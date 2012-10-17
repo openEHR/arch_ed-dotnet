@@ -306,14 +306,14 @@ Namespace ArchetypeEditor.XML_Classes
             Return an_interval
         End Function
 
-        Private Overloads Sub BuildCodedText(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal ConstraintID As String)
+        Private Overloads Sub BuildCodedText(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal ConstraintID As String)
             Dim coded_text As XMLParser.C_COMPLEX_OBJECT
             Dim code_rel_node As XMLParser.C_ATTRIBUTE
             Dim ca_Term As XMLParser.CONSTRAINT_REF
 
-            coded_text = mAomFactory.MakeComplexObject(value_attribute, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+            coded_text = mAomFactory.MakeComplexObject(attribute, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
 
-            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", value_attribute.existence)
+            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", attribute.existence)
             ca_Term = New XMLParser.CONSTRAINT_REF()
             ca_Term.rm_type_name = "CODE_PHRASE"
             ca_Term.node_id = ""
@@ -338,17 +338,17 @@ Namespace ArchetypeEditor.XML_Classes
             mAomFactory.add_object(code_rel_node, ca_Term)
         End Sub
 
-        Private Overloads Sub BuildCodedText(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal a_CodePhrase As CodePhrase, Optional ByVal an_assumed_value As String = "", Optional ByVal assumed_value_terminology As String = "")
+        Private Overloads Sub BuildCodedText(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal a_CodePhrase As CodePhrase, Optional ByVal an_assumed_value As String = "", Optional ByVal assumed_value_terminology As String = "")
             Dim coded_text As XMLParser.C_COMPLEX_OBJECT
             Dim code_rel_node As XMLParser.C_ATTRIBUTE
             Dim ca_Term As New XMLParser.C_CODE_PHRASE
 
             ca_Term.terminology_id = New XMLParser.TERMINOLOGY_ID
-            coded_text = mAomFactory.MakeComplexObject(value_attribute, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+            coded_text = mAomFactory.MakeComplexObject(attribute, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
             ca_Term.rm_type_name = "CODE_PHRASE"
             ca_Term.node_id = ""
             ca_Term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
-            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", value_attribute.existence)
+            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", attribute.existence)
 
             If a_CodePhrase.Codes.Count > 0 Then
                 ca_Term.terminology_id.value = a_CodePhrase.TerminologyID.ToString()
@@ -375,17 +375,17 @@ Namespace ArchetypeEditor.XML_Classes
             mAomFactory.add_object(code_rel_node, ca_Term)
         End Sub
 
-        Private Sub BuildPlainText(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal TermList As Collections.Specialized.StringCollection)
+        Private Sub BuildPlainText(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal TermList As Collections.Specialized.StringCollection)
             Dim plain_text As XMLParser.C_COMPLEX_OBJECT
             Dim value_rel_node As XMLParser.C_ATTRIBUTE
             Dim cString As XMLParser.C_STRING
             Dim xmlSimple As XMLParser.C_PRIMITIVE_OBJECT
 
-            plain_text = mAomFactory.MakeComplexObject(value_attribute, "DV_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+            plain_text = mAomFactory.MakeComplexObject(attribute, "DV_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
 
             If TermList.Count > 0 Then
                 Dim i As Integer
-                value_rel_node = mAomFactory.MakeSingleAttribute(plain_text, "value", value_attribute.existence)
+                value_rel_node = mAomFactory.MakeSingleAttribute(plain_text, "value", attribute.existence)
                 cString = New XMLParser.C_STRING()
                 cString.list = Array.CreateInstance(GetType(String), TermList.Count)
 
@@ -400,7 +400,7 @@ Namespace ArchetypeEditor.XML_Classes
         Private Sub DuplicateHistory(ByVal rm As RmStructureCompound, ByRef RelNode As XMLParser.C_ATTRIBUTE)
 
             Dim xmlHistory, xmlEvent As XMLParser.C_COMPLEX_OBJECT
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
+            Dim a As XMLParser.C_ATTRIBUTE
             Dim an_event As RmEvent
             Dim rm_1 As RmStructureCompound
             Dim a_history As RmHistory
@@ -415,13 +415,13 @@ Namespace ArchetypeEditor.XML_Classes
                         MakeOccurrences(a_history.Occurrences))
 
                     If Not a_history.HasNameConstraint Then
-                        an_attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "name", rm.Existence.XmlExistence)
-                        BuildText(an_attribute, a_history.NameConstraint)
+                        a = mAomFactory.MakeSingleAttribute(xmlHistory, "name", rm.Existence.XmlExistence)
+                        BuildText(a, a_history.NameConstraint)
                     End If
 
                     If a_history.isPeriodic Then
                         Dim durationConstraint As New Constraint_Duration
-                        an_attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "period", rm.Existence.XmlExistence)
+                        a = mAomFactory.MakeSingleAttribute(xmlHistory, "period", rm.Existence.XmlExistence)
                         durationConstraint.MinMaxValueUnits = a_history.PeriodUnits
 
                         'Set max and min to offset value
@@ -429,19 +429,19 @@ Namespace ArchetypeEditor.XML_Classes
                         durationConstraint.HasMinimum = True
                         durationConstraint.MaximumValue = a_history.Period
                         durationConstraint.HasMaximum = True
-                        BuildDuration(an_attribute, durationConstraint)
+                        BuildDuration(a, durationConstraint)
                     End If
 
                     ' now build the events
                     If a_history.Children.Count > 0 Then
-                        an_attribute = mAomFactory.MakeMultipleAttribute( _
+                        a = mAomFactory.MakeMultipleAttribute( _
                             xmlHistory, _
                             "events", _
                             MakeCardinality(a_history.Children.Cardinality), a_history.Children.Existence.XmlExistence)
 
                         an_event = a_history.Children.Item(0)
                         xmlEvent = mAomFactory.MakeComplexObject( _
-                            an_attribute, _
+                            a, _
                             ReferenceModel.RM_StructureName(StructureType.Event), _
                             an_event.NodeId, _
                             MakeOccurrences(an_event.Occurrences))
@@ -450,7 +450,7 @@ Namespace ArchetypeEditor.XML_Classes
                             Case RmEvent.ObservationEventType.PointInTime
                                 If an_event.hasFixedOffset Then
                                     Dim durationConstraint As New Constraint_Duration
-                                    an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "offset", rm.Existence.XmlExistence)
+                                    a = mAomFactory.MakeSingleAttribute(xmlEvent, "offset", rm.Existence.XmlExistence)
                                     durationConstraint.MinMaxValueUnits = an_event.OffsetUnits
 
                                     'Set max and min to offset value
@@ -458,17 +458,17 @@ Namespace ArchetypeEditor.XML_Classes
                                     durationConstraint.HasMinimum = True
                                     durationConstraint.MaximumValue = an_event.Offset
                                     durationConstraint.HasMaximum = True
-                                    BuildDuration(an_attribute, durationConstraint)
+                                    BuildDuration(a, durationConstraint)
                                 End If
                             Case RmEvent.ObservationEventType.Interval
                                 If Not an_event.AggregateMathFunction Is Nothing AndAlso an_event.AggregateMathFunction.Codes.Count > 0 Then
-                                    an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", rm.Existence.XmlExistence)
-                                    BuildCodedText(an_attribute, an_event.AggregateMathFunction)
+                                    a = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", rm.Existence.XmlExistence)
+                                    BuildCodedText(a, an_event.AggregateMathFunction)
                                 End If
 
                                 If an_event.hasFixedDuration Then
                                     Dim durationConstraint As New Constraint_Duration
-                                    an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "width", rm.Existence.XmlExistence)
+                                    a = mAomFactory.MakeSingleAttribute(xmlEvent, "width", rm.Existence.XmlExistence)
                                     durationConstraint.MinMaxValueUnits = an_event.WidthUnits
 
                                     'Set max and min to offset value
@@ -476,21 +476,21 @@ Namespace ArchetypeEditor.XML_Classes
                                     durationConstraint.HasMinimum = True
                                     durationConstraint.MaximumValue = an_event.Width
                                     durationConstraint.HasMaximum = True
-                                    BuildDuration(an_attribute, durationConstraint)
+                                    BuildDuration(a, durationConstraint)
                                 End If
                         End Select
 
                         ' runtime name
                         If an_event.HasNameConstraint Then
-                            an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "name", rm.Existence.XmlExistence)
-                            BuildText(an_attribute, an_event.NameConstraint)
+                            a = mAomFactory.MakeSingleAttribute(xmlEvent, "name", rm.Existence.XmlExistence)
+                            BuildText(a, an_event.NameConstraint)
                         End If
 
                         ' data
-                        an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "data", rm.Existence.XmlExistence)
+                        a = mAomFactory.MakeSingleAttribute(xmlEvent, "data", rm.Existence.XmlExistence)
 
                         Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject( _
-                            an_attribute, _
+                            a, _
                             ReferenceModel.RM_StructureName(rm.Type), _
                             rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
 
@@ -504,7 +504,7 @@ Namespace ArchetypeEditor.XML_Classes
         Private Sub BuildHistory(ByVal a_history As RmHistory, ByRef RelNode As XMLParser.C_ATTRIBUTE, ByVal rmState As RmStructureCompound)
             Dim events As Object()
             Dim history_event As XMLParser.C_COMPLEX_OBJECT
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
+            Dim a As XMLParser.C_ATTRIBUTE
             Dim embeddedState As Boolean = False
 
             events = BuildHistory(a_history, RelNode)
@@ -520,28 +520,28 @@ Namespace ArchetypeEditor.XML_Classes
 
                 For i As Integer = 0 To events.Length - 1
                     history_event = CType(events(i), XMLParser.C_COMPLEX_OBJECT)
-                    an_attribute = mAomFactory.MakeSingleAttribute(history_event, "state", rmState.Children.Existence.XmlExistence)
+                    a = mAomFactory.MakeSingleAttribute(history_event, "state", rmState.Children.Existence.XmlExistence)
 
                     'First event has the structure
                     If i = 0 Then
                         If a_rm.Type = StructureType.Slot Then
                             embeddedState = True
-                            BuildSlotFromAttribute(an_attribute, a_rm)
+                            BuildSlotFromRm(a, a_rm)
                         Else
                             Dim objNode As XMLParser.C_COMPLEX_OBJECT
-                            objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
+                            objNode = mAomFactory.MakeComplexObject(a, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
                             BuildStructure(a_rm, objNode)
                             path = GetPathOfNode(a_rm.NodeId)
                         End If
                     Else
                         If embeddedState Then
-                            BuildSlotFromAttribute(an_attribute, a_rm)
+                            BuildSlotFromRm(a, a_rm)
                         Else
                             'create a reference
                             Dim ref_xmlRefNode As XMLParser.ARCHETYPE_INTERNAL_REF
 
                             If Not path = "?" Then
-                                ref_xmlRefNode = mAomFactory.MakeArchetypeRef(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), path)
+                                ref_xmlRefNode = mAomFactory.MakeArchetypeRef(a, ReferenceModel.RM_StructureName(a_rm.Type), path)
                             Else
                                 Debug.Assert(False, "Error with path")
                             End If
@@ -554,7 +554,7 @@ Namespace ArchetypeEditor.XML_Classes
         Private Function BuildHistory(ByVal a_history As RmHistory, ByRef RelNode As XMLParser.C_ATTRIBUTE) As Object()
             Dim xmlHistory, xmlEvent As XMLParser.C_COMPLEX_OBJECT
             Dim events_rel_node As New XMLParser.C_MULTIPLE_ATTRIBUTE()
-            Dim attribute As XMLParser.C_ATTRIBUTE
+            Dim a As XMLParser.C_ATTRIBUTE
             Dim an_event As RmEvent
             Dim dataPath As String = Nothing
             Dim array_list_events As New ArrayList
@@ -567,14 +567,14 @@ Namespace ArchetypeEditor.XML_Classes
                     MakeOccurrences(a_history.Occurrences))
 
                 If a_history.HasNameConstraint Then
-                    attribute = New XMLParser.C_SINGLE_ATTRIBUTE()
-                    attribute.rm_attribute_name = "name"
-                    BuildText(attribute, a_history.NameConstraint)
+                    a = New XMLParser.C_SINGLE_ATTRIBUTE()
+                    a.rm_attribute_name = "name"
+                    BuildText(a, a_history.NameConstraint)
                 End If
 
                 If a_history.isPeriodic Then
                     Dim durationConstraint As New Constraint_Duration
-                    attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "period", a_history.Existence.XmlExistence)
+                    a = mAomFactory.MakeSingleAttribute(xmlHistory, "period", a_history.Existence.XmlExistence)
                     durationConstraint.MinMaxValueUnits = a_history.PeriodUnits
 
                     'Set max and min to offset value
@@ -582,7 +582,7 @@ Namespace ArchetypeEditor.XML_Classes
                     durationConstraint.HasMinimum = True
                     durationConstraint.MaximumValue = a_history.Period
                     durationConstraint.HasMaximum = True
-                    BuildDuration(attribute, durationConstraint)
+                    BuildDuration(a, durationConstraint)
                 End If
 
                 ' now build the events
@@ -610,7 +610,7 @@ Namespace ArchetypeEditor.XML_Classes
                         Case StructureType.PointEvent
                             If an_event.hasFixedOffset Then
                                 Dim durationConstraint As New Constraint_Duration
-                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "offset", an_event.Existence.XmlExistence)
+                                a = mAomFactory.MakeSingleAttribute(xmlEvent, "offset", an_event.Existence.XmlExistence)
                                 durationConstraint.MinMaxValueUnits = an_event.OffsetUnits
 
                                 'Set max and min to offset value
@@ -618,17 +618,17 @@ Namespace ArchetypeEditor.XML_Classes
                                 durationConstraint.HasMinimum = True
                                 durationConstraint.MaximumValue = an_event.Offset
                                 durationConstraint.HasMaximum = True
-                                BuildDuration(attribute, durationConstraint)
+                                BuildDuration(a, durationConstraint)
                             End If
                         Case StructureType.IntervalEvent
                             If Not an_event.AggregateMathFunction Is Nothing AndAlso an_event.AggregateMathFunction.Codes.Count > 0 Then
-                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", an_event.Existence.XmlExistence)
-                                BuildCodedText(attribute, an_event.AggregateMathFunction)
+                                a = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", an_event.Existence.XmlExistence)
+                                BuildCodedText(a, an_event.AggregateMathFunction)
                             End If
 
                             If an_event.hasFixedDuration Then
                                 Dim durationConstraint As New Constraint_Duration
-                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "width", an_event.Existence.XmlExistence)
+                                a = mAomFactory.MakeSingleAttribute(xmlEvent, "width", an_event.Existence.XmlExistence)
                                 durationConstraint.MinMaxValueUnits = an_event.WidthUnits
 
                                 'Set max and min to offset value
@@ -636,24 +636,24 @@ Namespace ArchetypeEditor.XML_Classes
                                 durationConstraint.HasMinimum = True
                                 durationConstraint.MaximumValue = an_event.Width
                                 durationConstraint.HasMaximum = True
-                                BuildDuration(attribute, durationConstraint)
+                                BuildDuration(a, durationConstraint)
                             End If
                     End Select
 
                     If an_event.HasNameConstraint Then
-                        attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "name", an_event.Existence.XmlExistence)
-                        BuildText(attribute, an_event.NameConstraint)
+                        a = mAomFactory.MakeSingleAttribute(xmlEvent, "name", an_event.Existence.XmlExistence)
+                        BuildText(a, an_event.NameConstraint)
                     End If
 
                     If Not a_history.Data Is Nothing Then
-                        attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "data", an_event.Existence.XmlExistence)
+                        a = mAomFactory.MakeSingleAttribute(xmlEvent, "data", an_event.Existence.XmlExistence)
                         Dim typeName As String = ReferenceModel.RM_StructureName(a_history.Data.Type)
 
                         If dataPath Is Nothing Then
-                            BuildStructure(a_history.Data, mAomFactory.MakeComplexObject(attribute, typeName, a_history.Data.NodeId, MakeOccurrences(New RmCardinality(1, 1))))
+                            BuildStructure(a_history.Data, mAomFactory.MakeComplexObject(a, typeName, a_history.Data.NodeId, MakeOccurrences(New RmCardinality(1, 1))))
                             dataPath = GetPathOfNode(a_history.Data.NodeId)
                         Else
-                            mAomFactory.MakeArchetypeRef(attribute, typeName, dataPath)
+                            mAomFactory.MakeArchetypeRef(a, typeName, dataPath)
                         End If
                     End If
                 Next
@@ -667,29 +667,29 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Sub BuildCluster(ByVal Cluster As RmCluster, ByRef RelNode As XMLParser.C_ATTRIBUTE)
             Dim clusterXmlObj As XMLParser.C_COMPLEX_OBJECT
-            Dim attribute As XMLParser.C_ATTRIBUTE
+            Dim a As XMLParser.C_ATTRIBUTE
             Dim rm As RmStructure
 
             clusterXmlObj = mAomFactory.MakeComplexObject(RelNode, ReferenceModel.RM_StructureName(StructureType.Cluster), Cluster.NodeId, MakeOccurrences(Cluster.Occurrences))
 
             If Cluster.HasNameConstraint Then
-                attribute = mAomFactory.MakeSingleAttribute(clusterXmlObj, "name", Cluster.Existence.XmlExistence)
-                BuildText(attribute, Cluster.NameConstraint)
+                a = mAomFactory.MakeSingleAttribute(clusterXmlObj, "name", Cluster.Existence.XmlExistence)
+                BuildText(a, Cluster.NameConstraint)
             End If
 
             If Cluster.Children.Count > 0 Then
-                attribute = mAomFactory.MakeMultipleAttribute(clusterXmlObj, "items", MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered), Cluster.Children.Existence.XmlExistence)
+                a = mAomFactory.MakeMultipleAttribute(clusterXmlObj, "items", MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered), Cluster.Children.Existence.XmlExistence)
                 Dim index As Integer = 0
 
                 For Each rm In Cluster.Children.Items
                     If rm.Type = StructureType.Cluster Then
-                        BuildCluster(rm, attribute)
+                        BuildCluster(rm, a)
                         index += 1
                     ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                        BuildElementOrReference(rm, attribute, index)
+                        BuildElementOrReference(rm, a, index)
                         index += 1
                     ElseIf rm.Type = StructureType.Slot Then
-                        BuildSlotFromAttribute(attribute, rm)
+                        BuildSlotFromRm(a, rm)
                         index += 1
                     Else
                         Debug.Assert(False, "Type not handled")
@@ -698,88 +698,25 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Protected Sub BuildRootElement(ByVal element As RmElement, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
-            ' N.B.: Writing the name constraint has already been done in the caller.
-
-            If Not element.Constraint Is Nothing AndAlso element.Constraint.Kind <> ConstraintKind.Any Then
-                Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(xmlObj, "value", element.Existence.XmlExistence)
-                BuildElementConstraint(xmlObj, attribute, element.Constraint)
-            End If
-        End Sub
-
-        Protected Sub BuildRootCluster(ByVal Cluster As RmCluster, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
-            ' Build a section, runtimename is already done
-            If Cluster.Children.Count > 0 Then
-                Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute(xmlObj, "items", MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered), Cluster.Children.Existence.XmlExistence)
-                Dim index As Integer = 0
-
-                For Each rm As RmStructure In Cluster.Children.Items
-                    If rm.Type = StructureType.Cluster Then
-                        BuildCluster(rm, Attribute)
-                        index += 1
-                    ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                        BuildElementOrReference(rm, attribute, index)
-                        index += 1
-                    ElseIf rm.Type = StructureType.Slot Then
-                        BuildSlotFromAttribute(attribute, rm)
-                        index += 1
-                    Else
-                        Debug.Assert(False, "Type not handled")
-                    End If
-                Next
-            End If
-
-            ResolveReferences()
-        End Sub
-
-        Private Sub BuildRootSection(ByVal section As RmSection, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
-            ' Build a section, runtimename is already done
-            If section.Children.Count > 0 Then
-                Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute( _
-                    xmlObj, _
-                    "items", _
-                    MakeCardinality(section.Children.Cardinality, section.Children.Cardinality.Ordered), section.Children.Existence.XmlExistence)
-
-                For Each rm As RmStructure In section.Children
-                    If rm.Type = StructureType.SECTION Then
-                        Dim newSection As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject("SECTION", rm.NodeId, MakeOccurrences(rm.Occurrences))
-
-                        If rm.HasNameConstraint Then
-                            Dim anotherAttribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(newSection, "name", rm.Existence.XmlExistence)
-                            BuildText(anotherAttribute, rm.NameConstraint)
-                        End If
-
-                        If CType(rm, RmSection).Children.Count > 0 Then
-                            BuildSection(CType(rm, RmSection).Children, newSection)
-                        End If
-
-                        mAomFactory.add_object(attribute, newSection)
-                    ElseIf rm.Type = StructureType.Slot Then
-                        BuildSlotFromAttribute(attribute, rm)
-                    End If
-                Next
-            End If
-        End Sub
-
-        Private Sub BuildProportion(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal cp As Constraint_Proportion)
+        Private Sub BuildProportion(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal cp As Constraint_Proportion)
             Dim proportion As XMLParser.C_COMPLEX_OBJECT
             Dim fraction As XMLParser.C_ATTRIBUTE
 
-            proportion = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(cp.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+            proportion = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_DataTypeName(cp.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
 
             If cp.Numerator.HasMaximum Or cp.Numerator.HasMinimum Then
-                fraction = mAomFactory.MakeSingleAttribute(proportion, "numerator", value_attribute.existence)
+                fraction = mAomFactory.MakeSingleAttribute(proportion, "numerator", attribute.existence)
                 BuildReal(fraction, cp.Numerator)
             End If
 
             If cp.HasDenominator And (cp.Denominator.HasMaximum Or cp.Denominator.HasMinimum) Then
-                fraction = mAomFactory.MakeSingleAttribute(proportion, "denominator", value_attribute.existence)
+                fraction = mAomFactory.MakeSingleAttribute(proportion, "denominator", attribute.existence)
                 BuildReal(fraction, cp.Denominator)
             End If
 
             If cp.IsIntegralSet Then
                 'There is a restriction on whether the instance will be integral or not
-                fraction = mAomFactory.MakeSingleAttribute(proportion, "is_integral", value_attribute.existence)
+                fraction = mAomFactory.MakeSingleAttribute(proportion, "is_integral", attribute.existence)
                 Dim b As New XMLParser.C_BOOLEAN
 
                 If cp.IsIntegral Then
@@ -795,7 +732,7 @@ Namespace ArchetypeEditor.XML_Classes
 
             If Not cp.AllowsAllTypes Then
                 Dim integerConstraint As New XMLParser.C_INTEGER
-                fraction = mAomFactory.MakeSingleAttribute(proportion, "type", value_attribute.existence)
+                fraction = mAomFactory.MakeSingleAttribute(proportion, "type", attribute.existence)
                 Dim allowedTypes As New ArrayList
 
                 For i As Integer = 0 To 4
@@ -809,7 +746,7 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Private Sub BuildReal(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal ct As Constraint_Count)
+        Private Sub BuildReal(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal ct As Constraint_Count)
             Dim magnitude As New XMLParser.C_REAL
 
             If ct.HasMaximum Or ct.HasMinimum Then
@@ -839,7 +776,7 @@ Namespace ArchetypeEditor.XML_Classes
                 magnitude.assumed_value = CSng(ct.AssumedValue)
             End If
 
-            mAomFactory.MakePrimitiveObject(value_attribute, magnitude)
+            mAomFactory.MakePrimitiveObject(attribute, magnitude)
 
             ' Validate Interval PostConditions
             With magnitude.range
@@ -852,16 +789,16 @@ Namespace ArchetypeEditor.XML_Classes
             End With
         End Sub
 
-        Private Sub BuildCount(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal ct As Constraint_Count)
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
+        Private Sub BuildCount(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal ct As Constraint_Count)
+            Dim a As XMLParser.C_ATTRIBUTE
             Dim xmlCount As XMLParser.C_COMPLEX_OBJECT
             Dim magnitude As XMLParser.C_PRIMITIVE_OBJECT
 
-            xmlCount = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(ct.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+            xmlCount = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_DataTypeName(ct.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
 
             If ct.HasMaximum Or ct.HasMinimum Then
                 ' set the magnitude constraint
-                an_attribute = mAomFactory.MakeSingleAttribute(xmlCount, "magnitude", value_attribute.existence)
+                a = mAomFactory.MakeSingleAttribute(xmlCount, "magnitude", attribute.existence)
                 Dim c_int As New XMLParser.C_INTEGER
 
                 If ct.HasMaximum Or ct.HasMinimum Then
@@ -891,7 +828,7 @@ Namespace ArchetypeEditor.XML_Classes
                     c_int.assumed_value = CInt(ct.AssumedValue)
                 End If
 
-                magnitude = mAomFactory.MakePrimitiveObject(an_attribute, c_int)
+                magnitude = mAomFactory.MakePrimitiveObject(a, c_int)
 
                 With c_int.range
                     Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
@@ -904,10 +841,9 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Private Sub BuildDateTime(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal dt As Constraint_DateTime)
-
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
-            Dim an_object As XMLParser.C_COMPLEX_OBJECT
+        Private Sub BuildDateTime(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal dt As Constraint_DateTime)
+            Dim a As XMLParser.C_ATTRIBUTE
+            Dim o As XMLParser.C_COMPLEX_OBJECT
             Dim cd As XMLParser.C_PRIMITIVE
             Dim xmlDateTime As New XMLParser.C_PRIMITIVE_OBJECT
             Dim allowAll As Boolean = False
@@ -972,15 +908,15 @@ Namespace ArchetypeEditor.XML_Classes
                     a_type = "DV_TIME"
             End Select
 
-            an_object = mAomFactory.MakeComplexObject(value_attribute, a_type, "", MakeOccurrences(New RmCardinality(1, 1)))
+            o = mAomFactory.MakeComplexObject(attribute, a_type, "", MakeOccurrences(New RmCardinality(1, 1)))
 
             If Not allowAll Then
-                an_attribute = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence)
-                mAomFactory.MakePrimitiveObject(an_attribute, cd)
+                a = mAomFactory.MakeSingleAttribute(o, "value", attribute.existence)
+                mAomFactory.MakePrimitiveObject(a, cd)
             End If
         End Sub
 
-        Private Sub BuildSlotFromAttribute(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal a_slot As RmSlot)
+        Protected Sub BuildSlotFromRm(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal a_slot As RmSlot)
             Dim slot As New XMLParser.ARCHETYPE_SLOT
             slot.rm_type_name = ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)
             slot.occurrences = MakeOccurrences(a_slot.Occurrences)
@@ -1050,8 +986,8 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Private Sub BuildDuration(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Duration)
-            Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+        Private Sub BuildDuration(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Duration)
+            Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
             Dim objNode As XMLParser.C_PRIMITIVE_OBJECT
             Dim d As New XMLParser.C_DURATION
 
@@ -1092,17 +1028,17 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             If Not d.range Is Nothing Or Not String.IsNullOrEmpty(d.pattern) Or Not String.IsNullOrEmpty(d.assumed_value) Then
-                Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence)
-                objNode = mAomFactory.MakePrimitiveObject(an_attribute, d)
+                Dim a As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", attribute.existence)
+                objNode = mAomFactory.MakePrimitiveObject(a, d)
             End If
         End Sub
 
-        Private Sub BuildQuantity(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
+        Private Sub BuildQuantity(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
             Dim cQuantity As New XMLParser.C_DV_QUANTITY
             cQuantity.rm_type_name = "DV_QUANTITY"
             cQuantity.node_id = ""
             cQuantity.occurrences = MakeOccurrences(New RmCardinality(1, 1))
-            mAomFactory.add_object(value_attribute, cQuantity)
+            mAomFactory.add_object(attribute, cQuantity)
 
             If Not q.IsNull Then
                 Debug.Assert(q.IsCoded)
@@ -1184,33 +1120,32 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Private Sub BuildBoolean(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal b As Constraint_Boolean)
-            Dim o As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(b.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
-            Dim attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(o, "value", value_attribute.existence)
-
+        Private Sub BuildBoolean(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal b As Constraint_Boolean)
+            Dim o As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_DataTypeName(b.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+            Dim a As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(o, "value", attribute.existence)
             Dim c_bool As New XMLParser.C_BOOLEAN
 
             If b.TrueFalseAllowed Then
                 c_bool.false_valid = True
                 c_bool.true_valid = True
-                mAomFactory.MakePrimitiveObject(attribute, c_bool)
+                mAomFactory.MakePrimitiveObject(a, c_bool)
             ElseIf b.TrueAllowed Then
                 c_bool.false_valid = False
                 c_bool.true_valid = True
-                mAomFactory.MakePrimitiveObject(attribute, c_bool)
+                mAomFactory.MakePrimitiveObject(a, c_bool)
             ElseIf b.FalseAllowed Then
                 c_bool.false_valid = True
                 c_bool.true_valid = False
-                mAomFactory.MakePrimitiveObject(attribute, c_bool)
+                mAomFactory.MakePrimitiveObject(a, c_bool)
             End If
 
-            If b.hasAssumedValue Then
+            If b.HasAssumedValue Then
                 c_bool.assumed_value = b.AssumedValue
                 c_bool.assumed_valueSpecified = True
             End If
         End Sub
 
-        Private Sub BuildOrdinal(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal o As Constraint_Ordinal)
+        Private Sub BuildOrdinal(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal o As Constraint_Ordinal)
             Dim c_value As XMLParser.C_DV_ORDINAL
             Dim o_v As OrdinalValue
 
@@ -1254,19 +1189,19 @@ Namespace ArchetypeEditor.XML_Classes
                 c_value.assumed_value.value = CStr(o.AssumedValue)
             End If
 
-            mAomFactory.add_object(value_attribute, c_value)
+            mAomFactory.add_object(attribute, c_value)
         End Sub
 
-        Private Sub BuildText(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal t As Constraint_Text)
+        Private Sub BuildText(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal t As Constraint_Text)
             Select Case t.TypeOfTextConstraint
                 Case TextConstraintType.Terminology
                     If t.ConstraintCode <> "" Then
-                        BuildCodedText(value_attribute, t.ConstraintCode)
+                        BuildCodedText(attribute, t.ConstraintCode)
                     End If
                 Case TextConstraintType.Internal
-                    BuildCodedText(value_attribute, t.AllowableValues, CStr(t.AssumedValue), t.AssumedValue_TerminologyId)
+                    BuildCodedText(attribute, t.AllowableValues, CStr(t.AssumedValue), t.AssumedValue_TerminologyId)
                 Case TextConstraintType.Text
-                    BuildPlainText(value_attribute, t.AllowableValues.Codes)
+                    BuildPlainText(attribute, t.AllowableValues.Codes)
             End Select
         End Sub
 
@@ -1283,27 +1218,27 @@ Namespace ArchetypeEditor.XML_Classes
             Return result
         End Function
 
-        Private Sub BuildInterval(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Interval)
-            Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+        Private Sub BuildInterval(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Interval)
+            Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
 
             'Upper of type T
-            Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(objNode, "upper", value_attribute.existence)
-            BuildElementConstraint(objNode, attribute, c.UpperLimit)
+            Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(objNode, "upper", attribute.existence)
+            BuildElementConstraint(a, c.UpperLimit)
 
             'Lower of type T
-            attribute = mAomFactory.MakeSingleAttribute(objNode, "lower", value_attribute.existence)
-            BuildElementConstraint(objNode, attribute, c.LowerLimit)
+            a = mAomFactory.MakeSingleAttribute(objNode, "lower", attribute.existence)
+            BuildElementConstraint(a, c.LowerLimit)
 
             'For a date or time interval, we need to set the actual class type of the lower limit
-            If c.Kind = ConstraintKind.Interval_DateTime AndAlso Not attribute Is Nothing AndAlso Not attribute.children Is Nothing Then
-                Dim s As String = CType(attribute.children(0), XMLParser.C_COMPLEX_OBJECT).rm_type_name
+            If c.Kind = ConstraintKind.Interval_DateTime AndAlso Not a Is Nothing AndAlso Not a.children Is Nothing Then
+                Dim s As String = CType(a.children(0), XMLParser.C_COMPLEX_OBJECT).rm_type_name
 
                 If s <> "DV_DATE_TIME" Then
-                    Dim i As Integer = value_attribute.children.Length
+                    Dim i As Integer = attribute.children.Length
 
                     While i > 0
                         i = i - 1
-                        Dim o As XMLParser.C_COMPLEX_OBJECT = CType(value_attribute.children(i), XMLParser.C_COMPLEX_OBJECT)
+                        Dim o As XMLParser.C_COMPLEX_OBJECT = CType(attribute.children(i), XMLParser.C_COMPLEX_OBJECT)
 
                         If o.rm_type_name = "DV_INTERVAL<DV_DATE_TIME>" Then
                             i = 0
@@ -1314,13 +1249,13 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Private Sub BuildMultiMedia(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_MultiMedia)
+        Private Sub BuildMultiMedia(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_MultiMedia)
             Dim objNode As XMLParser.C_COMPLEX_OBJECT
             Dim code_rel_node As XMLParser.C_ATTRIBUTE
             Dim ca_Term As XMLParser.C_CODE_PHRASE
 
-            objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
-            code_rel_node = mAomFactory.MakeSingleAttribute(objNode, "media_type", value_attribute.existence)
+            objNode = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+            code_rel_node = mAomFactory.MakeSingleAttribute(objNode, "media_type", attribute.existence)
             ca_Term = New XMLParser.C_CODE_PHRASE
             ca_Term.rm_type_name = "CODE_PHRASE"
             ca_Term.node_id = ""
@@ -1340,132 +1275,140 @@ Namespace ArchetypeEditor.XML_Classes
             mAomFactory.add_object(code_rel_node, ca_Term)
         End Sub
 
-        Private Sub BuildURI(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_URI)
+        Private Sub BuildURI(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_URI)
             Dim objNode As XMLParser.C_COMPLEX_OBJECT
 
             If c.EhrUriOnly Then
-                objNode = mAomFactory.MakeComplexObject(value_attribute, "DV_EHR_URI", "", MakeOccurrences(New RmCardinality(1, 1)))
+                objNode = mAomFactory.MakeComplexObject(attribute, "DV_EHR_URI", "", MakeOccurrences(New RmCardinality(1, 1)))
             Else
-                objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+                objNode = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
             End If
 
             If Not String.IsNullOrEmpty(c.RegularExpression) Then
                 'Add a constraint to C_STRING
-                Dim attribute As XMLParser.C_ATTRIBUTE
-                attribute = mAomFactory.MakeSingleAttribute(objNode, "value", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(objNode, "value", MakeOccurrences(New RmCardinality(1, 1)))
                 Dim cSt As New XMLParser.C_STRING
                 cSt.pattern = c.RegularExpression
-                mAomFactory.MakePrimitiveObject(attribute, cSt)
+                mAomFactory.MakePrimitiveObject(a, cSt)
             End If
-
         End Sub
 
-        Private Sub BuildParsable(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Parsable)
-            Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+        Private Sub BuildParsable(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Parsable)
+            Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
 
             If c.AllowableFormalisms.Count > 0 Then
                 'Add a constraint to C_STRING
-                Dim attribute As XMLParser.C_ATTRIBUTE
-                attribute = mAomFactory.MakeSingleAttribute(objNode, "formalism", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(objNode, "formalism", MakeOccurrences(New RmCardinality(1, 1)))
                 Dim cSt As New XMLParser.C_STRING
                 cSt.list = c.AllowableFormalisms.ToArray()
-                mAomFactory.MakePrimitiveObject(attribute, cSt)
+                mAomFactory.MakePrimitiveObject(a, cSt)
             End If
         End Sub
 
-        Private Sub BuildIdentifier(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Identifier)
-            Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+        Private Sub BuildIdentifier(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Identifier)
+            Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
 
             If c.IssuerRegex <> Nothing Then
                 'Add a constraint to C_STRING
-                Dim attribute As XMLParser.C_ATTRIBUTE
-                attribute = mAomFactory.MakeSingleAttribute(objNode, "issuer", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(objNode, "issuer", MakeOccurrences(New RmCardinality(1, 1)))
                 Dim cSt As New XMLParser.C_STRING
                 cSt.pattern = c.IssuerRegex
-                mAomFactory.MakePrimitiveObject(attribute, cSt)
+                mAomFactory.MakePrimitiveObject(a, cSt)
             End If
+
             If c.TypeRegex <> Nothing Then
                 'Add a constraint to C_STRING
-                Dim attribute As XMLParser.C_ATTRIBUTE
-                attribute = mAomFactory.MakeSingleAttribute(objNode, "type", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(objNode, "type", MakeOccurrences(New RmCardinality(1, 1)))
                 Dim cSt As New XMLParser.C_STRING
                 cSt.pattern = c.TypeRegex
-                mAomFactory.MakePrimitiveObject(attribute, cSt)
+                mAomFactory.MakePrimitiveObject(a, cSt)
             End If
+
             If c.IDRegex <> Nothing Then
                 'Add a constraint to C_STRING
-                Dim attribute As XMLParser.C_ATTRIBUTE
-                attribute = mAomFactory.MakeSingleAttribute(objNode, "id", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(objNode, "id", MakeOccurrences(New RmCardinality(1, 1)))
                 Dim cSt As New XMLParser.C_STRING
                 cSt.pattern = c.IDRegex
-                mAomFactory.MakePrimitiveObject(attribute, cSt)
+                mAomFactory.MakePrimitiveObject(a, cSt)
             End If
         End Sub
 
-        Private Sub BuildElementConstraint(ByVal parent As XMLParser.C_COMPLEX_OBJECT, ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint)
-            Try
-                ' cannot have a value with no constraint on datatype
-                Debug.Assert(c.Kind <> ConstraintKind.Any)
+        Private Sub BuildChoice(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Choice)
+            For Each constraint As Constraint In c.Constraints
+                Dim slotConstraint As Constraint_Slot = TryCast(constraint, Constraint_Slot)
 
-                Select Case c.Kind
-                    Case ConstraintKind.Quantity
-                        BuildQuantity(value_attribute, c)
+                If Not slotConstraint Is Nothing Then
+                    Dim slot As New RmSlot()
+                    slot.SlotConstraint = slotConstraint
+                    slot.Occurrences.IsUnbounded = True
+                    BuildSlotFromRm(attribute, slot)
 
-                    Case ConstraintKind.Boolean
-                        BuildBoolean(value_attribute, c)
+                    'Dim slot As New XMLParser.ARCHETYPE_SLOT
+                    'slot.rm_type_name = ReferenceModel.RM_StructureName(slotConstraint.RM_ClassType)
+                    'BuildSlot(slot, slotConstraint)
+                    'mAomFactory.add_object(attribute, slot)
+                Else
+                    BuildElementConstraint(attribute, constraint)
+                End If
+            Next
+        End Sub
 
-                    Case ConstraintKind.Text
-                        BuildText(value_attribute, c)
+        Private Sub BuildElementConstraint(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint)
+            ' cannot have a value with no constraint on datatype
+            Debug.Assert(c.Kind <> ConstraintKind.Any)
 
-                    Case ConstraintKind.Ordinal
-                        BuildOrdinal(value_attribute, c)
+            Select Case c.Kind
+                Case ConstraintKind.Quantity
+                    BuildQuantity(attribute, c)
 
-                    Case ConstraintKind.Any
+                Case ConstraintKind.Boolean
+                    BuildBoolean(attribute, c)
 
-                    Case ConstraintKind.Proportion
-                        BuildProportion(value_attribute, c)
+                Case ConstraintKind.Text
+                    BuildText(attribute, c)
 
-                    Case ConstraintKind.Count
-                        BuildCount(value_attribute, c)
+                Case ConstraintKind.Ordinal
+                    BuildOrdinal(attribute, c)
 
-                    Case ConstraintKind.DateTime
-                        BuildDateTime(value_attribute, c)
+                Case ConstraintKind.Any
+                    Debug.Assert(False, "Need to check this is set to the true")
 
-                    Case ConstraintKind.Slot
-                        Dim slot As New RmSlot()
-                        slot.SlotConstraint = c
-                        slot.Occurrences.IsUnbounded = True
-                        BuildSlotFromAttribute(value_attribute, slot)
+                Case ConstraintKind.Proportion
+                    BuildProportion(attribute, c)
 
-                    Case ConstraintKind.Multiple
-                        For Each a_constraint As Constraint In CType(c, Constraint_Choice).Constraints
-                            BuildElementConstraint(parent, value_attribute, a_constraint)
-                        Next
+                Case ConstraintKind.Count
+                    BuildCount(attribute, c)
 
-                    Case ConstraintKind.Interval_Count, ConstraintKind.Interval_Quantity, ConstraintKind.Interval_DateTime
-                        BuildInterval(value_attribute, c)
+                Case ConstraintKind.DateTime
+                    BuildDateTime(attribute, c)
 
-                    Case ConstraintKind.MultiMedia
-                        BuildMultiMedia(value_attribute, c)
+                Case ConstraintKind.Multiple
+                    BuildChoice(attribute, CType(c, Constraint_Choice))
 
-                    Case ConstraintKind.URI
-                        BuildURI(value_attribute, c)
+                Case ConstraintKind.Interval_Count, ConstraintKind.Interval_Quantity, ConstraintKind.Interval_DateTime
+                    BuildInterval(attribute, c)
 
-                    Case ConstraintKind.Duration
-                        BuildDuration(value_attribute, c)
+                Case ConstraintKind.MultiMedia
+                    BuildMultiMedia(attribute, c)
 
-                    Case ConstraintKind.Identifier
-                        BuildIdentifier(value_attribute, c)
+                Case ConstraintKind.URI
+                    BuildURI(attribute, c)
 
-                    Case ConstraintKind.Parsable
-                        BuildParsable(value_attribute, c)
+                Case ConstraintKind.Duration
+                    BuildDuration(attribute, c)
 
-                    Case Else
-                        Debug.Assert(False, String.Format("{0} constraint type is not handled", c.ToString()))
-                End Select
-            Catch ex As Exception
-                Debug.Assert(False)
-            End Try
+                    'Case ConstraintType.Currency
+                    '    BuildCurrency(attribute, c)
+
+                Case ConstraintKind.Identifier
+                    BuildIdentifier(attribute, c)
+
+                Case ConstraintKind.Parsable
+                    BuildParsable(attribute, c)
+
+                Case Else
+                    Debug.Assert(False, String.Format("{0} constraint type is not handled", c.ToString()))
+            End Select
         End Sub
 
         Protected Sub BuildElementOrReference(ByVal Element As RmElement, ByRef RelNode As XMLParser.C_ATTRIBUTE, ByVal index As Integer)
@@ -1488,19 +1431,19 @@ Namespace ArchetypeEditor.XML_Classes
                     ReferenceModel.RM_StructureName(StructureType.Element), Element.NodeId, MakeOccurrences(Element.Occurrences))
 
                 If Element.HasNameConstraint Then
-                    Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(elementXmlObj, "name", Element.Existence.XmlExistence)
-                    BuildText(attribute, Element.NameConstraint)
+                    Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(elementXmlObj, "name", Element.Existence.XmlExistence)
+                    BuildText(a, Element.NameConstraint)
                 End If
 
                 If Element.Constraint.Kind <> ConstraintKind.Any Then
-                    Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(elementXmlObj, "value", Element.Existence.XmlExistence)
-                    BuildElementConstraint(elementXmlObj, attribute, Element.Constraint)
+                    Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(elementXmlObj, "value", Element.Existence.XmlExistence)
+                    BuildElementConstraint(a, Element.Constraint)
                 End If
 
                 'Check for constraint on Flavours of Null
                 If Element.HasNullFlavourConstraint() Then
-                    Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(elementXmlObj, "null_flavour", New RmExistence(0, 1).XmlExistence)
-                    BuildCodedText(attribute, Element.ConstrainedNullFlavours)
+                    Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(elementXmlObj, "null_flavour", New RmExistence(0, 1).XmlExistence)
+                    BuildCodedText(a, Element.ConstrainedNullFlavours)
                 End If
             End If
         End Sub
@@ -1528,7 +1471,7 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildStructure(ByVal rmStruct As RmStructureCompound, ByRef objNode As XMLParser.C_COMPLEX_OBJECT)
-            Dim attribute As XMLParser.C_ATTRIBUTE
+            Dim a As XMLParser.C_ATTRIBUTE
             Dim rm As RmStructure
             Dim index As Integer = 0
 
@@ -1539,44 +1482,44 @@ Namespace ArchetypeEditor.XML_Classes
             If rmStruct.Children.Count > 0 Then
                 Select Case rmStruct.Type
                     Case StructureType.Single
-                        attribute = mAomFactory.MakeSingleAttribute(objNode, "item", rmStruct.Existence.XmlExistence)
+                        a = mAomFactory.MakeSingleAttribute(objNode, "item", rmStruct.Existence.XmlExistence)
                         rm = rmStruct.Children.Items(0)
 
                         If rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                            BuildElementOrReference(rm, attribute, 0)
+                            BuildElementOrReference(rm, a, 0)
                         ElseIf rm.Type = StructureType.Slot Then
-                            BuildSlotFromAttribute(attribute, rm)
+                            BuildSlotFromRm(a, rm)
                         Else
                             Debug.Assert(False, "Type not handled")
                         End If
                     Case StructureType.List
-                        attribute = mAomFactory.MakeMultipleAttribute(objNode, "items", _
+                        a = mAomFactory.MakeMultipleAttribute(objNode, "items", _
                             MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered), CType(rmStruct, RmStructureCompound).Children.Existence.XmlExistence)
 
                         For Each rm In rmStruct.Children.Items
                             If rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                                BuildElementOrReference(rm, attribute, index)
+                                BuildElementOrReference(rm, a, index)
                                 index += 1
                             ElseIf rm.Type = StructureType.Slot Then
-                                BuildSlotFromAttribute(attribute, rm)
+                                BuildSlotFromRm(a, rm)
                                 index += 1
                             Else
                                 Debug.Assert(False, "Type not handled")
                             End If
                         Next
                     Case StructureType.Tree
-                        attribute = mAomFactory.MakeMultipleAttribute(objNode, "items", _
+                        a = mAomFactory.MakeMultipleAttribute(objNode, "items", _
                             MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered), CType(rmStruct, RmStructureCompound).Children.Existence.XmlExistence)
 
                         For Each rm In rmStruct.Children.Items
                             If rm.Type = StructureType.Cluster Then
-                                BuildCluster(rm, attribute)
+                                BuildCluster(rm, a)
                                 index += 1
                             ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                                BuildElementOrReference(rm, attribute, index)
+                                BuildElementOrReference(rm, a, index)
                                 index += 1
                             ElseIf rm.Type = StructureType.Slot Then
-                                BuildSlotFromAttribute(attribute, rm)
+                                BuildSlotFromRm(a, rm)
                                 index += 1
                             Else
                                 Debug.Assert(False, "Type not handled")
@@ -1586,17 +1529,17 @@ Namespace ArchetypeEditor.XML_Classes
                         Dim table As RmTable = CType(rmStruct, RmTable)
                         Dim b As New XMLParser.C_BOOLEAN
                         b.assumed_valueSpecified = False
-                        attribute = mAomFactory.MakeSingleAttribute(objNode, "rotated", rmStruct.Existence.XmlExistence)
+                        a = mAomFactory.MakeSingleAttribute(objNode, "rotated", rmStruct.Existence.XmlExistence)
 
                         b.true_valid = table.isRotated
                         b.false_valid = Not table.isRotated
-                        mAomFactory.MakePrimitiveObject(attribute, b)
+                        mAomFactory.MakePrimitiveObject(a, b)
 
                         ' set number of row if not one
                         If table.NumberKeyColumns > 0 Then
                             Dim rh As New XMLParser.C_INTEGER
                             rh.range = New XMLParser.IntervalOfInteger
-                            attribute = mAomFactory.MakeSingleAttribute(objNode, "number_key_columns", rmStruct.Existence.XmlExistence)
+                            a = mAomFactory.MakeSingleAttribute(objNode, "number_key_columns", rmStruct.Existence.XmlExistence)
 
                             rh.range.lower = table.NumberKeyColumns
                             rh.range.lower_included = True
@@ -1618,11 +1561,11 @@ Namespace ArchetypeEditor.XML_Classes
                                 Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
                             End With
 
-                            mAomFactory.MakePrimitiveObject(attribute, rh)
+                            mAomFactory.MakePrimitiveObject(a, rh)
                         End If
 
-                        attribute = mAomFactory.MakeMultipleAttribute(objNode, "rows", MakeCardinality(New RmCardinality(rmStruct.Occurrences), True), rmStruct.Existence.XmlExistence)
-                        BuildCluster(rmStruct.Children.Items(0), attribute)
+                        a = mAomFactory.MakeMultipleAttribute(objNode, "rows", MakeCardinality(New RmCardinality(rmStruct.Occurrences), True), rmStruct.Existence.XmlExistence)
+                        BuildCluster(rmStruct.Children.Items(0), a)
                 End Select
             End If
 
@@ -1631,43 +1574,34 @@ Namespace ArchetypeEditor.XML_Classes
 
         Protected Sub BuildSubjectOfData(ByVal subject As RelatedParty, ByVal root_node As XMLParser.C_COMPLEX_OBJECT)
             Dim objnode As XMLParser.C_COMPLEX_OBJECT
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
+            Dim a As XMLParser.C_ATTRIBUTE
             Dim a_relationship As XMLParser.C_ATTRIBUTE
 
-            an_attribute = mAomFactory.MakeSingleAttribute(root_node, "subject", New RmExistence(1).XmlExistence)
-            objnode = mAomFactory.MakeComplexObject(an_attribute, "PARTY_RELATED", "", MakeOccurrences(New RmCardinality(1, 1)))
+            a = mAomFactory.MakeSingleAttribute(root_node, "subject", New RmExistence(1).XmlExistence)
+            objnode = mAomFactory.MakeComplexObject(a, "PARTY_RELATED", "", MakeOccurrences(New RmCardinality(1, 1)))
             a_relationship = mAomFactory.MakeSingleAttribute(objnode, "relationship", New RmExistence(1).XmlExistence)
             BuildCodedText(a_relationship, subject.Relationship)
         End Sub
 
         Private Sub BuildSection(ByVal rmChildren As Children, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
             ' Build a section, runtimename is already done
-            Dim an_attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute( _
-                xmlObj, _
-                "items", _
+            Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute(xmlObj, "items", _
                 MakeCardinality(rmChildren.Cardinality, rmChildren.Cardinality.Ordered), rmChildren.Existence.XmlExistence)
 
             For Each a_structure As RmStructure In rmChildren
-
                 If a_structure.Type = StructureType.SECTION Then
-                    Dim new_section As XMLParser.C_COMPLEX_OBJECT
-
-                    new_section = mAomFactory.MakeComplexObject( _
-                    an_attribute, _
-                    "SECTION", _
-                    a_structure.NodeId, _
-                    MakeOccurrences(a_structure.Occurrences))
+                    Dim new_section As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(a, "SECTION", a_structure.NodeId, MakeOccurrences(a_structure.Occurrences))
 
                     If a_structure.HasNameConstraint Then
-                        an_attribute = mAomFactory.MakeSingleAttribute(new_section, "name", rmChildren.Existence.XmlExistence)
-                        BuildText(an_attribute, a_structure.NameConstraint)
+                        a = mAomFactory.MakeSingleAttribute(new_section, "name", rmChildren.Existence.XmlExistence)
+                        BuildText(a, a_structure.NameConstraint)
                     End If
 
                     If CType(a_structure, RmSection).Children.Count > 0 Then
                         BuildSection(CType(a_structure, RmSection).Children, new_section)
                     End If
                 ElseIf a_structure.Type = StructureType.Slot Then
-                    BuildSlotFromAttribute(an_attribute, a_structure)
+                    BuildSlotFromRm(a, a_structure)
                 Else
                     Debug.Assert(False)
                 End If
@@ -1675,7 +1609,7 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildComposition(ByVal Rm As RmComposition, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
-            Dim an_attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(xmlObj, "category", New RmExistence(1).XmlExistence)
+            Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(xmlObj, "category", New RmExistence(1).XmlExistence)
 
             Dim t As New Constraint_Text
             t.TypeOfTextConstraint = TextConstraintType.Terminology ' coded_text
@@ -1687,13 +1621,13 @@ Namespace ArchetypeEditor.XML_Classes
                 t.AllowableValues.Codes.Add("433") ' event
             End If
 
-            BuildCodedText(an_attribute, t.AllowableValues)
+            BuildCodedText(a, t.AllowableValues)
 
             Dim eventContext As XMLParser.C_COMPLEX_OBJECT = Nothing
 
             If Rm.HasParticipations Then
-                an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
-                eventContext = mAomFactory.MakeComplexObject(an_attribute, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+                a = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
+                eventContext = mAomFactory.MakeComplexObject(a, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
                 BuildParticipations(eventContext, Rm.Participations)
             End If
 
@@ -1706,27 +1640,27 @@ Namespace ArchetypeEditor.XML_Classes
                             Dim new_structure As XMLParser.C_COMPLEX_OBJECT
 
                             If eventContext Is Nothing Then
-                                an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
-                                eventContext = mAomFactory.MakeComplexObject(an_attribute, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+                                a = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
+                                eventContext = mAomFactory.MakeComplexObject(a, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
                             End If
 
-                            an_attribute = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
-                            new_structure = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_structure.Type), a_structure.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
+                            a = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
+                            new_structure = mAomFactory.MakeComplexObject(a, ReferenceModel.RM_StructureName(a_structure.Type), a_structure.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
                             BuildStructure(a_structure, new_structure)
                         Case StructureType.Slot
                             If eventContext Is Nothing Then
-                                an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
-                                eventContext = mAomFactory.MakeComplexObject(an_attribute, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+                                a = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
+                                eventContext = mAomFactory.MakeComplexObject(a, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
                             End If
 
-                            an_attribute = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
-                            BuildSlotFromAttribute(an_attribute, a_structure)
+                            a = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
+                            BuildSlotFromRm(a, a_structure)
                         Case StructureType.SECTION
                             If CType(a_structure, RmSection).Children.Count > 0 Then
-                                an_attribute = mAomFactory.MakeMultipleAttribute(xmlObj, "content", MakeCardinality(Rm.Data.Cardinality), a_structure.Existence.XmlExistence)
+                                a = mAomFactory.MakeMultipleAttribute(xmlObj, "content", MakeCardinality(Rm.Data.Cardinality), a_structure.Existence.XmlExistence)
 
                                 For Each slot As RmSlot In CType(a_structure, RmSection).Children
-                                    BuildSlotFromAttribute(an_attribute, slot)
+                                    BuildSlotFromRm(a, slot)
                                 Next
                             End If
                         Case Else
@@ -1736,16 +1670,77 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
+        Protected Sub BuildRootElement(ByVal element As RmElement, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
+            ' N.B.: Writing the name constraint has already been done in the caller.
+
+            If Not element.Constraint Is Nothing AndAlso element.Constraint.Kind <> ConstraintKind.Any Then
+                Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(xmlObj, "value", element.Existence.XmlExistence)
+                BuildElementConstraint(a, element.Constraint)
+            End If
+        End Sub
+
+        Protected Sub BuildRootCluster(ByVal Cluster As RmCluster, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
+            ' Build a section, runtimename is already done
+            If Cluster.Children.Count > 0 Then
+                Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute(xmlObj, "items", MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered), Cluster.Children.Existence.XmlExistence)
+                Dim index As Integer = 0
+
+                For Each rm As RmStructure In Cluster.Children.Items
+                    If rm.Type = StructureType.Cluster Then
+                        BuildCluster(rm, a)
+                        index += 1
+                    ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
+                        BuildElementOrReference(rm, a, index)
+                        index += 1
+                    ElseIf rm.Type = StructureType.Slot Then
+                        BuildSlotFromRm(a, rm)
+                        index += 1
+                    Else
+                        Debug.Assert(False, "Type not handled")
+                    End If
+                Next
+            End If
+
+            ResolveReferences()
+        End Sub
+
+        Private Sub BuildRootSection(ByVal section As RmSection, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
+            ' Build a section, runtimename is already done
+            If section.Children.Count > 0 Then
+                Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute(xmlObj, "items", _
+                    MakeCardinality(section.Children.Cardinality, section.Children.Cardinality.Ordered), section.Children.Existence.XmlExistence)
+
+                For Each rm As RmStructure In section.Children
+                    If rm.Type = StructureType.SECTION Then
+                        Dim newSection As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject("SECTION", rm.NodeId, MakeOccurrences(rm.Occurrences))
+
+                        If rm.HasNameConstraint Then
+                            Dim anotherAttribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(newSection, "name", rm.Existence.XmlExistence)
+                            BuildText(anotherAttribute, rm.NameConstraint)
+                        End If
+
+                        If CType(rm, RmSection).Children.Count > 0 Then
+                            BuildSection(CType(rm, RmSection).Children, newSection)
+                        End If
+
+                        mAomFactory.add_object(a, newSection)
+                    ElseIf rm.Type = StructureType.Slot Then
+                        BuildSlotFromRm(a, rm)
+                    End If
+                Next
+            End If
+        End Sub
+
         Private Sub BuildStructure(ByVal rm As RmStructureCompound, ByVal an_adlArchetype As XMLParser.C_COMPLEX_OBJECT, ByVal attribute_name As String)
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
+            Dim a As XMLParser.C_ATTRIBUTE
 
             If CType(rm.Children.Items(0), RmStructure).Type = StructureType.Slot Then
-                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Existence.XmlExistence)
-                BuildSlotFromAttribute(an_attribute, rm.Children.Items(0))
+                a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Existence.XmlExistence)
+                BuildSlotFromRm(a, rm.Children.Items(0))
             Else
-                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Children.Existence.XmlExistence)
+                a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Children.Existence.XmlExistence)
                 Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject( _
-                    an_attribute, _
+                    a, _
                     ReferenceModel.RM_StructureName(rm.Children.Items(0).Type), _
                     rm.Children.Items(0).NodeId, MakeOccurrences(New RmCardinality(1, 1)))
 
@@ -1754,24 +1749,24 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildProtocol(ByVal rm As RmStructure, ByVal an_adlArchetype As XMLParser.C_COMPLEX_OBJECT)
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
+            Dim a As XMLParser.C_ATTRIBUTE
             Dim rmStructComp As RmStructureCompound
 
             If rm.Type = StructureType.Slot Then
-                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rm.Existence.XmlExistence)
-                BuildSlotFromAttribute(an_attribute, rm)
+                a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rm.Existence.XmlExistence)
+                BuildSlotFromRm(a, rm)
             Else
                 rmStructComp = CType(rm, RmStructureCompound)
                 If rmStructComp.Children.Count > 0 Then
-                    an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rmStructComp.Children.Existence.XmlExistence)
+                    a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rmStructComp.Children.Existence.XmlExistence)
                     ' only 1 protocol allowed
                     Dim protocolRm As RmStructure = rmStructComp.Children.Items(0)
 
                     If protocolRm.Type = StructureType.Slot Then
-                        BuildSlotFromAttribute(an_attribute, CType(protocolRm, RmSlot))
+                        BuildSlotFromRm(a, CType(protocolRm, RmSlot))
                     Else
                         Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject( _
-                            an_attribute, _
+                            a, _
                             ReferenceModel.RM_StructureName(rmStructComp.Children.Items(0).Type), _
                             rmStructComp.Children.Items(0).NodeId, MakeOccurrences(New RmCardinality(1, 1)))
 
@@ -1781,13 +1776,13 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Private Sub BuildWorkFlowStep(ByVal rm As RmPathwayStep, ByVal an_attribute As XMLParser.C_ATTRIBUTE)
+        Private Sub BuildWorkFlowStep(ByVal rm As RmPathwayStep, ByVal attribute As XMLParser.C_ATTRIBUTE)
             Dim a_state, a_step As XMLParser.C_ATTRIBUTE
             Dim objNode As XMLParser.C_COMPLEX_OBJECT
             Dim code_phrase As New CodePhrase
 
-            objNode = mAomFactory.MakeComplexObject(an_attribute, "ISM_TRANSITION", rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
-            a_state = mAomFactory.MakeSingleAttribute(objNode, "current_state", an_attribute.existence)
+            objNode = mAomFactory.MakeComplexObject(attribute, "ISM_TRANSITION", rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
+            a_state = mAomFactory.MakeSingleAttribute(objNode, "current_state", attribute.existence)
             code_phrase.TerminologyID = "openehr"
             code_phrase.Codes.Add((CInt(rm.StateType)).ToString)
 
@@ -1796,7 +1791,7 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             BuildCodedText(a_state, code_phrase)
-            a_step = mAomFactory.MakeSingleAttribute(objNode, "careflow_step", an_attribute.existence)
+            a_step = mAomFactory.MakeSingleAttribute(objNode, "careflow_step", attribute.existence)
             code_phrase = New CodePhrase
             code_phrase.Codes.Add(rm.NodeId)  ' local is default terminology, node_id of rm is same as term code of name
             BuildCodedText(a_step, code_phrase)
@@ -1804,16 +1799,16 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Sub BuildPathway(ByVal rm As RmStructureCompound, ByVal arch_def As XMLParser.C_COMPLEX_OBJECT)
             If rm.Children.Count > 0 Then
-                Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "ism_transition", rm.Existence.XmlExistence)
+                Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "ism_transition", rm.Existence.XmlExistence)
 
                 For Each pathway_step As RmPathwayStep In rm.Children
-                    BuildWorkFlowStep(pathway_step, attribute)
+                    BuildWorkFlowStep(pathway_step, a)
                 Next
             End If
         End Sub
 
-        Private Sub BuildActivity(ByVal rm As RmActivity, ByVal an_attribute As XMLParser.C_ATTRIBUTE)
-            Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(an_attribute, "ACTIVITY", rm.NodeId, MakeOccurrences(rm.Occurrences))
+        Private Sub BuildActivity(ByVal rm As RmActivity, ByVal attribute As XMLParser.C_ATTRIBUTE)
+            Dim o As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(attribute, "ACTIVITY", rm.NodeId, MakeOccurrences(rm.Occurrences))
             Dim escapedString As String = rm.ArchetypeId
 
             If escapedString <> "" Then
@@ -1825,18 +1820,18 @@ Namespace ArchetypeEditor.XML_Classes
                 End If
 
                 escapedString = ReferenceModel.ReferenceModelName & "-ACTION\." + escapedString
-                an_attribute = mAomFactory.MakeSingleAttribute(objNode, "action_archetype_id", rm.Children.Existence.XmlExistence)
+                attribute = mAomFactory.MakeSingleAttribute(o, "action_archetype_id", rm.Children.Existence.XmlExistence)
                 Dim c_s As New XMLParser.C_STRING
                 c_s.pattern = escapedString
-                mAomFactory.MakePrimitiveObject(an_attribute, c_s)
+                mAomFactory.MakePrimitiveObject(attribute, c_s)
             End If
 
             For Each rm_struct As RmStructure In rm.Children
-                an_attribute = mAomFactory.MakeSingleAttribute(objNode, "description", rm.Children.Existence.XmlExistence)
+                attribute = mAomFactory.MakeSingleAttribute(o, "description", rm.Children.Existence.XmlExistence)
 
                 Select Case rm_struct.Type
                     Case StructureType.List, StructureType.Single, StructureType.Tree, StructureType.Table
-                        Dim EIF_struct As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(an_attribute, _
+                        Dim EIF_struct As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(attribute, _
                             ReferenceModel.RM_StructureName(rm_struct.Type), _
                             rm_struct.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
 
@@ -1845,7 +1840,7 @@ Namespace ArchetypeEditor.XML_Classes
                     Case StructureType.Slot
                         ' this allows a structure to be archetyped at this point
                         Debug.Assert(CType(rm_struct, RmStructure).Type = StructureType.Slot)
-                        BuildSlotFromAttribute(an_attribute, rm_struct)
+                        BuildSlotFromRm(attribute, rm_struct)
                 End Select
             Next
         End Sub
@@ -1856,12 +1851,12 @@ Namespace ArchetypeEditor.XML_Classes
                     Case StructureType.Activities
 
                         'ToDo: Set cardinality on this attribute
-                        Dim an_attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute(mXmlArchetype.definition, _
+                        Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute(mXmlArchetype.definition, _
                             "activities", MakeCardinality(New RmCardinality(0)), _
                             New RmExistence(1).XmlExistence)
 
                         For Each activity As RmActivity In rm.Children
-                            BuildActivity(activity, an_attribute)
+                            BuildActivity(activity, a)
                         Next
                     Case StructureType.Protocol
                         BuildProtocol(rm, mXmlArchetype.definition)
@@ -1873,24 +1868,24 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Sub BuildAction(ByVal rm As RmStructureCompound, ByVal a_definition As XMLParser.C_COMPLEX_OBJECT)
             Dim action_spec As RmStructure
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
-            Dim objNode As XMLParser.C_COMPLEX_OBJECT
+            Dim a As XMLParser.C_ATTRIBUTE
+            Dim o As XMLParser.C_COMPLEX_OBJECT
 
             If rm.Children.Items.Length > 0 Then
-                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "description", rm.Existence.XmlExistence)
+                a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "description", rm.Existence.XmlExistence)
                 action_spec = rm.Children.Items(0)
 
                 Select Case action_spec.Type
                     Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                        objNode = mAomFactory.MakeComplexObject(an_attribute, _
+                        o = mAomFactory.MakeComplexObject(a, _
                             ReferenceModel.RM_StructureName(action_spec.Type), _
                             rm.Children.Items(0).NodeId, MakeOccurrences(New RmCardinality(1, 1)))
 
-                        BuildStructure(action_spec, objNode)
+                        BuildStructure(action_spec, o)
 
                     Case StructureType.Slot
                         ' allows action to be specified in another archetype
-                        BuildSlotFromAttribute(an_attribute, CType(action_spec, RmSlot))
+                        BuildSlotFromRm(a, CType(action_spec, RmSlot))
                 End Select
             End If
         End Sub
@@ -1898,7 +1893,7 @@ Namespace ArchetypeEditor.XML_Classes
         Public Overridable Sub MakeParseTree()
             If Not mSynchronised Then
                 Dim rm As RmStructureCompound
-                Dim attribute As XMLParser.C_ATTRIBUTE
+                Dim a As XMLParser.C_ATTRIBUTE
 
                 'reset the XML definition to make it again
                 mXmlArchetype.definition.attributes = Nothing
@@ -1932,8 +1927,8 @@ Namespace ArchetypeEditor.XML_Classes
                     mAomFactory = New XMLParser.AomFactory()
 
                     If cDefinition.HasNameConstraint Then
-                        attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "name", New RmExistence(1).XmlExistence)
-                        BuildText(attribute, cDefinition.NameConstraint)
+                        a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "name", New RmExistence(1).XmlExistence)
+                        BuildText(a, cDefinition.NameConstraint)
                     End If
 
                     Select Case cDefinition.Type
@@ -1977,7 +1972,7 @@ Namespace ArchetypeEditor.XML_Classes
 
                         Case StructureType.ADMIN_ENTRY
                             BuildEntryAttributes(CType(cDefinition, RmEntry), mXmlArchetype.definition)
-                            attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data", New RmExistence(1).XmlExistence)
+                            a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data", New RmExistence(1).XmlExistence)
                             Dim items() As RmStructure = CType(cDefinition, ArchetypeDefinition).Data.Items
 
                             If items.Length > 0 Then
@@ -1985,7 +1980,7 @@ Namespace ArchetypeEditor.XML_Classes
 
                                 If struct.Children.Items.Length > 0 Then
                                     struct = struct.Children.Items(0)
-                                    BuildStructure(struct, mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_StructureName(struct.Type), struct.NodeId, MakeOccurrences(New RmCardinality(1, 1))))
+                                    BuildStructure(struct, mAomFactory.MakeComplexObject(a, ReferenceModel.RM_StructureName(struct.Type), struct.NodeId, MakeOccurrences(New RmCardinality(1, 1))))
                                 End If
                             End If
 
@@ -2016,30 +2011,30 @@ Namespace ArchetypeEditor.XML_Classes
                                         If a_rm Is Nothing OrElse a_rm.Type <> StructureType.History Then
                                             rm_state = rm
                                         Else
-                                            attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "state", a_rm.Existence.XmlExistence)
+                                            a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "state", a_rm.Existence.XmlExistence)
 
                                             ' can have EventSeries for each state
-                                            BuildHistory(a_rm, attribute)
+                                            BuildHistory(a_rm, a)
                                         End If
                                 End Select
                             Next
 
                             'Add the data
                             If Not rm_data Is Nothing Then
-                                attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data", rm_data.Existence.XmlExistence)
+                                a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data", rm_data.Existence.XmlExistence)
 
                                 For Each a_rm As RmStructureCompound In rm_data.Children.Items
                                     Select Case a_rm.Type
                                         Case StructureType.History
                                             If Not rm_state Is Nothing Then
-                                                BuildHistory(a_rm, attribute, rm_state)
+                                                BuildHistory(a_rm, a, rm_state)
                                             Else
-                                                BuildHistory(a_rm, attribute)
+                                                BuildHistory(a_rm, a)
                                             End If
                                         Case Else
                                             Debug.Assert(False) '?OBSOLETE
                                             Dim objNode As XMLParser.C_COMPLEX_OBJECT
-                                            objNode = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
+                                            objNode = mAomFactory.MakeComplexObject(a, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
                                             BuildStructure(a_rm, objNode)
                                     End Select
                                 Next
@@ -2083,7 +2078,7 @@ Namespace ArchetypeEditor.XML_Classes
 
         Sub BuildLinks(ByVal cLinks As System.Collections.Generic.List(Of RmLink), ByVal cObject As XMLParser.C_COMPLEX_OBJECT)
             Dim linksAttribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute(cObject, "links", MakeCardinality(New RmCardinality(0)), New RmExistence(0).XmlExistence)
-            Dim anAttribute As XMLParser.C_ATTRIBUTE
+            Dim a As XMLParser.C_ATTRIBUTE
 
             For Each l As RmLink In cLinks
                 If l.HasConstraint Then
@@ -2091,18 +2086,18 @@ Namespace ArchetypeEditor.XML_Classes
                         mAomFactory.MakeComplexObject(linksAttribute, "LINK")
 
                     If l.Meaning.TypeOfTextConstraint <> TextConstraintType.Text Then
-                        anAttribute = mAomFactory.MakeSingleAttribute(linkObject, "meaning", New RmExistence().XmlExistence)
-                        BuildText(anAttribute, l.Meaning)
+                        a = mAomFactory.MakeSingleAttribute(linkObject, "meaning", New RmExistence().XmlExistence)
+                        BuildText(a, l.Meaning)
                     End If
 
                     If l.LinkType.TypeOfTextConstraint <> TextConstraintType.Text Then
-                        anAttribute = mAomFactory.MakeSingleAttribute(linkObject, "type", New RmExistence().XmlExistence)
-                        BuildText(anAttribute, l.LinkType)
+                        a = mAomFactory.MakeSingleAttribute(linkObject, "type", New RmExistence().XmlExistence)
+                        BuildText(a, l.LinkType)
                     End If
 
                     If l.Target.RegularExpression <> String.Empty Then
-                        anAttribute = mAomFactory.MakeSingleAttribute(linkObject, "target".ToLowerInvariant, New RmExistence().XmlExistence)
-                        BuildURI(anAttribute, l.Target)
+                        a = mAomFactory.MakeSingleAttribute(linkObject, "target".ToLowerInvariant, New RmExistence().XmlExistence)
+                        BuildURI(a, l.Target)
                     End If
                 End If
             Next
@@ -2114,10 +2109,9 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             If CType(cDefinition, RmEntry).ProviderIsMandatory Then
-                Dim objnode As XMLParser.C_COMPLEX_OBJECT
-                Dim an_attribute As XMLParser.C_ATTRIBUTE
-                an_attribute = mAomFactory.MakeSingleAttribute(archetypeDefinition, "provider", New RmExistence(1).XmlExistence)
-                objnode = mAomFactory.MakeComplexObject(an_attribute, "PARTY_PROXY", "", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim o As XMLParser.C_COMPLEX_OBJECT
+                Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(archetypeDefinition, "provider", New RmExistence(1).XmlExistence)
+                o = mAomFactory.MakeComplexObject(a, "PARTY_PROXY", "", MakeOccurrences(New RmCardinality(1, 1)))
             End If
 
             BuildParticipations(mXmlArchetype.definition, CType(cDefinition, RmEntry).OtherParticipations)

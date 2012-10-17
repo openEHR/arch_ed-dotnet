@@ -24,51 +24,50 @@ Namespace ArchetypeEditor.ADL_Classes
     Public Class ADL_RmElement
         Inherits RmElement
 
-        Sub New(ByVal EIF_Element As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        Sub New(ByVal EIF_Element As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal)
             MyBase.New(EIF_Element)
-            ProcessElement(EIF_Element, a_filemanager)
+            ProcessElement(EIF_Element, fileManager)
         End Sub
 
-        Private Sub ProcessElement(ByVal ComplexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        Private Sub ProcessElement(ByVal complexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal)
             Try
                 Dim v As EiffelKernel.STRING_8 = Eiffel.String("value")
                 cConstraint = New Constraint
 
-                If Not ComplexObj.any_allowed Then
-                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                If Not complexObj.any_allowed Then
+                    Dim a As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                     Dim i As Integer
 
-                    If ComplexObj.has_attribute(v) Then
-                        attribute = ComplexObj.c_attribute_at_path(v)
+                    If complexObj.has_attribute(v) Then
+                        a = complexObj.c_attribute_at_path(v)
 
-                        If attribute.children.count > 1 Then
-                            ' multiple constraints - not dealt with yet in the GUI
-                            Dim m_c As New Constraint_Choice
+                        If a.children.count > 1 Then
+                            Dim c As New Constraint_Choice
 
-                            For i = 1 To attribute.children.count
-                                m_c.Constraints.Add(ProcessValue(CType(attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager))
+                            For i = 1 To a.children.count
+                                c.Constraints.Add(ProcessValue(CType(a.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager))
                             Next
 
-                            cConstraint = m_c
-                        ElseIf attribute.has_children Then
-                            cConstraint = ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager)
+                            cConstraint = c
+                        ElseIf a.has_children Then
+                            cConstraint = ProcessValue(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager)
                         End If
                     End If
 
                     Dim hasNullFlavour As Boolean = False
                     v = Eiffel.String("null_flavor") ' Obsolete
-                    hasNullFlavour = ComplexObj.has_attribute(v)
+                    hasNullFlavour = complexObj.has_attribute(v)
 
                     If Not hasNullFlavour Then
                         v = Eiffel.String("null_flavour") ' redundant
-                        hasNullFlavour = ComplexObj.has_attribute(v)
+                        hasNullFlavour = complexObj.has_attribute(v)
                     End If
 
                     If hasNullFlavour Then
-                        attribute = ComplexObj.c_attribute_at_path(v)
+                        a = complexObj.c_attribute_at_path(v)
 
-                        If attribute.children.count = 1 Then
-                            Dim c As Constraint_Text = ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        If a.children.count = 1 Then
+                            Dim c As Constraint_Text = ProcessText(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
 
                             If Not c Is Nothing AndAlso c.AllowableValues.Codes.Count > 0 Then
                                 ConstrainedNullFlavours = c.AllowableValues
@@ -77,12 +76,12 @@ Namespace ArchetypeEditor.ADL_Classes
                     End If
                 End If
             Catch ex As Exception
-                MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ComplexObj.node_id.to_cil & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & complexObj.node_id.to_cil & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Sub
 
-        Private Function ProcessInterval(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint_Interval
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+        Private Function ProcessInterval(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal) As Constraint_Interval
+            Dim a As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             Debug.Assert(Not ObjNode.any_allowed)
 
@@ -91,10 +90,10 @@ Namespace ArchetypeEditor.ADL_Classes
                     Dim cic As New Constraint_Interval_Count
                     Dim countLimits As Constraint_Count
 
-                    attribute = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+                    a = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                    If attribute.has_children Then
-                        countLimits = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
+                    If a.has_children Then
+                        countLimits = CType(ProcessValue(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager), Constraint_Count)
 
                         If countLimits.HasMaximum Then
                             CType(cic.UpperLimit, Constraint_Count).HasMaximum = True
@@ -114,19 +113,19 @@ Namespace ArchetypeEditor.ADL_Classes
                     Try
                         ' Get the upper value
                         If ObjNode.has_attribute(Eiffel.String("upper")) Then
-                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
+                            a = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
 
-                            If attribute.has_children Then
-                                cic.UpperLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
+                            If a.has_children Then
+                                cic.UpperLimit = CType(ProcessValue(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager), Constraint_Count)
                             End If
                         End If
 
                         ' Get the lower value
                         If ObjNode.has_attribute(Eiffel.String("lower")) Then
-                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
+                            a = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
 
-                            If attribute.has_children Then
-                                cic.LowerLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
+                            If a.has_children Then
+                                cic.LowerLimit = CType(ProcessValue(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager), Constraint_Count)
                             End If
                         End If
                     Catch ex As Exception
@@ -138,10 +137,10 @@ Namespace ArchetypeEditor.ADL_Classes
                     Dim ciq As New Constraint_Interval_Quantity
                     Dim quantLimits As New Constraint_Quantity
 
-                    attribute = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+                    a = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                    If attribute.has_children Then
-                        quantLimits = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
+                    If a.has_children Then
+                        quantLimits = CType(ProcessValue(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager), Constraint_Quantity)
                     End If
 
                     If quantLimits.HasUnits Then
@@ -158,19 +157,19 @@ Namespace ArchetypeEditor.ADL_Classes
                     Try
                         ' Get the upper value
                         If ObjNode.has_attribute(Eiffel.String("upper")) Then
-                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
+                            a = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
 
-                            If attribute.has_children Then
-                                ciq.UpperLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
+                            If a.has_children Then
+                                ciq.UpperLimit = CType(ProcessValue(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager), Constraint_Quantity)
                             End If
                         End If
 
                         ' Get the lower value
                         If ObjNode.has_attribute(Eiffel.String("lower")) Then
-                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
+                            a = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
 
-                            If attribute.has_children Then
-                                ciq.LowerLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
+                            If a.has_children Then
+                                ciq.LowerLimit = CType(ProcessValue(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager), Constraint_Quantity)
                             End If
                         End If
                     Catch ex As Exception
@@ -184,19 +183,19 @@ Namespace ArchetypeEditor.ADL_Classes
                     Try
                         ' Get the upper value
                         If ObjNode.has_attribute(Eiffel.String("upper")) Then
-                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
+                            a = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
 
-                            If attribute.has_children Then
-                                cidt.UpperLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_DateTime)
+                            If a.has_children Then
+                                cidt.UpperLimit = CType(ProcessValue(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager), Constraint_DateTime)
                             End If
                         End If
 
                         ' Get the lower value
                         If ObjNode.has_attribute(Eiffel.String("lower")) Then
-                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
+                            a = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
 
-                            If attribute.has_children Then
-                                cidt.LowerLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_DateTime)
+                            If a.has_children Then
+                                cidt.LowerLimit = CType(ProcessValue(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager), Constraint_DateTime)
                             End If
                         End If
                     Catch ex As Exception
@@ -342,67 +341,76 @@ Namespace ArchetypeEditor.ADL_Classes
             Return result
         End Function
 
-        Private Function ProcessValue(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint
-            Select Case ObjNode.rm_type_name.to_cil.ToLowerInvariant()
-                Case "dv_quantity", "quantity"
-                    Return ProcessQuantity(CType(ObjNode, openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_QUANTITY))
-                Case "dv_coded_text", "dv_text", "coded_text", "text"
-                    Return ProcessText(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                Case "dv_boolean", "boolean"
-                    If TypeOf (ObjNode) Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
-                        Return ProcessBoolean(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                    Else
-                        'obsolete
-                        Return ProcessBoolean(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
-                    End If
-                Case "dv_ordinal", "ordinal"
-                    If TypeOf (ObjNode) Is openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL Then
-                        Return ProcessOrdinal(CType(ObjNode, openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL), a_filemanager)
-                    Else
-                        'redundant
-                        Return ProcessOrdinal(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
-                    End If
-                Case "dv_date_time", "dv_date", "dv_time", "datetime", "date_time", "date", "time", "_c_date"
-                    If TypeOf (ObjNode) Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
-                        Return ProcessDateTime(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                    Else
-                        'obsolete
-                        Return ProcessDateTime(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
-                    End If
-                Case "quantity_ratio" ' OBSOLETE
-                    Return ProcessRatio(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                Case "dv_proportion", "proportion"
-                    Return ProcessProportion(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                Case "dv_count", "count"
-                    Return ProcessCount(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                Case "interval_count", "interval_quantity" 'OBSOLETE
-                    Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
-                Case "dv_interval<dv_count>", "dv_interval<count>", "interval<count>", _
-                     "dv_interval<dv_quantity>", "dv_interval<quantity>", "interval<quantity>", _
-                     "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", _
-                     "dv_interval<dv_date>", "dv_interval<dv_time>"
-                    Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
-                Case "dv_multimedia", "multimedia", "multi_media"
-                    Return ProcessMultiMedia(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                Case "dv_uri", "uri", "dv_ehr_uri"
-                    Return ProcessUri(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                Case "dv_identifier"
-                    Return ProcessIdentifier(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                    'TODO Case "dv_currency"
-                    '    Return ProcessCurrency(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                Case "dv_duration", "duration"
-                    If TypeOf ObjNode Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
-                        Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                    Else
-                        'obsolete
-                        Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
-                    End If
-                Case "dv_parsable"
-                    Return ProcessParsable(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                Case Else
-                    Debug.Assert(False, String.Format("Attribute not handled: {0}", ObjNode.rm_type_name.to_cil))
-                    Return New Constraint
-            End Select
+        Private Function ProcessValue(ByVal node As openehr.openehr.am.archetype.constraint_model.C_OBJECT, ByVal fileManager As FileManagerLocal) As Constraint
+            Dim result As Constraint
+            Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT = TryCast(node, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)
+
+            If Not slot Is Nothing Then
+                result = New Constraint_Slot(slot)
+            Else
+                Select Case node.rm_type_name.to_cil.ToLowerInvariant()
+                    Case "dv_quantity", "quantity"
+                        result = ProcessQuantity(CType(node, openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_QUANTITY))
+                    Case "dv_coded_text", "dv_text", "coded_text", "text"
+                        result = ProcessText(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Case "dv_boolean", "boolean"
+                        If TypeOf (node) Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
+                            result = ProcessBoolean(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        Else
+                            'obsolete
+                            result = ProcessBoolean(CType(node, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                        End If
+                    Case "dv_ordinal", "ordinal"
+                        If TypeOf (node) Is openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL Then
+                            result = ProcessOrdinal(CType(node, openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL), fileManager)
+                        Else
+                            'redundant
+                            result = ProcessOrdinal(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), fileManager)
+                        End If
+                    Case "dv_date_time", "dv_date", "dv_time", "datetime", "date_time", "date", "time", "_c_date"
+                        If TypeOf (node) Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
+                            result = ProcessDateTime(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        Else
+                            'obsolete
+                            result = ProcessDateTime(CType(node, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                        End If
+                    Case "quantity_ratio" ' OBSOLETE
+                        result = ProcessRatio(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Case "dv_proportion", "proportion"
+                        result = ProcessProportion(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Case "dv_count", "count"
+                        result = ProcessCount(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Case "interval_count", "interval_quantity" 'OBSOLETE
+                        result = ProcessInterval(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), fileManager)
+                    Case "dv_interval<dv_count>", "dv_interval<count>", "interval<count>", _
+                         "dv_interval<dv_quantity>", "dv_interval<quantity>", "interval<quantity>", _
+                         "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", _
+                         "dv_interval<dv_date>", "dv_interval<dv_time>"
+                        result = ProcessInterval(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), fileManager)
+                    Case "dv_multimedia", "multimedia", "multi_media"
+                        result = ProcessMultiMedia(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Case "dv_uri", "uri", "dv_ehr_uri"
+                        result = ProcessUri(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Case "dv_identifier"
+                        result = ProcessIdentifier(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        'TODO Case "dv_currency"
+                        '    result = ProcessCurrency(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Case "dv_duration", "duration"
+                        If TypeOf node Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
+                            result = ProcessDuration(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        Else
+                            'obsolete
+                            result = ProcessDuration(CType(node, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                        End If
+                    Case "dv_parsable"
+                        result = ProcessParsable(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Case Else
+                        Debug.Assert(False, String.Format("Attribute not handled: {0}", node.rm_type_name.to_cil))
+                        result = New Constraint
+                End Select
+            End If
+
+            Return result
         End Function
 
         Shared Function ProcessParsable(ByVal dvParse As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint
@@ -734,8 +742,8 @@ Namespace ArchetypeEditor.ADL_Classes
             Return result
         End Function
 
-        Private Function ProcessOrdinal(ByVal an_ordinal_constraint As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
-            Dim ord As New Constraint_Ordinal(a_filemanager)
+        Private Function ProcessOrdinal(ByVal an_ordinal_constraint As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL, ByVal fileManager As FileManagerLocal) As Constraint_Ordinal
+            Dim ord As New Constraint_Ordinal(fileManager)
             Dim Ordinals As EiffelList.LINKED_LIST_REFERENCE
             Dim c_phrase As New CodePhrase
             Dim openehr_ordinal As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
@@ -785,7 +793,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         'OBSOLETE
-        Private Function ProcessOrdinal(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
+        Private Function ProcessOrdinal(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal) As Constraint_Ordinal
             Dim i As Integer
 
             If Not ObjNode.any_allowed Then
@@ -795,7 +803,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     If attribute.has_children Then
                         Select Case attribute.rm_attribute_name.to_cil.ToLowerInvariant()
                             Case "value"
-                                Return ProcessOrdinal(CType(attribute.children.first, openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL), a_filemanager)
+                                Return ProcessOrdinal(CType(attribute.children.first, openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL), fileManager)
                             Case Else
                                 Debug.Assert(False, "attribute not handled")
                         End Select
@@ -803,7 +811,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Next
             End If
 
-            Return New Constraint_Ordinal(True, a_filemanager)
+            Return New Constraint_Ordinal(True, fileManager)
         End Function
 
         Private Function ProcessBoolean(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Boolean
@@ -939,79 +947,71 @@ Namespace ArchetypeEditor.ADL_Classes
             Return result
         End Function
 
-        Private Function ProcessQuantity(ByVal ObjNode As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_QUANTITY) As Constraint_Quantity
-            Dim q As New Constraint_Quantity
+        Private Function ProcessQuantity(ByVal node As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_QUANTITY) As Constraint_Quantity
+            Dim result As New Constraint_Quantity
             Dim u As Constraint_QuantityUnit
             Dim i As Integer
 
-            If ObjNode.any_allowed Then
-                Return q
-            End If
-
-            If Not ObjNode.property Is Nothing Then
-
-                Dim s As String = ObjNode.property.code_string.to_cil
+            If Not node.any_allowed And Not node.property Is Nothing Then
+                Dim s As String = node.property.code_string.to_cil
 
                 If IsNumeric(s) Then
-                    q.OpenEhrCode = Integer.Parse(s)
+                    result.OpenEhrCode = Integer.Parse(s)
                 Else
                     'OBSOLETE - to cope with physical properties
-                    q.PhysicalPropertyAsString = s
+                    result.PhysicalPropertyAsString = s
                 End If
 
-                If (Not ObjNode.list Is Nothing) AndAlso ObjNode.list.count > 0 Then
+                If Not node.list Is Nothing AndAlso node.list.count > 0 Then
                     Dim cqi As openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM
 
-                    For i = 1 To ObjNode.list.count
-                        'Do not set attribute to true here as there
-                        'is no special handling of time units until Unit is set
-                        u = New Constraint_QuantityUnit(q.IsTime)
-                        cqi = CType(ObjNode.list.i_th(i), openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM)
-
+                    For i = 1 To node.list.count
+                        'Do not set attribute to true here as there is no special handling of time units until Unit is set
+                        u = New Constraint_QuantityUnit(result.IsTime)
+                        cqi = CType(node.list.i_th(i), openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM)
                         u.Unit = cqi.units.to_cil
 
                         If Not cqi.any_magnitude_allowed Then
                             u.HasMaximum = Not cqi.magnitude.upper_unbounded
+
                             If u.HasMaximum Then
                                 u.MaximumRealValue = CSng(cqi.magnitude.upper)
                                 u.IncludeMaximum = cqi.magnitude.upper_included
                             End If
+
                             u.HasMinimum = Not cqi.magnitude.lower_unbounded
+
                             If u.HasMinimum Then
                                 u.MinimumRealValue = CSng(cqi.magnitude.lower)
                                 u.IncludeMinimum = cqi.magnitude.lower_included
                             End If
                         End If
-                        'Changed SRH: 18th July 2007
-                        'Moved from inside any allowed to allow precision without magnitude
+
                         If Not cqi.any_precision_allowed Then
                             'Only deal in maximum precision
                             u.Precision = cqi.precision.upper
                         End If
-                        ' need to add with key for retrieval
-                        q.Units.Add(u, u.Unit)
-                    Next
 
+                        result.Units.Add(u, u.Unit)
+                    Next
                 End If
 
-                If ObjNode.has_assumed_value Then
-                    Dim units As String = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).units.to_cil
-                    'SRH: June 22 2009 - error with blood pressure archetype with assumed unit of degrees - apply only to time
-
+                If node.has_assumed_value Then
+                    Dim units As String = CType(node.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).units.to_cil
                     Dim assumedUnits As Constraint_QuantityUnit
-                    If q.IsCoded AndAlso q.OpenEhrCode = 128 Then  'time
-                        assumedUnits = CType(q.Units.Item(Main.ISO_TimeUnits.GetOptimalIsoUnit(units)), Constraint_QuantityUnit)
+
+                    If result.IsCoded AndAlso result.OpenEhrCode = 128 Then  'time
+                        assumedUnits = CType(result.Units.Item(Main.ISO_TimeUnits.GetOptimalIsoUnit(units)), Constraint_QuantityUnit)
                     Else
-                        assumedUnits = CType(q.Units.Item(units), Constraint_QuantityUnit)
+                        assumedUnits = CType(result.Units.Item(units), Constraint_QuantityUnit)
                     End If
-                    assumedUnits.AssumedValue = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).magnitude
+
+                    assumedUnits.AssumedValue = CType(node.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).magnitude
                     assumedUnits.HasAssumedValue = True
                 End If
+            End If
 
-                End If
-
-                Return q
-
+            Return result
         End Function
 
     End Class

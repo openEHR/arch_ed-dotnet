@@ -90,6 +90,134 @@ Public Class Constraint_Slot
         End Set
     End Property
 
+    Sub SetRmTypeName(ByVal name As String)
+        Select Case name.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
+            Case "SECTION"
+                RM_ClassType = StructureType.SECTION
+            Case "ENTRY"
+                RM_ClassType = StructureType.ENTRY
+            Case "ADMIN_ENTRY"
+                RM_ClassType = StructureType.ADMIN_ENTRY
+            Case "OBSERVATION"
+                RM_ClassType = StructureType.OBSERVATION
+            Case "EVALUATION"
+                RM_ClassType = StructureType.EVALUATION
+            Case "ACTION"
+                RM_ClassType = StructureType.ACTION
+            Case "INSTRUCTION"
+                RM_ClassType = StructureType.INSTRUCTION
+            Case "ITEM_SINGLE"
+                RM_ClassType = StructureType.Single
+            Case "ITEM_LIST"
+                RM_ClassType = StructureType.List
+            Case "ITEM_TREE"
+                RM_ClassType = StructureType.Tree
+            Case "ITEM_TABLE"
+                RM_ClassType = StructureType.Table
+            Case "ITEM"
+                RM_ClassType = StructureType.Item
+            Case "CLUSTER"
+                RM_ClassType = StructureType.Cluster
+            Case "ELEMENT"
+                RM_ClassType = StructureType.Element
+        End Select
+    End Sub
+
+    Sub New()
+    End Sub
+
+    Sub New(ByVal slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)
+        SetRmTypeName(slot.rm_type_name.to_cil)
+
+        If slot.has_includes Then
+            For i As Integer = 1 To slot.includes.count
+                Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION = CType(slot.includes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
+                Dim pattern As String = ArchetypeEditor.ADL_Classes.ADL_Tools.GetConstraintFromAssertion(assert)
+
+                If pattern = ".*" Then
+                    IncludeAll = True
+                ElseIf Not ReferenceModel.IsAbstract(RM_ClassType) Then
+                    Dim classPrefix As String = ReferenceModel.ReferenceModelName + "-" + RM_ClassType.ToString.ToUpperInvariant
+
+                    For Each s As String In pattern.Split("|"c)
+                        Include.Add(s.Replace(classPrefix, "").TrimStart("\"c, "."c))
+                    Next
+                Else
+                    For Each s As String In pattern.Split("|"c)
+                        Include.Add(s)
+                    Next
+                End If
+            Next
+        End If
+
+        If slot.has_excludes Then
+            For i As Integer = 1 To slot.excludes.count
+                Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION = CType(slot.excludes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
+                Dim pattern As String = ArchetypeEditor.ADL_Classes.ADL_Tools.GetConstraintFromAssertion(assert)
+
+                If pattern = ".*" Then
+                    ExcludeAll = True
+                ElseIf Not ReferenceModel.IsAbstract(RM_ClassType) Then
+                    Dim classPrefix As String = ReferenceModel.ReferenceModelName + "-" + RM_ClassType.ToString.ToUpperInvariant
+
+                    For Each s As String In pattern.Split("|"c)
+                        Exclude.Add(s.Replace(classPrefix, "").TrimStart("\"c, "."c))
+                    Next
+                Else
+                    For Each s As String In pattern.Split("|"c)
+                        Exclude.Add(s)
+                    Next
+                End If
+            Next
+        End If
+    End Sub
+
+    Sub New(ByVal slot As XMLParser.ARCHETYPE_SLOT)
+        SetRmTypeName(slot.rm_type_name)
+
+        If slot.includes IsNot Nothing AndAlso slot.includes.Length > 0 Then
+            For i As Integer = 0 To slot.includes.Length - 1
+                Dim assert As XMLParser.ASSERTION = CType(slot.includes(i), XMLParser.ASSERTION)
+                Dim pattern As String = ArchetypeEditor.XML_Classes.XML_Tools.GetConstraintFromAssertion(assert)
+
+                If pattern = ".*" Then
+                    IncludeAll = True
+                ElseIf Not ReferenceModel.IsAbstract(RM_ClassType) Then
+                    Dim classPrefix As String = ReferenceModel.ReferenceModelName + "-" + RM_ClassType.ToString.ToUpperInvariant
+
+                    For Each s As String In pattern.Split("|"c)
+                        Include.Add(s.Replace(classPrefix, "").TrimStart("\"c, "."c))
+                    Next
+                Else
+                    For Each s As String In pattern.Split("|"c)
+                        Include.Add(s)
+                    Next
+                End If
+            Next
+        End If
+
+        If slot.excludes IsNot Nothing AndAlso slot.excludes.Length > 0 Then
+            For i As Integer = 0 To slot.excludes.Length - 1
+                Dim assert As XMLParser.ASSERTION = CType(slot.excludes(i), XMLParser.ASSERTION)
+                Dim pattern As String = ArchetypeEditor.XML_Classes.XML_Tools.GetConstraintFromAssertion(assert)
+
+                If pattern = ".*" Then
+                    ExcludeAll = True
+                ElseIf Not ReferenceModel.IsAbstract(RM_ClassType) Then
+                    Dim classPrefix As String = ReferenceModel.ReferenceModelName + "-" + RM_ClassType.ToString.ToUpperInvariant
+
+                    For Each s As String In pattern.Split("|"c)
+                        Exclude.Add(s.Replace(classPrefix, "").TrimStart("\"c, "."c))
+                    Next
+                Else
+                    For Each s As String In pattern.Split("|"c)
+                        Exclude.Add(s)
+                    Next
+                End If
+            Next
+        End If
+    End Sub
+
 End Class
 
 '
