@@ -246,12 +246,11 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkMilliseconds.Text = Main.ISO_TimeUnits.GetLanguageForISO("millisec")
     End Sub
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-
+    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         Dim s As String = Me.Constraint.AllowableUnits
 
         mCountControl = New CountConstraintControl(mFileManager)
-        Me.Controls.Add(mCountControl)
+        Controls.Add(mCountControl)
         mCountControl.Top = Me.panelDetail.Top + Me.panelDetail.Height + 10
         mCountControl.ShowConstraint(IsState, Me.Constraint)
         mCountControl.LabelQuantity.Text = AE_Constants.Instance.Unit

@@ -386,7 +386,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         End Get
     End Property
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
+    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         Dim s As String
         lblClass.Text = Filemanager.GetOpenEhrTerm(CInt(Constraint.RM_ClassType), Constraint.RM_ClassType.ToString())
         butShowAll()

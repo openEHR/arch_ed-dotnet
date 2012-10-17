@@ -216,9 +216,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
         End Get
     End Property
 
-    Protected Overloads Overrides Sub SetControlValuesFromElement(ByVal IsState As Boolean, _
-            ByVal aArchetypeElement As ArchetypeElement)
-
+    Protected Overrides Sub SetControlValuesFromElement(ByVal IsState As Boolean, ByVal aArchetypeElement As ArchetypeElement)
         Debug.Assert(TypeOf aArchetypeElement.Constraint Is Constraint_Ordinal)
         mOrdinalConstraint = CType(aArchetypeElement.Constraint, Constraint_Ordinal)
 
@@ -237,37 +235,30 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
             Me.MenuItemCancelCopy.Visible = True
             Me.MenuItemCopyAll.Enabled = False
         End If
-
     End Sub
 
-    Protected Overloads Overrides Sub SetControlValuesFromConstraint(ByVal IsState As Boolean, ByVal c As Constraint)
-
+    Protected Overrides Sub SetControlValuesFromConstraint(ByVal IsState As Boolean, ByVal c As Constraint)
         Debug.Assert(TypeOf c Is Constraint_Ordinal)
 
         mOrdinalConstraint = CType(c, Constraint_Ordinal)
-
         InitialiseOrdinals()
 
         ' set constraint values on control
         If IsState Then
-            Me.butSetAssumedOrdinal.Visible = True
-            Me.txtAssumedOrdinal.Visible = True
-            'SRH: 5 March 2009 - EDT-523 ordinal fix
-            Me.txtAssumedOrdinal.Text = GetOrdinalText(CInt(mOrdinalConstraint.AssumedValue))
+            butSetAssumedOrdinal.Visible = True
+            txtAssumedOrdinal.Visible = True
+            txtAssumedOrdinal.Text = GetOrdinalText(CInt(mOrdinalConstraint.AssumedValue))
         End If
-
-
-
     End Sub
-
-    'SRH: 5 March 2009 - EDT-523 ordinal fix
 
     Private Function GetOrdinalText(ByVal ordinal As Integer) As String
         Dim result As String = ""
         Dim dr As DataRow = Me.Constraint.OrdinalValues.Rows.Find(ordinal)
+
         If Not dr Is Nothing Then
             result = mFileManager.OntologyManager.GetText(CStr(dr.Item(2)))
         End If
+
         Return result
     End Function
 

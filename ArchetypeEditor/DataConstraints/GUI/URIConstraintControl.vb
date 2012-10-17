@@ -139,21 +139,14 @@ Public Class UriConstraintControl : Inherits ConstraintControl
         Me.lblRegex.Text = Filemanager.GetOpenEhrTerm(657, Me.lblRegex.Text)
     End Sub
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-
+    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         ' set constraint values on control
         MyBase.IsLoading = True
-
-        If Constraint.EhrUriOnly Then
-            Me.chkURI.Checked = True
-        Else
-            Me.chkURI.Checked = False
-        End If
+        chkURI.Checked = Constraint.EhrUriOnly
 
         If Constraint.RegularExpression <> Nothing Then
-            Me.txtRegEx.Text = Constraint.RegularExpression
+            txtRegEx.Text = Constraint.RegularExpression
         End If
-
     End Sub
 
     Private Sub chkURI_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkURI.CheckedChanged

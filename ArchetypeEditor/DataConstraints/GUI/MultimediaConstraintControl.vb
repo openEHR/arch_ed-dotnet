@@ -173,11 +173,8 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
         End Get
     End Property
 
-
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-
+    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         ' set constraint values on control
-
         Dim cp As CodePhrase = Me.Constraint.AllowableValues
 
         Debug.Assert(cp.TerminologyID = "openEHR")

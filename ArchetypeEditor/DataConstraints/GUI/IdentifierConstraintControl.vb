@@ -170,11 +170,9 @@ Public Class IdentifierConstraintControl : Inherits ConstraintControl
         Me.lblAssigner.Text = Filemanager.GetOpenEhrTerm(670, Me.lblAssigner.Text)
     End Sub
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-
+    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         ' set constraint values on control
         MyBase.IsLoading = True
-
 
         If Constraint.IssuerRegex <> Nothing Then
             Me.txtIssuer.Text = Constraint.IssuerRegex

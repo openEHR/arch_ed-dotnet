@@ -202,13 +202,11 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
         End Get
     End Property
 
-
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-
+    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         ' set constraint values on control
-
         For Each s As String In Me.Constraint.AllowableFormalisms
             Dim n As TreeNode
+
             If Not TvParsable.Nodes.ContainsKey(s) Then
                 TvParsable.Nodes.Add(s, s)
                 n = TvParsable.Nodes(TvParsable.Nodes.IndexOfKey(s))
@@ -216,10 +214,9 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
             Else
                 n = TvParsable.Nodes(TvParsable.Nodes.IndexOfKey(s))
             End If
+
             n.Checked = True
         Next
-
-
     End Sub
 
     Private Sub TvParsable_AfterCheck(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvParsable.AfterCheck

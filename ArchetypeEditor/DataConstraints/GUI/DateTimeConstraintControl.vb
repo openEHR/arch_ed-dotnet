@@ -132,13 +132,9 @@ Public Class DateTimeConstraintControl : Inherits ConstraintControl
     End Property
 
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-
-        Me.TvDateTime.SelectedNode = FindNode(Me.TvDateTime.Nodes, _
-                CStr(Me.Constraint.TypeofDateTimeConstraint), True)
-
-        Me.TvDateTime.SelectedNode.EnsureVisible()
-
+    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
+        TvDateTime.SelectedNode = FindNode(Me.TvDateTime.Nodes, CStr(Me.Constraint.TypeofDateTimeConstraint), True)
+        TvDateTime.SelectedNode.EnsureVisible()
     End Sub
 
     Private Sub TvDateTime_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvDateTime.AfterSelect

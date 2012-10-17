@@ -135,21 +135,16 @@ Public Class IntervalConstraintControl : Inherits ConstraintControl
         cc.Dock = DockStyle.Fill
         Me.TabConstraints.TabPages.Add(tp)
     End Sub
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-        
+
+    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         mIsState = IsState
         ' set constraint values on control
         AddConstraintControl(Me.Constraint.LowerLimit, AE_Constants.Instance.Lower)
         AddConstraintControl(Me.Constraint.UpperLimit, AE_Constants.Instance.Upper)
-        
     End Sub
 
-    'Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-
+    'Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
     '    mConstraintControl = New MultipleConstraintControl(mFileManager)
-
-
-
     '    Select Case MyBase.Constraint.Type
     '        Case ConstraintType.Interval_Count
     '            Me.LabelInterval.Text = AE_Constants.Instance.IntervalCount

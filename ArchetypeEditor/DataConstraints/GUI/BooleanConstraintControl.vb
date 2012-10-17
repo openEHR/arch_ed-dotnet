@@ -149,7 +149,7 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         End Get
     End Property
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
+    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         cbFalse.Text = AE_Constants.Instance.False_
         cbTrue.Text = AE_Constants.Instance.True_
 
@@ -166,7 +166,7 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
 
         gbAssummedValue.Visible = True
 
-        If Constraint.hasAssumedValue Then
+        If Constraint.HasAssumedValue Then
             If Constraint.AssumedValue Then
                 listBoolean.SelectedIndex = listBoolean.Items.IndexOf(AE_Constants.Instance.True_)
             Else
