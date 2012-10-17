@@ -530,15 +530,23 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         End If
 
         Dim increment As Decimal = CDec(Math.Pow(10, -precision)) ' set the increment to the power of the precision
-        Dim minimum As Decimal = unit.MinimumValue
-        Dim maximum As Decimal = unit.MaximumValue
+        Dim minimum As Decimal = Decimal.MinValue
+        Dim maximum As Decimal = Decimal.MaxValue
 
-        If Not unit.IncludeMinimum Then
-            minimum += increment  ' don't include minimum
+        If unit.HasMinimum Then
+            minimum = unit.MinimumValue
+
+            If Not unit.IncludeMinimum Then
+                minimum += increment  ' don't include minimum
+            End If
         End If
 
-        If Not unit.IncludeMaximum Then
-            maximum -= increment  ' don't include maximum
+        If unit.HasMaximum Then
+            maximum = unit.MaximumValue
+
+            If Not unit.IncludeMaximum Then
+                maximum -= increment  ' don't include maximum
+            End If
         End If
 
         AssumedValueNumericUpDown.DecimalPlaces = precision
