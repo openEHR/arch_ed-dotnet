@@ -1342,11 +1342,6 @@ Namespace ArchetypeEditor.XML_Classes
                     slot.SlotConstraint = slotConstraint
                     slot.Occurrences.IsUnbounded = True
                     BuildSlotFromRm(attribute, slot)
-
-                    'Dim slot As New XMLParser.ARCHETYPE_SLOT
-                    'slot.rm_type_name = ReferenceModel.RM_StructureName(slotConstraint.RM_ClassType)
-                    'BuildSlot(slot, slotConstraint)
-                    'mAomFactory.add_object(attribute, slot)
                 Else
                     BuildElementConstraint(attribute, constraint)
                 End If
