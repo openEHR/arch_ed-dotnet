@@ -895,10 +895,6 @@ Namespace ArchetypeEditor.ADL_Classes
 
                                             Dim assumedValue As openehr.openehr.rm.data_types.text.CODE_PHRASE = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).assumed_value, openehr.openehr.rm.data_types.text.CODE_PHRASE)
                                             result.AssumedValue = assumedValue.code_string().to_cil()
-
-                                            If Not assumedValue.terminology_id Is Nothing Then
-                                                result.AssumedValue_TerminologyId = assumedValue.terminology_id.value.to_cil()
-                                            End If
                                         End If
 
                                         If result.AllowableValues.TerminologyID = "local" Or result.AllowableValues.TerminologyID = "openehr" Then

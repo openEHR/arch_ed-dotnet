@@ -71,19 +71,6 @@ Public Class Constraint_Text
         End Set
     End Property
 
-    Public Property AssumedValue_TerminologyId() As String
-        Get
-            If HasAssumedValue Then
-                Return mTerminologyId
-            Else
-                Return ""
-            End If
-        End Get
-        Set(ByVal value As String)
-            mTerminologyId = value
-        End Set
-    End Property
-
     Public Property AllowableValues() As CodePhrase
         Get
             Return cpTerms

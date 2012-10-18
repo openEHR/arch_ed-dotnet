@@ -306,73 +306,52 @@ Namespace ArchetypeEditor.XML_Classes
             Return an_interval
         End Function
 
-        Private Overloads Sub BuildCodedText(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal ConstraintID As String)
-            Dim coded_text As XMLParser.C_COMPLEX_OBJECT
-            Dim code_rel_node As XMLParser.C_ATTRIBUTE
-            Dim ca_Term As XMLParser.CONSTRAINT_REF
+        Private Sub BuildCodedText(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal constraintId As String)
+            Dim codedText As XMLParser.C_COMPLEX_OBJECT
+            Dim code As XMLParser.C_ATTRIBUTE
+            Dim term As New XMLParser.CONSTRAINT_REF
 
-            coded_text = mAomFactory.MakeComplexObject(attribute, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
-
-            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", attribute.existence)
-            ca_Term = New XMLParser.CONSTRAINT_REF()
-            ca_Term.rm_type_name = "CODE_PHRASE"
-            ca_Term.node_id = ""
-            ca_Term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
-            ca_Term.reference = ConstraintID
-            mAomFactory.add_object(code_rel_node, ca_Term)
+            codedText = mAomFactory.MakeComplexObject(attribute, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+            code = mAomFactory.MakeSingleAttribute(codedText, "defining_code", attribute.existence)
+            term.rm_type_name = "CODE_PHRASE"
+            term.node_id = ""
+            term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
+            term.reference = constraintId
+            mAomFactory.add_object(code, term)
         End Sub
 
-        Private Overloads Sub BuildCodedText(ByRef ObjNode As XMLParser.C_COMPLEX_OBJECT, ByVal RunTimeName As String)
-            Dim coded_text As XMLParser.C_COMPLEX_OBJECT
-            Dim code_rel_node, name_rel_node As XMLParser.C_ATTRIBUTE
-            Dim ca_Term As XMLParser.CONSTRAINT_REF
+        Private Sub BuildCodedTextInternal(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal codePhrase As CodePhrase, ByVal assumedValue As String)
+            Dim codedText As XMLParser.C_COMPLEX_OBJECT
+            Dim code As XMLParser.C_ATTRIBUTE
+            Dim term As New XMLParser.C_CODE_PHRASE
 
-            name_rel_node = mAomFactory.MakeSingleAttribute(ObjNode, "name", New RmExistence(1).XmlExistence)
-            coded_text = mAomFactory.MakeComplexObject(name_rel_node, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
-            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", New RmExistence(1).XmlExistence)
-            ca_Term = New XMLParser.CONSTRAINT_REF()
-            ca_Term.rm_type_name = "CODE_PHRASE"
-            ca_Term.node_id = ""
-            ca_Term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
-            ca_Term.reference = RunTimeName
-            mAomFactory.add_object(code_rel_node, ca_Term)
-        End Sub
+            term.terminology_id = New XMLParser.TERMINOLOGY_ID
+            codedText = mAomFactory.MakeComplexObject(attribute, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+            code = mAomFactory.MakeSingleAttribute(codedText, "defining_code", attribute.existence)
+            term.rm_type_name = "CODE_PHRASE"
+            term.node_id = ""
+            term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
 
-        Private Overloads Sub BuildCodedText(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal a_CodePhrase As CodePhrase, Optional ByVal an_assumed_value As String = "", Optional ByVal assumed_value_terminology As String = "")
-            Dim coded_text As XMLParser.C_COMPLEX_OBJECT
-            Dim code_rel_node As XMLParser.C_ATTRIBUTE
-            Dim ca_Term As New XMLParser.C_CODE_PHRASE
+            If codePhrase.Codes.Count > 0 Then
+                term.terminology_id.value = codePhrase.TerminologyID
+                ReDim term.code_list(codePhrase.Codes.Count - 1)
 
-            ca_Term.terminology_id = New XMLParser.TERMINOLOGY_ID
-            coded_text = mAomFactory.MakeComplexObject(attribute, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
-            ca_Term.rm_type_name = "CODE_PHRASE"
-            ca_Term.node_id = ""
-            ca_Term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
-            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", attribute.existence)
-
-            If a_CodePhrase.Codes.Count > 0 Then
-                ca_Term.terminology_id.value = a_CodePhrase.TerminologyID.ToString()
-                ca_Term.code_list = Array.CreateInstance(GetType(String), a_CodePhrase.Codes.Count)
-
-                For i As Integer = 0 To a_CodePhrase.Codes.Count - 1
-                    ca_Term.code_list(i) = a_CodePhrase.Codes(i)
+                For i As Integer = 0 To codePhrase.Codes.Count - 1
+                    term.code_list(i) = codePhrase.Codes(i)
                 Next
 
-                If an_assumed_value <> "" Then
-                    ca_Term.assumed_value = New XMLParser.CODE_PHRASE
-                    ca_Term.assumed_value.code_string = an_assumed_value
-
-                    If assumed_value_terminology <> "" Then
-                        ca_Term.assumed_value.terminology_id = New XMLParser.TERMINOLOGY_ID
-                        ca_Term.assumed_value.terminology_id.value = assumed_value_terminology
-                    End If
+                If assumedValue <> "" Then
+                    term.assumed_value = New XMLParser.CODE_PHRASE
+                    term.assumed_value.code_string = assumedValue
+                    term.assumed_value.terminology_id = New XMLParser.TERMINOLOGY_ID
+                    term.assumed_value.terminology_id.value = codePhrase.TerminologyID
                 End If
             Else
-                ca_Term.terminology_id = New XMLParser.TERMINOLOGY_ID
-                ca_Term.terminology_id.value = a_CodePhrase.TerminologyID
+                term.terminology_id = New XMLParser.TERMINOLOGY_ID
+                term.terminology_id.value = codePhrase.TerminologyID
             End If
 
-            mAomFactory.add_object(code_rel_node, ca_Term)
+            mAomFactory.add_object(code, term)
         End Sub
 
         Private Sub BuildPlainText(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal TermList As Collections.Specialized.StringCollection)
@@ -463,7 +442,7 @@ Namespace ArchetypeEditor.XML_Classes
                             Case RmEvent.ObservationEventType.Interval
                                 If Not an_event.AggregateMathFunction Is Nothing AndAlso an_event.AggregateMathFunction.Codes.Count > 0 Then
                                     a = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", rm.Existence.XmlExistence)
-                                    BuildCodedText(a, an_event.AggregateMathFunction)
+                                    BuildCodedTextInternal(a, an_event.AggregateMathFunction, "")
                                 End If
 
                                 If an_event.hasFixedDuration Then
@@ -623,7 +602,7 @@ Namespace ArchetypeEditor.XML_Classes
                         Case StructureType.IntervalEvent
                             If Not an_event.AggregateMathFunction Is Nothing AndAlso an_event.AggregateMathFunction.Codes.Count > 0 Then
                                 a = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", an_event.Existence.XmlExistence)
-                                BuildCodedText(a, an_event.AggregateMathFunction)
+                                BuildCodedTextInternal(a, an_event.AggregateMathFunction, "")
                             End If
 
                             If an_event.hasFixedDuration Then
@@ -1199,7 +1178,7 @@ Namespace ArchetypeEditor.XML_Classes
                         BuildCodedText(attribute, t.ConstraintCode)
                     End If
                 Case TextConstraintType.Internal
-                    BuildCodedText(attribute, t.AllowableValues, CStr(t.AssumedValue), t.AssumedValue_TerminologyId)
+                    BuildCodedTextInternal(attribute, t.AllowableValues, CStr(t.AssumedValue))
                 Case TextConstraintType.Text
                     BuildPlainText(attribute, t.AllowableValues.Codes)
             End Select
@@ -1438,7 +1417,7 @@ Namespace ArchetypeEditor.XML_Classes
                 'Check for constraint on Flavours of Null
                 If Element.HasNullFlavourConstraint() Then
                     Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(elementXmlObj, "null_flavour", New RmExistence(0, 1).XmlExistence)
-                    BuildCodedText(a, Element.ConstrainedNullFlavours)
+                    BuildCodedTextInternal(a, Element.ConstrainedNullFlavours, "")
                 End If
             End If
         End Sub
@@ -1575,7 +1554,7 @@ Namespace ArchetypeEditor.XML_Classes
             a = mAomFactory.MakeSingleAttribute(root_node, "subject", New RmExistence(1).XmlExistence)
             objnode = mAomFactory.MakeComplexObject(a, "PARTY_RELATED", "", MakeOccurrences(New RmCardinality(1, 1)))
             a_relationship = mAomFactory.MakeSingleAttribute(objnode, "relationship", New RmExistence(1).XmlExistence)
-            BuildCodedText(a_relationship, subject.Relationship)
+            BuildCodedTextInternal(a_relationship, subject.Relationship, "")
         End Sub
 
         Private Sub BuildSection(ByVal rmChildren As Children, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
@@ -1616,7 +1595,7 @@ Namespace ArchetypeEditor.XML_Classes
                 t.AllowableValues.Codes.Add("433") ' event
             End If
 
-            BuildCodedText(a, t.AllowableValues)
+            BuildCodedTextInternal(a, t.AllowableValues, "")
 
             Dim eventContext As XMLParser.C_COMPLEX_OBJECT = Nothing
 
@@ -1785,11 +1764,11 @@ Namespace ArchetypeEditor.XML_Classes
                 code_phrase.Codes.Add(CInt(rm.AlternativeState).ToString)
             End If
 
-            BuildCodedText(a_state, code_phrase)
+            BuildCodedTextInternal(a_state, code_phrase, "")
             a_step = mAomFactory.MakeSingleAttribute(objNode, "careflow_step", attribute.existence)
             code_phrase = New CodePhrase
             code_phrase.Codes.Add(rm.NodeId)  ' local is default terminology, node_id of rm is same as term code of name
-            BuildCodedText(a_step, code_phrase)
+            BuildCodedTextInternal(a_step, code_phrase, "")
         End Sub
 
         Private Sub BuildPathway(ByVal rm As RmStructureCompound, ByVal arch_def As XMLParser.C_COMPLEX_OBJECT)
@@ -2132,7 +2111,7 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             If participation.ModeSet.Codes.Count > 0 Then
-                BuildCodedText(mAomFactory.MakeSingleAttribute(cObject, "mode", New RmExistence(1).XmlExistence), participation.ModeSet)
+                BuildCodedTextInternal(mAomFactory.MakeSingleAttribute(cObject, "mode", New RmExistence(1).XmlExistence), participation.ModeSet, "")
             End If
 
             If participation.FunctionConstraint.TypeOfTextConstraint <> TextConstraintType.Text Then
@@ -2140,7 +2119,7 @@ Namespace ArchetypeEditor.XML_Classes
                 constraintAttribute = mAomFactory.MakeSingleAttribute(cObject, "function", New RmExistence(1).XmlExistence)
 
                 If participation.FunctionConstraint.TypeOfTextConstraint = TextConstraintType.Internal Then
-                    BuildCodedText(constraintAttribute, participation.FunctionConstraint.AllowableValues)
+                    BuildCodedTextInternal(constraintAttribute, participation.FunctionConstraint.AllowableValues, "")
                 Else
                     BuildCodedText(constraintAttribute, participation.FunctionConstraint.ConstraintCode)
                 End If

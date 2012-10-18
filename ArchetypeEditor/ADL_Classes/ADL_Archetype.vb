@@ -246,45 +246,34 @@ Namespace ArchetypeEditor.ADL_Classes
             Return mAomFactory.create_c_integer_make_bounded(e.MinCount, e.MaxCount, True, True).interval
         End Function
 
-        Protected Overloads Sub BuildCodedText(ByVal attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal ConstraintID As String)
-            Dim coded_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim code_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim ca_Term As openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF
+        Protected Sub BuildCodedText(ByVal attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal constraintId As String)
+            Dim codedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim code As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim term As openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF
 
-            coded_text = mAomFactory.create_c_complex_object_anonymous(attribute, Eiffel.String("DV_CODED_TEXT"))
-            code_rel_node = mAomFactory.create_c_attribute_single(coded_text, Eiffel.String("defining_code"))
-            ca_Term = openehr.openehr.am.archetype.constraint_model.Create.CONSTRAINT_REF.make(Eiffel.String(ConstraintID))
-            code_rel_node.put_child(ca_Term)
+            codedText = mAomFactory.create_c_complex_object_anonymous(attribute, Eiffel.String("DV_CODED_TEXT"))
+            code = mAomFactory.create_c_attribute_single(codedText, Eiffel.String("defining_code"))
+            term = openehr.openehr.am.archetype.constraint_model.Create.CONSTRAINT_REF.make(Eiffel.String(constraintId))
+            code.put_child(term)
         End Sub
 
-        Protected Overloads Sub BuildCodedText(ByRef ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal RunTimeName As String)
-            Dim coded_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim code_rel_node, name_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim ca_Term As openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF
+        Protected Sub BuildCodedTextInternal(ByVal attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal codePhrase As CodePhrase, ByVal assumedValue As String)
+            Dim codedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim code As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim term As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE
 
-            name_rel_node = mAomFactory.create_c_attribute_single(ObjNode, Eiffel.String("name"))
-            coded_text = mAomFactory.create_c_complex_object_anonymous(name_rel_node, Eiffel.String("DV_CODED_TEXT"))
-            code_rel_node = mAomFactory.create_c_attribute_single(coded_text, Eiffel.String("defining_code"))
-            ca_Term = openehr.openehr.am.archetype.constraint_model.Create.CONSTRAINT_REF.make(Eiffel.String(RunTimeName))
-            code_rel_node.put_child(ca_Term)
-        End Sub
+            codedText = mAomFactory.create_c_complex_object_anonymous(attribute, Eiffel.String("DV_CODED_TEXT"))
+            code = mAomFactory.create_c_attribute_single(codedText, Eiffel.String("defining_code"))
 
-        Protected Overloads Sub BuildCodedText(ByVal attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_CodePhrase As CodePhrase, Optional ByVal an_assumed_value As String = "")
-            Dim coded_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim code_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim ca_Term As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE
+            If codePhrase.Codes.Count > 0 Then
+                term = mAomFactory.create_c_code_phrase_from_pattern(code, Eiffel.String(codePhrase.Phrase))
 
-            coded_text = mAomFactory.create_c_complex_object_anonymous(attribute, Eiffel.String("DV_CODED_TEXT"))
-
-            code_rel_node = mAomFactory.create_c_attribute_single(coded_text, Eiffel.String("defining_code"))
-            If a_CodePhrase.Codes.Count > 0 Then
-                ca_Term = mAomFactory.create_c_code_phrase_from_pattern(code_rel_node, Eiffel.String(a_CodePhrase.Phrase))
-                If an_assumed_value <> "" Then
-                    ca_Term.set_assumed_value(openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(Eiffel.String("local::" & an_assumed_value)))
+                If assumedValue <> "" Then
+                    term.set_assumed_value(openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(Eiffel.String("local::" & assumedValue)))
                 End If
             Else
-                ca_Term = openehr.openehr.am.openehr_profile.data_types.text.Create.C_CODE_PHRASE.make_from_terminology_id(Eiffel.String(a_CodePhrase.TerminologyID))
-                code_rel_node.put_child(ca_Term)
+                term = openehr.openehr.am.openehr_profile.data_types.text.Create.C_CODE_PHRASE.make_from_terminology_id(Eiffel.String(codePhrase.TerminologyID))
+                code.put_child(term)
             End If
         End Sub
 
@@ -363,7 +352,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             Case RmEvent.ObservationEventType.Interval
                                 If Not an_event.AggregateMathFunction Is Nothing AndAlso an_event.AggregateMathFunction.Codes.Count > 0 Then
                                     a = mAomFactory.create_c_attribute_single(cadlEvent, Eiffel.String("math_function"))
-                                    BuildCodedText(a, an_event.AggregateMathFunction)
+                                    BuildCodedTextInternal(a, an_event.AggregateMathFunction, "")
                                 End If
 
                                 If an_event.hasFixedDuration Then
@@ -507,7 +496,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     Case StructureType.IntervalEvent
                         If Not an_event.AggregateMathFunction Is Nothing AndAlso an_event.AggregateMathFunction.Codes.Count > 0 Then
                             a = mAomFactory.create_c_attribute_single(cadlEvent, Eiffel.String("math_function"))
-                            BuildCodedText(a, an_event.AggregateMathFunction)
+                            BuildCodedTextInternal(a, an_event.AggregateMathFunction, "")
                         End If
 
                         If an_event.hasFixedDuration Then
@@ -902,7 +891,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 c_value = mAomFactory.create_c_primitive_object(a, mAomFactory.create_c_boolean_make_false())
             End If
 
-            If b.hasAssumedValue Then
+            If b.HasAssumedValue Then
                 Dim bool As EiffelKernel.BOOLEAN_REF = EiffelKernel.Create.BOOLEAN_REF.default_create
                 bool.set_item(b.AssumedValue)
                 c_value.item.set_assumed_value(bool)
@@ -936,7 +925,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         BuildCodedText(attribute, t.ConstraintCode)
                     End If
                 Case TextConstraintType.Internal
-                    BuildCodedText(attribute, t.AllowableValues, t.AssumedValue)
+                    BuildCodedTextInternal(attribute, t.AllowableValues, t.AssumedValue)
                 Case TextConstraintType.Text
                     BuildPlainText(attribute, t.AllowableValues.Codes)
             End Select
@@ -1179,7 +1168,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 If Element.HasNullFlavourConstraint() Then
                     Dim a As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(elementCadlObj, Eiffel.String("null_flavour"))
                     a.set_existence(mAomFactory.create_c_integer_make_bounded(0, 1, True, True).interval)
-                    BuildCodedText(a, Element.ConstrainedNullFlavours)
+                    BuildCodedTextInternal(a, Element.ConstrainedNullFlavours, "")
                 End If
             End If
         End Sub
@@ -1308,7 +1297,7 @@ Namespace ArchetypeEditor.ADL_Classes
             objnode = openehr.openehr.am.archetype.constraint_model.Create.C_COMPLEX_OBJECT.make_anonymous(Eiffel.String("PARTY_RELATED"))
             a.put_child(objnode)
             a_relationship = mAomFactory.create_c_attribute_single(objnode, Eiffel.String("relationship"))
-            BuildCodedText(a_relationship, subject.Relationship)
+            BuildCodedTextInternal(a_relationship, subject.Relationship, "")
         End Sub
 
         Protected Sub BuildParticipation(ByVal attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal participation As RmParticipation)
@@ -1321,7 +1310,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             If participation.ModeSet.Codes.Count > 0 Then
-                BuildCodedText(mAomFactory.create_c_attribute_single(cObject, Eiffel.String("mode")), participation.ModeSet)
+                BuildCodedTextInternal(mAomFactory.create_c_attribute_single(cObject, Eiffel.String("mode")), participation.ModeSet, "")
             End If
 
             If participation.FunctionConstraint.TypeOfTextConstraint <> TextConstraintType.Text Then
@@ -1329,8 +1318,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 constraintAttribute = mAomFactory.create_c_attribute_single(cObject, Eiffel.String("function"))
 
                 If participation.FunctionConstraint.TypeOfTextConstraint = TextConstraintType.Internal Then
-
-                    BuildCodedText(constraintAttribute, participation.FunctionConstraint.AllowableValues)
+                    BuildCodedTextInternal(constraintAttribute, participation.FunctionConstraint.AllowableValues, "")
                 Else
                     BuildCodedText(constraintAttribute, participation.FunctionConstraint.ConstraintCode)
                 End If
@@ -1399,8 +1387,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 t.AllowableValues.Codes.Add("433") ' event
             End If
 
-            BuildCodedText(a, t.AllowableValues)
-            'Changed SRH 29 Apr 2008 - added handling of participations
+            BuildCodedTextInternal(a, t.AllowableValues, "")
 
             Dim eventContext As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = Nothing
 
@@ -1569,12 +1556,12 @@ Namespace ArchetypeEditor.ADL_Classes
             If rm.HasAlternativeState Then
                 code_phrase.Codes.Add(CInt(rm.AlternativeState).ToString)
             End If
-            BuildCodedText(a_state, code_phrase)
+            BuildCodedTextInternal(a_state, code_phrase, "")
 
             a_step = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("careflow_step"))
             code_phrase = New CodePhrase
             code_phrase.Codes.Add(rm.NodeId)  ' local is default terminology, node_id of rm is same as term code of name
-            BuildCodedText(a_step, code_phrase)
+            BuildCodedTextInternal(a_step, code_phrase, "")
         End Sub
 
         Private Sub BuildPathway(ByVal rm As RmStructureCompound, ByVal arch_def As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)

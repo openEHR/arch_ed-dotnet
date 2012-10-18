@@ -800,7 +800,6 @@ Namespace ArchetypeEditor.XML_Classes
                                 If Not CType(Obj, XMLParser.C_CODE_PHRASE).assumed_value Is Nothing Then
                                     t.HasAssumedValue = True
                                     t.AssumedValue = CType(Obj, XMLParser.C_CODE_PHRASE).assumed_value.code_string()
-                                    t.AssumedValue_TerminologyId = CType(Obj, XMLParser.C_CODE_PHRASE).assumed_value.terminology_id.value
                                 End If
 
                                 If t.AllowableValues.TerminologyID = "local" Or t.AllowableValues.TerminologyID = "openehr" Then
