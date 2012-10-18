@@ -31,8 +31,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
     End Sub
 
-
-    Public Sub New(ByVal a_file_manager As FileManagerLocal)
+    Public Sub New(ByVal fileManager As FileManagerLocal)
         MyBase.New()
 
         'This call is required by the Windows Form Designer.
@@ -40,14 +39,8 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
         'Add any initialization after the InitializeComponent() call
 
-        mFileManager = a_file_manager
-
-        If Main.Instance.DefaultLanguageCode <> "en" Then
-            cbMinValue.Text = Filemanager.GetOpenEhrTerm(131, cbMinValue.Text)
-            cbMaxValue.Text = Filemanager.GetOpenEhrTerm(132, cbMaxValue.Text)
-            lblAssumedValue.Text = Filemanager.GetOpenEhrTerm(158, lblAssumedValue.Text)
-            chkDecimalPlaces.Text = Filemanager.GetOpenEhrTerm(649, chkDecimalPlaces.Text)
-        End If
+        mFileManager = fileManager
+        Translate()
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer
@@ -141,7 +134,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.NumericAssumed.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.NumericAssumed.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.NumericAssumed.Name = "NumericAssumed"
-        Me.NumericAssumed.Size = New System.Drawing.Size(100, 22)
+        Me.NumericAssumed.Size = New System.Drawing.Size(100, 20)
         Me.NumericAssumed.TabIndex = 10
         Me.NumericAssumed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.NumericAssumed.ThousandsSeparator = True
@@ -152,7 +145,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numMaxValue.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.numMaxValue.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.numMaxValue.Name = "numMaxValue"
-        Me.numMaxValue.Size = New System.Drawing.Size(100, 22)
+        Me.numMaxValue.Size = New System.Drawing.Size(100, 20)
         Me.numMaxValue.TabIndex = 8
         Me.numMaxValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numMaxValue.ThousandsSeparator = True
@@ -164,7 +157,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numMinValue.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.numMinValue.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.numMinValue.Name = "numMinValue"
-        Me.numMinValue.Size = New System.Drawing.Size(100, 22)
+        Me.numMinValue.Size = New System.Drawing.Size(100, 20)
         Me.numMinValue.TabIndex = 5
         Me.numMinValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numMinValue.ThousandsSeparator = True
@@ -233,7 +226,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.comboIncludeMin.Items.AddRange(New Object() {">=", ">"})
         Me.comboIncludeMin.Location = New System.Drawing.Point(212, 29)
         Me.comboIncludeMin.Name = "comboIncludeMin"
-        Me.comboIncludeMin.Size = New System.Drawing.Size(48, 24)
+        Me.comboIncludeMin.Size = New System.Drawing.Size(48, 21)
         Me.comboIncludeMin.TabIndex = 4
         Me.comboIncludeMin.Text = ">="
         Me.comboIncludeMin.Visible = False
@@ -243,14 +236,14 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.comboIncludeMax.Items.AddRange(New Object() {"<=", "<"})
         Me.comboIncludeMax.Location = New System.Drawing.Point(212, 56)
         Me.comboIncludeMax.Name = "comboIncludeMax"
-        Me.comboIncludeMax.Size = New System.Drawing.Size(48, 24)
+        Me.comboIncludeMax.Size = New System.Drawing.Size(48, 21)
         Me.comboIncludeMax.TabIndex = 7
         Me.comboIncludeMax.Text = "<="
         Me.comboIncludeMax.Visible = False
         '
         'lblAssumedValue
         '
-        Me.lblAssumedValue.Location = New System.Drawing.Point(68, 84)
+        Me.lblAssumedValue.Location = New System.Drawing.Point(78, 80)
         Me.lblAssumedValue.Name = "lblAssumedValue"
         Me.lblAssumedValue.Size = New System.Drawing.Size(184, 24)
         Me.lblAssumedValue.TabIndex = 9
@@ -262,19 +255,22 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numPrecision.Location = New System.Drawing.Point(317, 4)
         Me.numPrecision.Maximum = New Decimal(New Integer() {15, 0, 0, 0})
         Me.numPrecision.Name = "numPrecision"
-        Me.numPrecision.Size = New System.Drawing.Size(51, 22)
+        Me.numPrecision.Size = New System.Drawing.Size(51, 20)
         Me.numPrecision.TabIndex = 2
         Me.numPrecision.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numPrecision.Value = New Decimal(New Integer() {3, 0, 0, 0})
         '
         'chkDecimalPlaces
         '
+        Me.chkDecimalPlaces.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkDecimalPlaces.AutoSize = True
-        Me.chkDecimalPlaces.Location = New System.Drawing.Point(134, 4)
+        Me.chkDecimalPlaces.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.chkDecimalPlaces.Location = New System.Drawing.Point(191, 5)
         Me.chkDecimalPlaces.Name = "chkDecimalPlaces"
-        Me.chkDecimalPlaces.Size = New System.Drawing.Size(156, 21)
+        Me.chkDecimalPlaces.Size = New System.Drawing.Size(120, 17)
         Me.chkDecimalPlaces.TabIndex = 1
         Me.chkDecimalPlaces.Text = "Limit decimal places"
+        Me.chkDecimalPlaces.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.chkDecimalPlaces.UseVisualStyleBackColor = True
         '
         'chkList
@@ -282,7 +278,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.chkList.AutoSize = True
         Me.chkList.Location = New System.Drawing.Point(20, 111)
         Me.chkList.Name = "chkList"
-        Me.chkList.Size = New System.Drawing.Size(126, 21)
+        Me.chkList.Size = New System.Drawing.Size(96, 17)
         Me.chkList.TabIndex = 11
         Me.chkList.Text = "List (e.g. 1,4,6)"
         Me.chkList.UseVisualStyleBackColor = True
@@ -292,7 +288,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         '
         Me.txtList.Location = New System.Drawing.Point(212, 109)
         Me.txtList.Name = "txtList"
-        Me.txtList.Size = New System.Drawing.Size(156, 22)
+        Me.txtList.Size = New System.Drawing.Size(156, 20)
         Me.txtList.TabIndex = 12
         Me.txtList.Visible = False
         '
@@ -329,6 +325,13 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             Return CType(MyBase.Constraint, Constraint_Count)
         End Get
     End Property
+
+    Public Sub Translate()
+        cbMinValue.Text = Filemanager.GetOpenEhrTerm(131, cbMinValue.Text)
+        cbMaxValue.Text = Filemanager.GetOpenEhrTerm(132, cbMaxValue.Text)
+        lblAssumedValue.Text = Filemanager.GetOpenEhrTerm(158, lblAssumedValue.Text)
+        chkDecimalPlaces.Text = Filemanager.GetOpenEhrTerm(649, chkDecimalPlaces.Text)
+    End Sub
 
     Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
         ' set constraint values on control

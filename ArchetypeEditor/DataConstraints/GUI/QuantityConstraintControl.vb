@@ -47,9 +47,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             LabelQuantity.Text = Filemanager.GetOpenEhrTerm(115, LabelQuantity.Text)
             lblListProperty.Text = Filemanager.GetOpenEhrTerm(116, lblListProperty.Text)
             lblListUnits.Text = Filemanager.GetOpenEhrTerm(117, lblListUnits.Text)
-            QuantityUnitConstraint.cbMinValue.Text = Filemanager.GetOpenEhrTerm(131, QuantityUnitConstraint.cbMinValue.Text)
-            QuantityUnitConstraint.cbMaxValue.Text = Filemanager.GetOpenEhrTerm(132, QuantityUnitConstraint.cbMaxValue.Text)
-            QuantityUnitConstraint.lblAssumedValue.Text = Filemanager.GetOpenEhrTerm(158, QuantityUnitConstraint.lblAssumedValue.Text)
+            QuantityUnitConstraint.Translate()
             AssumedValueLabel.Text = Filemanager.GetOpenEhrTerm(158, AssumedValueLabel.Text)
         End If
     End Sub

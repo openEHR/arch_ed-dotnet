@@ -28,16 +28,6 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
         'Add any initialization after the InitializeComponent() call
     End Sub
 
-    Public Sub New(ByVal fileManager As FileManagerLocal)
-        MyBase.New(fileManager)
-
-        'This call is required by the Windows Form Designer.
-        InitializeComponent()
-
-        'Add any initialization after the InitializeComponent() call
-        mFileManager = fileManager
-    End Sub
-
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
