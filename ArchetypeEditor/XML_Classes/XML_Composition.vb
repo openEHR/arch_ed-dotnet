@@ -21,55 +21,58 @@ Namespace ArchetypeEditor.XML_Classes
     Class XML_COMPOSITION
         Inherits RmComposition
 
-        Sub New(ByVal Definition As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        Sub New(ByVal definition As XMLParser.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal)
             MyBase.New()
 
-            Try
-                Dim an_attribute As XMLParser.C_ATTRIBUTE
+            ' set the root node id - usually the same as the concept
+            mNodeID = definition.node_id
 
-                ' set the root node id - usually the same as the concept
-                mNodeID = Definition.node_id
+            For Each attribute As XMLParser.C_ATTRIBUTE In definition.attributes
+                Select Case attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    Case "category"
+                        If attribute.children.Length > 0 Then
+                            Dim t As Constraint_Text = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(attribute.children(0))
 
-                For Each an_attribute In Definition.attributes
-                    Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                        Case "category"
-                            Dim t As Constraint_Text
-                            t = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(an_attribute.children(0))
                             If t.AllowableValues.HasCode("431") Then
                                 'isPersistent defaults to false (openehr::433) for event
                                 mIsPersistent = True
                             End If
-                        Case "context"
-                            Dim complexObj As XMLParser.C_COMPLEX_OBJECT
-                            complexObj = an_attribute.children(0)
-                            For Each context_attribute As XMLParser.C_ATTRIBUTE In complexObj.attributes
-                                Select Case context_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                                    Case "participations"
-                                        Me.Participations = New RmStructureCompound(an_attribute, StructureType.OtherParticipations, a_filemanager)
-                                    Case "other_context"
-                                        'SRH: 26 Feb 2009, EDT-419
-                                        Dim child As Object = context_attribute.children(0)
-                                        If TypeOf child Is XMLParser.C_COMPLEX_OBJECT Then
-                                            mChildren.Add(New RmStructureCompound(CType(child, XMLParser.C_COMPLEX_OBJECT), a_filemanager))
-                                        Else
-                                            mChildren.Add(New RmSlot(CType(child, XMLParser.ARCHETYPE_SLOT)))
-                                        End If
+                        End If
+                    Case "context"
+                        If attribute.children.Length > 0 Then
+                            Dim complexObj As XMLParser.C_COMPLEX_OBJECT = attribute.children(0)
 
+                            For Each a As XMLParser.C_ATTRIBUTE In complexObj.attributes
+                                Select Case a.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                                    Case "participations"
+                                        Participations = New RmStructureCompound(a, StructureType.OtherParticipations, fileManager)
+                                    Case "other_context"
+                                        Dim child As XMLParser.C_COMPLEX_OBJECT = TryCast(a.children(0), XMLParser.C_COMPLEX_OBJECT)
+
+                                        If Not child Is Nothing Then
+                                            Select Case ReferenceModel.StructureTypeFromString(child.rm_type_name)
+                                                Case StructureType.Single, StructureType.List, StructureType.Tree
+                                                    mChildren.Add(New RmStructureCompound(child, fileManager))
+                                                Case StructureType.Table
+                                                    mChildren.Add(New RmTable(child, fileManager))
+                                            End Select
+                                        Else
+                                            mChildren.Add(New RmSlot(CType(a.children(0), XMLParser.ARCHETYPE_SLOT)))
+                                        End If
                                 End Select
                             Next
-                        Case "content"
-                            ' a set of slots constraining what sections can be added
-                            Dim section As RmSection = New RmSection("root")
+                        End If
+                    Case "content"
+                        ' a set of slots constraining what sections can be added
+                        Dim section As RmSection = New RmSection("root")
 
-                            For i As Integer = 0 To an_attribute.children.Length - 1
-                                section.Children.Add(New RmSlot(CType(an_attribute.children(i), XMLParser.ARCHETYPE_SLOT)))
-                            Next
-                            mChildren.Add(section)
-                    End Select
-                Next
-            Catch ex As Exception
-                Debug.Assert(True)
-            End Try
+                        For i As Integer = 0 To attribute.children.Length - 1
+                            section.Children.Add(New RmSlot(CType(attribute.children(i), XMLParser.ARCHETYPE_SLOT)))
+                        Next
+
+                        mChildren.Add(section)
+                End Select
+            Next
         End Sub
 
     End Class

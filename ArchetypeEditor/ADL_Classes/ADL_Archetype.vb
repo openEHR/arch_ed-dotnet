@@ -1399,19 +1399,16 @@ Namespace ArchetypeEditor.ADL_Classes
 
             ' Deal with the content and context
             If Rm.Data.Count > 0 Then
-                For Each a_structure As RmStructure In Rm.Data
-                    Select Case a_structure.Type
+                For Each child As RmStructure In Rm.Data
+                    Select Case child.Type
                         Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree
-                            Dim new_structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-
                             If eventContext Is Nothing Then
                                 a = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("context"))
                                 eventContext = mAomFactory.create_c_complex_object_anonymous(a, Eiffel.String("EVENT_CONTEXT"))
                             End If
 
                             a = mAomFactory.create_c_attribute_single(eventContext, Eiffel.String("other_context"))
-                            new_structure = mAomFactory.create_c_complex_object_identified(a, Eiffel.String(ReferenceModel.RM_StructureName(a_structure.Type)), Eiffel.String(a_structure.NodeId))
-                            BuildStructure(a_structure, new_structure)
+                            BuildStructure(child, mAomFactory.create_c_complex_object_identified(a, Eiffel.String(ReferenceModel.RM_StructureName(child.Type)), Eiffel.String(child.NodeId)))
 
                         Case StructureType.Slot
                             If eventContext Is Nothing Then
@@ -1420,16 +1417,15 @@ Namespace ArchetypeEditor.ADL_Classes
                             End If
 
                             a = mAomFactory.create_c_attribute_single(eventContext, Eiffel.String("other_context"))
-                            BuildSlotFromRm(a, a_structure)
+                            BuildSlotFromRm(a, child)
 
                         Case StructureType.SECTION
-                            If CType(a_structure, RmSection).Children.Count > 0 Then
-
+                            If CType(child, RmSection).Children.Count > 0 Then
                                 a = mAomFactory.create_c_attribute_multiple(CadlObj, _
                                     Eiffel.String("content"), _
-                                    MakeCardinality(CType(a_structure, RmSection).Children.Cardinality, CType(a_structure, RmSection).Children.Cardinality.Ordered))
+                                    MakeCardinality(CType(child, RmSection).Children.Cardinality, CType(child, RmSection).Children.Cardinality.Ordered))
 
-                                For Each slot As RmSlot In CType(a_structure, RmSection).Children
+                                For Each slot As RmSlot In CType(child, RmSection).Children
                                     BuildSlotFromRm(a, slot)
                                 Next
                             End If
@@ -1502,21 +1498,20 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Private Sub BuildStructure(ByVal rm As RmStructureCompound, ByVal an_adlArchetype As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal attribute_name As String)
-            Dim a As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String(attribute_name))
+        Private Sub BuildStructure(ByVal rm As RmStructureCompound, ByVal archetype As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal attributeName As String)
+            Dim a As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String(attributeName))
 
             If rm.Children.Count > 0 Then
-                If CType(rm.Children.Items(0), RmStructure).Type = StructureType.Slot Then
-                    BuildSlotFromRm(a, rm.Children.Items(0))
-                Else
-                    Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                Dim child As RmStructure = rm.Children.Items(0)
 
-                    objNode = mAomFactory.create_c_complex_object_identified(a, Eiffel.String(ReferenceModel.RM_StructureName(rm.Children.Items(0).Type)), Eiffel.String(rm.Children.Items(0).NodeId))
-                    BuildStructure(rm.Children.Items(0), objNode)
+                If child.Type = StructureType.Slot Then
+                    BuildSlotFromRm(a, child)
+                Else
+                    BuildStructure(child, mAomFactory.create_c_complex_object_identified(a, Eiffel.String(ReferenceModel.RM_StructureName(child.Type)), Eiffel.String(child.NodeId)))
                 End If
             End If
 
-            If attribute_name = "state" Or attribute_name = "protocol" Then
+            If attributeName = "state" Or attributeName = "protocol" Then
                 a.set_existence(MakeExistence(rm.Children.Existence))
             End If
         End Sub
@@ -1537,7 +1532,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     objNode = mAomFactory.create_c_complex_object_identified(a, Eiffel.String(ReferenceModel.RM_StructureName(rmStruct.Type)), Eiffel.String(rmStruct.NodeId))
                     BuildStructure(CType(rmStruct, RmStructureCompound), objNode)
                 End If
-                'SRH: 11 Jan 2009 - EDT-502 - set existence of protocol and state attributes
+
                 a.set_existence(MakeExistence(rm.Children.Existence))
             End If
         End Sub
@@ -1547,8 +1542,6 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_phrase As New CodePhrase
 
-            'objNode = mAomFactory.create_c_complex_object_anonymous(an_attribute, Eiffel.String("ISM_TRANSITION"))
-            'EDT-584
             objNode = mAomFactory.create_c_complex_object_identified(an_attribute, Eiffel.String("ISM_TRANSITION"), Eiffel.String(rm.NodeId))
             a_state = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("current_state"))
             code_phrase.TerminologyID = "openehr"

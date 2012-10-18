@@ -22,17 +22,14 @@ Namespace ArchetypeEditor.ADL_Classes
 Class ADL_COMPOSITION
     Inherits RmComposition
 
-        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        Sub New(ByRef definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal)
             MyBase.New()
 
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim i As Integer
-
             ' set the root node id - usually the same as the concept
-            mNodeID = Definition.node_id.to_cil
+            mNodeID = definition.node_id.to_cil
 
-            For i = 1 To Definition.attributes.count
-                attribute = Definition.attributes.i_th(i)
+            For i As Integer = 1 To definition.attributes.count
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = definition.attributes.i_th(i)
 
                 Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                     Case "category"
@@ -48,25 +45,29 @@ Class ADL_COMPOSITION
                         If attribute.has_children Then
                             Dim complexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = attribute.children.first
 
-                            If complexObj.has_attribute(Eiffel.String("other_context")) Then
-                                attribute = complexObj.c_attribute_at_path(Eiffel.String("other_context"))
+                            For j As Integer = 1 To complexObj.attributes.count
+                                Dim a As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = complexObj.attributes.i_th(j)
 
-                                If attribute.has_children Then
-                                    Dim child As Object = attribute.children.first
+                                Select a.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                                    Case "participations"
+                                        Participations = New RmStructureCompound(a, StructureType.OtherParticipations, fileManager)
+                                    Case "other_context"
+                                        If a.has_children Then
+                                            Dim child As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = TryCast(a.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
 
-                                    If TypeOf child Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
-                                        mChildren.Add(New RmStructureCompound(CType(child, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
-                                        ' remembers the Processed data off events
-                                    Else
-                                        mChildren.Add(New RmSlot(CType(child, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
-                                    End If
-                                End If
-                            End If
-
-                            If complexObj.has_attribute(Eiffel.String("participations")) Then
-                                attribute = complexObj.c_attribute_at_path(Eiffel.String("participations"))
-                                Participations = New RmStructureCompound(attribute, StructureType.OtherParticipations, a_filemanager)
-                            End If
+                                            If Not child Is Nothing Then
+                                                Select Case ReferenceModel.StructureTypeFromString(child.rm_type_name.to_cil)
+                                                    Case StructureType.Single, StructureType.List, StructureType.Tree
+                                                        mChildren.Add(New RmStructureCompound(child, fileManager))
+                                                    Case StructureType.Table
+                                                        mChildren.Add(New RmTable(child, fileManager))
+                                                End Select
+                                            Else
+                                                mChildren.Add(New RmSlot(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                                            End If
+                                        End If
+                                End Select
+                            Next
                         End If
                     Case "content"
                         ' a set of slots constraining what sections can be added
@@ -82,7 +83,7 @@ Class ADL_COMPOSITION
                                     MessageBox.Show("Editor does not support compositions with fixed sections. Create slots and separate suitable section archetype", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
                                 End If
                             Catch ex As Exception
-                                MessageBox.Show(String.Format("{0}- ({1}): {2}", AE_Constants.Instance.ErrorLoading, a_filemanager.Archetype.Archetype_ID.ToString(), ex.Message), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                MessageBox.Show(String.Format("{0}- ({1}): {2}", AE_Constants.Instance.ErrorLoading, fileManager.Archetype.Archetype_ID.ToString(), ex.Message), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                             End Try
                         Next
 

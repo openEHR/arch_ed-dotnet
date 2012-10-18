@@ -75,9 +75,9 @@ Namespace ArchetypeEditor.ADL_Classes
                     Case "activities"
                         mChildren.Add(New RmStructureCompound(attribute, StructureType.Activities, a_filemanager))
                     Case "provider"
-                        Me.ProviderIsMandatory = True
+                        ProviderIsMandatory = True
                     Case "other_participations"
-                        Me.OtherParticipations = New RmStructureCompound(attribute, StructureType.OtherParticipations, a_filemanager)
+                        OtherParticipations = New RmStructureCompound(attribute, StructureType.OtherParticipations, a_filemanager)
                     Case "links"
                         ' No action as handled for all archetypes
                     Case Else

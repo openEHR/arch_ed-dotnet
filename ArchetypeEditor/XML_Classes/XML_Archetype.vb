@@ -1607,20 +1607,17 @@ Namespace ArchetypeEditor.XML_Classes
 
             ' Deal with the content and context
             If Rm.Data.Count > 0 Then
-
-                For Each a_structure As RmStructure In Rm.Data
-                    Select Case a_structure.Type
+                For Each child As RmStructure In Rm.Data
+                    Select Case child.Type
                         Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree
-                            Dim new_structure As XMLParser.C_COMPLEX_OBJECT
-
                             If eventContext Is Nothing Then
                                 a = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
                                 eventContext = mAomFactory.MakeComplexObject(a, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
                             End If
 
                             a = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
-                            new_structure = mAomFactory.MakeComplexObject(a, ReferenceModel.RM_StructureName(a_structure.Type), a_structure.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
-                            BuildStructure(a_structure, new_structure)
+                            BuildStructure(child, mAomFactory.MakeComplexObject(a, ReferenceModel.RM_StructureName(child.Type), child.NodeId, MakeOccurrences(New RmCardinality(1, 1))))
+
                         Case StructureType.Slot
                             If eventContext Is Nothing Then
                                 a = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
@@ -1628,15 +1625,17 @@ Namespace ArchetypeEditor.XML_Classes
                             End If
 
                             a = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
-                            BuildSlotFromRm(a, a_structure)
-                        Case StructureType.SECTION
-                            If CType(a_structure, RmSection).Children.Count > 0 Then
-                                a = mAomFactory.MakeMultipleAttribute(xmlObj, "content", MakeCardinality(Rm.Data.Cardinality), a_structure.Existence.XmlExistence)
+                            BuildSlotFromRm(a, child)
 
-                                For Each slot As RmSlot In CType(a_structure, RmSection).Children
+                        Case StructureType.SECTION
+                            If CType(child, RmSection).Children.Count > 0 Then
+                                a = mAomFactory.MakeMultipleAttribute(xmlObj, "content", MakeCardinality(Rm.Data.Cardinality), child.Existence.XmlExistence)
+
+                                For Each slot As RmSlot In CType(child, RmSection).Children
                                     BuildSlotFromRm(a, slot)
                                 Next
                             End If
+
                         Case Else
                             Debug.Assert(False)
                     End Select
@@ -1705,20 +1704,19 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Private Sub BuildStructure(ByVal rm As RmStructureCompound, ByVal an_adlArchetype As XMLParser.C_COMPLEX_OBJECT, ByVal attribute_name As String)
+        Private Sub BuildStructure(ByVal rm As RmStructureCompound, ByVal archetype As XMLParser.C_COMPLEX_OBJECT, ByVal attributeName As String)
             Dim a As XMLParser.C_ATTRIBUTE
 
-            If CType(rm.Children.Items(0), RmStructure).Type = StructureType.Slot Then
-                a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Existence.XmlExistence)
-                BuildSlotFromRm(a, rm.Children.Items(0))
-            Else
-                a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Children.Existence.XmlExistence)
-                Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject( _
-                    a, _
-                    ReferenceModel.RM_StructureName(rm.Children.Items(0).Type), _
-                    rm.Children.Items(0).NodeId, MakeOccurrences(New RmCardinality(1, 1)))
+            If rm.Children.Count > 0 Then
+                Dim child As RmStructure = rm.Children.Items(0)
 
-                BuildStructure(rm.Children.Items(0), objNode)
+                If child.Type = StructureType.Slot Then
+                    a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attributeName, rm.Existence.XmlExistence)
+                    BuildSlotFromRm(a, child)
+                Else
+                    a = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attributeName, rm.Children.Existence.XmlExistence)
+                    BuildStructure(child, mAomFactory.MakeComplexObject(a, ReferenceModel.RM_StructureName(child.Type), child.NodeId, MakeOccurrences(New RmCardinality(1, 1))))
+                End If
             End If
         End Sub
 
