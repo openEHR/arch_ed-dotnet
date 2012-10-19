@@ -441,11 +441,11 @@ Public Class CountConstraintControl : Inherits ConstraintControl
                 Dim iMaximum As Integer = Integer.MaxValue
 
                 If cbMinValue.Checked Then
-                    Integer.TryParse(numMinValue.Text, iMinimum)
+                    Integer.TryParse(numMinValue.Text, Globalization.NumberStyles.Integer Or Globalization.NumberStyles.AllowThousands, Nothing, iMinimum)
                 End If
 
                 If cbMaxValue.Checked Then
-                    Integer.TryParse(numMaxValue.Text, iMaximum)
+                    Integer.TryParse(numMaxValue.Text, Globalization.NumberStyles.Integer Or Globalization.NumberStyles.AllowThousands, Nothing, iMaximum)
                 End If
 
                 minimum = iMinimum
@@ -542,32 +542,18 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
-    Private Sub numMaxValue_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles numMaxValue.Validating
+    Private Sub MinOrMaxValue_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles numMinValue.Validating, numMaxValue.Validating
         If Not IsLoading Then
-            If numMaxValue.Text = "" Then 'empty string, revert to previous value
+            Dim c As NumericUpDown = CType(sender, NumericUpDown)
+
+            If c.Text = "" Then 'empty string, revert to previous value
                 e.Cancel = True
-                numMaxValue.Text = CStr(numMaxValue.Value) 'display previous value (previous value remains in .value but display is blank)
+                c.Text = CStr(c.Value) 'display previous value (previous value remains in .value but display is blank)
             End If
         End If
     End Sub
 
-    Protected Sub numMaxValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMaxValue.TextChanged
-        If Not IsLoading Then
-            CoordinateMinAndMaxValues()
-            mFileManager.FileEdited = True
-        End If
-    End Sub
-
-    Private Sub numMinValue_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles numMinValue.Validating
-        If Not IsLoading Then
-            If numMinValue.Text = "" Then 'empty string, revert to previous value
-                e.Cancel = True
-                numMinValue.Text = CStr(numMinValue.Value) 'display previous value (previous value remains in .value but display is blank)
-            End If
-        End If
-    End Sub
-
-    Protected Sub numMinValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMinValue.TextChanged
+    Protected Sub MinOrMaxValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMinValue.TextChanged, numMaxValue.TextChanged
         If Not IsLoading Then
             CoordinateMinAndMaxValues()
             mFileManager.FileEdited = True
@@ -581,8 +567,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
-    Private Sub Decimal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles Decimal_0.Click, Decimal_1.Click, Decimal_2.Click, Decimal_3.Click
+    Private Sub Decimal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Decimal_0.Click, Decimal_1.Click, Decimal_2.Click, Decimal_3.Click
         If TypeOf ActiveControl Is System.Windows.Forms.NumericUpDown Then
             Dim i As Integer
             Dim ctrl As System.Windows.Forms.MenuItem
@@ -649,7 +634,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             If NumericAssumed.DecimalPlaces = 0 Then
                 Constraint.AssumedValue = assumedValue
             Else
-                Constraint.AssumedValue = Convert.ToSingle(assumedValue, System.Globalization.NumberFormatInfo.InvariantInfo)
+                Constraint.AssumedValue = Convert.ToSingle(assumedValue, Globalization.NumberFormatInfo.InvariantInfo)
             End If
 
             Constraint.HasAssumedValue = True
