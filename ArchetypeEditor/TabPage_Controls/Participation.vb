@@ -10,6 +10,7 @@ Public Class Participation
         Get
             mParticipation.ModeSet = mRestrictedModeSet.AsCodePhrase
             mParticipation.FunctionConstraint = mParticipationFunction.TextConstraint
+            mParticipation.Occurrences = mOccurrences.Cardinality
             Return mParticipation
         End Get
         Set(ByVal value As RmParticipation)
