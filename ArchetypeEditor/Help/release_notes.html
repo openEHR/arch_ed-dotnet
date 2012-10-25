@@ -31,7 +31,7 @@
 
           <h1><a name="ArchetypeEditorReleases-CurrentBetaRelease"></a>Current Beta Release</h1>
 
-          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor2.2"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/TRUNK/ArchetypeEditor" rel="nofollow">Archetype Editor 2.2.779</a></span> 2 May 2011</h2>
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor2.2"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/TRUNK/ArchetypeEditor" rel="nofollow">Archetype Editor 2.2.870</a></span> 26 October 2012</h2>
 
           <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
           <ul>
@@ -46,6 +46,7 @@
             <li>An <b><i>open</i>EHR installer</b> is now available. (Previous releases were only available from Ocean Informatics.)</li>
             <li>The option to report an issue goes to the problem tracker on <i>open</i>EHR rather than Ocean Informatics.</li>
             <li>The <b>Help</b> is now online as well as being installed.</li>
+            <li>Archetypes can be copied to and from ADL and XML, in batch mode from the command line.</li>
             <li>On creating a new archetype, the 'short concept label' is inserted as the default 'Concept' label.</li>
             <li>On creating a new archetype, an appropriate structure is preselected (usually 'Tree').</li>
             <li><b>&lt;Ctrl+F6&gt;</b> and <b>&lt;Ctrl+Shift+F6&gt;</b> keyboard shortcuts move between the main tabs.</li>
@@ -67,28 +68,49 @@
             <li>Allow an individual <b>internal code</b> to be copied in a format like 'local::at0071::meconium'.</li>
             <li>Allow <b>constraint bindings</b> to be edited directly at the node definition.</li>
             <li>Allow <b>constraint bindings</b> and <b>term bindings</b> to use and browse any terminology.</li>
+            <li>Allow <b>assumed value</b> to be set in any data, not just on patient state.</li>
             <li>Allow each <b>contributor</b> to be edited.</li>
             <li>Allow the <b>copyright</b> to be edited.</li>
+            <li>Allow the <b>current contact</b> to be recorded.</li>
+            <li>Allow <b>DV_PARSABLE</b> to be viewed on the Interface tab.</li>
+            <li>Named <b>slots</b> now show the Details tab, allowing comments, annotations and bindings to be added.</li>
             <li>The active <b>language</b> is now displayed in the title bar.</li>
             <li>The at-code and description of <b>internal codes</b> are now shown.</li>
             <li>HTML displays the <b>copyright</b> from the archetype.</li>
-            <li>Prevent renaming of non-specialised nodes in specialised archetypes.</li>
+            <li>The <b>Authorship</b> date defaults to YYYY-MM-DD format.</li>
+            <li>Prevent changing the structure of specialised archetypes.</li>
+            <li>Prevent editing of non-specialised nodes on the Definition tab of specialised archetypes.</li>
             <li>When specialising a multiple-occurrence node, the node is cloned only if the user requests.</li>
             <li>When specialising a cluster by cloning, all of the cluster's children are copied too.</li>
             <li>Added g/m2.7 and 10^x property units.</li>
             <li>Fixed the file recovery dialog to appear when appropriate during start-up.</li>
             <li>Fixed specialising of <b>XML</b> archetypes.</li>
+            <li>Fixed saving name constraints of <b>XML ELEMENT</b> archetypes.</li>
             <li>Fixed several exceptions with <b>XML</b> archetypes.</li>
             <li>Fixed specialising of of a node more than 10 times in ADL archetypes.</li>
             <li>Fixed drag and drop in <b>SECTION</b> archetypes.</li>
             <li>Fixed action patterns in <b>XML INSTRUCTION</b> archetypes.</li>
             <li>Fixed loading math_function, width, fixed interval and offset in <b>OBSERVATION</b> archetypes.</li>
             <li>Fixed errors when loading <b>term bindings</b> and <b>constraint bindings</b>.</li>
+            <li>Fixed some problems editing the <b>Term Bindings</b> Complex tab.</li>
             <li>Fixed displaying <b>URI</b> constraints within a <b>choice</b> element.</li>
-            <li>Fixed errors when saving an archetype containing a <b>choice</b> with an interval of date or time.</li>
+            <li>Fixed usability problems with <b>assumed value</b> for <b>DV_QUANTITY</b>.</li>
+            <li>Fixed changing the data type of an element to a slot.</li>
+            <li>Fixed saving a <b>choice</b> with an interval of date or time.</li>
+            <li>Fixed saving a <b>choice</b> with a slot.</li>
+            <li>Fixed saving a <b>Single</b> or <b>Table</b> structure with a slot.</li>
+            <li>Fixed saving of <b>assumed value</b> for <b>DV_CODED_TEXT</b> internal codes.</li>
+            <li>Fixed saving of <b>assumed value</b> for <b>DV_PROPORTION</b>.</li>
+            <li>Fixed saving to XML of <b>is_integral</b> for <b>DV_PROPORTION</b>.</li>
+            <li>Fixed saving <b>COMPOSITION</b> archetypes with a <b>Table</b> structure.</li>
+            <li>Fixed saving <b>Participation</b> occurrences in <b>COMPOSITION</b> archetypes.</li>
             <li>Fixed invalid occurrences of embedded archetypes.</li>
             <li>Fixed mistranslations in the <b>Japanese</b> terminology.</li>
             <li>Fixed errors that occurred when the computer's language is <b>Norwegian</b>.</li>
+            <li>Fixed saving of edits done on the Terminology tab.</li>
+            <li>Fixed saving the correct order of <b>internal reference</b> elements.</li>
+            <li>Fixed "Person State with Event Series" to be initially enabled in <b>OBSERVATION</b> archetypes.</li>
+            <li>Fixed the "-" button to be enabled whenever appropriate to remove cluster and slot elements.</li>
           </ul>
 
 
@@ -646,7 +668,7 @@
           <li value="0"><a href="release_notes.html">Release notes</a></li>
           <li value="0"><a href="Menu/HowTo/archetype_editor.htm">Getting started</a></li>
         </ul>
-        <p>Copyright 2011 openEHR Foundation - $LastChangedDate$ $LastChangedRevision$</p>
+        <p>Copyright 2012 openEHR Foundation - $LastChangedDate$ $LastChangedRevision$</p>
       </div>
     </div>
   </body>
