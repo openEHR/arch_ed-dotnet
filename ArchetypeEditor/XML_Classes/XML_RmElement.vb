@@ -145,7 +145,7 @@ Namespace ArchetypeEditor.XML_Classes
                     End Try
 
                     Return ciq
-                Case "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", "dv_interval<dv_time>", "dv_interval<dv_date>"
+                Case "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", "dv_interval<dv_date>", "dv_interval<dv_time>"
                     Dim cidt As New Constraint_Interval_DateTime
 
                     Try
@@ -231,7 +231,7 @@ Namespace ArchetypeEditor.XML_Classes
                          "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", _
                          "dv_interval<dv_date>", "dv_interval<dv_time>"
                         result = ProcessInterval(CType(node, XMLParser.C_COMPLEX_OBJECT), fileManager)
-                    Case "dv_multimedia", "multi_media", "multimedia"
+                    Case "dv_multimedia", "multimedia", "multi_media"
                         result = ProcessMultiMedia(CType(node, XMLParser.C_COMPLEX_OBJECT))
                     Case "dv_uri", "uri", "dv_ehr_uri"
                         result = ProcessUri(CType(node, XMLParser.C_COMPLEX_OBJECT))

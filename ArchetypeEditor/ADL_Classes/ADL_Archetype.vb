@@ -963,17 +963,16 @@ Namespace ArchetypeEditor.ADL_Classes
 
             'For a date or time interval, we need to set the actual class type of the lower limit
             If c.Kind = ConstraintKind.Interval_DateTime Then
-                Dim s As String = CType(attribute.children.i_th(1), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).rm_type_name.to_cil
+                Dim s As String = CType(a.children.i_th(1), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).rm_type_name.to_cil
 
                 If s <> "DV_DATE_TIME" Then
                     Dim i As Integer = attribute.children.count
 
                     While i > 0
                         Dim o As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = CType(attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+                        i = i - 1
 
-                        If o.rm_type_name.to_cil <> "DV_INTERVAL<DV_DATE_TIME>" Then
-                            i = i - 1
-                        Else
+                        If o.rm_type_name.to_cil = "DV_INTERVAL<DV_DATE_TIME>" Then
                             i = 0
                             o._set_rm_type_name(Eiffel.String("DV_INTERVAL<" & s & ">"))
                         End If
