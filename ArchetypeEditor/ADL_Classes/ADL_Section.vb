@@ -52,60 +52,52 @@ Namespace ArchetypeEditor.ADL_Classes
             Return result
         End Function
 
-        Private Sub ProcessSection(ByVal a_rm_section As Object, ByVal an_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
-            'ccomplex object means it is a section, otherwise a slot
+        Private Sub ProcessSection(ByVal section As Object, ByVal obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT, ByVal fileManager As FileManagerLocal)
+            'c_complex object means it is a section, otherwise a slot
             'a_rm_section is passed as object so that definition can be passed at the first level
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim i, j As Integer
 
-            Select Case an_object.generating_type.to_cil
+            Select Case obj.generating_type.to_cil
                 Case "C_COMPLEX_OBJECT"
-                    Dim a_complex_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                    Dim a_section As RmSection
+                    Dim o As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = CType(obj, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+                    Dim subSection As New RmSection(o, fileManager)
 
-                    a_section = New RmSection(an_object.node_id.to_cil)
-                    a_complex_object = an_object
+                    For i = 1 To o.attributes.count
+                        Dim a As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = o.attributes.i_th(i)
 
-                    For i = 1 To a_complex_object.attributes.count
-                        an_attribute = a_complex_object.attributes.i_th(i)
-
-                        If an_attribute.has_children Then
-                            Select Case an_attribute.rm_attribute_name.to_cil
+                        If a.has_children Then
+                            Select Case a.rm_attribute_name.to_cil
                                 Case "name", "Name", "NAME", "runtime_label"
-                                    a_section.NameConstraint = ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                                    subSection.NameConstraint = ADL_RmElement.ProcessText(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                                 Case "items", "Items", "ITEMS"
-                                    For j = 1 To an_attribute.children.count
-                                        ProcessSection(a_section, an_attribute.children.i_th(j))
+                                    For j = 1 To a.children.count
+                                        ProcessSection(subSection, a.children.i_th(j), fileManager)
                                     Next
                             End Select
                         End If
                     Next
 
-                    a_rm_section.Children.Add(a_section)
+                    section.Children.Add(subSection)
 
                 Case "ARCHETYPE_SLOT"
-                    a_rm_section.children.add(New RmSlot(CType(an_object, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                    section.children.add(New RmSlot(CType(obj, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
 
                 Case Else
                     Debug.Assert(False, "Type is not catered for")
             End Select
         End Sub
 
-        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-            MyBase.New(Definition, a_filemanager)
+        Sub New(ByRef obj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal)
+            MyBase.New(obj, fileManager)
 
-            If Definition.has_attribute(Eiffel.String("items")) Then
-                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                Dim i As Integer
+            If obj.has_attribute(Eiffel.String("items")) Then
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = obj.c_attribute_at_path(Eiffel.String("items"))
+                ArchetypeEditor.ADL_Classes.ADL_Tools.SetCardinality(attribute.cardinality, Children)
 
-                an_attribute = Definition.c_attribute_at_path(Eiffel.String("items"))
-                ArchetypeEditor.ADL_Classes.ADL_Tools.SetCardinality(an_attribute.cardinality, Me.Children)
-
-                For i = 1 To an_attribute.children.count
-                    ProcessSection(Me, an_attribute.children.i_th(i))
+                For i As Integer = 1 To attribute.children.count
+                    ProcessSection(Me, attribute.children.i_th(i), fileManager)
                 Next
             End If
-
         End Sub
 
     End Class

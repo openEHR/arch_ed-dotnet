@@ -45,50 +45,46 @@ Namespace ArchetypeEditor.XML_Classes
 
         End Function
 
-        Private Sub ProcessSection(ByVal a_rm_section As Object, ByVal an_object As XMLParser.C_OBJECT)
+        Private Sub ProcessSection(ByVal section As Object, ByVal obj As XMLParser.C_OBJECT, ByVal fileManager As FileManagerLocal)
             'c_complex object means it is a section, otherwise a slot
             'a_rm_section is passed as object so that definition can be passed at the first level
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
-
-            Select Case an_object.GetType.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Select Case obj.GetType.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "xmlparser.c_complex_object"
-                    Dim a_complex_object As XMLParser.C_COMPLEX_OBJECT
-                    Dim a_section As RmSection
+                    Dim o As XMLParser.C_COMPLEX_OBJECT = CType(obj, XMLParser.C_COMPLEX_OBJECT)
+                    Dim subSection As New RmSection(o, fileManager)
 
-                    a_section = New RmSection(an_object.node_id)
-                    a_complex_object = an_object
-
-                    If Not a_complex_object.attributes Is Nothing Then
-                        For Each an_attribute In a_complex_object.attributes
-                            Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    If Not o.attributes Is Nothing Then
+                        For Each a As XMLParser.C_ATTRIBUTE In o.attributes
+                            Select Case a.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                                 Case "name"
-                                    a_section.NameConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                                    subSection.NameConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(a.children(0), XMLParser.C_COMPLEX_OBJECT))
                                 Case "items"
-                                    For Each cco As XMLParser.C_OBJECT In an_attribute.children
-                                        ProcessSection(a_section, cco)
+                                    For Each cco As XMLParser.C_OBJECT In a.children
+                                        ProcessSection(subSection, cco, fileManager)
                                     Next
                             End Select
                         Next
                     End If
-                    a_rm_section.Children.Add(a_section)
+
+                    section.Children.Add(subSection)
                 Case "xmlparser.archetype_slot"
-                    a_rm_section.children.add(New RmSlot(CType(an_object, XMLParser.ARCHETYPE_SLOT)))
+                    section.children.add(New RmSlot(CType(obj, XMLParser.ARCHETYPE_SLOT)))
 
                 Case Else
                     Debug.Assert(False, "Type is not catered for")
             End Select
-
         End Sub
 
+        Sub New(ByRef obj As XMLParser.C_COMPLEX_OBJECT, ByVal filemanager As FileManagerLocal)
+            MyBase.New(obj, filemanager)
 
-        Sub New(ByRef Definition As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-            MyBase.New(Definition, a_filemanager)
-            If Not Definition.attributes Is Nothing Then
-                For Each attrib As XMLParser.C_ATTRIBUTE In Definition.attributes
+            If Not obj.attributes Is Nothing Then
+                For Each attrib As XMLParser.C_ATTRIBUTE In obj.attributes
                     If attrib.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "items" Then
-                        ArchetypeEditor.XML_Classes.XML_Tools.SetCardinality(CType(attrib, XMLParser.C_MULTIPLE_ATTRIBUTE).cardinality, Me.Children)
+                        ArchetypeEditor.XML_Classes.XML_Tools.SetCardinality(CType(attrib, XMLParser.C_MULTIPLE_ATTRIBUTE).cardinality, Children)
+
                         For Each section As XMLParser.C_OBJECT In attrib.children
-                            ProcessSection(Me, section)
+                            ProcessSection(Me, section, filemanager)
                         Next
                     End If
                 Next
