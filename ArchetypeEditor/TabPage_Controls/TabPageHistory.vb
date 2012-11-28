@@ -643,11 +643,11 @@ Public Class TabpageHistory
         End If
 
         For Each elvi In ListEvents.Items
-            Dim s As String = RichTextBoxUnicode.CreateRichTextBoxTag(elvi.RM_Class.NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) 'SRH: 23 Aug 2009 [EDT-575] Support unicode
+            Dim s As String = RichTextBoxUnicode.EscapedRtfString(mFileManager.OntologyManager.GetText(elvi.RM_Class.NodeId))
 
             Text.WriteLine(Space(3 * level) & "\b " & s & " (" & elvi.Occurrences.ToString & ") \b0\par")
 
-            s = RichTextBoxUnicode.CreateRichTextBoxTag(elvi.RM_Class.NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_DESC) 'SRH: 23 Aug 2009 [EDT-575] Support unicode
+            s = RichTextBoxUnicode.EscapedRtfString(mFileManager.OntologyManager.GetDescription(elvi.RM_Class.NodeId))
 
             Text.WriteLine(Space(3 * level) & "\i   - " & s & "\i0\par")
 
@@ -658,29 +658,32 @@ Public Class TabpageHistory
 
                 Case StructureType.PointEvent
                     If elvi.hasFixedOffset Then
-                        Text.WriteLine(Space(3 * level) & Filemanager.GetOpenEhrTerm(179, "Offset") + _
-                        " = " & elvi.Offset.ToString & " " & elvi.OffsetUnits & "\par")
+                        Text.WriteLine(Space(3 * level) & RichTextBoxUnicode.EscapedRtfString(Filemanager.GetOpenEhrTerm(179, "Offset")) + " = " & elvi.Offset.ToString & " " & elvi.OffsetUnits & "\par")
                     End If
 
                 Case StructureType.IntervalEvent
                     If elvi.hasFixedWidth Then
-                        Text.WriteLine(Space(3 * level) & Filemanager.GetOpenEhrTerm(143, "Fixed interval") + _
-                        " = " & elvi.Width.ToString & " " & elvi.WidthUnits & "\par")
+                        Text.WriteLine(Space(3 * level) & RichTextBoxUnicode.EscapedRtfString(Filemanager.GetOpenEhrTerm(143, "Fixed interval")) + " = " & elvi.Width.ToString & " " & elvi.WidthUnits & "\par")
                     End If
+
                     Try
                         If Not elvi.AggregateMathFunction Is Nothing AndAlso elvi.AggregateMathFunction.Codes.Count > 0 Then
-                            Text.Write(Space(3 * level) & Filemanager.GetOpenEhrTerm(266, "Event math function"))
+                            Text.Write(Space(3 * level) & RichTextBoxUnicode.EscapedRtfString(Filemanager.GetOpenEhrTerm(266, "Event math function")))
                             Text.Write(" = ")
                             Dim separator As String = ""
+
                             For Each code As String In elvi.AggregateMathFunction.Codes
                                 Dim i As Integer
+
                                 If Integer.TryParse(code, i) Then
-                                    Text.Write(separator & Filemanager.GetOpenEhrTerm(i, "Fixed interval"))
+                                    Text.Write(separator & RichTextBoxUnicode.EscapedRtfString(Filemanager.GetOpenEhrTerm(i, "Fixed interval")))
+
                                     If separator = "" Then
                                         separator = ", "
                                     End If
                                 End If
                             Next
+
                             Text.WriteLine("\par")
                         End If
                     Catch

@@ -91,10 +91,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                     Dim a_string As String
 
                     For Each a_string In TextConstraint.AllowableValues.Codes
-                        'a_Term = mFileManager.OntologyManager.GetTerm(a_string)
-                        's = s & " '" & a_Term.Text & "',"                        
-                        s = s & " '" & RichTextBoxUnicode.CreateRichTextBoxTag(a_string, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "',"
-
+                        s = s & " '" & RichTextBoxUnicode.EscapedRtfString(mFileManager.OntologyManager.GetText(a_string)) & "',"
                     Next
 
                     s = s.TrimEnd(punctuation)
@@ -276,36 +273,28 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     End Function
 
     Private Function OrdinalConstraintToRichText(ByVal OrdinalConstraint As Constraint_Ordinal) As String
-        Dim s As String
-        Dim ov As OrdinalValue
+        Dim s As String = "{"
 
-        s = "{"
-        For Each ov In OrdinalConstraint.OrdinalValues
-            s = s & ov.Ordinal.ToString & ": \i " & RichTextBoxUnicode.CreateRichTextBoxTag(ov.InternalCode, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\i0 ; "
+        For Each ov As OrdinalValue In OrdinalConstraint.OrdinalValues
+            s = s & ov.Ordinal.ToString & ": \i " & RichTextBoxUnicode.EscapedRtfString(mFileManager.OntologyManager.GetText(ov.InternalCode)) & "\i0 ; "
         Next
 
-        s = s.Trim & "}"
-        Return s
+        Return s.Trim & "}"
     End Function
 
     Private Function OrdinalConstraintToHTML(ByVal OrdinalConstraint As Constraint_Ordinal) As String
-        Dim s As String
-        Dim ov As OrdinalValue
-        Dim a_Term As RmTerm
-        s = ""
+        Dim s As String = ""
 
-        For Each ov In OrdinalConstraint.OrdinalValues
-            a_Term = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
-            s &= ov.Ordinal.ToString & ": <i> " & a_Term.Text & "<i><br> "
+        For Each ov As OrdinalValue In OrdinalConstraint.OrdinalValues
+            Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
+            s &= ov.Ordinal.ToString & ": <i> " & term.Text & "<i><br> "
         Next
 
-        s = s.Trim
-        Return s
+        Return s.Trim
     End Function
 
     Private Function ProportionConstraintToHTML(ByVal RatioConstraint As Constraint_Proportion) As String
-        Dim s As String
-        s = CountConstraintToRichText(CType(RatioConstraint.Numerator, Constraint_Count))
+        Dim s As String = CountConstraintToRichText(CType(RatioConstraint.Numerator, Constraint_Count))
 
         If RatioConstraint.IsPercent Then
             s &= " %"
@@ -365,14 +354,13 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     Public Overrides Function ToRichText(ByVal level As Integer) As String
         ' write the cardinality of the element
-        Dim s1 As String = RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & " (" & mItem.Occurrences.ToString & ")"
+        Dim s1 As String = RichTextBoxUnicode.EscapedRtfString(mFileManager.OntologyManager.GetText(NodeId)) & " (" & mItem.Occurrences.ToString & ")"
 
         ' add bars if table and wrapping text
         Dim result As String = (Space(3 * level) & "\b " & s1 & "\b0\par")
 
         'write the description of the element
-        Dim s As String = RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_DESC)
-
+        Dim s As String = RichTextBoxUnicode.EscapedRtfString(mFileManager.OntologyManager.GetText(NodeId))
         result = result & Environment.NewLine & (Space(3 * level) & s & "\par")
 
         If Not Element.Constraint Is Nothing Then
@@ -385,9 +373,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     End Function
 
     Private Function DateTimeConstraintToRichText(ByVal a_date_time_constraint As Constraint_DateTime) As String
-        Dim result As String = ""
-        result &= Filemanager.GetOpenEhrTerm(a_date_time_constraint.TypeofDateTimeConstraint, "not known")
-        Return result
+        Return Filemanager.GetOpenEhrTerm(a_date_time_constraint.TypeofDateTimeConstraint, "not known")
     End Function
 
     Private Function ConstraintToRichText(ByVal a_constraint As Constraint, ByVal level As Integer) As String
@@ -396,8 +382,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Select Case a_constraint.Kind
 
             Case ConstraintKind.Quantity
-                result &= Environment.NewLine _
-                        & QuantityConstraintToRichText(CType(a_constraint, Constraint_Quantity), level)
+                result &= Environment.NewLine & QuantityConstraintToRichText(CType(a_constraint, Constraint_Quantity), level)
 
             Case ConstraintKind.Count
                 result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & CountConstraintToRichText(CType(a_constraint, Constraint_Count)) & "\par")

@@ -62,8 +62,8 @@ Public Class ArchetypeComposite
         Dim result, s1 As String
         Dim nl As String = Chr(10) & Chr(13)
 
-        result = (Space(3 * level) & "\ul " & RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\ulnone  (" & mItem.Occurrences.ToString & ")\par") & nl
-        result &= (Space(3 * level) & "\i    - " & RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_DESC) & "\i0\par") & nl
+        result = (Space(3 * level) & "\ul " & RichTextBoxUnicode.EscapedRtfString(mFileManager.OntologyManager.GetText(NodeId)) & "\ulnone  (" & mItem.Occurrences.ToString & ")\par") & nl
+        result &= (Space(3 * level) & "\i    - " & RichTextBoxUnicode.EscapedRtfString(mFileManager.OntologyManager.GetDescription(NodeId)) & "\i0\par") & nl
 
         s1 = "\cf2 Items \cf0"
 

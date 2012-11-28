@@ -2456,7 +2456,6 @@ Public Class Designer
         mTabPageDescription.Translate()
         mTermBindingPanel.PopulatePathTree()
         RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
-        RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
 
         Select Case TabMain.SelectedTab.Name
             Case "tpInterface"
@@ -2513,8 +2512,7 @@ Public Class Designer
         text.WriteLine("{\colortbl ;\red0\green0\blue255;\red0\green255\blue0;}")
         text.WriteLine("\viewkind4\uc1\pard\tx2840\tx5112\lang3081\f0\fs20")
         text.WriteLine("\cf1 Header\cf0\par")
-        'text.WriteLine("   Concept: " & Me.txtConceptInFull.Text & "\par")        
-        text.WriteLine("   Concept: " & RichTextBoxUnicode.CreateRichTextBoxTag(mFileManager.Archetype.ConceptCode, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\par")
+        text.WriteLine("   Concept: " & RichTextBoxUnicode.EscapedRtfString(mFileManager.OntologyManager.GetText(mFileManager.Archetype.ConceptCode)) & "\par")
 
         text.WriteLine("\par")
         text.WriteLine("\cf1 Definition\cf0\par")
@@ -2539,10 +2537,10 @@ Public Class Designer
                 If Not mRestrictedSubject Is Nothing AndAlso mRestrictedSubject.HasRestriction Then
                     text.WriteLine("       Subject relationship restricted to " & mRestrictedSubject.CSV & "\par")
                 End If
+
                 text.WriteLine("\par")
                 ' add subject relationship constraint here
                 text.WriteLine("\cf1   DATA\cf0  = \{\par")
-
 
                 If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
                     If Not mTabPageInstruction Is Nothing Then
@@ -2580,13 +2578,14 @@ Public Class Designer
                     text.WriteLine("\par")
                 End If
 
-
                 If Not mTabPageStateStructure Is Nothing Then
                     text.WriteLine("cf1   STATE\cf0  = \{\par")
                     mTabPageStateStructure.toRichText(text, 2)
+
                     If Not mTabPageStateEventSeries Is Nothing Then
                         mTabPageStateEventSeries.ToRichText(text, 2)
                     End If
+
                     text.WriteLine("     \} -- end State\par")
                     text.WriteLine("\par")
                 End If
@@ -2605,7 +2604,6 @@ Public Class Designer
         End Select
 
         mRichTextArchetype.Rtf = text.ToString
-        RichTextBoxUnicode.ProcessRichEditControl(mRichTextArchetype, mFileManager, mTabPageDescription)
     End Sub
 
     Protected Sub WriteToHTML(ByVal filename As String)
@@ -3034,7 +3032,6 @@ Public Class Designer
         mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
 
         RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
-        RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
     End Sub
 
     Private Function CheckOKtoClose() As Boolean
@@ -4352,7 +4349,6 @@ Public Class Designer
 
             If TabMain.SelectedTab Is tpDescription Then
                 RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
-                RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
             End If
         End If
     End Sub
