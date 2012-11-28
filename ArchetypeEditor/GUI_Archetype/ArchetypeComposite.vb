@@ -20,7 +20,7 @@ Public Class ArchetypeComposite
     Inherits ArchetypeNodeAbstract
 
     Private mIsFixed As Boolean
-    Private mCardinality As New RmCardinality(0)
+    Private mCardinality As New RmCardinality(1)
 
     Public Property Cardinality() As RmCardinality
         Get
@@ -59,26 +59,26 @@ Public Class ArchetypeComposite
     End Function
 
     Public Overrides Function ToRichText(ByVal level As Integer) As String
-        Dim s, s1 As String
+        Dim result, s1 As String
         Dim nl As String = Chr(10) & Chr(13)
 
-        's = (Space(3 * level) & "\ul " & mText & "\ulnone  (" & mItem.Occurrences.ToString & ")\par") & nl
-        s = (Space(3 * level) & "\ul " & RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\ulnone  (" & mItem.Occurrences.ToString & ")\par") & nl 'JAR: 13APR07, EDT-32 Support unicode
-
-        's &= (Space(3 * level) & "\i    - " & mDescription & "\i0\par") & nl    
-        s &= (Space(3 * level) & "\i    - " & RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_DESC) & "\i0\par") & nl 'JAR: 13APR07, EDT-32 Support unicode
+        result = (Space(3 * level) & "\ul " & RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\ulnone  (" & mItem.Occurrences.ToString & ")\par") & nl
+        result &= (Space(3 * level) & "\i    - " & RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_DESC) & "\i0\par") & nl
 
         s1 = "\cf2 Items \cf0"
+
         If IsOrdered Then
             s1 &= " ordered"
         End If
+
         If mIsFixed Then
             s1 &= " fixed"
         End If
+
         s1 = s1.Trim
         s1 &= "\par"
-        s &= (Space(3 * (level + 1)) & s1)
-        Return s
+        result &= Space(3 * (level + 1)) & s1
+        Return result
     End Function
 
     Public Overrides Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
@@ -105,12 +105,16 @@ Public Class ArchetypeComposite
         If mIsFixed Then
             result.Append(", fixed")
         End If
+
         If IsOrdered Then
             result.Append(", ordered")
         End If
+
         result.Append("</td><td>&nbsp;</td>")
+
         If showComments Then
-            Dim commentString As String = Me.Comment
+            Dim commentString As String = Comment
+
             If commentString = "" Then
                 commentString = "&nbsp;"
             End If
@@ -118,44 +122,20 @@ Public Class ArchetypeComposite
         End If
 
         Return result.ToString
-
     End Function
 
-    Public Sub New(ByVal aText As String, ByVal a_type As StructureType, ByVal fileManager As FileManagerLocal)
-        MyBase.New(aText)
+    Public Sub New(ByVal text As String, ByVal type As StructureType, ByVal fileManager As FileManagerLocal)
+        MyBase.New(text)
         mFileManager = fileManager
-        Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(aText)
-        Item = New RmStructure(term.Code, a_type)
+        Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(text)
+        Item = New RmStructure(term.Code, type)
         Item.Occurrences.MaxCount = 1
-    End Sub
-
-    Public Sub New(ByVal a_type As StructureType, ByVal fileManager As FileManagerLocal)
-        ' for anonymous use of an archetype with no term
-        ' called by structures when creating the cluster control which has no id
-        MyBase.New("")
-
-        mFileManager = fileManager
-        Dim term As RmTerm = New RmTerm("")
-        Item = New RmStructure(term.Code, a_type)
-        Item.Occurrences.MaxCount = 1
-    End Sub
-
-    Sub New(ByVal cluster As RmCluster, ByVal fileManager As FileManagerLocal)
-        MyBase.New(New RmStructure(cluster), fileManager)
-        mCardinality = cluster.Children.Cardinality
-        mIsFixed = cluster.Children.Fixed
     End Sub
 
     Sub New(ByVal struct As RmStructureCompound, ByVal fileManager As FileManagerLocal)
         MyBase.New(New RmStructure(struct), fileManager)
         mCardinality = struct.Children.Cardinality
         mIsFixed = struct.Children.Fixed
-    End Sub
-
-    Sub New(ByVal aSection As RmSection, ByVal fileManager As FileManagerLocal)
-        MyBase.New(New RmStructure(aSection), fileManager)
-        mCardinality = aSection.Children.Cardinality
-        mIsFixed = aSection.Children.Fixed
     End Sub
 
     Sub New(ByVal aNode As ArchetypeNodeAbstract)

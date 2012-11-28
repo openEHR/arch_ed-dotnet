@@ -169,15 +169,15 @@ Public Class Children
         End If
     End Sub
 
-    Sub New(ByVal ParentStructureType As StructureType)
-        mParentStructureType = ParentStructureType
+    Sub New(ByVal parentStructureType As StructureType)
+        mParentStructureType = parentStructureType
 
         ' HKF: Revert EDT-502 - allowing this to remain as 1..1 results in a null statement about existence in the ADL but results in incorrect XML, which must be ignored 
         ''SRH: 11 Jan 2009 - EDT-502 - added check for existence to be mandatory if contains any mandatory children (only relevant for structures as protocol or state)
         'If ParentStructureType = StructureType.Protocol Or ParentStructureType = StructureType.State Then
         '    Me.Existence.MinCount = 0
         'End If
-        If ParentStructureType = StructureType.Cluster Then
+        If parentStructureType = StructureType.Cluster Or parentStructureType = StructureType.SECTION Then
             'Default to 1..*
             If Cardinality.MinCount < 1 Then
                 Cardinality.MinCount = 1

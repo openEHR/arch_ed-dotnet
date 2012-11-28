@@ -355,12 +355,10 @@ Public Class RmStructureCompound
     End Sub
 
     Protected Sub ProcessTree(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
         Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
-        'If Not ObjNode.any_allowed AndAlso Not ObjNode.attributes Is Nothing Then
+
         If Not complexObject.Any_Allowed AndAlso Not ObjNode.attributes Is Nothing Then
             For Each an_attribute As XMLParser.C_ATTRIBUTE In ObjNode.attributes
-
                 If an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "items" Then
                     'for items - that is content only
                     ArchetypeEditor.XML_Classes.XML_Tools.SetCardinality(CType(an_attribute, XMLParser.C_MULTIPLE_ATTRIBUTE).cardinality, colChildren)
@@ -395,9 +393,9 @@ Public Class RmStructureCompound
     Private Sub ProcessData(ByVal data_rel_node As XMLParser.C_ATTRIBUTE, ByVal a_filemanager As FileManagerLocal)
         Dim ObjNode As XMLParser.C_OBJECT
         Dim structure_type As StructureType
+
         Try
             For Each ObjNode In data_rel_node.children
-
                 structure_type = ReferenceModel.StructureTypeFromString(ObjNode.rm_type_name)
 
                 Select Case ObjNode.GetType.ToString.ToLower(System.Globalization.CultureInfo.InvariantCulture)
@@ -407,7 +405,6 @@ Public Class RmStructureCompound
                             Case StructureType.History
                                 colChildren.Add(New RmHistory(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager))
                             Case StructureType.Single, StructureType.List, StructureType.Tree
-                                ' a structure
                                 colChildren.Add(New RmStructureCompound(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager))
                             Case StructureType.Table
                                 colChildren.Add(New RmTable(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager))

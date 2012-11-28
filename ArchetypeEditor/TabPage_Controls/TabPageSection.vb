@@ -38,7 +38,7 @@ Public Class TabPageSection
 
         If Not DesignMode Then
             mFileManager = Filemanager.Master
-            SetCardinality(StructureType.SECTION)
+            InitialiseCardinality(StructureType.SECTION)
             DetailsPanel = New ArchetypeNodeConstraintControl(mFileManager)
         End If
     End Sub
@@ -281,23 +281,6 @@ Public Class TabPageSection
         text.WriteLine("\pard\f0\fs20\par")
     End Sub
 
-    Private Sub ProcessSection(ByVal A_sect As RmSection, ByVal tvNodes As TreeNodeCollection)
-        Dim rm As Object
-
-        ' can be RmSlot or RmStructureCompound
-        For Each rm In A_sect.Children
-            If TypeOf rm Is RmSection Then
-                Dim n As ArchetypeTreeNode
-                n = New ArchetypeTreeNode(CType(rm, RmSection), mFileManager)
-                tvNodes.Add(n)
-                ProcessSection(rm, n.Nodes)
-            ElseIf TypeOf rm Is RmSlot Then
-                Dim n As New ArchetypeTreeNode(CType(rm, RmSlot), mFileManager)
-                tvNodes.Add(n)
-            End If
-        Next
-    End Sub
-
     Private Sub ProcessChildrenRM_Structures(ByVal colNodes As TreeNodeCollection, ByRef a_section As RmSection)
         Dim tvNode As TreeNode
         Dim SectionNode As RmSection
@@ -349,30 +332,31 @@ Public Class TabPageSection
         Return SectNode
     End Function
 
-    Public Sub ProcessSection(ByVal a_section As RmSection)
-        Dim rm_node As Object
-        SetCardinality(a_section)
+    Public Sub ProcessSection(ByVal section As RmSection)
+        SetCardinality(section)
         tvTree.Nodes.Clear()
 
         If mRootOfComposition Then
-            For Each slot As RmSlot In a_section.Children
+            For Each slot As RmSlot In section.Children
                 Dim n As New ArchetypeTreeNode(CType(slot, RmSlot), mFileManager)
                 tvTree.Nodes.Add(n)
             Next
         Else
-            For Each rm_node In a_section.Children
-                If TypeOf rm_node Is RmSection Then
-                    Dim n As New ArchetypeTreeNode(CType(rm_node, RmStructureCompound), mFileManager)
-                    tvTree.Nodes.Add(n)
-                    ProcessSection(rm_node, n.Nodes)
-                ElseIf TypeOf rm_node Is RmSlot Then
-                    Dim n As New ArchetypeTreeNode(CType(rm_node, RmSlot), mFileManager)
-                    tvTree.Nodes.Add(n)
-                Else
-                    Debug.Assert(False, "Type not catered for")
-                End If
-            Next
+            ProcessSectionRecursively(section, tvTree.Nodes)
         End If
+    End Sub
+
+    Private Sub ProcessSectionRecursively(ByVal section As RmSection, ByVal tvNodes As TreeNodeCollection)
+        For Each node As Object In section.Children
+            If TypeOf node Is RmSection Then
+                Dim n As New ArchetypeTreeNode(CType(node, RmSection), mFileManager)
+                tvNodes.Add(n)
+                ProcessSectionRecursively(node, n.Nodes)
+            ElseIf TypeOf node Is RmSlot Then
+                Dim n As New ArchetypeTreeNode(CType(node, RmSlot), mFileManager)
+                tvNodes.Add(n)
+            End If
+        Next
     End Sub
 
     Private Sub TranslateSectionNodes(ByRef tvnodes As TreeNodeCollection)
@@ -396,22 +380,27 @@ Public Class TabPageSection
 
     Protected Sub SetCardinality(ByVal rm As RmStructureCompound)
         If mCardinalityControl Is Nothing Then
-            SetCardinality(rm.Type)
+            InitialiseCardinality(rm.Type)
         End If
 
         mCardinalityControl.Cardinality = rm.Children.Cardinality
     End Sub
 
-    Protected Sub SetCardinality(ByVal a_structure_type As StructureType)
+    Protected Sub InitialiseCardinality(ByVal type As StructureType)
         mCardinalityControl = New OccurrencesPanel(mFileManager)
         mCardinalityControl.LocalFileManager = mFileManager
 
-        If a_structure_type = StructureType.Single Then
+        If type = StructureType.Single Then
             mCardinalityControl.SetSingle = True
         Else
             mCardinalityControl.IsContainer = True
-            mCardinalityControl.Location = New Drawing.Point(0, 0)
+            mCardinalityControl.Location = New Point(0, 0)
             PanelTop.Controls.Add(mCardinalityControl)
+
+            If type = StructureType.Cluster Or type = StructureType.SECTION Then
+                mCardinalityControl.SetMandatory = True
+                mCardinalityControl.IsContainer = True
+            End If
         End If
     End Sub
 

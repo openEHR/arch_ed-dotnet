@@ -25,12 +25,12 @@ Public Class RmSection
         MyBase.New(NodeId, StructureType.SECTION)
     End Sub
 
-    Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        MyBase.New(EIF_Structure, a_filemanager)
+    Sub New(ByVal obj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal)
+        MyBase.New(obj, fileManager)
     End Sub
 
-    Sub New(ByVal XML_Structure As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        MyBase.New(XML_Structure, a_filemanager)
+    Sub New(ByVal obj As XMLParser.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal)
+        MyBase.New(obj, fileManager)
     End Sub
 End Class
 

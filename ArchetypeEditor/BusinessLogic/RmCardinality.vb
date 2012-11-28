@@ -26,7 +26,6 @@ Public Class RmCardinality
     Private mOrdered As Boolean = False
     Private mIsDefault As Boolean = False
 
-    'SRH: 11 Jan 2009 - EDT-502 - handling of existence and cardinality
     Public Event Updated As CardinalityUpdatedEventHandler
     Public Delegate Sub CardinalityUpdatedEventHandler(ByVal sender As Object, ByVal e As EventArgs)
 
@@ -217,7 +216,6 @@ Public Class RmCardinality
     End Sub
 
     Sub New(ByVal lower As Integer, ByVal upper As Integer)
-        Debug.Assert(lower <> Nothing And upper <> Nothing)
         mMinCount = lower
         mMaxCount = upper
         mUnbounded = False
@@ -237,12 +235,12 @@ Public Class RmCardinality
         mIsDefault = True
     End Sub
 
-    Sub New(ByVal aCount As RmCardinality)
-        mUnbounded = aCount.IsUnbounded
-        mMaxCount = aCount.MaxCount
-        mMinCount = aCount.MinCount
-        mIncludeLower = aCount.IncludeLower
-        mIncludeUpper = aCount.IncludeUpper
+    Sub New(ByVal count As RmCardinality)
+        mUnbounded = count.IsUnbounded
+        mMaxCount = count.MaxCount
+        mMinCount = count.MinCount
+        mIncludeLower = count.IncludeLower
+        mIncludeUpper = count.IncludeUpper
     End Sub
 
 End Class

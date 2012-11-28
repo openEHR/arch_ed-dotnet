@@ -91,7 +91,7 @@ Public Class EntryStructure
         End Select
 
         ShowIcons()
-        SetCardinality(mStructureType)
+        InitialiseCardinality(mStructureType)
     End Sub
 
     Public Sub New()
@@ -538,24 +538,24 @@ Public Class EntryStructure
     End Property
 
     Protected Sub SetCardinality(ByVal rm As RmStructureCompound)
-        SetCardinality(rm.Type)
+        InitialiseCardinality(rm.Type)
         mCardinalityControl.Cardinality = rm.Children.Cardinality
         AddHandler mCardinalityControl.Cardinality.Updated, AddressOf CardinalityUpdated
         CardinalityUpdated(mCardinalityControl, New EventArgs)
     End Sub
 
-    Protected Sub SetCardinality(ByVal a_structure_type As StructureType)
+    Protected Sub InitialiseCardinality(ByVal type As StructureType)
         mCardinalityControl = New OccurrencesPanel(mFileManager)
         mCardinalityControl.LocalFileManager = mFileManager
 
-        If a_structure_type = StructureType.Single Then
+        If type = StructureType.Single Then
             mCardinalityControl.SetSingle = True
         Else
             mCardinalityControl.IsContainer = True
             mCardinalityControl.Location = New Point(0, 0)
             PanelStructureHeader.Controls.Add(mCardinalityControl)
 
-            If a_structure_type = Global.ArchetypeEditor.StructureType.Cluster Then
+            If type = StructureType.Cluster Or type = StructureType.SECTION Then
                 mCardinalityControl.SetMandatory = True
                 mCardinalityControl.IsContainer = True
             End If

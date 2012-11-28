@@ -1328,28 +1328,22 @@ Namespace ArchetypeEditor.ADL_Classes
             If participations.Children.Count > 0 Then
                 Dim participationAttribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 participationAttribute = mAomFactory.create_c_attribute_multiple(aRmClass, Eiffel.String(participations.NodeId), MakeCardinality(participations.Children.Cardinality))
+
                 For Each p As RmParticipation In participations.Children
                     BuildParticipation(participationAttribute, p)
                 Next
             End If
-
         End Sub
 
         Protected Sub BuildSection(ByVal rmChildren As Children, ByVal cadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             ' Build a section, runtimename is already done
             Dim a As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-
-            If rmChildren.Cardinality.MinCount = 0 Then
-                rmChildren.Cardinality.MinCount = 1
-            End If
-
             a = mAomFactory.create_c_attribute_multiple(cadlObj, Eiffel.String("items"), MakeCardinality(rmChildren.Cardinality, rmChildren.Cardinality.Ordered))
             'SRH - 11 Feb 2009 - EDT 514 - set the minimum cardinality of cluster and structures to 1
             'As cardinality is expressed in the RM as 1..* this forces existence at the moment to be 1..1 - however this is not the intent.
             'an_attribute.set_existence(MakeExistence(rmChildren.Existence))
 
             For Each a_structure As RmStructure In rmChildren
-
                 If a_structure.Type = StructureType.SECTION Then
                     Dim new_section As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
@@ -1365,6 +1359,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     If CType(a_structure, RmSection).Children.Count > 0 Then
                         BuildSection(CType(a_structure, RmSection).Children, new_section)
                     End If
+
                     a.put_child(new_section)
                 ElseIf a_structure.Type = StructureType.Slot Then
                     BuildSlotFromRm(a, a_structure)

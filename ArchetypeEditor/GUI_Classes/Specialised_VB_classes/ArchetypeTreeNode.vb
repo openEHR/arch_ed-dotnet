@@ -124,72 +124,45 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         Return result
     End Function
 
-    Public Sub New(ByVal aArchetypeNode As ArchetypeNode)
-        MyBase.New(aArchetypeNode.Text)
-        mArchetypeNode = aArchetypeNode.Copy
-
-        If mArchetypeNode.RM_Class.Type = StructureType.Cluster AndAlso CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
-            CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
-        End If
+    Public Sub New(ByVal node As ArchetypeNode)
+        MyBase.New(node.Text)
+        mArchetypeNode = node.Copy
     End Sub
 
-    Sub New(ByVal aText As String, ByVal a_type As StructureType, ByVal fileManager As FileManagerLocal)
-        MyBase.New(aText)
+    Sub New(ByVal text As String, ByVal type As StructureType, ByVal fileManager As FileManagerLocal)
+        MyBase.New(text)
 
-        Select Case a_type
+        Select Case type
             Case StructureType.Element
-                mArchetypeNode = New ArchetypeElement(aText, fileManager)
+                mArchetypeNode = New ArchetypeElement(text, fileManager)
             Case StructureType.Cluster
-                mArchetypeNode = New ArchetypeComposite(aText, a_type, fileManager)
-
-                If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
-                    CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
-                End If
+                mArchetypeNode = New ArchetypeComposite(text, type, fileManager)
             Case StructureType.SECTION
-                mArchetypeNode = New ArchetypeComposite(aText, a_type, fileManager)
+                mArchetypeNode = New ArchetypeComposite(text, type, fileManager)
                 ImageIndex = 1
                 SelectedImageIndex = 3
             Case Else
-                Debug.Assert(False, String.Format("Type {0} is not handled", a_type.ToString.ToUpper))
-                'Case StructureType.Slot
-                '    mArchetypeNode = New ArchetypeSlot(aText, a_file_manager)
-                '    'mArchetypeNode = New ArchetypeNodeAnonymous(a_type)
+                Debug.Assert(False, String.Format("Type {0} is not handled", type.ToString.ToUpper))
         End Select
 
         Item.Occurrences.MaxCount = 1
     End Sub
 
-    Sub New(ByVal aCluster As RmCluster, ByVal fileManager As FileManagerLocal)
+    Sub New(ByVal cluster As RmCluster, ByVal fileManager As FileManagerLocal)
         MyBase.New()
-        mArchetypeNode = New ArchetypeComposite(aCluster, fileManager)
+        mArchetypeNode = New ArchetypeComposite(cluster, fileManager)
         Text = mArchetypeNode.Text
-
-        If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
-            CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
-        End If
     End Sub
 
-    Sub New(ByVal aCluster As ArchetypeComposite)
+    Sub New(ByVal cluster As ArchetypeComposite)
         MyBase.New()
-        mArchetypeNode = aCluster.Copy
+        mArchetypeNode = cluster.Copy
         Text = mArchetypeNode.Text
-
-        If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
-            CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
-        End If
     End Sub
 
-    Sub New(ByVal aSection As RmSection, ByVal fileManager As FileManagerLocal)
+    Sub New(ByVal section As RmSection, ByVal fileManager As FileManagerLocal)
         MyBase.New()
-        mArchetypeNode = New ArchetypeComposite(aSection, fileManager)
-        Text = mArchetypeNode.Text
-        ImageIndex = 1
-        SelectedImageIndex = 3
-    End Sub
-
-    Sub New(ByVal aSection As RmStructureCompound, ByVal fileManager As FileManagerLocal)
-        MyBase.New()
-        mArchetypeNode = New ArchetypeComposite(aSection, fileManager)
+        mArchetypeNode = New ArchetypeComposite(section, fileManager)
         Text = mArchetypeNode.Text
         ImageIndex = 1
         SelectedImageIndex = 3
