@@ -262,7 +262,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         '
         'chkDecimalPlaces
         '
-        Me.chkDecimalPlaces.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkDecimalPlaces.AutoSize = True
         Me.chkDecimalPlaces.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.chkDecimalPlaces.Location = New System.Drawing.Point(191, 5)
