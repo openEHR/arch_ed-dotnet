@@ -32,8 +32,6 @@ Public Class Constraint_Duration
         result.mHasMaxVal = mHasMaxVal
         result.mIncludeMin = mIncludeMin
         result.mIncludeMax = mIncludeMax
-        result.mHasList = mHasList
-        result.mList = mList
         result.HasAssumedValue = HasAssumedValue
         result.mAllowableUnits = mAllowableUnits
         result.mMinMaxValueUnits = MinMaxValueUnits

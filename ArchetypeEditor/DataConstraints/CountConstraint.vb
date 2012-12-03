@@ -24,8 +24,6 @@ Public Class Constraint_Count
     Protected mHasMinVal As Boolean
     Protected mIncludeMax As Boolean = True
     Protected mIncludeMin As Boolean = True
-    Protected mHasList As Boolean
-    Protected mList As String
 
     Public Overrides Function Copy() As Constraint
         Dim result As New Constraint_Count
@@ -36,8 +34,6 @@ Public Class Constraint_Count
         result.mHasMaxVal = mHasMaxVal
         result.mIncludeMin = mIncludeMin
         result.mIncludeMax = mIncludeMax
-        result.mHasList = mHasList
-        result.mList = mList
         result.HasAssumedValue = HasAssumedValue
         Return result
     End Function
@@ -82,14 +78,6 @@ Public Class Constraint_Count
             mHasMaxVal = Value
         End Set
     End Property
-    Public Property HasList() As Boolean
-        Get
-            Return mHasList
-        End Get
-        Set(ByVal Value As Boolean)
-            mHasList = Value
-        End Set
-    End Property
 
     Public Property MinimumValue() As Long
         Get
@@ -124,19 +112,6 @@ Public Class Constraint_Count
         End Get
         Set(ByVal Value As Boolean)
             mIncludeMin = Value
-        End Set
-    End Property
-
-    ''' <summary>
-    ''' Gets or sets the comma separated value list.
-    ''' </summary>
-    ''' <value>The value list as a comma separated string</value>
-    Public Property ValueList() As String
-        Get
-            Return mList
-        End Get
-        Set(ByVal Value As String)
-            mList = Value
         End Set
     End Property
 

@@ -68,8 +68,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     Friend WithEvents comboIncludeMax As System.Windows.Forms.ComboBox
     Friend WithEvents numPrecision As System.Windows.Forms.NumericUpDown
     Friend WithEvents chkDecimalPlaces As System.Windows.Forms.CheckBox
-    Friend WithEvents chkList As System.Windows.Forms.CheckBox
-    Friend WithEvents txtList As System.Windows.Forms.TextBox
     Friend WithEvents lblAssumedValue As System.Windows.Forms.Label
 
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
@@ -95,8 +93,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.lblAssumedValue = New System.Windows.Forms.Label
         Me.numPrecision = New System.Windows.Forms.NumericUpDown
         Me.chkDecimalPlaces = New System.Windows.Forms.CheckBox
-        Me.chkList = New System.Windows.Forms.CheckBox
-        Me.txtList = New System.Windows.Forms.TextBox
         CType(Me.NumericAssumed, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numMaxValue, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numMinValue, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -274,29 +270,8 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.chkDecimalPlaces.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.chkDecimalPlaces.UseVisualStyleBackColor = True
         '
-        'chkList
-        '
-        Me.chkList.AutoSize = True
-        Me.chkList.Location = New System.Drawing.Point(20, 111)
-        Me.chkList.Name = "chkList"
-        Me.chkList.Size = New System.Drawing.Size(96, 17)
-        Me.chkList.TabIndex = 11
-        Me.chkList.Text = "List (e.g. 1,4,6)"
-        Me.chkList.UseVisualStyleBackColor = True
-        Me.chkList.Visible = False
-        '
-        'txtList
-        '
-        Me.txtList.Location = New System.Drawing.Point(212, 109)
-        Me.txtList.Name = "txtList"
-        Me.txtList.Size = New System.Drawing.Size(156, 20)
-        Me.txtList.TabIndex = 12
-        Me.txtList.Visible = False
-        '
         'CountConstraintControl
         '
-        Me.Controls.Add(Me.txtList)
-        Me.Controls.Add(Me.chkList)
         Me.Controls.Add(Me.chkDecimalPlaces)
         Me.Controls.Add(Me.numPrecision)
         Me.Controls.Add(Me.lblAssumedValue)
@@ -336,86 +311,75 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
     Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
         ' set constraint values on control
+        IsIntegral = Not (TypeOf Constraint Is Constraint_Real Or TypeOf Constraint Is Constraint_Currency)
+        Dim realConstraint As Constraint_Real = TryCast(Constraint, Constraint_Real)
+
+        If Constraint.HasMaximum Then
+            cbMaxValue.Checked = True
+
+            If Not realConstraint Is Nothing Then
+                Dim max As Single = realConstraint.MaximumRealValue
+
+                If max > numMaxValue.Maximum Then
+                    numMaxValue.Value = numMaxValue.Maximum
+                ElseIf max < numMaxValue.Minimum Then
+                    numMaxValue.Value = numMaxValue.Minimum
+                Else
+                    numMaxValue.Value = CDec(max)
+                End If
+            Else
+                numMaxValue.Value = Constraint.MaximumValue
+            End If
+
+            If Constraint.IncludeMaximum Then
+                comboIncludeMax.SelectedIndex = 0
+            Else
+                comboIncludeMax.SelectedIndex = 1
+            End If
+        Else
+            cbMaxValue.Checked = False
+        End If
+
+        If Constraint.HasMinimum Then
+            cbMinValue.Checked = True
+
+            If Not realConstraint Is Nothing Then
+                Dim min As Single = realConstraint.MinimumRealValue
+
+                If min > numMinValue.Maximum Then
+                    numMinValue.Value = numMinValue.Maximum
+                ElseIf min < numMinValue.Minimum Then
+                    numMinValue.Value = numMinValue.Minimum
+                Else
+                    numMinValue.Value = CDec(min)
+                End If
+            Else
+                numMinValue.Value = Constraint.MinimumValue
+            End If
+
+            If Constraint.IncludeMinimum Then
+                comboIncludeMin.SelectedIndex = 0
+            Else
+                comboIncludeMin.SelectedIndex = 1
+            End If
+        Else
+            cbMinValue.Checked = False
+        End If
+
         NumericAssumed.Minimum = Decimal.MinValue
         NumericAssumed.Maximum = Decimal.MaxValue
         NumericAssumed.Value = 0
-
-        IsIntegral = Not (TypeOf Constraint Is Constraint_Real Or TypeOf Constraint Is Constraint_Currency)
-        SetMaxAndMin()
 
         If Constraint.HasAssumedValue Then
             NumericAssumed.Value = CType(Constraint.AssumedValue, Decimal)
         End If
 
+        CoordinateMinAndMaxValues()
+
         If TypeOf Constraint Is Constraint_Currency Then
             LabelQuantity.Text = AE_Constants.Instance.Currency
         Else
             LabelQuantity.Text = AE_Constants.Instance.Count
-        End If
-
-        LabelQuantity.Text = AE_Constants.Instance.Count
-    End Sub
-
-    Private Sub SetMaxAndMin()
-        If Constraint.HasList Then
-            chkList.Checked = True
-            txtList.Text = Constraint.ValueList
-        Else
-            Dim realConstraint As Constraint_Real = TryCast(Constraint, Constraint_Real)
-
-            If Constraint.HasMaximum Then
-                cbMaxValue.Checked = True
-
-                If Not realConstraint Is Nothing Then
-                    Dim max As Single = realConstraint.MaximumRealValue
-
-                    If max > numMaxValue.Maximum Then
-                        numMaxValue.Value = numMaxValue.Maximum
-                    ElseIf max < numMaxValue.Minimum Then
-                        numMaxValue.Value = numMaxValue.Minimum
-                    Else
-                        numMaxValue.Value = CDec(max)
-                    End If
-                Else
-                    numMaxValue.Value = Constraint.MaximumValue
-                End If
-
-                If Constraint.IncludeMaximum Then
-                    comboIncludeMax.SelectedIndex = 0
-                Else
-                    comboIncludeMax.SelectedIndex = 1
-                End If
-            Else
-                cbMaxValue.Checked = False
-            End If
-
-            If Constraint.HasMinimum Then
-                cbMinValue.Checked = True
-
-                If Not realConstraint Is Nothing Then
-                    Dim min As Single = realConstraint.MinimumRealValue
-
-                    If min > numMinValue.Maximum Then
-                        numMinValue.Value = numMinValue.Maximum
-                    ElseIf min < numMinValue.Minimum Then
-                        numMinValue.Value = numMinValue.Minimum
-                    Else
-                        numMinValue.Value = CDec(min)
-                    End If
-                Else
-                    numMinValue.Value = Constraint.MinimumValue
-                End If
-
-                If Constraint.IncludeMinimum Then
-                    comboIncludeMin.SelectedIndex = 0
-                Else
-                    comboIncludeMin.SelectedIndex = 1
-                End If
-            Else
-                cbMinValue.Checked = False
-            End If
-
-            CoordinateMinAndMaxValues()
         End If
     End Sub
 
@@ -631,45 +595,38 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         If Not IsLoading Then
             Dim assumedValue As Decimal = 0
             Decimal.TryParse(NumericAssumed.Text, assumedValue)
-
-            If NumericAssumed.DecimalPlaces = 0 Then
-                Constraint.AssumedValue = assumedValue
-            Else
-                Constraint.AssumedValue = Convert.ToSingle(assumedValue, Globalization.NumberFormatInfo.InvariantInfo)
-            End If
-
+            Constraint.AssumedValue = assumedValue
             Constraint.HasAssumedValue = True
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub numPrecision_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numPrecision.ValueChanged
-        Dim i As Integer = CInt(numPrecision.Value)
+        Dim precision As Integer = CInt(numPrecision.Value)
 
-        If i > 2 Then
+        If precision > 2 Then
             numMaxValue.DecimalPlaces = 3
             numMinValue.DecimalPlaces = 3
             NumericAssumed.DecimalPlaces = 3
             numMinValue.Increment = CDec(0.001)
         Else
-            numMaxValue.DecimalPlaces = i
-            numMinValue.DecimalPlaces = i
-            NumericAssumed.DecimalPlaces = i
-            Dim d As Decimal = CDec(Math.Pow(10, -i)) ' set the increment to the power of the precision
+            numMaxValue.DecimalPlaces = precision
+            numMinValue.DecimalPlaces = precision
+            NumericAssumed.DecimalPlaces = precision
+            Dim d As Decimal = CDec(Math.Pow(10, -precision)) ' set the increment to the power of the precision
             numMinValue.Increment = d
             numMaxValue.Increment = d
         End If
 
         If Not IsLoading Then
-            Dim decimalPlaces As Integer = CInt(numPrecision.Value)
-
-            If decimalPlaces > -1 AndAlso CType(Constraint, Constraint_Real).Precision > decimalPlaces Then
-                numMaxValue.Value = CDec(Math.Round(CDbl(numMaxValue.Value), CInt(numPrecision.Value)))
-                numMinValue.Value = CDec(Math.Round(CDbl(numMinValue.Value), CInt(numPrecision.Value)))
+            If precision > -1 AndAlso CType(Constraint, Constraint_Real).Precision > precision Then
+                numMaxValue.Value = CDec(Math.Round(CDbl(numMaxValue.Value), precision))
+                numMinValue.Value = CDec(Math.Round(CDbl(numMinValue.Value), precision))
+                NumericAssumed.Value = CDec(Math.Round(CDbl(NumericAssumed.Value), precision))
                 CoordinateMinAndMaxValues()
             End If
 
-            CType(Constraint, Constraint_Real).Precision = decimalPlaces
+            CType(Constraint, Constraint_Real).Precision = precision
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -694,47 +651,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
-
-    Private Sub txtList_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtList.KeyPress
-        If e.KeyChar = ","c Then
-            e.Handled = (txtList.TextLength = 0 Or txtList.Text.EndsWith(","))
-        ElseIf "1234567890".Contains(e.KeyChar.ToString()) Then
-            e.Handled = False
-        Else
-            e.Handled = True
-        End If
-    End Sub
-
-    Protected Sub chkList_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkList.CheckedChanged
-        If Not IsLoading Then
-            mFileManager.FileEdited = True
-
-            If chkList.Checked Then
-                Constraint.HasList = True
-                Constraint.ValueList = txtList.Text
-            Else
-                Constraint.HasList = False
-            End If
-        End If
-
-        If chkList.Checked Then
-            txtList.Visible = True
-            cbMinValue.Checked = False
-            cbMinValue.Enabled = False
-            cbMaxValue.Checked = False
-            cbMaxValue.Enabled = False
-        Else
-            txtList.Visible = False
-            cbMinValue.Enabled = True
-            cbMaxValue.Enabled = True
-        End If
-    End Sub
-
-    Private Sub txtList_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtList.TextChanged
-        If Not IsLoading Then
-            Constraint.ValueList = txtList.Text
-        End If
-    End Sub
 End Class
 
 '
