@@ -3722,30 +3722,30 @@
   <Concept Language="ja" ConceptID="44" Rubric="表示" />
   <Concept Language="ja" ConceptID="45" Rubric="発行" />
   <Concept Language="ja" ConceptID="46" Rubric="言語" />
-  <Concept Language="ja" ConceptID="47" Rubric="用語体系" />
+  <Concept Language="ja" ConceptID="47" Rubric="ターミノロジー" />
   <Concept Language="ja" ConceptID="48" Rubric="ヘルプ" />
   <Concept Language="ja" ConceptID="49" Rubric="フォームのラベル" />
-  <Concept Language="ja" ConceptID="50" Rubric="アーキタイプ" />
+  <Concept Language="ja" ConceptID="50" Rubric="Archetype" />
   <Concept Language="ja" ConceptID="51" Rubric="モデルとコンポーネント" />
   <Concept Language="ja" ConceptID="52" Rubric="短い概念ラベル" />
   <Concept Language="ja" ConceptID="53" Rubric="バージョン" />
   <Concept Language="ja" ConceptID="54" Rubric="概念" />
   <Concept Language="ja" ConceptID="56" Rubric="無制限" />
-  <Concept Language="ja" ConceptID="57" Rubric="アーキタイプファイル名" />
+  <Concept Language="ja" ConceptID="57" Rubric="Archetypeファイル名" />
   <Concept Language="ja" ConceptID="58" Rubric="Archetypeエディタ" />
   <Concept Language="ja" ConceptID="59" Rubric="ツールチップ" />
   <Concept Language="ja" ConceptID="60" Rubric="データ型の変更" />
   <Concept Language="ja" ConceptID="61" Rubric="開く" />
   <Concept Language="ja" ConceptID="62" Rubric="新規作成    Ctrl+N" />
   <Concept Language="ja" ConceptID="63" Rubric="終了" />
-  <Concept Language="ja" ConceptID="64" Rubric="アーキタイプDB" />
+  <Concept Language="ja" ConceptID="64" Rubric="Archetype DB" />
   <Concept Language="ja" ConceptID="65" Rubric="圧縮する" />
   <Concept Language="ja" ConceptID="66" Rubric="仕上げる" />
   <Concept Language="ja" ConceptID="67" Rubric="利用できる言語" />
   <Concept Language="ja" ConceptID="68" Rubric="言語を追加" />
   <Concept Language="ja" ConceptID="69" Rubric="言語を変更" />
-  <Concept Language="ja" ConceptID="70" Rubric="利用できる用語体系" />
-  <Concept Language="ja" ConceptID="71" Rubric="用語体系に加える" />
+  <Concept Language="ja" ConceptID="70" Rubric="利用できるターミノロジー" />
+  <Concept Language="ja" ConceptID="71" Rubric="ターミノロジーを加える" />
   <Concept Language="ja" ConceptID="72" Rubric="はじめに" />
   <Concept Language="ja" ConceptID="73" Rubric="ライセンス" />
   <Concept Language="ja" ConceptID="75" Rubric="Archetype Editorについて" />
@@ -3852,8 +3852,8 @@
   <Concept Language="ja" ConceptID="182" Rubric="符号付きマイナス(signed negative)" />
   <Concept Language="ja" ConceptID="183" Rubric="保存" />
   <Concept Language="ja" ConceptID="184" Rubric="閉じる" />
-  <Concept Language="ja" ConceptID="185" Rubric="特化する(Specialise)" />
-  <Concept Language="ja" ConceptID="186" Rubric="特化(Specialisation)" />
+  <Concept Language="ja" ConceptID="185" Rubric="特殊化する(Specialise)" />
+  <Concept Language="ja" ConceptID="186" Rubric="特殊化(Specialisation)" />
   <Concept Language="ja" ConceptID="187" Rubric="一次言語" />
   <Concept Language="ja" ConceptID="188" Rubric="to" />
   <Concept Language="ja" ConceptID="189" Rubric="新生児" />
@@ -4228,11 +4228,11 @@
   <Concept Language="ja" ConceptID="629" Rubric="全てを除外" />
   <Concept Language="ja" ConceptID="630" Rubric="パーセントで" />
   <Concept Language="ja" ConceptID="631" Rubric="全て削除" />
-  <Concept Language="ja" ConceptID="632" Rubric="アーキタイプID" />
+  <Concept Language="ja" ConceptID="632" Rubric="Archetype ID" />
   <Concept Language="ja" ConceptID="633" Rubric="識別子" />
   <Concept Language="ja" ConceptID="634" Rubric="段落" />
-  <Concept Language="ja" ConceptID="635" Rubric="パースできる" />
-  <Concept Language="ja" ConceptID="636" Rubric="コード化されたテキスト" />
+  <Concept Language="ja" ConceptID="635" Rubric="Parsable" />
+  <Concept Language="ja" ConceptID="636" Rubric="Coded Text" />
   <Concept Language="ja" ConceptID="637" Rubric="アプリケーション/DICOM" />
   <Concept Language="ja" ConceptID="638" Rubric="フォーマット" />
   <Concept Language="ja" ConceptID="639" Rubric="パスをクリップボードにコピー" />
@@ -4265,7 +4265,7 @@
   <Concept Language="ja" ConceptID="666" Rubric="ウェブから既存のアーキタイプを開く" />
   <Concept Language="ja" ConceptID="667" Rubric="ツール" />
   <Concept Language="ja" ConceptID="668" Rubric="左側と右側からユニットを一つづつ選択" />
-  <Concept Language="ja" ConceptID="669" Rubric="特化(specialisation)も行いますか？" />
+  <Concept Language="ja" ConceptID="669" Rubric="特殊化(specialisation)も行いますか？" />
   <Concept Language="ko" ConceptID="280" Rubric="그리고 모든 참조" />
   <Concept Language="ko" ConceptID="0" Rubric="자신" />
   <Concept Language="ko" ConceptID="3" Rubric="태아" />
@@ -5778,23 +5778,44 @@
   <Concept Language="sv" ConceptID="560" Rubric="Administrativ post" />
   <Concept Language="da" ConceptID="648" Rubric="bevidnet" />
   <Concept Language="da" ConceptID="649" Rubric="Begræns antallet decimaler" />
-  <Concept Language="ja" ConceptID="670" Rubric="*Time Fraction (en)" />
-  <Concept Language="ja" ConceptID="671" Rubric="*No embedded archetype matches at {0} (en)" />
+  <Concept Language="ja" ConceptID="670" Rubric="時間画分" />
+  <Concept Language="ja" ConceptID="671" Rubric="{0}の条件にマッチする組み込まれたArchetypeはありません。" />
   <Concept Language="ja" ConceptID="672" Rubric="このスロットに名前をつけますか?" />
   <Concept Language="ja" ConceptID="673" Rubric="アイテム" />
-  <Concept Language="ja" ConceptID="674" Rubric="*Care entry (en)" />
+  <Concept Language="ja" ConceptID="674" Rubric="ケアエントリ" />
   <Concept Language="ja" ConceptID="675" Rubric="このスロットに名前を付ける" />
   <Concept Language="ja" ConceptID="676" Rubric="繊維" />
-  <Concept Language="ja" ConceptID="677" Rubric="*Allow transition to (en)" />
-  <Concept Language="ja" ConceptID="678" Rubric="*Allow an alternative state for this action (en)" />
-  <Concept Language="ja" ConceptID="679" Rubric="*Alternative state (en)" />
-  <Concept Language="ja" ConceptID="680" Rubric="*File {0} already exists. Do you want to replace it? (en)" />
+  <Concept Language="ja" ConceptID="677" Rubric="遷移を認める" />
+  <Concept Language="ja" ConceptID="678" Rubric="このアクションに対する代替状態を認める" />
+  <Concept Language="ja" ConceptID="679" Rubric="代替状態" />
+  <Concept Language="ja" ConceptID="680" Rubric="{0} ファイルはすでに存在します。上書きしますか？" />
   <Concept Language="ja" ConceptID="681" Rubric="エクスポート" />
-  <Concept Language="ja" ConceptID="682" Rubric="*application/vnd.oasis.opendocument.text (en)" />
-  <Concept Language="ja" ConceptID="683" Rubric="*application/vnd.openxmlformats-officedocument.wordprocessingml.document (en)" />
-  <Concept Language="ja" ConceptID="684" Rubric="*ParsableText (en)" />
-  <Concept Language="ja" ConceptID="685" Rubric="*Refractive power (en)" />
-  <Concept Language="ja" ConceptID="686" Rubric="アーキタイプのファイル名{0}が不正です。{1}として保存しますか？ (en)" />
+  <Concept Language="ja" ConceptID="682" Rubric="application/vnd.oasis.opendocument.text (en)" />
+  <Concept Language="ja" ConceptID="683" Rubric="application/vnd.openxmlformats-officedocument.wordprocessingml.document (en)" />
+  <Concept Language="ja" ConceptID="684" Rubric="ParsableText" />
+  <Concept Language="ja" ConceptID="685" Rubric="屈折力" />
+  <Concept Language="ja" ConceptID="686" Rubric="Archetypeのファイル名{0}が不正です。{1}として保存しますか？ (en)" />
+  <Concept Language="ja" ConceptID="687" Rubric="アクションArchetypeを開く" />
+  <Concept Language="ja" ConceptID="688" Rubric="連絡先" />
+  <Concept Language="ja" ConceptID="689" Rubric="暴露源" />
+  <Concept Language="ja" ConceptID="690" Rubric="Copyright" />
+  <Concept Language="ja" ConceptID="691" Rubric="参考文献" />
+  <Concept Language="ja" ConceptID="692" Rubric="言語を変更する" />
+  <Concept Language="ja" ConceptID="693" Rubric="検索" />
+  <Concept Language="ja" ConceptID="694" Rubric="次を検索" />
+  <Concept Language="ja" ConceptID="695" Rubric="前を検索" />
+  <Concept Language="ja" ConceptID="696" Rubric="キー" />
+  <Concept Language="ja" ConceptID="697" Rubric="値" />
+  <Concept Language="ja" ConceptID="698" Rubric="アノテーション" />
+  <Concept Language="ja" ConceptID="699" Rubric="'{0}'を特殊化しますか？" />
+  <Concept Language="ja" ConceptID="700" Rubric="はい特殊化します" />
+  <Concept Language="ja" ConceptID="701" Rubric="はい、それで新しいノードを追加します" />
+  <Concept Language="ja" ConceptID="702" Rubric="いいえ" />
+  <Concept Language="ja" ConceptID="703" Rubric="構造型{0}を変更すると何かエレメントが失われる可能性があります。続行しますか？" />
+  <Concept Language="ja" ConceptID="704" Rubric="連絡先" />
+  <Concept Language="ja" ConceptID="705" Rubric="現在担当している" />
+  <Concept Language="ja" ConceptID="706" Rubric="Archetype IDのコンセプト部分を入力してください。" />
+  <Concept Language="ja" ConceptID="707" Rubric="特殊化された" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
