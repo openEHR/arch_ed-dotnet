@@ -88,6 +88,48 @@ Public Class Constraint_Duration
         Return result
     End Function
 
+    Public Sub SetMinimumValueAndUnits(ByVal durationString As String)
+        SetValueAndUnits(durationString, 1)
+    End Sub
+
+    Public Sub SetMaximumValueAndUnits(ByVal durationString As String)
+        SetValueAndUnits(durationString, 2)
+    End Sub
+
+    Public Sub SetAssumedValueAndUnits(ByVal durationString As String)
+        SetValueAndUnits(durationString, 3)
+    End Sub
+
+    Protected Sub SetValueAndUnits(ByVal durationString As String, ByVal which As Integer)
+        Dim units As String = ""
+        Dim valueString As String = ""
+
+        For Each c As Char In durationString.ToUpperInvariant
+            Select Case c
+                Case "P"c
+                    ' Remove the leading P
+                Case "Y"c, "W"c, "D"c, "H"c, "M"c, "S"c, "T"c
+                    units += c
+                Case Else
+                    valueString += c
+            End Select
+        Next
+
+        Dim value As Long = Convert.ToInt64(Val(valueString))
+
+        If which = 1 Then
+            MinimumValue = value
+        ElseIf which = 2 Then
+            MaximumValue = value
+        Else
+            AssumedValue = value
+        End If
+
+        If String.IsNullOrEmpty(MinMaxValueUnits) Then
+            MinMaxValueUnits = units
+        End If
+    End Sub
+
 End Class
 '
 '***** BEGIN LICENSE BLOCK *****

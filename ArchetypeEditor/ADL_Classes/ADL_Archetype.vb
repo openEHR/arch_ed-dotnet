@@ -805,37 +805,39 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Private Sub BuildDuration(ByVal attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Duration)
-            Dim durationIso As New Duration
+        Protected Sub BuildDuration(ByVal attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Duration)
             Dim pattern As EiffelKernel.STRING_8 = Nothing
             Dim lower As EiffelKernel.STRING_8 = Nothing
             Dim upper As EiffelKernel.STRING_8 = Nothing
 
-            If c.AllowableUnits <> String.Empty And c.AllowableUnits <> "PYMWDTHMS" Then
+            If c.AllowableUnits <> "" And c.AllowableUnits <> "PYMWDTHMS" Then
                 pattern = Eiffel.String(c.AllowableUnits)
             End If
 
+            Dim durationIso As New Duration
+            durationIso.ISO_Units = Main.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
+
             If c.HasMinimum Then
-                durationIso.ISO_Units = Main.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
                 durationIso.GUI_duration = CInt(c.MinimumValue)
                 lower = Eiffel.String(durationIso.ISO_duration)
             End If
 
             If c.HasMaximum Then
-                durationIso.ISO_Units = Main.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
                 durationIso.GUI_duration = CInt(c.MaximumValue)
                 upper = Eiffel.String(durationIso.ISO_duration)
             End If
 
-            Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            an_object = mAomFactory.create_c_complex_object_anonymous(attribute, Eiffel.String(ReferenceModel.RM_DataTypeName(c.Kind)))
+            Dim o As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = mAomFactory.create_c_complex_object_anonymous(attribute, Eiffel.String(ReferenceModel.RM_DataTypeName(c.Kind)))
 
-            If Not pattern Is Nothing Or Not lower Is Nothing Or Not upper Is Nothing Then
-                Dim d As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
-                d = mAomFactory.create_c_duration_make(pattern, lower, upper, c.IncludeMinimum, c.IncludeMaximum)
+            If pattern IsNot Nothing Or lower IsNot Nothing Or upper IsNot Nothing Then
+                Dim d As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION = mAomFactory.create_c_duration_make(pattern, lower, upper, c.IncludeMinimum, c.IncludeMaximum)
 
-                Dim a As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(an_object, Eiffel.String("value"))
-                mAomFactory.create_c_primitive_object(a, d)
+                If c.HasAssumedValue Then
+                    durationIso.GUI_duration = CInt(c.AssumedValue)
+                    d.set_assumed_value(openehr.common_libs.date_time.Create.ISO8601_DURATION.make_from_string(Eiffel.String(durationIso.ISO_duration)))
+                End If
+
+                mAomFactory.create_c_primitive_object(mAomFactory.create_c_attribute_single(o, Eiffel.String("value")), d)
             End If
         End Sub
 

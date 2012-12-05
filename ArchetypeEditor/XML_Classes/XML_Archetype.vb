@@ -965,20 +965,37 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Private Sub BuildDuration(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Duration)
-            Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
-            Dim objNode As XMLParser.C_PRIMITIVE_OBJECT
-            Dim d As New XMLParser.C_DURATION
+        Protected Sub BuildDuration(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Duration)
+            Dim pattern As String = Nothing
+            Dim lower As String = Nothing
+            Dim upper As String = Nothing
 
-            Dim durationISO As New Duration()
+            If c.AllowableUnits <> "" And c.AllowableUnits <> "PYMWDTHMS" Then
+                pattern = c.AllowableUnits
+            End If
 
-            If c.HasMaximum Or c.HasMinimum Then
+            Dim durationIso As New Duration
+            durationIso.ISO_Units = Main.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
+
+            If c.HasMinimum Then
+                durationIso.GUI_duration = CInt(c.MinimumValue)
+                lower = durationIso.ISO_duration
+            End If
+
+            If c.HasMaximum Then
+                durationIso.GUI_duration = CInt(c.MaximumValue)
+                upper = durationIso.ISO_duration
+            End If
+
+            Dim o As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+
+            If pattern IsNot Nothing Or lower IsNot Nothing Or upper IsNot Nothing Then
+                Dim d As New XMLParser.C_DURATION
+                d.pattern = pattern
                 d.range = New XMLParser.IntervalOfDuration()
-                durationISO.ISO_Units = Main.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
 
                 If c.HasMinimum Then
-                    durationISO.GUI_duration = CInt(c.MinimumValue)
-                    d.range.lower = durationISO.ISO_duration
+                    d.range.lower = lower
                     d.range.lower_included = c.IncludeMinimum
                     d.range.lower_includedSpecified = True
                 Else
@@ -986,8 +1003,7 @@ Namespace ArchetypeEditor.XML_Classes
                 End If
 
                 If c.HasMaximum Then
-                    durationISO.GUI_duration = CInt(c.MaximumValue)
-                    d.range.upper = durationISO.ISO_duration
+                    d.range.upper = upper
                     d.range.upper_included = c.IncludeMaximum
                     d.range.upper_includedSpecified = True
                 Else
@@ -1000,19 +1016,17 @@ Namespace ArchetypeEditor.XML_Classes
                     Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
                     Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
                 End With
-            End If
 
-            If Not String.IsNullOrEmpty(c.AllowableUnits) AndAlso c.AllowableUnits <> "PYMWDTHMS" Then
-                d.pattern = c.AllowableUnits
-            End If
+                If c.HasAssumedValue Then
+                    durationIso.GUI_duration = CInt(c.AssumedValue)
+                    d.assumed_value = durationIso.ISO_duration
+                End If
 
-            If Not d.range Is Nothing Or Not String.IsNullOrEmpty(d.pattern) Or Not String.IsNullOrEmpty(d.assumed_value) Then
-                Dim a As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", attribute.existence)
-                objNode = mAomFactory.MakePrimitiveObject(a, d)
+                mAomFactory.MakePrimitiveObject(mAomFactory.MakeSingleAttribute(o, "value", attribute.existence), d)
             End If
         End Sub
 
-        Private Sub BuildQuantity(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
+        Protected Sub BuildQuantity(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
             Dim cQuantity As New XMLParser.C_DV_QUANTITY
             cQuantity.rm_type_name = "DV_QUANTITY"
             cQuantity.node_id = ""

@@ -244,7 +244,7 @@ Namespace ArchetypeEditor.XML_Classes
                             result = ProcessDuration(CType(node, XMLParser.C_COMPLEX_OBJECT))
                         Else
                             'obsolete
-                            result = ProcessDuration(CType(node, XMLParser.C_PRIMITIVE_OBJECT))
+                            result = ProcessDurationValue(CType(node, XMLParser.C_PRIMITIVE_OBJECT))
                         End If
                     Case "dv_parsable"
                         result = ProcessParsable(CType(node, XMLParser.C_COMPLEX_OBJECT))
@@ -345,74 +345,59 @@ Namespace ArchetypeEditor.XML_Classes
             Return cIdentifier
         End Function
 
-        Private Function ProcessDuration(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Duration
+        Private Function ProcessDuration(ByVal o As XMLParser.C_COMPLEX_OBJECT) As Constraint_Duration
             Dim result As New Constraint_Duration
 
-            If Not New C_COMPLEX_OBJECT_PROXY(ObjNode).Any_Allowed Then
-                If ObjNode.attributes.Length > 0 Then
-                    Dim attribute As XMLParser.C_ATTRIBUTE = ObjNode.attributes(0)
+            If Not New C_COMPLEX_OBJECT_PROXY(o).Any_Allowed AndAlso o.attributes.Length > 0 Then
+                Dim attribute As XMLParser.C_ATTRIBUTE = o.attributes(0)
 
-                    Select Case attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                        Case "value"
-                            If Not attribute.children Is Nothing AndAlso attribute.children.Length > 0 Then
-                                result = ProcessDuration(CType(attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT))
-                            End If
-                    End Select
-                End If
+                Select Case attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    Case "value"
+                        If attribute.children IsNot Nothing AndAlso attribute.children.Length > 0 Then
+                            result = ProcessDurationValue(CType(attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT))
+                        End If
+                End Select
             End If
 
             Return result
         End Function
 
-        Private Function ProcessDuration(ByVal ObjNode As XMLParser.C_PRIMITIVE_OBJECT) As Constraint_Duration
+        Private Function ProcessDurationValue(ByVal o As XMLParser.C_PRIMITIVE_OBJECT) As Constraint_Duration
             Dim result As New Constraint_Duration
 
-            If Not New C_PRIMITIVE_OBJECT_PROXY(ObjNode).Any_Allowed Then
-                Dim cadlC As XMLParser.C_DURATION = CType(ObjNode.item, XMLParser.C_DURATION)
+            If Not New C_PRIMITIVE_OBJECT_PROXY(o).Any_Allowed Then
+                Dim duration As XMLParser.C_DURATION = CType(o.item, XMLParser.C_DURATION)
 
-                If Not String.IsNullOrEmpty(cadlC.pattern) Then
-                    result.AllowableUnits = cadlC.pattern
+                If duration.pattern IsNot Nothing Then
+                    result.AllowableUnits = duration.pattern
                 End If
 
-                If Not cadlC.range Is Nothing Then
-                    With cadlC.range
+                If duration.range IsNot Nothing Then
+                    With duration.range
                         Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
                         Debug.Assert(Not (.upper_included And .upper_unbounded), "upper included must not be true when unbounded")
                         Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
                         Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
                     End With
 
-                    If cadlC.range.lower_included Then
-                        result.HasMinimum = True
-                        result.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.lower)
+                    result.HasMinimum = Not duration.range.lower_unbounded
+                    result.HasMaximum = Not duration.range.upper_unbounded
 
-                        If cadlC.range.lower.StartsWith("P") Then
-                            result.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower.Substring(1))) ' leave the P of the front
-                        Else
-                            result.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower))
-                        End If
-                    Else
-                        result.HasMinimum = False
+                    If result.HasMinimum Then
+                        result.SetMinimumValueAndUnits(duration.range.lower)
+                        result.IncludeMinimum = duration.range.lower_included
                     End If
 
-                    If cadlC.range.upper_included Then
-                        If result.MinMaxValueUnits = "" Then
-                            result.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.upper)
-                        End If
-
-                        result.HasMaximum = True
-
-                        If cadlC.range.upper.StartsWith("P") Then
-                            result.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper.Substring(1))) ' leave the P of the front
-                        Else
-                            result.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper))
-                        End If
+                    If result.HasMaximum Then
+                        result.SetMaximumValueAndUnits(duration.range.upper)
+                        result.IncludeMaximum = duration.range.upper_included
                     End If
                 End If
 
-                If Not cadlC.assumed_value Is Nothing Then
-                    result.HasAssumedValue = True
-                    result.AssumedValue = cadlC.assumed_value
+                result.HasAssumedValue = duration.assumed_value IsNot Nothing
+
+                If result.HasAssumedValue Then
+                    result.SetAssumedValueAndUnits(duration.assumed_value)
                 End If
             End If
 

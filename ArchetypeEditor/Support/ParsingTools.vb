@@ -108,21 +108,6 @@ Public Class ParsingTools
 
     End Sub
 
-    Public Shared Function GetDurationUnits(ByVal a_duration As String) As String
-        Debug.Assert(a_duration.StartsWith("P"), "Incorrect duration format: '" & a_duration & "'")
-        Dim result As String = ""
-
-        For Each c As Char In a_duration
-            Select Case c.ToString.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                Case "p"
-                    'do nothing
-                Case "y", "w", "d", "h", "s", "t", "m"
-                    result += c
-            End Select
-        Next
-        Return result
-    End Function
-
 End Class
 '
 '***** BEGIN LICENSE BLOCK *****
