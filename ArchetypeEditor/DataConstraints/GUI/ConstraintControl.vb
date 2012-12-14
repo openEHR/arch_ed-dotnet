@@ -64,8 +64,8 @@ Public Class ConstraintControl
 
 #End Region
 
-    Private mIsLoading As Boolean = True
     Protected mFileManager As FileManagerLocal
+    Private mIsLoading As Boolean = True
 
     Protected Property IsLoading() As Boolean
         Get
@@ -76,17 +76,11 @@ Public Class ConstraintControl
         End Set
     End Property
 
-    Private mConstraint As Constraint
-    Protected Property Constraint() As Constraint
-        Get
-            Debug.Assert(Not mConstraint Is Nothing)
+    Protected mConstraint As Constraint
 
-            Return mConstraint
-        End Get
-        Set(ByVal Value As Constraint)
-            mConstraint = Value
-        End Set
-    End Property
+    Public Function HasConstraint() As Boolean
+        Return mConstraint IsNot Nothing
+    End Function
 
     Private Sub SetHelpTopic(ByVal a_constraint_type As ConstraintKind)
         HelpProviderConstraint.SetHelpNavigator(Me, HelpNavigator.Topic)
@@ -117,46 +111,19 @@ Public Class ConstraintControl
         End Select
     End Sub
 
-    Public Sub ShowElement(ByVal isState As Boolean, ByVal aArchetypeElement As ArchetypeElement)
+    Public Sub ShowConstraint(ByVal isState As Boolean, ByVal c As Constraint)
         mIsLoading = True
-        mConstraint = aArchetypeElement.Constraint
-        SetHelpTopic(mConstraint.Kind)
-        SetControlValuesFromElement(isState, aArchetypeElement)
-        mIsLoading = False
-    End Sub
-
-    Public Sub ShowConstraint(ByVal isState As Boolean, ByVal aConstraint As Constraint)
-        mIsLoading = True
-        mConstraint = aConstraint
-        SetHelpTopic(mConstraint.Kind)
-
-        If aConstraint.Kind = ConstraintKind.Ordinal Then
-            SetControlValuesFromConstraint(isState, aConstraint)
-        Else
-            SetControlValues(isState)
-        End If
-
-        mIsLoading = False
-    End Sub
-
-    Protected Overridable Sub SetControlValuesFromElement(ByVal isState As Boolean, ByVal aArchetypeElement As ArchetypeElement)
+        mConstraint = c
+        SetHelpTopic(c.Kind)
         SetControlValues(isState)
-    End Sub
-
-    Protected Overridable Sub SetControlValuesFromConstraint(ByVal isState As Boolean, ByVal c As Constraint)
-        SetControlValues(isState)
+        mIsLoading = False
     End Sub
 
     Protected Overridable Sub SetControlValues(ByVal isState As Boolean)
         'Noop
     End Sub
 
-    Public Function HasConstraint() As Boolean
-        Return Not mConstraint Is Nothing
-    End Function
-
     Public Shared Function CreateConstraintControl(ByVal aConstraintType As ConstraintKind, ByVal a_file_manager As FileManagerLocal) As ConstraintControl
-
         Select Case aConstraintType
             'Case ConstraintType.Any
 
@@ -216,8 +183,9 @@ Public Class ConstraintControl
     End Function
 
     Private Sub SetHelpDetails()
-        Me.HelpProviderConstraint.HelpNamespace = Main.Instance.Options.HelpLocationPath
+        HelpProviderConstraint.HelpNamespace = Main.Instance.Options.HelpLocationPath
     End Sub
+
 End Class
 
 '

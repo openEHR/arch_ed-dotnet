@@ -14,7 +14,7 @@
 
 Option Strict On
 
-MustInherit Class Constraint_Interval
+Public MustInherit Class Constraint_Interval
     Inherits Constraint
 
     MustOverride Property UpperLimit() As Constraint

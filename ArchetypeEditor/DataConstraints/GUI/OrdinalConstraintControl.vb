@@ -40,33 +40,27 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
 
         If Main.Instance.DefaultLanguageCode <> "en" Then
             LabelOrdinal.Text = Filemanager.GetOpenEhrTerm(156, LabelOrdinal.Text)
-            butSetAssumedOrdinal.Text = Filemanager.GetOpenEhrTerm(153, butSetAssumedOrdinal.Text)
+            AssumedValueCheckBox.Text = Filemanager.GetOpenEhrTerm(158, AssumedValueCheckBox.Text)
         End If
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents txtAssumedOrdinal As System.Windows.Forms.TextBox
-    Friend WithEvents butSetAssumedOrdinal As System.Windows.Forms.Button
     Friend WithEvents dgOrdinal As System.Windows.Forms.DataGrid
     Friend WithEvents OrdinalStyle As System.Windows.Forms.DataGridTableStyle
     Friend WithEvents GridOrdinalColumnOrdinal As System.Windows.Forms.DataGridTextBoxColumn
     Friend WithEvents GridOrdinalColumnText As System.Windows.Forms.DataGridTextBoxColumn
     Friend WithEvents LabelOrdinal As System.Windows.Forms.Label
-    Friend WithEvents ContextMenuClearText As System.Windows.Forms.ContextMenu
-    Friend WithEvents MenuClearText As System.Windows.Forms.MenuItem
     Friend WithEvents ContextMenuListAllowableValues As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuItemCopyAll As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItemPasteAll As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItemCancelCopy As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItemAddExisting As System.Windows.Forms.MenuItem
+    Friend WithEvents AssumedValueCheckBox As System.Windows.Forms.CheckBox
+    Friend WithEvents AssumedValueComboBox As System.Windows.Forms.ComboBox
     Friend WithEvents GridOrdinalColumnDescription As System.Windows.Forms.DataGridTextBoxColumn
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.txtAssumedOrdinal = New System.Windows.Forms.TextBox
-        Me.ContextMenuClearText = New System.Windows.Forms.ContextMenu
-        Me.MenuClearText = New System.Windows.Forms.MenuItem
-        Me.butSetAssumedOrdinal = New System.Windows.Forms.Button
         Me.dgOrdinal = New System.Windows.Forms.DataGrid
         Me.ContextMenuListAllowableValues = New System.Windows.Forms.ContextMenu
         Me.MenuItemCopyAll = New System.Windows.Forms.MenuItem
@@ -78,51 +72,25 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
         Me.GridOrdinalColumnText = New System.Windows.Forms.DataGridTextBoxColumn
         Me.GridOrdinalColumnDescription = New System.Windows.Forms.DataGridTextBoxColumn
         Me.LabelOrdinal = New System.Windows.Forms.Label
+        Me.AssumedValueCheckBox = New System.Windows.Forms.CheckBox
+        Me.AssumedValueComboBox = New System.Windows.Forms.ComboBox
         CType(Me.dgOrdinal, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'txtAssumedOrdinal
-        '
-        Me.txtAssumedOrdinal.ContextMenu = Me.ContextMenuClearText
-        Me.txtAssumedOrdinal.Location = New System.Drawing.Point(192, 224)
-        Me.txtAssumedOrdinal.Name = "txtAssumedOrdinal"
-        Me.txtAssumedOrdinal.ReadOnly = True
-        Me.txtAssumedOrdinal.Size = New System.Drawing.Size(176, 20)
-        Me.txtAssumedOrdinal.TabIndex = 40
-        Me.txtAssumedOrdinal.TabStop = False
-        Me.txtAssumedOrdinal.Text = "(none)"
-        Me.txtAssumedOrdinal.Visible = False
-        '
-        'ContextMenuClearText
-        '
-        Me.ContextMenuClearText.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuClearText})
-        '
-        'MenuClearText
-        '
-        Me.MenuClearText.Index = 0
-        Me.MenuClearText.Text = "Clear"
-        '
-        'butSetAssumedOrdinal
-        '
-        Me.butSetAssumedOrdinal.Location = New System.Drawing.Point(24, 224)
-        Me.butSetAssumedOrdinal.Name = "butSetAssumedOrdinal"
-        Me.butSetAssumedOrdinal.Size = New System.Drawing.Size(152, 24)
-        Me.butSetAssumedOrdinal.TabIndex = 39
-        Me.butSetAssumedOrdinal.Text = "Set assumed value"
-        Me.butSetAssumedOrdinal.Visible = False
         '
         'dgOrdinal
         '
         Me.dgOrdinal.AllowSorting = False
+        Me.dgOrdinal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgOrdinal.CaptionBackColor = System.Drawing.Color.CornflowerBlue
         Me.dgOrdinal.CaptionVisible = False
         Me.dgOrdinal.ContextMenu = Me.ContextMenuListAllowableValues
         Me.dgOrdinal.DataMember = ""
         Me.dgOrdinal.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.dgOrdinal.Location = New System.Drawing.Point(24, 56)
+        Me.dgOrdinal.Location = New System.Drawing.Point(11, 56)
         Me.dgOrdinal.Name = "dgOrdinal"
-        Me.dgOrdinal.Size = New System.Drawing.Size(344, 152)
-        Me.dgOrdinal.TabIndex = 3
+        Me.dgOrdinal.Size = New System.Drawing.Size(357, 152)
+        Me.dgOrdinal.TabIndex = 2
         Me.dgOrdinal.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.OrdinalStyle})
         '
         'ContextMenuListAllowableValues
@@ -189,13 +157,33 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
         Me.LabelOrdinal.Location = New System.Drawing.Point(8, 16)
         Me.LabelOrdinal.Name = "LabelOrdinal"
         Me.LabelOrdinal.Size = New System.Drawing.Size(96, 24)
-        Me.LabelOrdinal.TabIndex = 37
+        Me.LabelOrdinal.TabIndex = 1
         Me.LabelOrdinal.Text = "Ordinal"
+        '
+        'AssumedValueCheckBox
+        '
+        Me.AssumedValueCheckBox.Location = New System.Drawing.Point(15, 222)
+        Me.AssumedValueCheckBox.Name = "AssumedValueCheckBox"
+        Me.AssumedValueCheckBox.Size = New System.Drawing.Size(184, 24)
+        Me.AssumedValueCheckBox.TabIndex = 3
+        Me.AssumedValueCheckBox.Text = "Assumed value"
+        '
+        'AssumedValueComboBox
+        '
+        Me.AssumedValueComboBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AssumedValueComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.AssumedValueComboBox.FormattingEnabled = True
+        Me.AssumedValueComboBox.Location = New System.Drawing.Point(202, 223)
+        Me.AssumedValueComboBox.Name = "AssumedValueComboBox"
+        Me.AssumedValueComboBox.Size = New System.Drawing.Size(162, 21)
+        Me.AssumedValueComboBox.TabIndex = 4
+        Me.AssumedValueComboBox.Visible = False
         '
         'OrdinalConstraintControl
         '
-        Me.Controls.Add(Me.txtAssumedOrdinal)
-        Me.Controls.Add(Me.butSetAssumedOrdinal)
+        Me.Controls.Add(Me.AssumedValueComboBox)
+        Me.Controls.Add(Me.AssumedValueCheckBox)
         Me.Controls.Add(Me.dgOrdinal)
         Me.Controls.Add(Me.LabelOrdinal)
         Me.Name = "OrdinalConstraintControl"
@@ -207,184 +195,128 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
 
 #End Region
 
-    Private mTempConstraint As Constraint_Ordinal
-    Private WithEvents mOrdinalConstraint As Constraint_Ordinal
-
-    Private Shadows ReadOnly Property Constraint() As Constraint_Ordinal
+    Protected ReadOnly Property Constraint() As Constraint_Ordinal
         Get
-            Return mOrdinalConstraint
+            Return CType(mConstraint, Constraint_Ordinal)
         End Get
     End Property
 
-    Protected Overrides Sub SetControlValuesFromElement(ByVal IsState As Boolean, ByVal aArchetypeElement As ArchetypeElement)
-        Debug.Assert(TypeOf aArchetypeElement.Constraint Is Constraint_Ordinal)
-        mOrdinalConstraint = CType(aArchetypeElement.Constraint, Constraint_Ordinal)
-
+    Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
+        AssumedValueCheckBox.Checked = Constraint.HasAssumedValue
         InitialiseOrdinals()
+        dgOrdinal.SetDataBinding(Constraint.OrdinalValues.DefaultView, "")
 
-        ' set constraint values on control
-        If IsState Then
-            Me.butSetAssumedOrdinal.Visible = True
-            Me.txtAssumedOrdinal.Visible = True
-            'SRH: 5 March 2009 - EDT-523 ordinal fix
-            Me.txtAssumedOrdinal.Text = GetOrdinalText(CInt(mOrdinalConstraint.AssumedValue))
-        End If
+        Dim view As DataView = New DataView(Constraint.OrdinalValues)
+        view.Sort = "Ordinal"
+        AddHandler view.ListChanged, AddressOf AssumedValueComboBox_SelectedIndexChanged
+        AssumedValueComboBox.DataSource = view
 
-        If (Not Main.Instance.TempConstraint Is Nothing) AndAlso (Main.Instance.TempConstraint.Kind = ConstraintKind.Ordinal) Then
-            Me.MenuItemPasteAll.Enabled = True
-            Me.MenuItemCancelCopy.Visible = True
-            Me.MenuItemCopyAll.Enabled = False
+        For Each row As DataRowView In view
+            If Constraint.AssumedValue IsNot Nothing AndAlso New OrdinalValue(row.Row).Ordinal = CInt(Constraint.AssumedValue) Then
+                AssumedValueComboBox.SelectedItem = row
+            End If
+        Next
+
+        If Main.Instance.TempConstraint IsNot Nothing AndAlso Main.Instance.TempConstraint.Kind = ConstraintKind.Ordinal Then
+            MenuItemPasteAll.Enabled = True
+            MenuItemCancelCopy.Visible = True
+            MenuItemCopyAll.Enabled = False
         End If
     End Sub
 
-    Protected Overrides Sub SetControlValuesFromConstraint(ByVal IsState As Boolean, ByVal c As Constraint)
-        Debug.Assert(TypeOf c Is Constraint_Ordinal)
+    Protected Sub InitialiseOrdinals()
+        If Not Constraint.IsInitialised Or Constraint.Language <> mFileManager.OntologyManager.LanguageCode Then
+            Constraint.BeginLoading()
 
-        mOrdinalConstraint = CType(c, Constraint_Ordinal)
-        InitialiseOrdinals()
+            'set the language as need to reinitialise if change language
+            Constraint.Language = mFileManager.OntologyManager.LanguageCode
 
-        ' set constraint values on control
-        If IsState Then
-            butSetAssumedOrdinal.Visible = True
-            txtAssumedOrdinal.Visible = True
-            txtAssumedOrdinal.Text = GetOrdinalText(CInt(mOrdinalConstraint.AssumedValue))
+            For Each ov As OrdinalValue In Constraint.OrdinalValues
+                Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
+                ov.Text = term.Text
+                ov.Description = term.Description
+            Next
+
+            Constraint.EndLoading()
         End If
     End Sub
 
-    Private Function GetOrdinalText(ByVal ordinal As Integer) As String
-        Dim result As String = ""
-        Dim dr As DataRow = Me.Constraint.OrdinalValues.Rows.Find(ordinal)
+    Private Sub AssumedValueComboBox_Format(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ListControlConvertEventArgs) Handles AssumedValueComboBox.Format
+        e.Value = New OrdinalValue(CType(e.ListItem, DataRowView).Row).ToString
+    End Sub
 
-        If Not dr Is Nothing Then
-            result = mFileManager.OntologyManager.GetText(CStr(dr.Item(2)))
-        End If
+    Private Sub AssumedValueCheckBox_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AssumedValueCheckBox.CheckedChanged
+        AssumedValueComboBox.Visible = AssumedValueCheckBox.Checked
 
-        Return result
-    End Function
-
-
-    Private Sub butSetAssumedOrdinal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles butSetAssumedOrdinal.Click
-
-        If Me.dgOrdinal.CurrentRowIndex > -1 Then
-            Dim ordinal As Integer = CInt(Me.dgOrdinal.Item(Me.dgOrdinal.CurrentRowIndex, 0))
-            Me.txtAssumedOrdinal.Text = CStr(Me.dgOrdinal.Item(Me.dgOrdinal.CurrentRowIndex, 1))
-            Me.Constraint.AssumedValue = ordinal
+        If Not IsLoading Then
+            Constraint.HasAssumedValue = AssumedValueCheckBox.Checked
+            AssumedValueComboBox_SelectedIndexChanged(sender, e)
             mFileManager.FileEdited = True
         End If
-
     End Sub
 
-    Private Sub MenuClearText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuClearText.Click
+    Private Sub AssumedValueComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AssumedValueComboBox.SelectedIndexChanged
+        If Not IsLoading And Constraint.HasAssumedValue Then
+            Dim row As DataRowView = TryCast(AssumedValueComboBox.SelectedItem, DataRowView)
 
-        If MyBase.IsLoading Then Return
-
-        Me.Constraint.HasAssumedValue = False
-        Me.txtAssumedOrdinal.Text = "(none)"
-
-        mFileManager.FileEdited = True
-
+            If row IsNot Nothing AndAlso row.Row.RowState <> DataRowState.Detached Then
+                Constraint.AssumedValue = New OrdinalValue(row.Row).Ordinal
+                mFileManager.FileEdited = True
+            End If
+        End If
     End Sub
 
     Private Sub MenuItemCopyAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemCopyAll.Click
-
-        Main.Instance.TempConstraint = Me.Constraint
-
+        Main.Instance.TempConstraint = Constraint
     End Sub
 
     Private Sub MenuItemAddExisting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemAddExisting.Click
-        AddCodeToOrdinal()
-    End Sub
+        If Not IsLoading Then
+            Dim codes As String() = Main.Instance.ChooseInternal(mFileManager, Constraint.InternalCodes)
 
-    Private Sub AddCodeToOrdinal()
-        If MyBase.IsLoading Then Return
+            If codes IsNot Nothing Then
+                For Each code As String In codes
+                    Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(code)
+                    Dim newOrdinal As OrdinalValue = Constraint.OrdinalValues.NewOrdinal
+                    newOrdinal.InternalCode = code ' Must be done first to avoid creating a new term
+                    newOrdinal.Text = term.Text
+                    newOrdinal.Ordinal = Constraint.NextFreeOrdinalValue
+                    Constraint.OrdinalValues.Add(newOrdinal)
+                Next
 
-        Dim s As String() = Main.Instance.ChooseInternal(mFileManager, Me.Constraint.InternalCodes)
-        If s Is Nothing Then Return
-
-        For i As Integer = 0 To s.Length - 1
-            Dim newOrdinal As OrdinalValue = Me.Constraint.OrdinalValues.NewOrdinal
-
-            Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(s(i))
-
-            ' order is important as will create a new term unless the term code is added first
-            newOrdinal.InternalCode = s(i)
-            newOrdinal.Text = aTerm.Text
-            newOrdinal.Ordinal = Me.Constraint.NextFreeOrdinalValue
-            Me.Constraint.OrdinalValues.Add(newOrdinal)
-        Next
-
-        mFileManager.FileEdited = True
-
+                mFileManager.FileEdited = True
+            End If
+        End If
     End Sub
 
     Private Sub MenuItemPasteAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemPasteAll.Click
-
-        Me.Constraint.ClearOrdinalValues()
+        Constraint.ClearOrdinalValues()
 
         Debug.Assert(Main.Instance.TempConstraint.Kind = ConstraintKind.Ordinal)
 
-        '' default key(0) is set to ae.NodeId
+        ' default key(0) is set to ae.NodeId
         For Each ov As OrdinalValue In CType(Main.Instance.TempConstraint, Constraint_Ordinal).OrdinalValues
-            Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
-            Dim newOrdinal As OrdinalValue = Me.Constraint.OrdinalValues.NewOrdinal
-
+            Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
+            Dim newOrdinal As OrdinalValue = Constraint.OrdinalValues.NewOrdinal
             newOrdinal.Ordinal = ov.Ordinal
-            newOrdinal.Text = aTerm.Text
+            newOrdinal.Text = term.Text
             newOrdinal.InternalCode = ov.InternalCode
-
-            Me.Constraint.OrdinalValues.Add(newOrdinal)
-
+            Constraint.OrdinalValues.Add(newOrdinal)
         Next
 
-        MyBase.Constraint = Me.Constraint
-
-        Me.MenuItemPasteAll.Enabled = False
-        Me.MenuItemCancelCopy.Visible = False
-        Me.MenuItemCopyAll.Enabled = True
+        MenuItemPasteAll.Enabled = False
+        MenuItemCancelCopy.Visible = False
+        MenuItemCopyAll.Enabled = True
         Main.Instance.TempConstraint = Nothing
 
         mFileManager.FileEdited = True
-
-    End Sub
-
-    Private Sub InitialiseOrdinals()
-
-        If (Not Me.Constraint.IsInitialised) Or (Me.Constraint.Language <> mFileManager.OntologyManager.LanguageCode) Then
-            Me.Constraint.BeginLoading()
-
-            'set the language as need to reinitialise if change language
-            Me.Constraint.Language = mFileManager.OntologyManager.LanguageCode
-
-            For Each ov As OrdinalValue In Me.Constraint.OrdinalValues
-                Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
-
-                ov.Text = aTerm.Text
-                ov.Description = aTerm.Description
-                If (Not Me.Constraint.AssumedValue Is Nothing) AndAlso (ov.Ordinal = CInt(Me.Constraint.AssumedValue)) Then
-                    Me.txtAssumedOrdinal.Text = ov.Text
-                End If
-            Next
-            Me.Constraint.EndLoading()
-        End If
-
-        Me.dgOrdinal.SetDataBinding(Me.Constraint.OrdinalValues.DefaultView, "")
-
     End Sub
 
     Private Sub MenuItemCancelCopy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemCancelCopy.Click
-        Me.MenuItemPasteAll.Enabled = False
-        Me.MenuItemCancelCopy.Visible = False
-        Me.MenuItemCopyAll.Enabled = True
-        mTempConstraint = Nothing
+        MenuItemPasteAll.Enabled = False
+        MenuItemCancelCopy.Visible = False
+        MenuItemCopyAll.Enabled = True
     End Sub
-
-    Private Sub mOrdinalConstraint_AssumedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles mOrdinalConstraint.AssumedValueChanged
-        If Not Me.Constraint.HasAssumedValue Then
-            Me.txtAssumedOrdinal.Text = "(none)"
-        End If
-    End Sub
-
 
 End Class
 

@@ -14,47 +14,49 @@
 
 Option Strict On
 
-Class ConstraintCollection
+Public Class ConstraintCollection
     Inherits CollectionBase
 
     Public Sub Add(ByVal Value As Constraint)
-        Me.List.Add(Value)
+        List.Add(Value)
     End Sub
 
     Public Function Copy() As ConstraintCollection
-        Dim co As New ConstraintCollection
+        Dim result As New ConstraintCollection
 
-        For i As Integer = 0 To Me.List.Count - 1
-            co.Add(CType(Me.List.Item(i), Constraint))
+        For i As Integer = 0 To List.Count - 1
+            result.Add(CType(List.Item(i), Constraint))
         Next
-        Return co
+
+        Return result
     End Function
 
     Public Sub Insert(ByVal index As Integer, ByVal Value As Constraint)
-        Me.List.Insert(index, Value)
+        List.Insert(index, Value)
     End Sub
 
     Public Sub Move(ByVal value As Constraint, ByVal index As Integer)
-        Me.List.Remove(value)
-        Me.List.Insert(index, value)
+        List.Remove(value)
+        List.Insert(index, value)
     End Sub
 
     Public Property Item(ByVal key As Integer) As Constraint
         Get
-            Item = CType(Me.List.Item(key), Constraint)
+            Item = CType(List.Item(key), Constraint)
         End Get
         Set(ByVal Value As Constraint)
-            Me.List.Item(key) = Value
+            List.Item(key) = Value
         End Set
     End Property
 
     Public Sub Remove(ByVal c As Constraint)
-        Me.List.Remove(c)
+        List.Remove(c)
     End Sub
 
     Sub New()
         MyBase.New()
     End Sub
+
 End Class
 
 '

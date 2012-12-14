@@ -923,11 +923,11 @@
   <Concept Language="en" ConceptID="150" Rubric="Internal codes" />
   <Concept Language="en" ConceptID="151" Rubric="New" />
   <Concept Language="en" ConceptID="152" Rubric="Remove" />
-  <Concept Language="en" ConceptID="153" Rubric="Set assumed value" />
+  <Concept Language="en" ConceptID="153" Rubric="" />
   <Concept Language="en" ConceptID="155" Rubric="Add" />
   <Concept Language="en" ConceptID="156" Rubric="Ordinal" />
   <Concept Language="en" ConceptID="157" Rubric="True/False" />
-  <Concept Language="en" ConceptID="158" Rubric="Assumed value:" />
+  <Concept Language="en" ConceptID="158" Rubric="Assumed value" />
   <Concept Language="en" ConceptID="159" Rubric="True" />
   <Concept Language="en" ConceptID="160" Rubric="False" />
   <Concept Language="en" ConceptID="161" Rubric="Date &amp; Time" />
@@ -1565,7 +1565,7 @@
   <Concept Language="da" ConceptID="150" Rubric="Interne koder" />
   <Concept Language="da" ConceptID="151" Rubric="Ny" />
   <Concept Language="da" ConceptID="152" Rubric="Fjern" />
-  <Concept Language="da" ConceptID="153" Rubric="Angiv formodet værdi" />
+  <Concept Language="da" ConceptID="153" Rubric="" />
   <Concept Language="da" ConceptID="155" Rubric="Tilføj" />
   <Concept Language="da" ConceptID="156" Rubric="Ordinal" />
   <Concept Language="da" ConceptID="157" Rubric="Sand/Falsk" />
@@ -2144,7 +2144,7 @@
   <Concept Language="de" ConceptID="150" Rubric="Interne Kodierung" />
   <Concept Language="de" ConceptID="151" Rubric="Neu" />
   <Concept Language="de" ConceptID="152" Rubric="Verwerfen" />
-  <Concept Language="de" ConceptID="153" Rubric="Setze angenomm. Wert" />
+  <Concept Language="de" ConceptID="153" Rubric="" />
   <Concept Language="de" ConceptID="155" Rubric="Hinzufügen" />
   <Concept Language="de" ConceptID="156" Rubric="Ordinal" />
   <Concept Language="de" ConceptID="157" Rubric="Wahr/Falsch" />
@@ -2754,7 +2754,7 @@
   <Concept Language="es" ConceptID="150" Rubric="Códigos internacionales" />
   <Concept Language="es" ConceptID="151" Rubric="Nuevo" />
   <Concept Language="es" ConceptID="152" Rubric="Quitar" />
-  <Concept Language="es" ConceptID="153" Rubric="Asignar valor asumido" />
+  <Concept Language="es" ConceptID="153" Rubric="" />
   <Concept Language="es" ConceptID="155" Rubric="Agregar" />
   <Concept Language="es" ConceptID="156" Rubric="Ordinal" />
   <Concept Language="es" ConceptID="157" Rubric="Verdadero/Falso" />
@@ -3246,7 +3246,7 @@
   <Concept Language="fa" ConceptID="150" Rubric="کدهای داخلی" />
   <Concept Language="fa" ConceptID="151" Rubric="جدید" />
   <Concept Language="fa" ConceptID="152" Rubric="رفع کردن" />
-  <Concept Language="fa" ConceptID="153" Rubric="تنظیم بر اساس ارزش فرض شده" />
+  <Concept Language="fa" ConceptID="153" Rubric="" />
   <Concept Language="fa" ConceptID="155" Rubric="اضافه کردن" />
   <Concept Language="fa" ConceptID="156" Rubric="ترتیبی" />
   <Concept Language="fa" ConceptID="157" Rubric="صحیح و یا اشتباه" />
@@ -3823,7 +3823,7 @@
   <Concept Language="ja" ConceptID="150" Rubric="内部コード" />
   <Concept Language="ja" ConceptID="151" Rubric="新規作成" />
   <Concept Language="ja" ConceptID="152" Rubric="削除" />
-  <Concept Language="ja" ConceptID="153" Rubric="仮定(Assumed)値を設定" />
+  <Concept Language="ja" ConceptID="153" Rubric="" />
   <Concept Language="ja" ConceptID="155" Rubric="追加" />
   <Concept Language="ja" ConceptID="156" Rubric="Ordinal (序数)" />
   <Concept Language="ja" ConceptID="157" Rubric="真/偽" />
@@ -4416,11 +4416,11 @@
   <Concept Language="ko" ConceptID="150" Rubric="내부 코드" />
   <Concept Language="ko" ConceptID="151" Rubric="새로 만들기" />
   <Concept Language="ko" ConceptID="152" Rubric="제거" />
-  <Concept Language="ko" ConceptID="153" Rubric="가정(Assumed)값 설정" />
+  <Concept Language="ko" ConceptID="153" Rubric="" />
   <Concept Language="ko" ConceptID="155" Rubric="추가" />
   <Concept Language="ko" ConceptID="156" Rubric="Ordinal (서수)" />
   <Concept Language="ko" ConceptID="157" Rubric="참/거짓" />
-  <Concept Language="ko" ConceptID="158" Rubric="Assumed 값:" />
+  <Concept Language="ko" ConceptID="158" Rubric="Assumed 값" />
   <Concept Language="ko" ConceptID="159" Rubric="참" />
   <Concept Language="ko" ConceptID="160" Rubric="거짓" />
   <Concept Language="ko" ConceptID="161" Rubric="Date and Time (날짜와 시간)" />
@@ -4872,7 +4872,7 @@
   <Concept Language="tr" ConceptID="130" Rubric="İş" />
   <Concept Language="tr" ConceptID="50" Rubric="Arketip" />
   <Concept Language="tr" ConceptID="57" Rubric="Arketip dosya ismi" />
-  <Concept Language="tr" ConceptID="158" Rubric="Varsayılan değer:" />
+  <Concept Language="tr" ConceptID="158" Rubric="Varsayılan değer" />
   <Concept Language="tr" ConceptID="93" Rubric="Bağlantılar" />
   <Concept Language="tr" ConceptID="23" Rubric="Erkek kardeş" />
   <Concept Language="tr" ConceptID="166" Rubric="İptal" />
@@ -4975,7 +4975,7 @@
   <Concept Language="tr" ConceptID="103" Rubric="RTF olarak kaydet" />
   <Concept Language="tr" ConceptID="168" Rubric="Bölüm(Section) modeli" />
   <Concept Language="tr" ConceptID="174" Rubric="Bölüm slotu" />
-  <Concept Language="tr" ConceptID="153" Rubric="Varsayılan değeri belirle" />
+  <Concept Language="tr" ConceptID="153" Rubric="" />
   <Concept Language="tr" ConceptID="132" Rubric="Maksimum değeri belirle" />
   <Concept Language="tr" ConceptID="131" Rubric="Minimum değeri belirle" />
   <Concept Language="tr" ConceptID="52" Rubric="Kısa kavram ismi" />
@@ -5440,7 +5440,7 @@
   <Concept Language="sv" ConceptID="150" Rubric="Interna koder" />
   <Concept Language="sv" ConceptID="151" Rubric="Ny" />
   <Concept Language="sv" ConceptID="152" Rubric="Ta bort" />
-  <Concept Language="sv" ConceptID="153" Rubric="Ange antaget värde" />
+  <Concept Language="sv" ConceptID="153" Rubric="" />
   <Concept Language="sv" ConceptID="155" Rubric="Lägg till" />
   <Concept Language="sv" ConceptID="156" Rubric="Ordinal" />
   <Concept Language="sv" ConceptID="157" Rubric="Sant/Falskt" />

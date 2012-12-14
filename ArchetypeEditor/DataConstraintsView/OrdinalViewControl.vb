@@ -35,20 +35,20 @@ Public Class OrdinalViewControl : Inherits ElementViewControl
 
     Public Sub New(ByVal a_Constraint As Constraint, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(a_Constraint, a_filemanager)
+
         If Not CType(a_Constraint, Constraint_Ordinal).IsInitialised Then
             CType(a_Constraint, Constraint_Ordinal).BeginLoading()
+
             For Each ov As OrdinalValue In CType(a_Constraint, Constraint_Ordinal).OrdinalValues
                 Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
                 ov.Text = aTerm.Text
             Next
+
             CType(a_Constraint, Constraint_Ordinal).EndLoading()
         End If
-
     End Sub
 
-    Protected Overrides Sub InitialiseComponent(ByVal aConstraint As Constraint, _
-            ByVal aLocation As System.Drawing.Point)
-
+    Protected Overrides Sub InitialiseComponent(ByVal aConstraint As Constraint, ByVal aLocation As System.Drawing.Point)
         Dim ord As Constraint_Ordinal = CType(aConstraint, Constraint_Ordinal)
 
         mComboBox = New ComboBox
@@ -65,25 +65,24 @@ Public Class OrdinalViewControl : Inherits ElementViewControl
             If value.Text = "" Then
                 value.Text = mFileManager.OntologyManager.GetTerm(value.InternalCode).Text
             End If
+
             mComboBox.Items.Add(value)
 
             If ord.HasAssumedValue Then
                 Debug.Assert(TypeOf ord.AssumedValue Is Integer)
 
                 If value.Ordinal = CInt(ord.AssumedValue) Then
-                    mComboBox.Text = value.OrdinalAndText
+                    mComboBox.Text = value.ToString
                 End If
-
             End If
         Next
 
-        'mLoading = False
-        Me.Controls.Add(mComboBox)
-
+        Controls.Add(mComboBox)
     End Sub
 
     ' Value = -1 => not selected
     Private mValue As Integer
+
     Public Overrides Property Value() As Object
         Get
             Return mValue
@@ -104,8 +103,6 @@ Public Class OrdinalViewControl : Inherits ElementViewControl
             End If
         End Set
     End Property
-
-    'Private mText As String
 
     Private Sub ComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
             Handles mComboBox.SelectedIndexChanged

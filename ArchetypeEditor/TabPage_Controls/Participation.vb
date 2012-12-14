@@ -9,14 +9,14 @@ Public Class Participation
     Public Property ParticipationConstraint() As RmParticipation
         Get
             mParticipation.ModeSet = mRestrictedModeSet.AsCodePhrase
-            mParticipation.FunctionConstraint = mParticipationFunction.TextConstraint
+            mParticipation.FunctionConstraint = mParticipationFunction.Constraint
             mParticipation.Occurrences = mOccurrences.Cardinality
             Return mParticipation
         End Get
         Set(ByVal value As RmParticipation)
             mIsLoading = True
             mParticipation = value
-            mParticipationFunction.TextConstraint = mParticipation.FunctionConstraint
+            mParticipationFunction.Constraint = mParticipation.FunctionConstraint
             mOccurrences.Cardinality = mParticipation.Occurrences
             mRestrictedModeSet.LocalFileManager = Filemanager.Master
             mRestrictedModeSet.AsCodePhrase = mParticipation.ModeSet
@@ -36,7 +36,7 @@ Public Class Participation
 
         If Not mParticipationFunction.HasConstraint Then
             'if it has not been set from the archetype
-            mParticipationFunction.TextConstraint = New Constraint_Text
+            mParticipationFunction.Constraint = New Constraint_Text
         End If
 
         gbFunction.Controls.Add(mParticipationFunction)
@@ -83,7 +83,7 @@ Public Class Participation
     End Sub
 
     Public Function HasConstraint() As Boolean
-        Return mRestrictedModeSet.HasRestriction() OrElse cbDateTime.Checked OrElse mParticipationFunction.TextConstraint.TypeOfTextConstraint <> TextConstraintType.Text
+        Return mRestrictedModeSet.HasRestriction() OrElse cbDateTime.Checked OrElse mParticipationFunction.Constraint.TypeOfTextConstraint <> TextConstraintType.Text
     End Function
 
 End Class

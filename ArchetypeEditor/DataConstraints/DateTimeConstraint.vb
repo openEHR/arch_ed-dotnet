@@ -14,7 +14,7 @@
 
 Option Strict On
 
-Class Constraint_DateTime
+Public Class Constraint_DateTime
     Inherits Constraint
 
     Private iDTconstraint As Integer

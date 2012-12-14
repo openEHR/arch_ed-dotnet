@@ -127,21 +127,20 @@ Public Class UriConstraintControl : Inherits ConstraintControl
 
 #End Region
 
-    Private Shadows ReadOnly Property Constraint() As Constraint_URI
+    Protected ReadOnly Property Constraint() As Constraint_URI
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_URI)
-            Return CType(MyBase.Constraint, Constraint_URI)
+            Return CType(mConstraint, Constraint_URI)
         End Get
     End Property
 
     Public Sub Translate()
-        Me.LabelTop.Text = Filemanager.GetOpenEhrTerm(656, Me.LabelTop.Text)
-        Me.lblRegex.Text = Filemanager.GetOpenEhrTerm(657, Me.lblRegex.Text)
+        LabelTop.Text = Filemanager.GetOpenEhrTerm(656, LabelTop.Text)
+        lblRegex.Text = Filemanager.GetOpenEhrTerm(657, lblRegex.Text)
     End Sub
 
     Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         ' set constraint values on control
-        MyBase.IsLoading = True
+        IsLoading = True
         chkURI.Checked = Constraint.EhrUriOnly
 
         If Constraint.RegularExpression <> Nothing Then
@@ -150,15 +149,17 @@ Public Class UriConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub chkURI_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkURI.CheckedChanged
-        If MyBase.IsLoading Then Return
-        Constraint.EhrUriOnly = Me.chkURI.Checked
-        mFileManager.FileEdited = True
+        If Not IsLoading Then
+            Constraint.EhrUriOnly = chkURI.Checked
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub txtRegEx_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtRegEx.TextChanged
-        If MyBase.IsLoading Then Return
-        Constraint.RegularExpression = txtRegEx.Text
-        mFileManager.FileEdited = True
+        If Not IsLoading Then
+            Constraint.RegularExpression = txtRegEx.Text
+            mFileManager.FileEdited = True
+        End If
     End Sub
 End Class
 

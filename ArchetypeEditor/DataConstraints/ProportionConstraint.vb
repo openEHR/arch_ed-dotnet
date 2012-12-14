@@ -22,7 +22,7 @@ Enum ProportionType
     IntegerFraction = 4
 End Enum
 
-Class Constraint_Proportion
+Public Class Constraint_Proportion
     Inherits Constraint_with_value
 
     Private mNumerator As New Constraint_Real ' can be real if required

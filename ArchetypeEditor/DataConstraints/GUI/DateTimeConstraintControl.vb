@@ -123,44 +123,25 @@ Public Class DateTimeConstraintControl : Inherits ConstraintControl
 
 #End Region
 
-    Private Shadows ReadOnly Property Constraint() As Constraint_DateTime
+    Protected ReadOnly Property Constraint() As Constraint_DateTime
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_DateTime)
-
-            Return CType(MyBase.Constraint, Constraint_DateTime)
+            Return CType(mConstraint, Constraint_DateTime)
         End Get
     End Property
 
-
-    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
-        TvDateTime.SelectedNode = FindNode(Me.TvDateTime.Nodes, CStr(Me.Constraint.TypeofDateTimeConstraint), True)
+    Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
+        TvDateTime.SelectedNode = FindNode(TvDateTime.Nodes, CStr(Constraint.TypeofDateTimeConstraint), True)
         TvDateTime.SelectedNode.EnsureVisible()
     End Sub
 
     Private Sub TvDateTime_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvDateTime.AfterSelect
-        'Dim ae As iArchetypeElementNode
-
-        ' HKF: 1620
-        If MyBase.IsLoading Then Return
-        'If MyBase.ArchetypeNode Is Nothing Then Return
-
-        'Try
-        '    ae = CType(currentitem, iArchetypeElementNode)
-        'Catch
-        '    Return
-        'End Try
-
-        CType(MyBase.Constraint, Constraint_DateTime).TypeofDateTimeConstraint _
-                = CInt(Me.TvDateTime.SelectedNode.Tag)
-
-        mFileManager.FileEdited = True
-
+        If Not IsLoading Then
+            Constraint.TypeofDateTimeConstraint = CInt(TvDateTime.SelectedNode.Tag)
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
-    Private Function FindNode(ByVal NodeCol As TreeNodeCollection, ByVal sText As String, _
-            Optional ByVal Tag As Boolean = False) As TreeNode
-
-        'Dim n As TreeNode
+    Private Function FindNode(ByVal NodeCol As TreeNodeCollection, ByVal sText As String, Optional ByVal Tag As Boolean = False) As TreeNode
         For Each n As TreeNode In NodeCol
             If Tag Then
                 If CStr(n.Tag) = sText Then
@@ -171,13 +152,15 @@ Public Class DateTimeConstraintControl : Inherits ConstraintControl
                     Return n
                 End If
             End If
+
             n = FindNode(n.Nodes, sText, Tag)
+
             If Not n Is Nothing Then
                 Return n
             End If
         Next
-        Return Nothing
 
+        Return Nothing
     End Function
 
 End Class

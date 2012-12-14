@@ -8,18 +8,18 @@ Public Class Link
 
     Public Property LinkConstraint() As RmLink
         Get
-            mLink.Meaning = mLinkMeaning.TextConstraint
+            mLink.Meaning = mLinkMeaning.Constraint
             'Occurrences set automatically
-            mLink.LinkType = mLinkType.TextConstraint
+            mLink.LinkType = mLinkType.Constraint
             mLink.Target.RegularExpression = Me.txtTarget.Text
             Return mLink
         End Get
         Set(ByVal value As RmLink)
             mIsLoading = True
             mLink = value
-            mLinkMeaning.TextConstraint = mLink.Meaning
+            mLinkMeaning.Constraint = mLink.Meaning
             mOccurrences.Cardinality = mLink.Occurrences
-            mLinkType.TextConstraint = mLink.LinkType
+            mLinkType.Constraint = mLink.LinkType
             Me.txtTarget.Text = mLink.Target.RegularExpression
             mIsLoading = False
         End Set
@@ -32,7 +32,7 @@ Public Class Link
 
         If Not mLinkType.HasConstraint Then
             'if it has not been set from the archetype
-            mLinkType.TextConstraint = New Constraint_Text
+            mLinkType.Constraint = New Constraint_Text
         End If
 
         mLinkType.BringToFront()
@@ -41,7 +41,7 @@ Public Class Link
 
         If Not mLinkMeaning.HasConstraint Then
             'if it has not been set from the archetype
-            mLinkMeaning.TextConstraint = New Constraint_Text
+            mLinkMeaning.Constraint = New Constraint_Text
         End If
 
         mLinkMeaning.BringToFront()
@@ -76,13 +76,13 @@ Public Class Link
     End Sub
 
     Public Sub Translate()
-        mLinkMeaning.TextConstraint = mLink.Meaning
-        mLinkType.TextConstraint = mLink.LinkType
+        mLinkMeaning.Constraint = mLink.Meaning
+        mLinkType.Constraint = mLink.LinkType
     End Sub
 
     Public Function HasConstraint() As Boolean
-        Return mLinkType.TextConstraint.TypeOfTextConstraint <> TextConstraintType.Text OrElse _
-            mLinkMeaning.TextConstraint.TypeOfTextConstraint <> TextConstraintType.Text OrElse _
+        Return mLinkType.Constraint.TypeOfTextConstraint <> TextConstraintType.Text OrElse _
+            mLinkMeaning.Constraint.TypeOfTextConstraint <> TextConstraintType.Text OrElse _
             txtTarget.Text <> String.Empty
     End Function
 

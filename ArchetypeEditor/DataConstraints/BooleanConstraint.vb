@@ -13,7 +13,7 @@
 
 Option Strict On
 
-Class Constraint_Boolean
+Public Class Constraint_Boolean
     Inherits Constraint
 
     Private boolAssumed As Boolean

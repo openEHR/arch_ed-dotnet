@@ -571,9 +571,6 @@
     <Compile Include="DataConstraints\GUI\QuantityConstraintControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DataConstraints\GUI\QuantityUnitConstraintControl.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="DataConstraints\GUI\RatioConstraintControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
@@ -924,10 +921,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\QuantityConstraintControl.resx">
       <DependentUpon>QuantityConstraintControl.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DataConstraints\GUI\QuantityUnitConstraintControl.resx">
-      <DependentUpon>QuantityUnitConstraintControl.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\RatioConstraintControl.resx">

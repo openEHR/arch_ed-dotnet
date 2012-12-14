@@ -220,76 +220,81 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
 
 #End Region
 
-    Private Shadows ReadOnly Property Constraint() As Constraint_Duration
+    Protected ReadOnly Property Constraint() As Constraint_Duration
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Duration)
-
-            Return CType(MyBase.Constraint, Constraint_Duration)
+            Return CType(mConstraint, Constraint_Duration)
         End Get
     End Property
 
     Dim WithEvents mCountControl As CountConstraintControl
 
     Private Sub SetUnitDisplay(ByVal Sender As Object, ByVal DisplayUnits As Boolean) Handles mCountControl.ChangeDisplay
-        Me.comboTimeUnits.Visible = DisplayUnits
+        comboTimeUnits.Visible = DisplayUnits
     End Sub
 
     Public Sub Translate()
-        Me.LabelDuration.Text = Filemanager.GetOpenEhrTerm(142, Me.LabelDuration.Text)
-        Me.chkYears.Text = Main.ISO_TimeUnits.GetLanguageForISO("a")
-        Me.chkMonths.Text = Main.ISO_TimeUnits.GetLanguageForISO("mo")
-        Me.chkWeeks.Text = Main.ISO_TimeUnits.GetLanguageForISO("wk")
-        Me.chkDays.Text = Main.ISO_TimeUnits.GetLanguageForISO("d")
-        Me.chkHours.Text = Main.ISO_TimeUnits.GetLanguageForISO("h")
-        Me.chkMinutes.Text = Main.ISO_TimeUnits.GetLanguageForISO("m")
-        Me.chkSeconds.Text = Main.ISO_TimeUnits.GetLanguageForISO("s")
-        Me.chkMilliseconds.Text = Main.ISO_TimeUnits.GetLanguageForISO("millisec")
+        LabelDuration.Text = Filemanager.GetOpenEhrTerm(142, LabelDuration.Text)
+        chkYears.Text = Main.ISO_TimeUnits.GetLanguageForISO("a")
+        chkMonths.Text = Main.ISO_TimeUnits.GetLanguageForISO("mo")
+        chkWeeks.Text = Main.ISO_TimeUnits.GetLanguageForISO("wk")
+        chkDays.Text = Main.ISO_TimeUnits.GetLanguageForISO("d")
+        chkHours.Text = Main.ISO_TimeUnits.GetLanguageForISO("h")
+        chkMinutes.Text = Main.ISO_TimeUnits.GetLanguageForISO("m")
+        chkSeconds.Text = Main.ISO_TimeUnits.GetLanguageForISO("s")
+        chkMilliseconds.Text = Main.ISO_TimeUnits.GetLanguageForISO("millisec")
     End Sub
 
     Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
-        Dim s As String = Me.Constraint.AllowableUnits
+        Dim s As String = Constraint.AllowableUnits
 
         mCountControl = New CountConstraintControl(mFileManager)
         Controls.Add(mCountControl)
-        mCountControl.Top = Me.panelDetail.Top + Me.panelDetail.Height + 10
-        mCountControl.ShowConstraint(IsState, Me.Constraint)
+        mCountControl.Top = panelDetail.Top + panelDetail.Height + 10
+        mCountControl.ShowConstraint(IsState, Constraint)
         mCountControl.LabelQuantity.Text = AE_Constants.Instance.Unit
 
         If s = "PYMWDTHMS" Then
-            Me.chkAll.Checked = True
+            chkAll.Checked = True
         Else
-            Me.chkAll.Checked = False
-
+            chkAll.Checked = False
             Dim y As String() = s.Split("T".ToCharArray)
+
             If y.Length = 2 AndAlso y(1) <> "" Then
                 ' there are day and time units
                 If y(1).IndexOf("H") > -1 Then
-                    Me.chkHours.Checked = True
+                    chkHours.Checked = True
                 End If
+
                 If y(1).IndexOf("M") > -1 Then
-                    Me.chkMinutes.Checked = True
+                    chkMinutes.Checked = True
                 End If
+
                 If y(1).IndexOf("S") > -1 Then
-                    Me.chkSeconds.Checked = True
+                    chkSeconds.Checked = True
                 End If
             End If
+
             If y(0).IndexOf("Y") > -1 Then
-                Me.chkYears.Checked = True
+                chkYears.Checked = True
             End If
+
             If y(0).IndexOf("M") > -1 Then
-                Me.chkMonths.Checked = True
+                chkMonths.Checked = True
             End If
+
             If y(0).IndexOf("W") > -1 Then
-                Me.chkWeeks.Checked = True
+                chkWeeks.Checked = True
             End If
+
             If y(0).IndexOf("D") > -1 Then
-                Me.chkDays.Checked = True
+                chkDays.Checked = True
             End If
         End If
 
-        If Me.Constraint.MinMaxValueUnits <> "" Then
+        If Constraint.MinMaxValueUnits <> "" Then
             Dim time_unit As String = ""
-            Select Case Me.Constraint.MinMaxValueUnits
+
+            Select Case Constraint.MinMaxValueUnits
                 Case "Y"
                     time_unit = chkYears.Text
                 Case "M"
@@ -307,118 +312,132 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
                 Case Else
                     Debug.Assert(False, "Not handled")
             End Select
-            Me.comboTimeUnits.SelectedIndex = Me.comboTimeUnits.FindStringExact(time_unit)
+
+            comboTimeUnits.SelectedIndex = comboTimeUnits.FindStringExact(time_unit)
         End If
 
         ResetTimeUnits()
-        Me.LabelDuration.Text = AE_Constants.Instance.Duration
-
+        LabelDuration.Text = AE_Constants.Instance.Duration
     End Sub
 
     Private Function GetAllowableUnits() As String
         Dim result As String = "P"
         Dim time_separated As Boolean
 
-
-        If Me.chkYears.Checked Then
+        If chkYears.Checked Then
             result &= "Y"
         End If
-        If Me.chkMonths.Checked Then
+
+        If chkMonths.Checked Then
             result &= "M"
         End If
-        If Me.chkWeeks.Checked Then
+
+        If chkWeeks.Checked Then
             result &= "W"
         End If
-        If Me.chkDays.Checked Then
+
+        If chkDays.Checked Then
             result &= "D"
         End If
-        If Me.chkHours.Checked Then
+
+        If chkHours.Checked Then
             result &= "TH"
             time_separated = True
         End If
-        If Me.chkMinutes.Checked Then
+
+        If chkMinutes.Checked Then
             If Not time_separated Then
                 result &= "T"
                 time_separated = True
             End If
+
             result &= "M"
         End If
-        If Me.chkSeconds.Checked Then
+
+        If chkSeconds.Checked Then
             If Not time_separated Then
                 result &= "T"
                 time_separated = True
             End If
+
             result &= "S"
         End If
-        Return result
 
+        Return result
     End Function
 
     Private Sub ResetTimeUnits()
+        Dim s As String = comboTimeUnits.Text
+        comboTimeUnits.Items.Clear()
 
-        Dim s As String = Me.comboTimeUnits.Text
-
-        Me.comboTimeUnits.Items.Clear()
         If chkAll.Checked Then
-            Me.comboTimeUnits.Items.Add(chkYears.Text)
-            Me.comboTimeUnits.Items.Add(chkMonths.Text)
-            Me.comboTimeUnits.Items.Add(chkWeeks.Text)
-            Me.comboTimeUnits.Items.Add(chkDays.Text)
-            Me.comboTimeUnits.Items.Add(chkHours.Text)
-            Me.comboTimeUnits.Items.Add(chkMinutes.Text)
-            Me.comboTimeUnits.Items.Add(chkSeconds.Text)
+            comboTimeUnits.Items.Add(chkYears.Text)
+            comboTimeUnits.Items.Add(chkMonths.Text)
+            comboTimeUnits.Items.Add(chkWeeks.Text)
+            comboTimeUnits.Items.Add(chkDays.Text)
+            comboTimeUnits.Items.Add(chkHours.Text)
+            comboTimeUnits.Items.Add(chkMinutes.Text)
+            comboTimeUnits.Items.Add(chkSeconds.Text)
         Else
             If chkYears.Checked Then
-                Me.comboTimeUnits.Items.Add(chkYears.Text)
+                comboTimeUnits.Items.Add(chkYears.Text)
             End If
+
             If chkMonths.Checked Then
-                Me.comboTimeUnits.Items.Add(chkMonths.Text)
+                comboTimeUnits.Items.Add(chkMonths.Text)
             End If
+
             If chkWeeks.Checked Then
-                Me.comboTimeUnits.Items.Add(chkWeeks.Text)
+                comboTimeUnits.Items.Add(chkWeeks.Text)
             End If
+
             If chkDays.Checked Then
-                Me.comboTimeUnits.Items.Add(chkDays.Text)
+                comboTimeUnits.Items.Add(chkDays.Text)
             End If
+
             If chkHours.Checked Then
-                Me.comboTimeUnits.Items.Add(chkHours.Text)
+                comboTimeUnits.Items.Add(chkHours.Text)
             End If
+
             If chkMinutes.Checked Then
-                Me.comboTimeUnits.Items.Add(chkMinutes.Text)
+                comboTimeUnits.Items.Add(chkMinutes.Text)
             End If
+
             If chkSeconds.Checked Then
-                Me.comboTimeUnits.Items.Add(chkSeconds.Text)
+                comboTimeUnits.Items.Add(chkSeconds.Text)
             End If
         End If
 
         ' reset the units to the previous value
-        Dim i As Integer = Me.comboTimeUnits.FindStringExact(s)
-        If i > -1 Then
-            Me.comboTimeUnits.SelectedIndex = i
-        Else
-            Me.comboTimeUnits.SelectedIndex = Me.comboTimeUnits.Items.Count - 1
-        End If
+        Dim i As Integer = comboTimeUnits.FindStringExact(s)
 
+        If i > -1 Then
+            comboTimeUnits.SelectedIndex = i
+        Else
+            comboTimeUnits.SelectedIndex = comboTimeUnits.Items.Count - 1
+        End If
     End Sub
+
     Private Sub chkAll_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkAll.CheckedChanged
         If chkAll.Checked Then
-            Me.panelDetail.Visible = False
-            mCountControl.Top = Me.panelTop.Top + Me.panelTop.Height + 10
-            Me.comboTimeUnits.Top = Me.panelTop.Top + Me.panelTop.Height + 10
+            panelDetail.Visible = False
+            mCountControl.Top = panelTop.Top + panelTop.Height + 10
+            comboTimeUnits.Top = panelTop.Top + panelTop.Height + 10
         Else
-            Me.panelDetail.Visible = True
-            mCountControl.Top = Me.panelDetail.Top + Me.panelDetail.Height + 10
-            Me.comboTimeUnits.Top = Me.panelDetail.Top + Me.panelDetail.Height + 10
+            panelDetail.Visible = True
+            mCountControl.Top = panelDetail.Top + panelDetail.Height + 10
+            comboTimeUnits.Top = panelDetail.Top + panelDetail.Height + 10
         End If
 
         ResetTimeUnits()
 
-        If Not MyBase.IsLoading() Then
+        If Not IsLoading() Then
             If chkAll.Checked Then
-                Me.Constraint.AllowableUnits = "PYMWDTHMS"
+                Constraint.AllowableUnits = "PYMWDTHMS"
             Else
-                Me.Constraint.AllowableUnits = GetAllowableUnits()
+                Constraint.AllowableUnits = GetAllowableUnits()
             End If
+
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -428,49 +447,49 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         chkHours.CheckedChanged, chkMinutes.CheckedChanged, chkMonths.CheckedChanged, _
         chkSeconds.CheckedChanged, chkWeeks.CheckedChanged
 
-        Dim s As String = Me.comboTimeUnits.Text
-
+        Dim s As String = comboTimeUnits.Text
         ResetTimeUnits()
 
-
-        If Not MyBase.IsLoading() Then
-            Me.Constraint.AllowableUnits = GetAllowableUnits()
+        If Not IsLoading() Then
+            Constraint.AllowableUnits = GetAllowableUnits()
             mFileManager.FileEdited = True
         End If
     End Sub
 
-
     Private Sub comboTimeUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboTimeUnits.SelectedIndexChanged
-        If (Not MyBase.IsLoading) Or Me.Constraint.MinMaxValueUnits = "" Then
+        If Not IsLoading Or Constraint.MinMaxValueUnits = "" Then
             If comboTimeUnits.SelectedIndex > -1 Then
                 Dim s As String
 
                 Select Case comboTimeUnits.Text
-                    Case Me.chkYears.Text
+                    Case chkYears.Text
                         s = "Y"
-                    Case Me.chkMonths.Text
+                    Case chkMonths.Text
                         s = "M"
-                    Case Me.chkWeeks.Text
+                    Case chkWeeks.Text
                         s = "W"
-                    Case Me.chkDays.Text
+                    Case chkDays.Text
                         s = "D"
-                    Case Me.chkHours.Text
+                    Case chkHours.Text
                         s = "TH"
-                    Case Me.chkMinutes.Text
+                    Case chkMinutes.Text
                         s = "TM"
-                    Case Me.chkSeconds.Text
+                    Case chkSeconds.Text
                         s = "TS"
                     Case Else
                         Debug.Assert(False, "Not handled")
                         Return
                 End Select
-                Me.Constraint.MinMaxValueUnits = s
-                If Not MyBase.IsLoading Then
+
+                Constraint.MinMaxValueUnits = s
+
+                If Not IsLoading Then
                     mFileManager.FileEdited = True
                 End If
             End If
         End If
     End Sub
+
 End Class
 
 '

@@ -22,75 +22,68 @@ Public Class OrdinalTable : Inherits DataTable
 
     Public Sub New()
         MyBase.New("OrdinalTable")
-
         InitialiseTable()
     End Sub
 
     Private Sub InitialiseTable()
-
         Dim OrdColumn As DataColumn = New DataColumn
         OrdColumn.DataType = GetType(Integer)
-        OrdColumn.ColumnName = "Ordinal"  ' Ordinal Value
+        OrdColumn.ColumnName = "Ordinal"
         OrdColumn.AllowDBNull = False
-        Me.Columns.Add(OrdColumn)
+        Columns.Add(OrdColumn)
 
         Dim TextColumn As DataColumn = New DataColumn
         TextColumn.DataType = GetType(String)
-        TextColumn.ColumnName = "OrdinalText"               ' Term Text
+        TextColumn.ColumnName = "OrdinalText"
         TextColumn.AllowDBNull = True
-        Me.Columns.Add(TextColumn)
+        Columns.Add(TextColumn)
 
         Dim IdColumn As DataColumn = New DataColumn
         IdColumn.DataType = GetType(String)
-        IdColumn.ColumnName = "Code"                          'Internal Code
-        Me.Columns.Add(IdColumn)
+        IdColumn.ColumnName = "Code"
+        Columns.Add(IdColumn)
 
         Dim DescriptionColumn As DataColumn = New DataColumn
         DescriptionColumn.DataType = GetType(String)
-        DescriptionColumn.ColumnName = "OrdinalDescription"               ' Term Text
+        DescriptionColumn.ColumnName = "OrdinalDescription"
         DescriptionColumn.AllowDBNull = True
-        Me.Columns.Add(DescriptionColumn)
+        Columns.Add(DescriptionColumn)
 
         Dim keys(0) As DataColumn
         keys(0) = OrdColumn
-        Me.PrimaryKey = keys
+        PrimaryKey = keys
 
         DefaultView.Sort = "Ordinal"
     End Sub
 
     Public Overloads Sub Copy(ByVal sourceTable As OrdinalTable)
-        Me.Rows.Clear()
+        Rows.Clear()
 
         For Each sourceOrdinal As OrdinalValue In sourceTable
-            Dim newOrdinal As OrdinalValue = Me.NewOrdinal
-
-            newOrdinal.Copy(sourceOrdinal)
-
-            Me.Add(newOrdinal)
+            Dim o As OrdinalValue = NewOrdinal()
+            o.Copy(sourceOrdinal)
+            Add(o)
         Next
-
     End Sub
 
     Public Function NewOrdinal() As OrdinalValue
-        Dim row As DataRow = MyBase.NewRow
-        Return New OrdinalValue(row)
+        Return New OrdinalValue(NewRow)
     End Function
 
-    'public readonly property rows as datarowcollection
-
     Public Sub Add(ByVal anOrdinal As OrdinalValue)
-        MyBase.Rows.Add(anOrdinal.DataRow)
+        Rows.Add(anOrdinal.DataRow)
     End Sub
 
     Public ReadOnly Property Count() As Integer
         Get
-            Return MyBase.DefaultView.Count
+            Return DefaultView.Count
         End Get
     End Property
 
     Public Sub Commit()
         If Not mRowEnumerator Is Nothing Then
             Dim rowView As DataRowView = CType(mRowEnumerator.Current, DataRowView)
+
             If Not rowView Is Nothing Then
                 If rowView.IsEdit Then
                     rowView.EndEdit()
@@ -101,38 +94,30 @@ Public Class OrdinalTable : Inherits DataTable
         End If
     End Sub
 
-    Private Function GetEnumerator() As System.Collections.IEnumerator _
-            Implements System.Collections.IEnumerable.GetEnumerator
-
-        mRowEnumerator = Me.DefaultView.GetEnumerator
-
+    Private Function GetEnumerator() As System.Collections.IEnumerator Implements System.Collections.IEnumerable.GetEnumerator
+        mRowEnumerator = DefaultView.GetEnumerator
         Return Me
     End Function
 
     Private mRowEnumerator As IEnumerator
-    Private ReadOnly Property Current() As Object _
-            Implements System.Collections.IEnumerator.Current
+
+    Private ReadOnly Property Current() As Object Implements System.Collections.IEnumerator.Current
         Get
             Debug.Assert(Not mRowEnumerator Is Nothing)
-
             Debug.Assert(TypeOf mRowEnumerator.Current Is DataRowView)
-            Dim rowView As DataRowView = CType(mRowEnumerator.Current, DataRowView)
 
+            Dim rowView As DataRowView = CType(mRowEnumerator.Current, DataRowView)
             Return New OrdinalValue(rowView.Row)
         End Get
     End Property
 
-    Private Function MoveNext() As Boolean _
-            Implements System.Collections.IEnumerator.MoveNext
-
+    Private Function MoveNext() As Boolean Implements System.Collections.IEnumerator.MoveNext
         Debug.Assert(Not mRowEnumerator Is Nothing)
 
         Return mRowEnumerator.MoveNext
     End Function
 
-    Private Sub ResetEnumerator() _
-            Implements System.Collections.IEnumerator.Reset
-
+    Private Sub ResetEnumerator() Implements System.Collections.IEnumerator.Reset
         Debug.Assert(Not mRowEnumerator Is Nothing)
 
         mRowEnumerator.Reset()
@@ -140,7 +125,7 @@ Public Class OrdinalTable : Inherits DataTable
 
 End Class
 
-Public Class OrdinalValue ': Inherits DataRow
+Public Class OrdinalValue
     Private mDataRow As DataRow
 
     Public ReadOnly Property DataRow() As DataRow
@@ -151,7 +136,11 @@ Public Class OrdinalValue ': Inherits DataRow
 
     Public Property Ordinal() As Integer
         Get
-            Return CInt(mDataRow(0))
+            If mDataRow.IsNull(0) Then
+                Return 0
+            Else
+                Return CInt(mDataRow(0))
+            End If
         End Get
         Set(ByVal Value As Integer)
             mDataRow(0) = Value
@@ -186,19 +175,26 @@ Public Class OrdinalValue ': Inherits DataRow
 
     Public Property Description() As String
         Get
-            Debug.Assert(Not mDataRow.IsNull(3))
-            Return CStr(mDataRow(3))
+            If mDataRow.IsNull(3) Then
+                Return ""
+            Else
+                Return CStr(mDataRow(3))
+            End If
         End Get
         Set(ByVal Value As String)
             mDataRow(3) = Value
         End Set
     End Property
 
-    Public ReadOnly Property OrdinalAndText() As String
-        Get
-            Return Me.Ordinal.ToString.PadRight(2) & " - " & Me.Text
-        End Get
-    End Property
+    Public Overrides Function ToString() As String
+        Dim result As String = ""
+
+        If mDataRow.RowState <> DataRowState.Detached Then
+            result = Ordinal.ToString.PadRight(2) & " - " & Text
+        End If
+
+        Return result
+    End Function
 
     Public Sub New(ByVal newRow As DataRow)
         mDataRow = newRow

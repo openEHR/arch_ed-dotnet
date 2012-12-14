@@ -194,17 +194,15 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
 
 #End Region
 
-    Private Shadows ReadOnly Property Constraint() As Constraint_Parsable
+    Protected ReadOnly Property Constraint() As Constraint_Parsable
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Parsable)
-
-            Return CType(MyBase.Constraint, Constraint_Parsable)
+            Return CType(mConstraint, Constraint_Parsable)
         End Get
     End Property
 
     Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         ' set constraint values on control
-        For Each s As String In Me.Constraint.AllowableFormalisms
+        For Each s As String In Constraint.AllowableFormalisms
             Dim n As TreeNode
 
             If Not TvParsable.Nodes.ContainsKey(s) Then
@@ -220,28 +218,22 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub TvParsable_AfterCheck(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvParsable.AfterCheck
-        'Dim ae As iArchetypeElementNode
+        If Not IsLoading Then
+            Dim cp As Generic.List(Of String) = Constraint.AllowableFormalisms
 
-        If MyBase.IsLoading Then Return
+            If e.Node.Checked Then
+                Debug.Assert(Not cp.Contains(e.Node.Tag.ToString))
+                cp.Add(e.Node.Tag.ToString)
+            Else
+                Debug.Assert(cp.Contains(e.Node.Tag.ToString))
+                cp.Remove(e.Node.Tag.ToString)
+            End If
 
-        Dim cp As Generic.List(Of String) = Me.Constraint.AllowableFormalisms
-        If e.Node.Checked Then
-            Debug.Assert(Not cp.Contains(e.Node.Tag.ToString))
-            cp.Add(e.Node.Tag.ToString)
-        Else
-            Debug.Assert(cp.Contains(e.Node.Tag.ToString))
-            cp.Remove(e.Node.Tag.ToString)
+            mFileManager.FileEdited = True
         End If
-
-        mFileManager.FileEdited = True
-
     End Sub
 
-    Private Function FindNode(ByVal NodeCol As TreeNodeCollection, ByVal sText As String, _
-            Optional ByVal Tag As Boolean = False) As TreeNode
-
-        'Dim n As TreeNode
-
+    Private Function FindNode(ByVal NodeCol As TreeNodeCollection, ByVal sText As String, Optional ByVal Tag As Boolean = False) As TreeNode
         For Each n As TreeNode In NodeCol
             If Tag Then
                 If CStr(n.Tag) = sText Then
@@ -252,16 +244,17 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
                     Return n
                 End If
             End If
+
             If Not n Is Nothing Then
                 Return n
             End If
         Next
-        Return Nothing
 
+        Return Nothing
     End Function
 
     Sub TranslateGUI()
-        Me.lblParsable.Text = Filemanager.GetOpenEhrTerm(684, "Parsable")
+        lblParsable.Text = Filemanager.GetOpenEhrTerm(684, "Parsable")
     End Sub
 
     Private Sub ButNewItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButNewItem.Click

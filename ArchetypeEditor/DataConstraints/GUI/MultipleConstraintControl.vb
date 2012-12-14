@@ -114,11 +114,9 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl
     End Sub
 #End Region
 
-    Private Shadows ReadOnly Property Constraint() As Constraint_Choice
+    Protected ReadOnly Property Constraint() As Constraint_Choice
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Choice)
-
-            Return CType(MyBase.Constraint, Constraint_Choice)
+            Return CType(mConstraint, Constraint_Choice)
         End Get
     End Property
 

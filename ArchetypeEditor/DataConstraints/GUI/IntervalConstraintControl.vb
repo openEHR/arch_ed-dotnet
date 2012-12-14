@@ -114,33 +114,26 @@ Public Class IntervalConstraintControl : Inherits ConstraintControl
 #End Region
     Private mConstraintControl As ConstraintControl
 
-    Private Shadows ReadOnly Property Constraint() As Constraint_Interval
+    Protected ReadOnly Property Constraint() As Constraint_Interval
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Interval)
-
-            Return CType(MyBase.Constraint, Constraint_Interval)
+            Return CType(mConstraint, Constraint_Interval)
         End Get
     End Property
 
     Private Sub AddConstraintControl(ByVal c As Constraint, ByVal label As String)
-        Dim tp As TabPage
-        Dim cc As ConstraintControl
-
-        tp = New TabPage(label)
-
-        cc = ConstraintControl.CreateConstraintControl( _
-                    c.Kind, mFileManager)
+        Dim tp As New TabPage(label)
+        Dim cc As ConstraintControl = ConstraintControl.CreateConstraintControl(c.Kind, mFileManager)
         tp.Controls.Add(cc)
         cc.ShowConstraint(mIsState, c)
         cc.Dock = DockStyle.Fill
-        Me.TabConstraints.TabPages.Add(tp)
+        TabConstraints.TabPages.Add(tp)
     End Sub
 
     Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         mIsState = IsState
         ' set constraint values on control
-        AddConstraintControl(Me.Constraint.LowerLimit, AE_Constants.Instance.Lower)
-        AddConstraintControl(Me.Constraint.UpperLimit, AE_Constants.Instance.Upper)
+        AddConstraintControl(Constraint.LowerLimit, AE_Constants.Instance.Lower)
+        AddConstraintControl(Constraint.UpperLimit, AE_Constants.Instance.Upper)
     End Sub
 
     'Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)

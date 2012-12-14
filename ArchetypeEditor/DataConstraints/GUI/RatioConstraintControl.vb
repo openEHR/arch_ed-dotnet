@@ -142,11 +142,9 @@ Public Class RatioConstraintControl : Inherits ConstraintControl
     End Sub
 #End Region
 
-    Private Shadows ReadOnly Property Constraint() As Constraint_Proportion
+    Protected ReadOnly Property Constraint() As Constraint_Proportion
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Proportion)
-
-            Return CType(MyBase.Constraint, Constraint_Proportion)
+            Return CType(mConstraint, Constraint_Proportion)
         End Get
     End Property
 

@@ -41,7 +41,7 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
         mFileManager = a_file_manager
 
         If Main.Instance.DefaultLanguageCode <> "en" Then
-            lblMultiMedia.Text = Filemanager.GetOpenEhrTerm(386, Me.lblMultiMedia.Text)
+            lblMultiMedia.Text = Filemanager.GetOpenEhrTerm(386, lblMultiMedia.Text)
         End If
 
         Dim d_row As DataRow() = mFileManager.OntologyManager.CodeForGroupID(19, "en") ' must be in English
@@ -165,17 +165,15 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
 
 #End Region
 
-    Private Shadows ReadOnly Property Constraint() As Constraint_MultiMedia
+    Protected ReadOnly Property Constraint() As Constraint_MultiMedia
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_MultiMedia)
-
-            Return CType(MyBase.Constraint, Constraint_MultiMedia)
+            Return CType(mConstraint, Constraint_MultiMedia)
         End Get
     End Property
 
     Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         ' set constraint values on control
-        Dim cp As CodePhrase = Me.Constraint.AllowableValues
+        Dim cp As CodePhrase = Constraint.AllowableValues
 
         Debug.Assert(cp.TerminologyID = "openEHR")
 
@@ -188,48 +186,39 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
                 End If
             Next
         Next
-
-
     End Sub
 
     Private Sub TvMultiMedia_AfterCheck(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvMultiMedia.AfterCheck
-        'Dim ae As iArchetypeElementNode
+        If Not IsLoading Then
+            Dim cp As CodePhrase = Constraint.AllowableValues
 
-        If MyBase.IsLoading Then Return
-
-        Dim cp As CodePhrase = Me.Constraint.AllowableValues
-
-        If e.Node.Parent Is Nothing Then
-            ' check or uncheck all children
-            e.Node.Expand()
-            For Each n As TreeNode In e.Node.Nodes
-                If n.Checked <> e.Node.Checked Then
-                    n.Checked = e.Node.Checked
-                End If
-            Next
-        Else
-            If e.Node.Checked Then
-                Debug.Assert(Not cp.HasCode(e.Node.Tag.ToString))
-                cp.Codes.Add(e.Node.Tag.ToString)
-                ' check the parent - but stop processing of this
-                MyBase.IsLoading = True
-                e.Node.Parent.Checked = True
-                MyBase.IsLoading = False
+            If e.Node.Parent Is Nothing Then
+                ' check or uncheck all children
+                e.Node.Expand()
+                For Each n As TreeNode In e.Node.Nodes
+                    If n.Checked <> e.Node.Checked Then
+                        n.Checked = e.Node.Checked
+                    End If
+                Next
             Else
-                Debug.Assert(cp.HasCode(e.Node.Tag.ToString))
-                cp.Codes.Remove(e.Node.Tag.ToString)
+                If e.Node.Checked Then
+                    Debug.Assert(Not cp.HasCode(e.Node.Tag.ToString))
+                    cp.Codes.Add(e.Node.Tag.ToString)
+                    ' check the parent - but stop processing of this
+                    MyBase.IsLoading = True
+                    e.Node.Parent.Checked = True
+                    MyBase.IsLoading = False
+                Else
+                    Debug.Assert(cp.HasCode(e.Node.Tag.ToString))
+                    cp.Codes.Remove(e.Node.Tag.ToString)
+                End If
             End If
+
+            mFileManager.FileEdited = True
         End If
-
-
-        mFileManager.FileEdited = True
-
     End Sub
 
-    Private Function FindNode(ByVal NodeCol As TreeNodeCollection, ByVal sText As String, _
-            Optional ByVal Tag As Boolean = False) As TreeNode
-
-        'Dim n As TreeNode
+    Private Function FindNode(ByVal NodeCol As TreeNodeCollection, ByVal sText As String, Optional ByVal Tag As Boolean = False) As TreeNode
         For Each n As TreeNode In NodeCol
             If Tag Then
                 If CStr(n.Tag) = sText Then
@@ -240,13 +229,15 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
                     Return n
                 End If
             End If
+
             n = FindNode(n.Nodes, sText, Tag)
+
             If Not n Is Nothing Then
                 Return n
             End If
         Next
-        Return Nothing
 
+        Return Nothing
     End Function
 
 End Class

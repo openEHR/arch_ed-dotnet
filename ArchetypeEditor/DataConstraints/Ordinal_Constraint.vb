@@ -18,13 +18,11 @@ Option Strict On
 
 Public Class Constraint_Ordinal : Inherits Constraint_with_value
 
-    Public Event AssumedValueChanged As EventHandler
-
     Private mFixed As Boolean
     Private WithEvents mOrdinalTable As OrdinalTable
     Private mAssumedValue As Integer
-    Private mTerminologyId As String = "local" 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-    Private mCodeString As String 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+    Private mTerminologyId As String = "local"
+    Private mCodeString As String
     Private mIsLoadingComplete As Boolean
     Private mLanguage As String
     Private mFileManager As FileManagerLocal
@@ -35,7 +33,7 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
         result.OrdinalValues.Copy(mOrdinalTable)
 
         'SRH - 4th March 2009 - EDT-523 - error with assumed value being set to zero
-        'ord.HasAssumedValue = Me.HasAssumedValue
+        'ord.HasAssumedValue = HasAssumedValue
         If HasAssumedValue Then
             result.AssumedValue = mAssumedValue
         End If
@@ -69,19 +67,15 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
 
             mAssumedValue = CInt(Value)
             HasAssumedValue = True
+            Dim row As DataRow = mOrdinalTable.Rows.Find(Value)
 
-            'SRH - EDT-523 - need to set the ordinal value for XML output
-            Dim dr As DataRow = mOrdinalTable.Rows.Find(Value)
-            If Not dr Is Nothing Then
-                AssumedValue_CodeString = CStr(dr.Item(2))
+            If Not row Is Nothing Then
+                AssumedValue_CodeString = CStr(row.Item(2))
             End If
-
-            OnAssumedValueChanged()
         End Set
     End Property
 
-    'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-    Public Property AssumedValue_TerminologyId() As String 'Part of AssumedValue
+    Public Property AssumedValue_TerminologyId() As String
         Get
             If HasAssumedValue Then
                 Return mTerminologyId
@@ -94,8 +88,7 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
         End Set
     End Property
 
-    'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-    Public Property AssumedValue_CodeString() As String 'Part of AssumedValue 
+    Public Property AssumedValue_CodeString() As String
         Get
             If HasAssumedValue Then
                 Return mCodeString
@@ -107,10 +100,6 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
             mCodeString = value
         End Set
     End Property
-
-    Protected Sub OnAssumedValueChanged()
-        RaiseEvent AssumedValueChanged(Me, New EventArgs)
-    End Sub
 
     Public ReadOnly Property OrdinalValues() As OrdinalTable
         Get
@@ -135,14 +124,14 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
 
     Public ReadOnly Property NextFreeOrdinalValue() As Integer
         Get
-            Dim i, ord As Integer
+            Dim ord As Integer
 
-            For i = 0 To mOrdinalTable.Count - 1
-
+            For i As Integer = 0 To mOrdinalTable.Count - 1
                 If i = 0 Then
                     ord = CType(mOrdinalTable.Rows(i).Item(0), Integer)
                 Else
                     ord += 1
+
                     If mOrdinalTable.Rows.Find(ord) Is Nothing Then
                         Return ord
                     End If
@@ -150,21 +139,22 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
             Next
 
             Return ord + 1
-
         End Get
     End Property
 
-    'SRH: Added 1 Jul 2008
     ReadOnly Property InternalCodes() As String()
         Get
-            If (Not mOrdinalTable Is Nothing AndAlso mOrdinalTable.Rows.Count > 0) Then
+            If mOrdinalTable IsNot Nothing AndAlso mOrdinalTable.Rows.Count > 0 Then
                 Dim upperBound As Integer = mOrdinalTable.Rows.Count - 1
                 Dim result(upperBound) As String
+
                 For i As Integer = 0 To upperBound
                     result(i) = CStr(mOrdinalTable.Rows(i).Item(2))
                 Next
+
                 Return result
             End If
+
             Return CType(Array.CreateInstance(GetType(String), 0), String())
         End Get
     End Property
@@ -178,101 +168,67 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
         End Set
     End Property
 
-    Sub New(ByVal a_local_filemanager As FileManagerLocal)
-        mFileManager = a_local_filemanager
+    Sub New(ByVal fileManager As FileManagerLocal)
+        mFileManager = fileManager
         mOrdinalTable = New OrdinalTable
     End Sub
 
-    Sub New(ByVal IsLoadingComplete As Boolean, ByVal a_local_filemanager As FileManagerLocal)
-        Me.New(a_local_filemanager)
-        mIsLoadingComplete = IsLoadingComplete
+    Sub New(ByVal isLoadingComplete As Boolean, ByVal fileManager As FileManagerLocal)
+        Me.New(fileManager)
+        mIsLoadingComplete = isLoadingComplete
     End Sub
 
-    Private Sub OrdinalTable_RowDeleting(ByVal sender As Object, ByVal e As System.Data.DataRowChangeEventArgs) _
-            Handles mOrdinalTable.RowDeleting
+    Private Sub OrdinalTable_RowDeleting(ByVal sender As Object, ByVal e As System.Data.DataRowChangeEventArgs) Handles mOrdinalTable.RowDeleting
+        If mIsLoadingComplete And e.Action = DataRowAction.Delete Then
+            mFileManager.FileEdited = True
+        End If
+    End Sub
 
-        If Not mIsLoadingComplete Then Exit Sub
+    Private Sub OrdinalTable_ColumnChanging(ByVal sender As Object, ByVal e As System.Data.DataColumnChangeEventArgs) Handles mOrdinalTable.ColumnChanging
+        If mIsLoadingComplete Then
+            Select Case e.Column.ColumnName
+                Case "OrdinalText"
+                    Dim ordinal As New OrdinalValue(e.Row)
 
-        If e.Action = DataRowAction.Delete Then
-            If Me.HasAssumedValue Then
+                    If TypeOf e.Row.Item(0) Is System.DBNull Then
+                        mIsLoadingComplete = False
+                        e.Row.Item(0) = mOrdinalTable.Rows.Count
+                        mIsLoadingComplete = True
+                    End If
 
-                Dim ordinalValue As New OrdinalValue(e.Row)
-                'Debug.Assert(TypeOf e.Row(1) Is Long)
-                'Debug.Assert(TypeOf Me.AssumedValue Is Integer)
+                    If TypeOf e.Row.Item(2) Is System.DBNull Then
+                        'add ordinal to ontology when new ordinal is added
+                        mIsLoadingComplete = False
+                        Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(CStr(e.ProposedValue))
+                        ordinal.InternalCode = term.Code
+                        e.Row.Item(1) = term.Text
+                        mIsLoadingComplete = True
+                    Else
+                        'update ontology with ordinal text value when ordinal is edited
+                        mFileManager.OntologyManager.SetText(CStr(e.ProposedValue), ordinal.InternalCode)
+                    End If
 
-                'If CLng(e.Row(1)) = CLng(Me.Constraint.AssumedValue) Then
-                If ordinalValue.Ordinal = CInt(Me.AssumedValue) Then
+                Case "Ordinal"
+                    If TypeOf e.Row.Item(2) Is System.DBNull Then
+                        mIsLoadingComplete = False
+                        Dim ordinal As New OrdinalValue(e.Row)
+                        Dim term As RmTerm = mFileManager.OntologyManager.AddTerm("new ordinal")
+                        ordinal.InternalCode = term.Code
+                        e.Row.Item(1) = term.Text
+                        mIsLoadingComplete = True
+                    End If
 
-                    Me.HasAssumedValue = False
-                    'Me.txtAssumedOrdinal.Text = "(none)"
-
-                    'TODO: update assumedOrdinal textbox
-                    Debug.Assert(False, "TODO: update assumedOrdinal textbox")
-                    OnAssumedValueChanged()
-                End If
-
-            End If
+                Case "OrdinalDescription"
+                    If TypeOf e.Row.Item(0) Is System.DBNull And TypeOf e.Row.Item(2) Is System.DBNull Then
+                        e.ProposedValue = System.DBNull.Value
+                    Else
+                        'update ontology with ordinal text value when ordinal is edited
+                        mFileManager.OntologyManager.SetDescription(CStr(e.ProposedValue), CStr(e.Row.Item(2)))
+                    End If
+            End Select
 
             mFileManager.FileEdited = True
         End If
-
-    End Sub
-
-
-    Private Sub OrdinalTable_ColumnChanging(ByVal sender As Object, ByVal e As System.Data.DataColumnChangeEventArgs) _
-            Handles mOrdinalTable.ColumnChanging
-
-        If Not mIsLoadingComplete Then Return
-
-        'If e.Column.Ordinal = 2 Then
-        Select Case e.Column.ColumnName
-            Case "OrdinalText"
-                Dim ordinal As New OrdinalValue(e.Row)
-
-                If TypeOf e.Row.Item(0) Is System.DBNull Then
-                    mIsLoadingComplete = False
-                    e.Row.Item(0) = mOrdinalTable.Rows.Count
-                    mIsLoadingComplete = True
-                End If
-                If TypeOf e.Row.Item(2) Is System.DBNull Then
-                    'add ordinal to ontology when new ordinal is added
-                    mIsLoadingComplete = False
-                    Dim a_Term As RmTerm = mFileManager.OntologyManager.AddTerm( _
-                            CStr(e.ProposedValue))
-                    ordinal.InternalCode = a_Term.Code
-                    e.Row.Item(1) = a_term.Text
-                    mIsLoadingComplete = True
-                Else
-                    'update ontology with ordinal text value when ordinal is edited
-                    mFileManager.OntologyManager.SetText(CStr(e.ProposedValue), _
-                            ordinal.InternalCode)
-                End If
-
-                'Added Sam Heard 2004-07-05
-            Case "Ordinal"
-                If TypeOf e.Row.Item(2) Is System.DBNull Then
-                    mIsLoadingComplete = False
-                    Dim ordinal As New OrdinalValue(e.Row)
-                    Dim a_Term As RmTerm = mFileManager.OntologyManager.AddTerm( _
-                                              "new ordinal")
-                    ordinal.InternalCode = a_term.Code
-                    e.Row.Item(1) = a_term.Text
-                    mIsLoadingComplete = True
-                End If
-
-            Case "OrdinalDescription"
-                If (TypeOf e.Row.Item(0) Is System.DBNull) And (TypeOf e.Row.Item(2) Is System.DBNull) Then
-                    e.ProposedValue = System.DBNull.Value
-                Else
-                    'update ontology with ordinal text value when ordinal is edited
-                    mFileManager.OntologyManager.SetDescription(CStr(e.ProposedValue), _
-                            CStr(e.Row.Item(2)))
-                End If
-
-
-        End Select
-
-        mFileManager.FileEdited = True
     End Sub
 
     Public Sub EndLoading()

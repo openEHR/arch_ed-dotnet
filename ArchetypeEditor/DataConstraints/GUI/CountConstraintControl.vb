@@ -18,7 +18,7 @@ Option Strict On
 
 Public Class CountConstraintControl : Inherits ConstraintControl
 
-    Public Event ChangeDisplay(ByVal sender As Object, ByVal HasMinOrMax As Boolean)
+    Public Event ChangeDisplay(ByVal sender As Object, ByVal hasMinOrMax As Boolean)
 
 #Region " Windows Form Designer generated code "
     Public Sub New()
@@ -53,22 +53,11 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     Friend WithEvents NumericAssumed As System.Windows.Forms.NumericUpDown
     Friend WithEvents numMaxValue As System.Windows.Forms.NumericUpDown
     Friend WithEvents numMinValue As System.Windows.Forms.NumericUpDown
-    Friend WithEvents ContextMaxMin As System.Windows.Forms.ContextMenu
-    Friend WithEvents MenuItem3 As System.Windows.Forms.MenuItem
-    Friend WithEvents Decimal_0 As System.Windows.Forms.MenuItem
-    Friend WithEvents Decimal_1 As System.Windows.Forms.MenuItem
-    Friend WithEvents Decimal_2 As System.Windows.Forms.MenuItem
-    Friend WithEvents Decimal_3 As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuItem4 As System.Windows.Forms.MenuItem
-    Friend WithEvents Increment_1 As System.Windows.Forms.MenuItem
-    Friend WithEvents Increment_10 As System.Windows.Forms.MenuItem
-    Friend WithEvents Increment_100 As System.Windows.Forms.MenuItem
-    Friend WithEvents Increment_1000 As System.Windows.Forms.MenuItem
     Friend WithEvents comboIncludeMin As System.Windows.Forms.ComboBox
     Friend WithEvents comboIncludeMax As System.Windows.Forms.ComboBox
     Friend WithEvents numPrecision As System.Windows.Forms.NumericUpDown
+    Friend WithEvents AssumedValueCheckBox As System.Windows.Forms.CheckBox
     Friend WithEvents chkDecimalPlaces As System.Windows.Forms.CheckBox
-    Friend WithEvents lblAssumedValue As System.Windows.Forms.Label
 
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.LabelQuantity = New System.Windows.Forms.Label
@@ -77,22 +66,11 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.NumericAssumed = New System.Windows.Forms.NumericUpDown
         Me.numMaxValue = New System.Windows.Forms.NumericUpDown
         Me.numMinValue = New System.Windows.Forms.NumericUpDown
-        Me.ContextMaxMin = New System.Windows.Forms.ContextMenu
-        Me.MenuItem3 = New System.Windows.Forms.MenuItem
-        Me.Decimal_0 = New System.Windows.Forms.MenuItem
-        Me.Decimal_1 = New System.Windows.Forms.MenuItem
-        Me.Decimal_2 = New System.Windows.Forms.MenuItem
-        Me.Decimal_3 = New System.Windows.Forms.MenuItem
-        Me.MenuItem4 = New System.Windows.Forms.MenuItem
-        Me.Increment_1 = New System.Windows.Forms.MenuItem
-        Me.Increment_10 = New System.Windows.Forms.MenuItem
-        Me.Increment_100 = New System.Windows.Forms.MenuItem
-        Me.Increment_1000 = New System.Windows.Forms.MenuItem
         Me.comboIncludeMin = New System.Windows.Forms.ComboBox
         Me.comboIncludeMax = New System.Windows.Forms.ComboBox
-        Me.lblAssumedValue = New System.Windows.Forms.Label
         Me.numPrecision = New System.Windows.Forms.NumericUpDown
         Me.chkDecimalPlaces = New System.Windows.Forms.CheckBox
+        Me.AssumedValueCheckBox = New System.Windows.Forms.CheckBox
         CType(Me.NumericAssumed, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numMaxValue, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numMinValue, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -134,6 +112,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.NumericAssumed.TabIndex = 10
         Me.NumericAssumed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.NumericAssumed.ThousandsSeparator = True
+        Me.NumericAssumed.Visible = False
         '
         'numMaxValue
         '
@@ -159,64 +138,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numMinValue.ThousandsSeparator = True
         Me.numMinValue.Visible = False
         '
-        'ContextMaxMin
-        '
-        Me.ContextMaxMin.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItem3, Me.MenuItem4})
-        '
-        'MenuItem3
-        '
-        Me.MenuItem3.Index = 0
-        Me.MenuItem3.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.Decimal_0, Me.Decimal_1, Me.Decimal_2, Me.Decimal_3})
-        Me.MenuItem3.Text = "Decimal places..."
-        '
-        'Decimal_0
-        '
-        Me.Decimal_0.Checked = True
-        Me.Decimal_0.Index = 0
-        Me.Decimal_0.Text = "# (0)"
-        '
-        'Decimal_1
-        '
-        Me.Decimal_1.Index = 1
-        Me.Decimal_1.Text = "#.# (1)"
-        '
-        'Decimal_2
-        '
-        Me.Decimal_2.Index = 2
-        Me.Decimal_2.Text = "#.## (2)"
-        '
-        'Decimal_3
-        '
-        Me.Decimal_3.Index = 3
-        Me.Decimal_3.Text = "#.### (3)"
-        '
-        'MenuItem4
-        '
-        Me.MenuItem4.Index = 1
-        Me.MenuItem4.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.Increment_1, Me.Increment_10, Me.Increment_100, Me.Increment_1000})
-        Me.MenuItem4.Text = "Increment"
-        '
-        'Increment_1
-        '
-        Me.Increment_1.Checked = True
-        Me.Increment_1.Index = 0
-        Me.Increment_1.Text = "1"
-        '
-        'Increment_10
-        '
-        Me.Increment_10.Index = 1
-        Me.Increment_10.Text = "10"
-        '
-        'Increment_100
-        '
-        Me.Increment_100.Index = 2
-        Me.Increment_100.Text = "100"
-        '
-        'Increment_1000
-        '
-        Me.Increment_1000.Index = 3
-        Me.Increment_1000.Text = "1000"
-        '
         'comboIncludeMin
         '
         Me.comboIncludeMin.Items.AddRange(New Object() {">=", ">"})
@@ -236,15 +157,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.comboIncludeMax.TabIndex = 7
         Me.comboIncludeMax.Text = "<="
         Me.comboIncludeMax.Visible = False
-        '
-        'lblAssumedValue
-        '
-        Me.lblAssumedValue.Location = New System.Drawing.Point(78, 80)
-        Me.lblAssumedValue.Name = "lblAssumedValue"
-        Me.lblAssumedValue.Size = New System.Drawing.Size(184, 24)
-        Me.lblAssumedValue.TabIndex = 9
-        Me.lblAssumedValue.Text = "Assumed value:"
-        Me.lblAssumedValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'numPrecision
         '
@@ -270,11 +182,19 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.chkDecimalPlaces.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.chkDecimalPlaces.UseVisualStyleBackColor = True
         '
+        'AssumedValueCheckBox
+        '
+        Me.AssumedValueCheckBox.Location = New System.Drawing.Point(20, 83)
+        Me.AssumedValueCheckBox.Name = "AssumedValueCheckBox"
+        Me.AssumedValueCheckBox.Size = New System.Drawing.Size(184, 24)
+        Me.AssumedValueCheckBox.TabIndex = 9
+        Me.AssumedValueCheckBox.Text = "Assumed value"
+        '
         'CountConstraintControl
         '
+        Me.Controls.Add(Me.AssumedValueCheckBox)
         Me.Controls.Add(Me.chkDecimalPlaces)
         Me.Controls.Add(Me.numPrecision)
-        Me.Controls.Add(Me.lblAssumedValue)
         Me.Controls.Add(Me.comboIncludeMax)
         Me.Controls.Add(Me.comboIncludeMin)
         Me.Controls.Add(Me.LabelQuantity)
@@ -296,28 +216,33 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
 #End Region
 
-    Protected Shadows ReadOnly Property Constraint() As Constraint_Count
+    Protected ReadOnly Property Constraint() As Constraint_Count
         Get
-            Return CType(MyBase.Constraint, Constraint_Count)
+            Return CType(mConstraint, Constraint_Count)
         End Get
     End Property
 
     Public Sub Translate()
         cbMinValue.Text = Filemanager.GetOpenEhrTerm(131, cbMinValue.Text)
         cbMaxValue.Text = Filemanager.GetOpenEhrTerm(132, cbMaxValue.Text)
-        lblAssumedValue.Text = Filemanager.GetOpenEhrTerm(158, lblAssumedValue.Text)
+        AssumedValueCheckBox.Text = Filemanager.GetOpenEhrTerm(158, AssumedValueCheckBox.Text)
         chkDecimalPlaces.Text = Filemanager.GetOpenEhrTerm(649, chkDecimalPlaces.Text)
+    End Sub
+
+    Public Sub SetFileManager(ByVal value As FileManagerLocal)
+        mFileManager = value
     End Sub
 
     Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
         ' set constraint values on control
         IsIntegral = Not (TypeOf Constraint Is Constraint_Real Or TypeOf Constraint Is Constraint_Currency)
         Dim realConstraint As Constraint_Real = TryCast(Constraint, Constraint_Real)
+        cbMaxValue.Checked = Constraint.HasMaximum
+        cbMinValue.Checked = Constraint.HasMinimum
+        AssumedValueCheckBox.Checked = Constraint.HasAssumedValue
 
         If Constraint.HasMaximum Then
-            cbMaxValue.Checked = True
-
-            If Not realConstraint Is Nothing Then
+            If realConstraint IsNot Nothing Then
                 Dim max As Single = realConstraint.MaximumRealValue
 
                 If max > numMaxValue.Maximum Then
@@ -336,14 +261,10 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             Else
                 comboIncludeMax.SelectedIndex = 1
             End If
-        Else
-            cbMaxValue.Checked = False
         End If
 
         If Constraint.HasMinimum Then
-            cbMinValue.Checked = True
-
-            If Not realConstraint Is Nothing Then
+            If realConstraint IsNot Nothing Then
                 Dim min As Single = realConstraint.MinimumRealValue
 
                 If min > numMinValue.Maximum Then
@@ -362,15 +283,11 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             Else
                 comboIncludeMin.SelectedIndex = 1
             End If
-        Else
-            cbMinValue.Checked = False
         End If
 
-        NumericAssumed.Minimum = Decimal.MinValue
-        NumericAssumed.Maximum = Decimal.MaxValue
-        NumericAssumed.Value = 0
-
         If Constraint.HasAssumedValue Then
+            NumericAssumed.Minimum = Decimal.MinValue
+            NumericAssumed.Maximum = Decimal.MaxValue
             NumericAssumed.Value = CType(Constraint.AssumedValue, Decimal)
         End If
 
@@ -532,7 +449,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
-    Private Sub Decimal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Decimal_0.Click, Decimal_1.Click, Decimal_2.Click, Decimal_3.Click
+    Private Sub Decimal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         If TypeOf ActiveControl Is System.Windows.Forms.NumericUpDown Then
             Dim i As Integer
             Dim ctrl As System.Windows.Forms.MenuItem
@@ -582,6 +499,18 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
+    Private Sub AssumedValueCheckBox_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AssumedValueCheckBox.CheckedChanged
+        NumericAssumed.Visible = AssumedValueCheckBox.Checked
+
+        If Not IsLoading Then
+            Constraint.HasAssumedValue = AssumedValueCheckBox.Checked
+            SetControlValues(False)
+            mFileManager.FileEdited = True
+        End If
+
+        RaiseEvent ChangeDisplay(sender, cbMinValue.Checked Or cbMaxValue.Checked)
+    End Sub
+
     Private Sub NumericAssumed_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles NumericAssumed.Validating
         If Not IsLoading Then
             If NumericAssumed.Text = "" Then
@@ -596,29 +525,31 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             Dim assumedValue As Decimal = 0
             Decimal.TryParse(NumericAssumed.Text, assumedValue)
             Constraint.AssumedValue = assumedValue
-            Constraint.HasAssumedValue = True
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub numPrecision_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numPrecision.ValueChanged
-        Dim precision As Integer = CInt(numPrecision.Value)
-
-        If precision > 2 Then
-            numMaxValue.DecimalPlaces = 3
-            numMinValue.DecimalPlaces = 3
-            NumericAssumed.DecimalPlaces = 3
-            numMinValue.Increment = CDec(0.001)
-        Else
-            numMaxValue.DecimalPlaces = precision
-            numMinValue.DecimalPlaces = precision
-            NumericAssumed.DecimalPlaces = precision
-            Dim d As Decimal = CDec(Math.Pow(10, -precision)) ' set the increment to the power of the precision
-            numMinValue.Increment = d
-            numMaxValue.Increment = d
-        End If
-
         If Not IsLoading Then
+            Dim precision As Integer = CInt(numPrecision.Value)
+
+            If precision > 2 Or Not chkDecimalPlaces.Checked Then
+                numMaxValue.DecimalPlaces = 3
+                numMinValue.DecimalPlaces = 3
+                NumericAssumed.DecimalPlaces = 3
+                numMaxValue.Increment = CDec(0.001)
+                numMinValue.Increment = CDec(0.001)
+                NumericAssumed.Increment = CDec(0.001)
+            Else
+                numMaxValue.DecimalPlaces = precision
+                numMinValue.DecimalPlaces = precision
+                NumericAssumed.DecimalPlaces = precision
+                Dim d As Decimal = CDec(Math.Pow(10, -precision)) ' set the increment to the power of the precision
+                numMaxValue.Increment = d
+                numMinValue.Increment = d
+                NumericAssumed.Increment = d
+            End If
+
             If precision > -1 AndAlso CType(Constraint, Constraint_Real).Precision > precision Then
                 numMaxValue.Value = CDec(Math.Round(CDbl(numMaxValue.Value), precision))
                 numMinValue.Value = CDec(Math.Round(CDbl(numMinValue.Value), precision))
@@ -636,17 +567,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
         If Not IsLoading Then
             mFileManager.FileEdited = True
-
-            If chkDecimalPlaces.Checked Then
-                numPrecision_ValueChanged(sender, e)
-            Else
-                CType(Constraint, Constraint_Real).Precision = -1
-                numMaxValue.DecimalPlaces = 3
-                numMinValue.DecimalPlaces = 3
-                NumericAssumed.DecimalPlaces = 3
-                numMinValue.Increment = CDec(0.001)
-            End If
-
+            numPrecision_ValueChanged(sender, e)
             mFileManager.FileEdited = True
         End If
     End Sub

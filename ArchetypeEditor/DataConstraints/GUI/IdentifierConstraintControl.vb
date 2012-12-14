@@ -156,55 +156,55 @@ Public Class IdentifierConstraintControl : Inherits ConstraintControl
 
 #End Region
 
-    Private Shadows ReadOnly Property Constraint() As Constraint_Identifier
+    Protected ReadOnly Property Constraint() As Constraint_Identifier
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Identifier)
-            Return CType(MyBase.Constraint, Constraint_Identifier)
+            Return CType(mConstraint, Constraint_Identifier)
         End Get
     End Property
 
     Public Sub Translate()
-        Me.LabelTop.Text = Filemanager.GetOpenEhrTerm(663, Me.LabelTop.Text)
-        Me.lblIssuer.Text = Filemanager.GetOpenEhrTerm(671, Me.lblIssuer.Text)
-        Me.lblType.Text = Filemanager.GetOpenEhrTerm(443, Me.lblType.Text)
-        Me.lblAssigner.Text = Filemanager.GetOpenEhrTerm(670, Me.lblAssigner.Text)
+        LabelTop.Text = Filemanager.GetOpenEhrTerm(663, LabelTop.Text)
+        lblIssuer.Text = Filemanager.GetOpenEhrTerm(671, lblIssuer.Text)
+        lblType.Text = Filemanager.GetOpenEhrTerm(443, lblType.Text)
+        lblAssigner.Text = Filemanager.GetOpenEhrTerm(670, lblAssigner.Text)
     End Sub
 
     Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         ' set constraint values on control
-        MyBase.IsLoading = True
+        IsLoading = True
 
         If Constraint.IssuerRegex <> Nothing Then
-            Me.txtIssuer.Text = Constraint.IssuerRegex
+            txtIssuer.Text = Constraint.IssuerRegex
         End If
 
         If Constraint.TypeRegex <> Nothing Then
-            Me.txtType.Text = Constraint.TypeRegex
+            txtType.Text = Constraint.TypeRegex
         End If
 
         If Constraint.IDRegex <> Nothing Then
-            Me.txtId.Text = Constraint.IDRegex
+            txtId.Text = Constraint.IDRegex
         End If
-
-
     End Sub
 
     Private Sub txtIssuer_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtIssuer.TextChanged
-        If MyBase.IsLoading Then Return
-        Constraint.IssuerRegex = txtIssuer.Text
-        mFileManager.FileEdited = True
+        If Not IsLoading Then
+            Constraint.IssuerRegex = txtIssuer.Text
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub txtType_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtType.TextChanged
-        If MyBase.IsLoading Then Return
-        Constraint.TypeRegex = txtType.Text
-        mFileManager.FileEdited = True
+        If Not IsLoading Then
+            Constraint.TypeRegex = txtType.Text
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub txtId_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtId.TextChanged
-        If MyBase.IsLoading Then Return
-        Constraint.IDRegex = txtId.Text
-        mFileManager.FileEdited = True
+        If Not IsLoading Then
+            Constraint.IDRegex = txtId.Text
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
 End Class

@@ -14,7 +14,7 @@
 
 Option Strict On
 
-Class Constraint_Choice
+Public Class Constraint_Choice
     Inherits Constraint
 
     Dim col_Constraints As New ConstraintCollection

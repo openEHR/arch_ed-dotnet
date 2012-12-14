@@ -645,24 +645,19 @@ Public Class ArchetypeNodeConstraintControl
                 mOccurrences.SetUnitary = True
 
             Case StructureType.Element, StructureType.Reference
-                Dim archetypeElem As ArchetypeElement = CType(node, ArchetypeElement)
-                SetUpNullFlavours(archetypeElem)
+                Dim element As ArchetypeElement = CType(node, ArchetypeElement)
+                SetUpNullFlavours(element)
 
-                Select Case archetypeElem.Constraint.Kind
+                Select Case element.Constraint.Kind
                     Case ConstraintKind.Any
                         labelAny.Text = AE_Constants.Instance.Any
                         labelAny.Visible = True
                     Case Else
-                        If archetypeElem.Constraint.Kind = ConstraintKind.Text AndAlso CType(archetypeElem.Constraint, Constraint_Text).TypeOfTextConstraint = TextConstraintType.Terminology Then
-                            gbValueSets.Visible = True
-                        Else
-                            gbValueSets.Visible = False
-                        End If
-
-                        mConstraintControl = ConstraintControl.CreateConstraintControl(archetypeElem.Constraint.Kind, mFileManager)
+                        gbValueSets.Visible = (element.Constraint.Kind = ConstraintKind.Text AndAlso CType(element.Constraint, Constraint_Text).TypeOfTextConstraint = TextConstraintType.Terminology)
+                        mConstraintControl = ConstraintControl.CreateConstraintControl(element.Constraint.Kind, mFileManager)
                         PanelDataConstraint.Controls.Add(mConstraintControl)
                         mConstraintControl.Dock = DockStyle.Fill
-                        mConstraintControl.ShowElement(isState, archetypeElem)
+                        mConstraintControl.ShowConstraint(isState, element.Constraint)
                 End Select
 
             Case StructureType.Slot

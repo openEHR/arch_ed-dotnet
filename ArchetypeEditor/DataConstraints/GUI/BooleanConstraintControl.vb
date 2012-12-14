@@ -45,7 +45,7 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         If Main.Instance.DefaultLanguageCode <> "en" Then
             LabelTrueFalse.Text = Filemanager.GetOpenEhrTerm(157, Me.LabelTrueFalse.Text)
             LabelTrueFalseDefault.Text = Filemanager.GetOpenEhrTerm(600, Me.LabelTrueFalseDefault.Text)
-            gbAssummedValue.Text = Filemanager.GetOpenEhrTerm(158, Me.gbAssummedValue.Text)
+            AssumedValueCheckBox.Text = Filemanager.GetOpenEhrTerm(158, AssumedValueCheckBox.Text)
         End If
     End Sub
 
@@ -55,19 +55,19 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
     'Do not modify it using the code editor.
     'Friend WithEvents PanelBoolean As System.Windows.Forms.Panel
     Friend WithEvents LabelTrueFalseDefault As System.Windows.Forms.Label
-    Friend WithEvents listBoolean As System.Windows.Forms.ListBox
+    Friend WithEvents AssumedValueListBox As System.Windows.Forms.ListBox
     Friend WithEvents LabelTrueFalse As System.Windows.Forms.Label
     Friend WithEvents gbAssummedValue As System.Windows.Forms.GroupBox
     Friend WithEvents cbTrue As System.Windows.Forms.CheckBox
+    Friend WithEvents AssumedValueCheckBox As System.Windows.Forms.CheckBox
     Friend WithEvents cbFalse As System.Windows.Forms.CheckBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.LabelTrueFalseDefault = New System.Windows.Forms.Label
-        Me.listBoolean = New System.Windows.Forms.ListBox
+        Me.AssumedValueListBox = New System.Windows.Forms.ListBox
         Me.LabelTrueFalse = New System.Windows.Forms.Label
-        Me.gbAssummedValue = New System.Windows.Forms.GroupBox
         Me.cbTrue = New System.Windows.Forms.CheckBox
         Me.cbFalse = New System.Windows.Forms.CheckBox
-        Me.gbAssummedValue.SuspendLayout()
+        Me.AssumedValueCheckBox = New System.Windows.Forms.CheckBox
         Me.SuspendLayout()
         '
         'LabelTrueFalseDefault
@@ -79,12 +79,13 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         Me.LabelTrueFalseDefault.Text = "Allowed values:"
         Me.LabelTrueFalseDefault.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'listBoolean
+        'AssumedValueListBox
         '
-        Me.listBoolean.Location = New System.Drawing.Point(72, 24)
-        Me.listBoolean.Name = "listBoolean"
-        Me.listBoolean.Size = New System.Drawing.Size(72, 43)
-        Me.listBoolean.TabIndex = 1
+        Me.AssumedValueListBox.Location = New System.Drawing.Point(238, 98)
+        Me.AssumedValueListBox.Name = "AssumedValueListBox"
+        Me.AssumedValueListBox.Size = New System.Drawing.Size(118, 43)
+        Me.AssumedValueListBox.TabIndex = 5
+        Me.AssumedValueListBox.Visible = False
         '
         'LabelTrueFalse
         '
@@ -95,21 +96,11 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         Me.LabelTrueFalse.TabIndex = 0
         Me.LabelTrueFalse.Text = "True/False"
         '
-        'gbAssummedValue
-        '
-        Me.gbAssummedValue.Controls.Add(Me.listBoolean)
-        Me.gbAssummedValue.Location = New System.Drawing.Point(56, 88)
-        Me.gbAssummedValue.Name = "gbAssummedValue"
-        Me.gbAssummedValue.Size = New System.Drawing.Size(160, 80)
-        Me.gbAssummedValue.TabIndex = 4
-        Me.gbAssummedValue.TabStop = False
-        Me.gbAssummedValue.Text = "Assumed value"
-        '
         'cbTrue
         '
         Me.cbTrue.Checked = True
         Me.cbTrue.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.cbTrue.Location = New System.Drawing.Point(152, 32)
+        Me.cbTrue.Location = New System.Drawing.Point(138, 32)
         Me.cbTrue.Name = "cbTrue"
         Me.cbTrue.Size = New System.Drawing.Size(72, 24)
         Me.cbTrue.TabIndex = 2
@@ -119,37 +110,43 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         '
         Me.cbFalse.Checked = True
         Me.cbFalse.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.cbFalse.Location = New System.Drawing.Point(152, 56)
+        Me.cbFalse.Location = New System.Drawing.Point(138, 56)
         Me.cbFalse.Name = "cbFalse"
         Me.cbFalse.Size = New System.Drawing.Size(72, 24)
         Me.cbFalse.TabIndex = 3
         Me.cbFalse.Text = "False"
         '
+        'AssumedValueCheckBox
+        '
+        Me.AssumedValueCheckBox.Location = New System.Drawing.Point(48, 98)
+        Me.AssumedValueCheckBox.Name = "AssumedValueCheckBox"
+        Me.AssumedValueCheckBox.Size = New System.Drawing.Size(184, 24)
+        Me.AssumedValueCheckBox.TabIndex = 4
+        Me.AssumedValueCheckBox.Text = "Assumed value"
+        '
         'BooleanConstraintControl
         '
+        Me.Controls.Add(Me.AssumedValueCheckBox)
         Me.Controls.Add(Me.cbFalse)
         Me.Controls.Add(Me.cbTrue)
-        Me.Controls.Add(Me.gbAssummedValue)
         Me.Controls.Add(Me.LabelTrueFalseDefault)
         Me.Controls.Add(Me.LabelTrueFalse)
+        Me.Controls.Add(Me.AssumedValueListBox)
         Me.Name = "BooleanConstraintControl"
-        Me.Size = New System.Drawing.Size(232, 184)
-        Me.gbAssummedValue.ResumeLayout(False)
+        Me.Size = New System.Drawing.Size(375, 184)
         Me.ResumeLayout(False)
 
     End Sub
 
 #End Region
 
-    Private Shadows ReadOnly Property Constraint() As Constraint_Boolean
+    Protected ReadOnly Property Constraint() As Constraint_Boolean
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Boolean)
-
-            Return CType(MyBase.Constraint, Constraint_Boolean)
+            Return CType(mConstraint, Constraint_Boolean)
         End Get
     End Property
 
-    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
+    Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
         cbFalse.Text = AE_Constants.Instance.False_
         cbTrue.Text = AE_Constants.Instance.True_
 
@@ -164,22 +161,54 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
             cbTrue.Checked = False
         End If
 
-        gbAssummedValue.Visible = True
+        AssumedValueCheckBox.Checked = Constraint.HasAssumedValue
 
         If Constraint.HasAssumedValue Then
-            If Constraint.AssumedValue Then
-                listBoolean.SelectedIndex = listBoolean.Items.IndexOf(AE_Constants.Instance.True_)
+            If AssumedValueListBox.Items.Contains(AE_Constants.Instance.True_) Then
+                If Not cbTrue.Checked Then
+                    AssumedValueListBox.Items.Remove(AE_Constants.Instance.True_)
+                End If
             Else
-                listBoolean.SelectedIndex = listBoolean.Items.IndexOf(AE_Constants.Instance.False_)
+                If cbTrue.Checked Then
+                    AssumedValueListBox.Items.Add(AE_Constants.Instance.True_)
+                End If
+            End If
+
+            If AssumedValueListBox.Items.Contains(AE_Constants.Instance.False_) Then
+                If Not cbFalse.Checked Then
+                    AssumedValueListBox.Items.Remove(AE_Constants.Instance.False_)
+                End If
+            Else
+                If cbFalse.Checked Then
+                    AssumedValueListBox.Items.Add(AE_Constants.Instance.False_)
+                End If
+            End If
+
+            If AssumedValueListBox.Items.Count = 1 Then
+                AssumedValueListBox.SelectedIndex = 0
+            ElseIf Constraint.AssumedValue Then
+                AssumedValueListBox.SelectedIndex = AssumedValueListBox.Items.IndexOf(AE_Constants.Instance.True_)
+            Else
+                AssumedValueListBox.SelectedIndex = AssumedValueListBox.Items.IndexOf(AE_Constants.Instance.False_)
             End If
         End If
     End Sub
 
-    Private Sub listBoolean_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listBoolean.SelectedIndexChanged
-        If Not MyBase.IsLoading AndAlso listBoolean.SelectedIndex <> -1 Then
-            Constraint.hasAssumedValue = True
+    Private Sub AssumedValueCheckBox_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AssumedValueCheckBox.CheckedChanged
+        AssumedValueListBox.Visible = AssumedValueCheckBox.Checked
 
-            Select Case listBoolean.SelectedItem.ToString
+        If Not IsLoading Then
+            Constraint.HasAssumedValue = AssumedValueCheckBox.Checked
+            SetControlValues(False)
+            mFileManager.FileEdited = True
+        End If
+    End Sub
+
+    Private Sub AssumedValueListBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AssumedValueListBox.SelectedIndexChanged
+        If Not MyBase.IsLoading AndAlso AssumedValueListBox.SelectedIndex <> -1 Then
+            Constraint.HasAssumedValue = True
+
+            Select Case AssumedValueListBox.SelectedItem.ToString
                 Case AE_Constants.Instance.True_
                     Constraint.AssumedValue = True
                 Case AE_Constants.Instance.False_ ' false
@@ -201,25 +230,13 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
                     Constraint.AllowTrueOnly()
                 End If
             Else
-                If Not cbFalse.Checked Then
-                    ' something has to be allowed
-                    cbFalse.Checked = True
-                Else
-                    Constraint.AllowFalseOnly()
-                End If
+                ' something has to be allowed
+                cbFalse.Checked = True
+                Constraint.AllowFalseOnly()
             End If
 
+            SetControlValues(False)
             mFileManager.FileEdited = True
-        End If
-
-        If listBoolean.Items.Contains(AE_Constants.Instance.True_) Then
-            If Not cbTrue.Checked Then
-                listBoolean.Items.Remove(AE_Constants.Instance.True_)
-            End If
-        Else
-            If cbTrue.Checked Then
-                listBoolean.Items.Add(AE_Constants.Instance.True_)
-            End If
         End If
     End Sub
 
@@ -232,25 +249,13 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
                     Constraint.AllowFalseOnly()
                 End If
             Else
-                If Not cbTrue.Checked Then
-                    ' something has to be allowed
-                    cbTrue.Checked = True
-                Else
-                    Constraint.AllowTrueOnly()
-                End If
+                ' something has to be allowed
+                cbTrue.Checked = True
+                Constraint.AllowTrueOnly()
             End If
 
+            SetControlValues(False)
             mFileManager.FileEdited = True
-        End If
-
-        If listBoolean.Items.Contains(AE_Constants.Instance.False_) Then
-            If Not cbFalse.Checked Then
-                listBoolean.Items.Remove(AE_Constants.Instance.False_)
-            End If
-        Else
-            If cbFalse.Checked Then
-                listBoolean.Items.Add(AE_Constants.Instance.False_)
-            End If
         End If
     End Sub
 

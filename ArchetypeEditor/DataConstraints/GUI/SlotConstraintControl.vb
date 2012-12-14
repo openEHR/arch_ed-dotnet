@@ -379,10 +379,9 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
 
 #End Region
 
-    Private Shadows ReadOnly Property Constraint() As Constraint_Slot
+    Protected ReadOnly Property Constraint() As Constraint_Slot
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Slot)
-            Return CType(MyBase.Constraint, Constraint_Slot)
+            Return CType(mConstraint, Constraint_Slot)
         End Get
     End Property
 
@@ -451,19 +450,19 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             Return
         End If
 
-        Dim do_remove As Boolean = False
+        Dim doRemove As Boolean = False
 
         Select Case list.SelectedItems.Count
             Case 0
                 ' do nothing
             Case 1
-                do_remove = (MessageBox.Show(AE_Constants.Instance.Remove & " " & CStr(list.SelectedItems(0)), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK)
+                doRemove = (MessageBox.Show(AE_Constants.Instance.Remove & " " & CStr(list.SelectedItems(0)), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK)
             Case Is > 1
-                do_remove = (MessageBox.Show(AE_Constants.Instance.Remove & " " & list.SelectedItems.Count.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK)
+                doRemove = (MessageBox.Show(AE_Constants.Instance.Remove & " " & list.SelectedItems.Count.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK)
 
         End Select
 
-        If do_remove Then
+        If doRemove Then
             Dim s(list.SelectedItems.Count - 1) As String
             list.SelectedItems.CopyTo(s, 0)
 
@@ -477,16 +476,18 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub butInclude_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butInclude.Click
-        If Me.chkIncludeAll.Checked Then
-            Me.chkIncludeAll.Checked = False
+        If chkIncludeAll.Checked Then
+            chkIncludeAll.Checked = False
         End If
+
         AddSlot(AvailableArchetypesListBox.SelectedItems, listInclude, listExclude, Constraint.Include, Constraint.Exclude)
     End Sub
 
     Private Sub butExclude_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butExclude.Click
-        If Me.chkExcludeAll.Checked Then
-            Me.chkExcludeAll.Checked = False
+        If chkExcludeAll.Checked Then
+            chkExcludeAll.Checked = False
         End If
+
         AddSlot(AvailableArchetypesListBox.SelectedItems, listExclude, listInclude, Constraint.Exclude, Constraint.Include)
     End Sub
 
