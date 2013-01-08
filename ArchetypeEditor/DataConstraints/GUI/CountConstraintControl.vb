@@ -449,28 +449,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
-    Private Sub Decimal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        If TypeOf ActiveControl Is System.Windows.Forms.NumericUpDown Then
-            Dim i As Integer
-            Dim ctrl As System.Windows.Forms.MenuItem
-
-            Try
-                ctrl = CType(sender, System.Windows.Forms.MenuItem)
-            Catch
-                MessageBox.Show(Err.Description, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Exit Sub
-            End Try
-
-            CType(ActiveControl, NumericUpDown).DecimalPlaces = ctrl.Index
-
-            For i = 0 To ctrl.Parent.MenuItems.Count - 1
-                ctrl.Parent.MenuItems(i).Checked = False
-            Next
-
-            ctrl.Checked = True
-        End If
-    End Sub
-
     Private Sub comboIncludeMin_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboIncludeMin.SelectedIndexChanged
         If Not IsLoading Then
             If comboIncludeMin.SelectedIndex = 1 Then
@@ -530,26 +508,26 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub numPrecision_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numPrecision.ValueChanged
+        Dim precision As Integer = CInt(numPrecision.Value)
+
+        If precision > 2 Or Not chkDecimalPlaces.Checked Then
+            numMaxValue.DecimalPlaces = 3
+            numMinValue.DecimalPlaces = 3
+            NumericAssumed.DecimalPlaces = 3
+            numMaxValue.Increment = CDec(0.001)
+            numMinValue.Increment = CDec(0.001)
+            NumericAssumed.Increment = CDec(0.001)
+        Else
+            numMaxValue.DecimalPlaces = precision
+            numMinValue.DecimalPlaces = precision
+            NumericAssumed.DecimalPlaces = precision
+            Dim d As Decimal = CDec(Math.Pow(10, -precision)) ' set the increment to the power of the precision
+            numMaxValue.Increment = d
+            numMinValue.Increment = d
+            NumericAssumed.Increment = d
+        End If
+
         If Not IsLoading Then
-            Dim precision As Integer = CInt(numPrecision.Value)
-
-            If precision > 2 Or Not chkDecimalPlaces.Checked Then
-                numMaxValue.DecimalPlaces = 3
-                numMinValue.DecimalPlaces = 3
-                NumericAssumed.DecimalPlaces = 3
-                numMaxValue.Increment = CDec(0.001)
-                numMinValue.Increment = CDec(0.001)
-                NumericAssumed.Increment = CDec(0.001)
-            Else
-                numMaxValue.DecimalPlaces = precision
-                numMinValue.DecimalPlaces = precision
-                NumericAssumed.DecimalPlaces = precision
-                Dim d As Decimal = CDec(Math.Pow(10, -precision)) ' set the increment to the power of the precision
-                numMaxValue.Increment = d
-                numMinValue.Increment = d
-                NumericAssumed.Increment = d
-            End If
-
             If precision > -1 AndAlso CType(Constraint, Constraint_Real).Precision > precision Then
                 numMaxValue.Value = CDec(Math.Round(CDbl(numMaxValue.Value), precision))
                 numMinValue.Value = CDec(Math.Round(CDbl(numMinValue.Value), precision))
