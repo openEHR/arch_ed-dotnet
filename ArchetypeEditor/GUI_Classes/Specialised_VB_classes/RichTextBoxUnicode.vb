@@ -26,7 +26,7 @@ Public Class RichTextBoxUnicode
             Else
                 Dim i As UInt32 = Convert.ToUInt32(c)
 
-                If i <= &H7F Then
+                If &H20 <= i And i < &H7F Then
                     result.Append(c)
                 Else
                     result.Append("\u" + i.ToString + "?")
