@@ -78,6 +78,7 @@
   <Property id="79" Text="Electrical Potential Time" openEHR="655" />
   <Property id="80" Text="Time Fraction" openEHR="670" />
   <Property id="81" Text="Refractive power" openEHR="685" />
+  <Property id="82" Text="Rate of Change - Pressure" openEHR="708" />
   <Unit property_id="0" Text="m" name="meter" conversion="1" primary="true" />
   <Unit property_id="0" Text="cm" name="centimeter" conversion="0.01" primary="false" />
   <Unit property_id="0" Text="µm" name="micrometer" conversion="1" coefficient="-6" primary="false" />
@@ -555,4 +556,6 @@
   <Unit property_id="56" Text="10^6" conversion="1" coefficient="6" primary="false" />
   <Unit property_id="56" Text="10^9" conversion="1" coefficient="9" primary="false" />
   <Unit property_id="56" Text="10^12" conversion="1" coefficient="12" primary="false" />
+  <Unit property_id="82" Text="Pa/s" name="Pascals per second" conversion="1" primary="false" />
+  <Unit property_id="82" Text="daPa/s" name="decaPascals per second" primary="false" />
 </PropertyUnits>
