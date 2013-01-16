@@ -5818,6 +5818,645 @@
   <Concept Language="ja" ConceptID="705" Rubric="現在担当している" />
   <Concept Language="ja" ConceptID="706" Rubric="Archetype IDのコンセプト部分を入力してください。" />
   <Concept Language="ja" ConceptID="707" Rubric="特殊化された" />
+  <Concept Language="ru" ConceptID="0" Rubric="cам" />
+  <Concept Language="ru" ConceptID="3" Rubric="плод" />
+  <Concept Language="ru" ConceptID="6" Rubric="донор" />
+  <Concept Language="ru" ConceptID="7" Rubric="бабушка по материнской линии" />
+  <Concept Language="ru" ConceptID="8" Rubric="дедушка по материнской линии" />
+  <Concept Language="ru" ConceptID="9" Rubric="отец" />
+  <Concept Language="ru" ConceptID="10" Rubric="мать" />
+  <Concept Language="ru" ConceptID="11" Rubric="Разрешить все" />
+  <Concept Language="ru" ConceptID="12" Rubric="Дата и время" />
+  <Concept Language="ru" ConceptID="13" Rubric="Дата и неполное время" />
+  <Concept Language="ru" ConceptID="14" Rubric="Только дата" />
+  <Concept Language="ru" ConceptID="15" Rubric="Полная дата" />
+  <Concept Language="ru" ConceptID="16" Rubric="Неполное время" />
+  <Concept Language="ru" ConceptID="17" Rubric="Неполная дата с указанием месяца" />
+  <Concept Language="ru" ConceptID="18" Rubric="Только время" />
+  <Concept Language="ru" ConceptID="19" Rubric="Полное время чч: мм: сс" />
+  <Concept Language="ru" ConceptID="20" Rubric="Неполное время" />
+  <Concept Language="ru" ConceptID="21" Rubric="Неполное время с указанием минут" />
+  <Concept Language="ru" ConceptID="22" Rubric="супруг(а)" />
+  <Concept Language="ru" ConceptID="23" Rubric="брат" />
+  <Concept Language="ru" ConceptID="24" Rubric="сестра" />
+  <Concept Language="ru" ConceptID="25" Rubric="сводный брат" />
+  <Concept Language="ru" ConceptID="26" Rubric="сводная сестра" />
+  <Concept Language="ru" ConceptID="27" Rubric="родной брат (сестра)" />
+  <Concept Language="ru" ConceptID="28" Rubric="ребенок" />
+  <Concept Language="ru" ConceptID="29" Rubric="дочь" />
+  <Concept Language="ru" ConceptID="31" Rubric="сын" />
+  <Concept Language="ru" ConceptID="32" Rubric="Тематика данных" />
+  <Concept Language="ru" ConceptID="33" Rubric="Ограничения по дате или времени" />
+  <Concept Language="ru" ConceptID="34" Rubric="Никто" />
+  <Concept Language="ru" ConceptID="35" Rubric="Показать все" />
+  <Concept Language="ru" ConceptID="36" Rubric="дед по отцовской линии" />
+  <Concept Language="ru" ConceptID="37" Rubric="бабушка по отцовской линии" />
+  <Concept Language="ru" ConceptID="38" Rubric="дядя по материнской линии" />
+  <Concept Language="ru" ConceptID="39" Rubric="тетя по материнской линии" />
+  <Concept Language="ru" ConceptID="40" Rubric="дядя по отцовской линии" />
+  <Concept Language="ru" ConceptID="41" Rubric="тетя по отцовской линии" />
+  <Concept Language="ru" ConceptID="42" Rubric="Названия пунктов меню" />
+  <Concept Language="ru" ConceptID="43" Rubric="Файл" />
+  <Concept Language="ru" ConceptID="44" Rubric="Вид" />
+  <Concept Language="ru" ConceptID="45" Rubric="Опубликовать" />
+  <Concept Language="ru" ConceptID="46" Rubric="Язык" />
+  <Concept Language="ru" ConceptID="48" Rubric="Помощь" />
+  <Concept Language="ru" ConceptID="49" Rubric="Названия форм" />
+  <Concept Language="ru" ConceptID="50" Rubric="Архетип" />
+  <Concept Language="ru" ConceptID="51" Rubric="Модель &amp; компонента" />
+  <Concept Language="ru" ConceptID="52" Rubric="Краткое имя архетипа" />
+  <Concept Language="ru" ConceptID="53" Rubric="Версия" />
+  <Concept Language="ru" ConceptID="54" Rubric="Кр. имя" />
+  <Concept Language="ru" ConceptID="56" Rubric="Неогранич." />
+  <Concept Language="ru" ConceptID="57" Rubric="Имя файла Архетипа" />
+  <Concept Language="ru" ConceptID="59" Rubric="Всплывающие подсказки" />
+  <Concept Language="ru" ConceptID="60" Rubric="Изменение типа данных" />
+  <Concept Language="ru" ConceptID="61" Rubric="Открыть" />
+  <Concept Language="ru" ConceptID="62" Rubric="Новый Ctrl + N" />
+  <Concept Language="ru" ConceptID="63" Rubric="Выход" />
+  <Concept Language="ru" ConceptID="64" Rubric="БД Архетипов" />
+  <Concept Language="ru" ConceptID="65" Rubric="Упаковать" />
+  <Concept Language="ru" ConceptID="66" Rubric="Завершить" />
+  <Concept Language="ru" ConceptID="67" Rubric="Доступные языки" />
+  <Concept Language="ru" ConceptID="68" Rubric="Добавить язык" />
+  <Concept Language="ru" ConceptID="69" Rubric="Изменить язык" />
+  <Concept Language="ru" ConceptID="70" Rubric="Доступные терминологии" />
+  <Concept Language="ru" ConceptID="71" Rubric="Добавить новую терминологию" />
+  <Concept Language="ru" ConceptID="72" Rubric="Начало работы с Archetype Editor " />
+  <Concept Language="ru" ConceptID="73" Rubric="Лицензия" />
+  <Concept Language="ru" ConceptID="74" Rubric="Об openEHR" />
+  <Concept Language="ru" ConceptID="75" Rubric="О приложении Archetype Editor" />
+  <Concept Language="ru" ConceptID="76" Rubric="Заголовок" />
+  <Concept Language="ru" ConceptID="77" Rubric="Модель начального уровня" />
+  <Concept Language="ru" ConceptID="78" Rubric="Протокол" />
+  <Concept Language="ru" ConceptID="79" Rubric="История состояния" />
+  <Concept Language="ru" ConceptID="80" Rubric="Данные" />
+  <Concept Language="ru" ConceptID="81" Rubric="Серия событий" />
+  <Concept Language="ru" ConceptID="82" Rubric="Состояние пациента" />
+  <Concept Language="ru" ConceptID="83" Rubric="Варианты отображения" />
+  <Concept Language="ru" ConceptID="84" Rubric="Интерфейс" />
+  <Concept Language="ru" ConceptID="85" Rubric="Структура" />
+  <Concept Language="ru" ConceptID="86" Rubric="Условия" />
+  <Concept Language="ru" ConceptID="87" Rubric="Ограничения" />
+  <Concept Language="ru" ConceptID="88" Rubric="Язык &amp; терминологии" />
+  <Concept Language="ru" ConceptID="89" Rubric="Определения терминов" />
+  <Concept Language="ru" ConceptID="90" Rubric="Код" />
+  <Concept Language="ru" ConceptID="91" Rubric="Текст" />
+  <Concept Language="ru" ConceptID="93" Rubric="Связи" />
+  <Concept Language="ru" ConceptID="96" Rubric="Путь" />
+  <Concept Language="ru" ConceptID="97" Rubric="Выпуск" />
+  <Concept Language="ru" ConceptID="98" Rubric="Карта" />
+  <Concept Language="ru" ConceptID="99" Rubric="Добавить связь" />
+  <Concept Language="ru" ConceptID="100" Rubric="Специфичный" />
+  <Concept Language="ru" ConceptID="101" Rubric="Все" />
+  <Concept Language="ru" ConceptID="102" Rubric="Комплексное представление" />
+  <Concept Language="ru" ConceptID="103" Rubric="Сохранить как RTF" />
+  <Concept Language="ru" ConceptID="104" Rubric="Выберите ..." />
+  <Concept Language="ru" ConceptID="105" Rubric="Один" />
+  <Concept Language="ru" ConceptID="106" Rubric="Список" />
+  <Concept Language="ru" ConceptID="107" Rubric="Дерево" />
+  <Concept Language="ru" ConceptID="108" Rubric="Таблица" />
+  <Concept Language="ru" ConceptID="109" Rubric="Новый элемент" />
+  <Concept Language="ru" ConceptID="110" Rubric="Случай" />
+  <Concept Language="ru" ConceptID="111" Rubric="Макс:" />
+  <Concept Language="ru" ConceptID="112" Rubric="Неогранич." />
+  <Concept Language="ru" ConceptID="113" Rubric="Описание" />
+  <Concept Language="ru" ConceptID="114" Rubric="Время имя ограничения:" />
+  <Concept Language="ru" ConceptID="115" Rubric="Числовой (тип данных и ед. изм.)" />
+  <Concept Language="ru" ConceptID="116" Rubric="Параметр" />
+  <Concept Language="ru" ConceptID="117" Rubric="Единицы измерения" />
+  <Concept Language="ru" ConceptID="118" Rubric="Не установлено" />
+  <Concept Language="ru" ConceptID="119" Rubric="Концентрация" />
+  <Concept Language="ru" ConceptID="120" Rubric="Числовой" />
+  <Concept Language="ru" ConceptID="121" Rubric="Энергия" />
+  <Concept Language="ru" ConceptID="122" Rubric="Длина" />
+  <Concept Language="ru" ConceptID="123" Rubric="Громкость" />
+  <Concept Language="ru" ConceptID="124" Rubric="Масса" />
+  <Concept Language="ru" ConceptID="125" Rubric="Давление" />
+  <Concept Language="ru" ConceptID="126" Rubric="Расход, объем" />
+  <Concept Language="ru" ConceptID="127" Rubric="Температура" />
+  <Concept Language="ru" ConceptID="128" Rubric="Время" />
+  <Concept Language="ru" ConceptID="129" Rubric="Объем" />
+  <Concept Language="ru" ConceptID="130" Rubric="Работа" />
+  <Concept Language="ru" ConceptID="131" Rubric="Установить мин. значение" />
+  <Concept Language="ru" ConceptID="132" Rubric="Установить макс. значение" />
+  <Concept Language="ru" ConceptID="133" Rubric="События" />
+  <Concept Language="ru" ConceptID="134" Rubric="Список событий" />
+  <Concept Language="ru" ConceptID="135" Rubric="Открыть (Ctrl + O)" />
+  <Concept Language="ru" ConceptID="136" Rubric="Исправлены" />
+  <Concept Language="ru" ConceptID="137" Rubric="События в период времени" />
+  <Concept Language="ru" ConceptID="138" Rubric="Сведения о событии" />
+  <Concept Language="ru" ConceptID="139" Rubric="Новые ограничения" />
+  <Concept Language="ru" ConceptID="140" Rubric="Точка во времени" />
+  <Concept Language="ru" ConceptID="141" Rubric="Интервал" />
+  <Concept Language="ru" ConceptID="142" Rubric="Продолжительность" />
+  <Concept Language="ru" ConceptID="143" Rubric="Фиксированный интервал" />
+  <Concept Language="ru" ConceptID="144" Rubric="максимальный" />
+  <Concept Language="ru" ConceptID="145" Rubric="минимальный" />
+  <Concept Language="ru" ConceptID="146" Rubric="средний" />
+  <Concept Language="ru" ConceptID="147" Rubric="менять" />
+  <Concept Language="ru" ConceptID="148" Rubric="итоговый" />
+  <Concept Language="ru" ConceptID="149" Rubric="изменение" />
+  <Concept Language="ru" ConceptID="150" Rubric="Внутренний код" />
+  <Concept Language="ru" ConceptID="151" Rubric="Создать" />
+  <Concept Language="ru" ConceptID="152" Rubric="Удалить" />
+  <Concept Language="ru" ConceptID="153" Rubric="Установить допустимое значение" />
+  <Concept Language="ru" ConceptID="155" Rubric="Добавить" />
+  <Concept Language="ru" ConceptID="156" Rubric="Порядковый" />
+  <Concept Language="ru" ConceptID="157" Rubric="Истина/Ложь" />
+  <Concept Language="ru" ConceptID="158" Rubric="Допустимое значение:" />
+  <Concept Language="ru" ConceptID="159" Rubric="Правда" />
+  <Concept Language="ru" ConceptID="160" Rubric="Ложный" />
+  <Concept Language="ru" ConceptID="161" Rubric="Дата  и &amp; время" />
+  <Concept Language="ru" ConceptID="162" Rubric="Упорядочен." />
+  <Concept Language="ru" ConceptID="163" Rubric="Строка" />
+  <Concept Language="ru" ConceptID="164" Rubric="Столбец" />
+  <Concept Language="ru" ConceptID="165" Rubric="ОК" />
+  <Concept Language="ru" ConceptID="166" Rubric="Отмена" />
+  <Concept Language="ru" ConceptID="167" Rubric="TabCaptions" />
+  <Concept Language="ru" ConceptID="168" Rubric="Модель раздела" />
+  <Concept Language="ru" ConceptID="169" Rubric="Присваивание имен" />
+  <Concept Language="ru" ConceptID="170" Rubric="Слоты" />
+  <Concept Language="ru" ConceptID="171" Rubric="Места входа" />
+  <Concept Language="ru" ConceptID="172" Rubric="Внутренние записи" />
+  <Concept Language="ru" ConceptID="173" Rubric="Внешние записи:" />
+  <Concept Language="ru" ConceptID="174" Rubric="Слоты раздела" />
+  <Concept Language="ru" ConceptID="175" Rubric="Внутренние разделы" />
+  <Concept Language="ru" ConceptID="176" Rubric="Внешние разделы:" />
+  <Concept Language="ru" ConceptID="177" Rubric="Состояние" />
+  <Concept Language="ru" ConceptID="179" Rubric="Смещение" />
+  <Concept Language="ru" ConceptID="180" Rubric="Исправлено смещение" />
+  <Concept Language="ru" ConceptID="182" Rubric="Подпись отрицательные" />
+  <Concept Language="ru" ConceptID="183" Rubric="Сохранить" />
+  <Concept Language="ru" ConceptID="184" Rubric="Закрыть" />
+  <Concept Language="ru" ConceptID="185" Rubric="Специализация ..." />
+  <Concept Language="ru" ConceptID="47" Rubric="Терминология" />
+  <Concept Language="ru" ConceptID="58" Rubric="Archetype Editor" />
+  <Concept Language="ru" ConceptID="186" Rubric="Специализация" />
+  <Concept Language="ru" ConceptID="187" Rubric="Основной язык" />
+  <Concept Language="ru" ConceptID="188" Rubric="к" />
+  <Concept Language="ru" ConceptID="189" Rubric="новорожденный" />
+  <Concept Language="ru" ConceptID="192" Rubric="Режим участия" />
+  <Concept Language="ru" ConceptID="193" Rubric="не указано" />
+  <Concept Language="ru" ConceptID="194" Rubric="асинхронные аудиовизуальные записи; записанное видео" />
+  <Concept Language="ru" ConceptID="195" Rubric="живые аудиовизуальные записи; видеоконференции, видеозвонки" />
+  <Concept Language="ru" ConceptID="196" Rubric="записанное видео" />
+  <Concept Language="ru" ConceptID="197" Rubric="видеотелефон" />
+  <Concept Language="ru" ConceptID="198" Rubric="видеоконференция" />
+  <Concept Language="ru" ConceptID="199" Rubric="асинхронное аудио, продиктованное, голосовая почта" />
+  <Concept Language="ru" ConceptID="200" Rubric="продиктовано" />
+  <Concept Language="ru" ConceptID="201" Rubric="голосовая почта" />
+  <Concept Language="ru" ConceptID="202" Rubric="живое аудио, телефон, интернет-телефон, телеконференции" />
+  <Concept Language="ru" ConceptID="203" Rubric="телеконференция" />
+  <Concept Language="ru" ConceptID="204" Rubric="телефон" />
+  <Concept Language="ru" ConceptID="205" Rubric="Интернет телефон" />
+  <Concept Language="ru" ConceptID="206" Rubric="асинхронный текст; электронная почта, факс, письма, рукописные записи; SMS - сообщения" />
+  <Concept Language="ru" ConceptID="207" Rubric="E-mail" />
+  <Concept Language="ru" ConceptID="208" Rubric="Факсимильное сообщение/факс" />
+  <Concept Language="ru" ConceptID="209" Rubric="SMS-сообщение" />
+  <Concept Language="ru" ConceptID="210" Rubric="напечатаное/набраное на компьютере письмо" />
+  <Concept Language="ru" ConceptID="211" Rubric="рукописная запись" />
+  <Concept Language="ru" ConceptID="212" Rubric="живой текст, интернет-чаты, SMS-чат, интерактивные записи" />
+  <Concept Language="ru" ConceptID="213" Rubric="Интернет-чат" />
+  <Concept Language="ru" ConceptID="214" Rubric="SMS-чат" />
+  <Concept Language="ru" ConceptID="215" Rubric="интерактивно созданная запись" />
+  <Concept Language="ru" ConceptID="216" Rubric="Общение лицом к лицу" />
+  <Concept Language="ru" ConceptID="217" Rubric="Подписка (невербальное лицом-к-лицу)" />
+  <Concept Language="ru" ConceptID="218" Rubric="подписка над видео" />
+  <Concept Language="ru" ConceptID="219" Rubric="физическое присутствие" />
+  <Concept Language="ru" ConceptID="220" Rubric="удаленное размещение" />
+  <Concept Language="ru" ConceptID="221" Rubric="Переведенный текст" />
+  <Concept Language="ru" ConceptID="222" Rubric="интерпретировать как только аудио" />
+  <Concept Language="ru" ConceptID="223" Rubric="интерпретировать как лицом-к-лицу" />
+  <Concept Language="ru" ConceptID="224" Rubric="интерпретировать как видеосвязь" />
+  <Concept Language="ru" ConceptID="225" Rubric="Домой" />
+  <Concept Language="ru" ConceptID="226" Rubric="Настройки" />
+  <Concept Language="ru" ConceptID="227" Rubric="неотложная медицинская помощь" />
+  <Concept Language="ru" ConceptID="228" Rubric="первичная медицинская помощь" />
+  <Concept Language="ru" ConceptID="229" Rubric="первичный уход" />
+  <Concept Language="ru" ConceptID="230" Rubric="первичное лечение" />
+  <Concept Language="ru" ConceptID="231" Rubric="акушерство" />
+  <Concept Language="ru" ConceptID="232" Rubric="вторичная медицинская помощь" />
+  <Concept Language="ru" ConceptID="233" Rubric="вторичный уход" />
+  <Concept Language="ru" ConceptID="234" Rubric="вторичное лечение" />
+  <Concept Language="ru" ConceptID="235" Rubric="дополнительная медицинская помощь" />
+  <Concept Language="ru" ConceptID="236" Rubric="стоматологическая помощь" />
+  <Concept Language="ru" ConceptID="237" Rubric="сестринского уход на дому" />
+  <Concept Language="ru" ConceptID="238" Rubric="другое" />
+  <Concept Language="ru" ConceptID="239" Rubric="Аттестационная причине" />
+  <Concept Language="ru" ConceptID="240" Rubric="подписанный" />
+  <Concept Language="ru" ConceptID="241" Rubric="предназначенных" />
+  <Concept Language="ru" ConceptID="242" Rubric="требуется" />
+  <Concept Language="ru" ConceptID="243" Rubric="Версия цикла жизни" />
+  <Concept Language="ru" ConceptID="244" Rubric="Эскиз" />
+  <Concept Language="ru" ConceptID="245" Rubric="Активный" />
+  <Concept Language="ru" ConceptID="246" Rubric="Неактивный" />
+  <Concept Language="ru" ConceptID="247" Rubric="ожидает одобрения" />
+  <Concept Language="ru" ConceptID="248" Rubric="Аудит типа изменений" />
+  <Concept Language="ru" ConceptID="249" Rubric="создание" />
+  <Concept Language="ru" ConceptID="250" Rubric="правка" />
+  <Concept Language="ru" ConceptID="251" Rubric="модификация" />
+  <Concept Language="ru" ConceptID="252" Rubric="синтез" />
+  <Concept Language="ru" ConceptID="253" Rubric="Неизвестный" />
+  <Concept Language="ru" ConceptID="254" Rubric="родитель" />
+  <Concept Language="ru" ConceptID="255" Rubric="биологическая мать" />
+  <Concept Language="ru" ConceptID="256" Rubric="биологический отец" />
+  <Concept Language="ru" ConceptID="257" Rubric="двоюродный брат" />
+  <Concept Language="ru" ConceptID="258" Rubric="приемная мать" />
+  <Concept Language="ru" ConceptID="259" Rubric="приемный отец" />
+  <Concept Language="ru" ConceptID="260" Rubric="приемный сын" />
+  <Concept Language="ru" ConceptID="261" Rubric="приемная дочь" />
+  <Concept Language="ru" ConceptID="262" Rubric="мачеха" />
+  <Concept Language="ru" ConceptID="263" Rubric="отчим" />
+  <Concept Language="ru" ConceptID="264" Rubric="опекун" />
+  <Concept Language="ru" ConceptID="265" Rubric="сожитель" />
+  <Concept Language="ru" ConceptID="266" Rubric="Функция событий математике" />
+  <Concept Language="ru" ConceptID="267" Rubric="режим" />
+  <Concept Language="ru" ConceptID="268" Rubric="медиана" />
+  <Concept Language="ru" ConceptID="270" Rubric="Без вкуса" />
+  <Concept Language="ru" ConceptID="271" Rubric="Нет информации" />
+  <Concept Language="ru" ConceptID="272" Rubric="Замаскированный" />
+  <Concept Language="ru" ConceptID="273" Rubric="Не применимо" />
+  <Concept Language="ru" ConceptID="274" Rubric="структурные компоненты openEHR" />
+  <Concept Language="ru" ConceptID="275" Rubric="История" />
+  <Concept Language="ru" ConceptID="276" Rubric="Любое событие" />
+  <Concept Language="ru" ConceptID="277" Rubric="Уменьшитьтаблицу до простого значения" />
+  <Concept Language="ru" ConceptID="278" Rubric="Константы" />
+  <Concept Language="ru" ConceptID="279" Rubric="Выберите Меню &gt; Файл &gt; Новый  или нажмите кнопку [New] на панели инструментов для того чтобы начать сначала" />
+  <Concept Language="ru" ConceptID="280" Rubric="и все сноски" />
+  <Concept Language="ru" ConceptID="281" Rubric="Развернуть все" />
+  <Concept Language="ru" ConceptID="282" Rubric="Свернуть все" />
+  <Concept Language="ru" ConceptID="283" Rubric="Добавить сноску" />
+  <Concept Language="ru" ConceptID="284" Rubric="Archetype Editor" />
+  <Concept Language="ru" ConceptID="285" Rubric="Вы выбрали язык, который не полностью переведен, хотите заполнить раздел терминологии?" />
+  <Concept Language="ru" ConceptID="286" Rubric="Пополнение языковой бызы отменено" />
+  <Concept Language="ru" ConceptID="287" Rubric="Данный Архетип" />
+  <Concept Language="ru" ConceptID="288" Rubric="Отменить изменения" />
+  <Concept Language="ru" ConceptID="289" Rubric="Не удалось найти" />
+  <Concept Language="ru" ConceptID="290" Rubric="Пожалуйста, сперва опишите Концепцию" />
+  <Concept Language="ru" ConceptID="291" Rubric="Удалить информацию о состоянии?" />
+  <Concept Language="ru" ConceptID="292" Rubric="Ошибка при загрузке" />
+  <Concept Language="ru" ConceptID="293" Rubric="Ошибка при сохранении" />
+  <Concept Language="ru" ConceptID="294" Rubric="Узел, код или идентификатор архетипа не верен" />
+  <Concept Language="ru" ConceptID="295" Rubric="Сохранить изменения в" />
+  <Concept Language="ru" ConceptID="296" Rubric="Неправильный формат" />
+  <Concept Language="ru" ConceptID="297" Rubric="Нет определения для" />
+  <Concept Language="ru" ConceptID="298" Rubric="Имя столбца уже используется" />
+  <Concept Language="ru" ConceptID="299" Rubric="На следующем шаге Вы сократите список до одного значения -" />
+  <Concept Language="ru" ConceptID="300" Rubric="Выбранный узел не является элементом:" />
+  <Concept Language="ru" ConceptID="301" Rubric="Сначала выберите элемент слева" />
+  <Concept Language="ru" ConceptID="302" Rubric="На следующем шаге Вы преобразуете деревовидную структуру в плоский список значений - все элементы кластера будут потеряны" />
+  <Concept Language="ru" ConceptID="303" Rubric="Данное имя уже используется" />
+  <Concept Language="ru" ConceptID="304" Rubric="Не удается удалить" />
+  <Concept Language="ru" ConceptID="305" Rubric="Введите новое имя для" />
+  <Concept Language="ru" ConceptID="306" Rubric="Невозможно переименовать" />
+  <Concept Language="ru" ConceptID="307" Rubric="Данная функция пока недоступна!" />
+  <Concept Language="ru" ConceptID="308" Rubric="Предупреждение: при изменении ограничений Вы потеряете данные" />
+  <Concept Language="ru" ConceptID="309" Rubric="Преобразовать строку с значениями в текст" />
+  <Concept Language="ru" ConceptID="310" Rubric="Преобразовать текст в строку" />
+  <Concept Language="ru" ConceptID="311" Rubric="Преобразовать порядковые значения в допустимые значения" />
+  <Concept Language="ru" ConceptID="312" Rubric="Слот" />
+  <Concept Language="ru" ConceptID="313" Rubric="Кластер" />
+  <Concept Language="ru" ConceptID="314" Rubric="Раздел" />
+  <Concept Language="ru" ConceptID="315" Rubric="Логический" />
+  <Concept Language="ru" ConceptID="316" Rubric="Любой" />
+  <Concept Language="ru" ConceptID="317" Rubric="Преобразовать текст в порядковые значения" />
+  <Concept Language="ru" ConceptID="318" Rubric="Преобразовать внутренние коды в свободный текст" />
+  <Concept Language="ru" ConceptID="320" Rubric="Выбор" />
+  <Concept Language="ru" ConceptID="321" Rubric="Соотношение" />
+  <Concept Language="ru" ConceptID="322" Rubric="Новый кластер" />
+  <Concept Language="ru" ConceptID="323" Rubric="Новый столбец" />
+  <Concept Language="ru" ConceptID="324" Rubric="Новая строка" />
+  <Concept Language="ru" ConceptID="325" Rubric="Переименовать" />
+  <Concept Language="ru" ConceptID="326" Rubric="Измененить структуру" />
+  <Concept Language="ru" ConceptID="327" Rubric="Эта связь уже существует, вы должны добавить критерии" />
+  <Concept Language="ru" ConceptID="329" Rubric="Интервал количества" />
+  <Concept Language="ru" ConceptID="330" Rubric="Интервал целых значений (счет)" />
+  <Concept Language="ru" ConceptID="332" Rubric="Установить абсолютный макс." />
+  <Concept Language="ru" ConceptID="333" Rubric="Установить абсолютный мин." />
+  <Concept Language="ru" ConceptID="334" Rubric="Электрический ток" />
+  <Concept Language="ru" ConceptID="335" Rubric="Область" />
+  <Concept Language="ru" ConceptID="336" Rubric="Удельный объем" />
+  <Concept Language="ru" ConceptID="337" Rubric="Удельная поверхность" />
+  <Concept Language="ru" ConceptID="338" Rubric="Скорость" />
+  <Concept Language="ru" ConceptID="339" Rubric="Ускорение" />
+  <Concept Language="ru" ConceptID="340" Rubric="Импульс" />
+  <Concept Language="ru" ConceptID="341" Rubric="Угловая скорость" />
+  <Concept Language="ru" ConceptID="342" Rubric="Угловое ускорение" />
+  <Concept Language="ru" ConceptID="343" Rubric="Угловой момент" />
+  <Concept Language="ru" ConceptID="344" Rubric="Момент инерции, площадь" />
+  <Concept Language="ru" ConceptID="345" Rubric="Момент инерции, масса" />
+  <Concept Language="ru" ConceptID="346" Rubric="Моментальная величина расхода" />
+  <Concept Language="ru" ConceptID="347" Rubric="Расход, масса" />
+  <Concept Language="ru" ConceptID="348" Rubric="Поток, масса" />
+  <Concept Language="ru" ConceptID="349" Rubric="Масса, приходящаяся на единицу площади" />
+  <Concept Language="ru" ConceptID="350" Rubric="Плотность" />
+  <Concept Language="ru" ConceptID="351" Rubric="Расход, масса/объем" />
+  <Concept Language="ru" ConceptID="352" Rubric="Расход, масса/сила" />
+  <Concept Language="ru" ConceptID="354" Rubric="Удельный вес" />
+  <Concept Language="ru" ConceptID="355" Rubric="Сила" />
+  <Concept Language="ru" ConceptID="356" Rubric="Поверхностное натяжение" />
+  <Concept Language="ru" ConceptID="357" Rubric="Сила, Тело" />
+  <Concept Language="ru" ConceptID="358" Rubric="Силы на единицу массы" />
+  <Concept Language="ru" ConceptID="359" Rubric="Крутящий момент" />
+  <Concept Language="ru" ConceptID="360" Rubric="Вязкость, динамическая" />
+  <Concept Language="ru" ConceptID="361" Rubric="Вязкость, кинетическая" />
+  <Concept Language="ru" ConceptID="362" Rubric="Коэффициент диффузии" />
+  <Concept Language="ru" ConceptID="363" Rubric="Мощность" />
+  <Concept Language="ru" ConceptID="364" Rubric="Энергия, Линейная" />
+  <Concept Language="ru" ConceptID="365" Rubric="Энергия на единицу площади" />
+  <Concept Language="ru" ConceptID="366" Rubric="Плотность энергии" />
+  <Concept Language="ru" ConceptID="367" Rubric="Мощность, Линейная" />
+  <Concept Language="ru" ConceptID="368" Rubric="Поток мощности" />
+  <Concept Language="ru" ConceptID="369" Rubric="Удельная мощность" />
+  <Concept Language="ru" ConceptID="370" Rubric="Удельная энергия" />
+  <Concept Language="ru" ConceptID="371" Rubric="Удельная теплоемкость, газовая постоянная" />
+  <Concept Language="ru" ConceptID="372" Rubric="Теплопроводность" />
+  <Concept Language="ru" ConceptID="373" Rubric="Коэффициент теплоотдачи" />
+  <Concept Language="ru" ConceptID="374" Rubric="Напряжение, электрический потенциал" />
+  <Concept Language="ru" ConceptID="375" Rubric="Сопротивление" />
+  <Concept Language="ru" ConceptID="377" Rubric="Напряженность электрического поля" />
+  <Concept Language="ru" ConceptID="378" Rubric="Магнитный поток" />
+  <Concept Language="ru" ConceptID="379" Rubric="Индуктивность" />
+  <Concept Language="ru" ConceptID="380" Rubric="Реальная квалификация" />
+  <Concept Language="ru" ConceptID="381" Rubric="Сумма (Eq)" />
+  <Concept Language="ru" ConceptID="382" Rubric="Частота" />
+  <Concept Language="ru" ConceptID="384" Rubric="Сумма (моль)" />
+  <Concept Language="ru" ConceptID="385" Rubric="Масса (IU)" />
+  <Concept Language="ru" ConceptID="386" Rubric="Мультимедиа" />
+  <Concept Language="ru" ConceptID="387" Rubric="аудио/DVI4" />
+  <Concept Language="ru" ConceptID="388" Rubric="аудио/G722" />
+  <Concept Language="ru" ConceptID="389" Rubric="аудио/G723" />
+  <Concept Language="ru" ConceptID="390" Rubric="аудио/G726-16" />
+  <Concept Language="ru" ConceptID="391" Rubric="аудио/G726-24" />
+  <Concept Language="ru" ConceptID="392" Rubric="аудио/G726-32" />
+  <Concept Language="ru" ConceptID="393" Rubric="аудио/G726-40" />
+  <Concept Language="ru" ConceptID="394" Rubric="аудио/G728" />
+  <Concept Language="ru" ConceptID="395" Rubric="аудио/L8" />
+  <Concept Language="ru" ConceptID="396" Rubric="аудио/L16" />
+  <Concept Language="ru" ConceptID="397" Rubric="аудио / LPC" />
+  <Concept Language="ru" ConceptID="398" Rubric="аудио/G729" />
+  <Concept Language="ru" ConceptID="399" Rubric="аудио/G729D" />
+  <Concept Language="ru" ConceptID="400" Rubric="аудио/G729E" />
+  <Concept Language="ru" ConceptID="401" Rubric="видео/BT656" />
+  <Concept Language="ru" ConceptID="402" Rubric="видео / CelB" />
+  <Concept Language="ru" ConceptID="403" Rubric="видео / JPEG" />
+  <Concept Language="ru" ConceptID="404" Rubric="видео/H261" />
+  <Concept Language="ru" ConceptID="405" Rubric="видео/H263" />
+  <Concept Language="ru" ConceptID="406" Rubric="видео/H263-1998" />
+  <Concept Language="ru" ConceptID="407" Rubric="видео/H263-2000" />
+  <Concept Language="ru" ConceptID="408" Rubric="видео / MPV" />
+  <Concept Language="ru" ConceptID="409" Rubric="аудио / MPEG" />
+  <Concept Language="ru" ConceptID="410" Rubric="аудио/mpeg4-generic" />
+  <Concept Language="ru" ConceptID="411" Rubric="аудио/L20" />
+  <Concept Language="ru" ConceptID="412" Rubric="аудио/L24" />
+  <Concept Language="ru" ConceptID="413" Rubric="аудио/телефонные события" />
+  <Concept Language="ru" ConceptID="414" Rubric="видео/QuickTime" />
+  <Concept Language="ru" ConceptID="415" Rubric="текст/календарь" />
+  <Concept Language="ru" ConceptID="416" Rubric="текст/каталог" />
+  <Concept Language="ru" ConceptID="417" Rubric="текст/html" />
+  <Concept Language="ru" ConceptID="418" Rubric="текст/план" />
+  <Concept Language="ru" ConceptID="419" Rubric="текст/RTF" />
+  <Concept Language="ru" ConceptID="420" Rubric="текст/SGML" />
+  <Concept Language="ru" ConceptID="421" Rubric="текст/разделенные табуляцией значения" />
+  <Concept Language="ru" ConceptID="422" Rubric="текст/URI-лист" />
+  <Concept Language="ru" ConceptID="423" Rubric="текст/XML" />
+  <Concept Language="ru" ConceptID="424" Rubric="текст/XML-внешне разобранный документ" />
+  <Concept Language="ru" ConceptID="425" Rubric="изображение/CGM" />
+  <Concept Language="ru" ConceptID="426" Rubric="изображение/GIF" />
+  <Concept Language="ru" ConceptID="427" Rubric="изображение/PNG" />
+  <Concept Language="ru" ConceptID="428" Rubric="изображение/TIFF" />
+  <Concept Language="ru" ConceptID="429" Rubric="изображение/JPEG /" />
+  <Concept Language="ru" ConceptID="430" Rubric="URI - идентификатор ресурсов" />
+  <Concept Language="ru" ConceptID="431" Rubric="хронический" />
+  <Concept Language="ru" ConceptID="432" Rubric="Категории композиции" />
+  <Concept Language="ru" ConceptID="433" Rubric="Событие" />
+  <Concept Language="ru" ConceptID="434" Rubric="процесс" />
+  <Concept Language="ru" ConceptID="435" Rubric="лаборатория" />
+  <Concept Language="ru" ConceptID="436" Rubric="визуализация" />
+  <Concept Language="ru" ConceptID="437" Rubric="Количество элементов множества" />
+  <Concept Language="ru" ConceptID="438" Rubric="Значения" />
+  <Concept Language="ru" ConceptID="439" Rubric="Только для чтения" />
+  <Concept Language="ru" ConceptID="440" Rubric="Перетащите и иконку сюда, чтобы задать тип данных" />
+  <Concept Language="ru" ConceptID="441" Rubric="Любой текст" />
+  <Concept Language="ru" ConceptID="442" Rubric="Заменить перевод этого термина?" />
+  <Concept Language="ru" ConceptID="443" Rubric="Тип" />
+  <Concept Language="ru" ConceptID="444" Rubric="Обычный или закодированный текст" />
+  <Concept Language="ru" ConceptID="445" Rubric="Масса (единицы)" />
+  <Concept Language="ru" ConceptID="446" Rubric="обязательный" />
+  <Concept Language="ru" ConceptID="447" Rubric="повторяющийся" />
+  <Concept Language="ru" ConceptID="448" Rubric="необязательный" />
+  <Concept Language="ru" ConceptID="449" Rubric="Знаменатель" />
+  <Concept Language="ru" ConceptID="450" Rubric="Числитель" />
+  <Concept Language="ru" ConceptID="497" Rubric="Угол, плоскость" />
+  <Concept Language="ru" ConceptID="498" Rubric="Электрический заряд" />
+  <Concept Language="ru" ConceptID="499" Rubric="Интенсивность света" />
+  <Concept Language="ru" ConceptID="500" Rubric="Угол, твердое вещество" />
+  <Concept Language="ru" ConceptID="501" Rubric="Электрическая емкость" />
+  <Concept Language="ru" ConceptID="502" Rubric="Электрическая проводимость" />
+  <Concept Language="ru" ConceptID="503" Rubric="Магнитная индукция" />
+  <Concept Language="ru" ConceptID="504" Rubric="Световой поток" />
+  <Concept Language="ru" ConceptID="505" Rubric="Освещенность" />
+  <Concept Language="ru" ConceptID="506" Rubric="Радиоактивность" />
+  <Concept Language="ru" ConceptID="507" Rubric="Доля" />
+  <Concept Language="ru" ConceptID="508" Rubric="Доза энергии" />
+  <Concept Language="ru" ConceptID="509" Rubric="Описание деятельности" />
+  <Concept Language="ru" ConceptID="510" Rubric="Путь" />
+  <Concept Language="ru" ConceptID="511" Rubric="множественный" />
+  <Concept Language="ru" ConceptID="513" Rubric="Компонент" />
+  <Concept Language="ru" ConceptID="514" Rubric="Контекст" />
+  <Concept Language="ru" ConceptID="515" Rubric="Содержание" />
+  <Concept Language="ru" ConceptID="516" Rubric="Интервал даты и времени" />
+  <Concept Language="ru" ConceptID="517" Rubric="приложение/MSWord" />
+  <Concept Language="ru" ConceptID="518" Rubric="применение/PDF" />
+  <Concept Language="ru" ConceptID="519" Rubric="приложение/RTF" />
+  <Concept Language="ru" ConceptID="520" Rubric="Печать" />
+  <Concept Language="ru" ConceptID="521" Rubric="снижение" />
+  <Concept Language="ru" ConceptID="522" Rubric="повышение" />
+  <Concept Language="ru" ConceptID="523" Rubric="удаленный" />
+  <Concept Language="ru" ConceptID="524" Rubric="Начальный" />
+  <Concept Language="ru" ConceptID="525" Rubric="Состояние инструктажа" />
+  <Concept Language="ru" ConceptID="526" Rubric="Запланированный" />
+  <Concept Language="ru" ConceptID="527" Rubric="Отложено" />
+  <Concept Language="ru" ConceptID="528" Rubric="Отменено" />
+  <Concept Language="ru" ConceptID="529" Rubric="Плановый" />
+  <Concept Language="ru" ConceptID="530" Rubric="Зависший" />
+  <Concept Language="ru" ConceptID="531" Rubric="Отмененный" />
+  <Concept Language="ru" ConceptID="532" Rubric="Завершенный" />
+  <Concept Language="ru" ConceptID="533" Rubric="Истекший" />
+  <Concept Language="ru" ConceptID="534" Rubric="Повторный инструктаж" />
+  <Concept Language="ru" ConceptID="535" Rubric="Инициировать" />
+  <Concept Language="ru" ConceptID="536" Rubric="Шаг плана" />
+  <Concept Language="ru" ConceptID="537" Rubric="Откладывать" />
+  <Concept Language="ru" ConceptID="538" Rubric="Восстановление" />
+  <Concept Language="ru" ConceptID="539" Rubric="Расписание" />
+  <Concept Language="ru" ConceptID="540" Rubric="Начало" />
+  <Concept Language="ru" ConceptID="541" Rubric="Делать" />
+  <Concept Language="ru" ConceptID="542" Rubric="Отложенный шаг" />
+  <Concept Language="ru" ConceptID="543" Rubric="Активный шаг" />
+  <Concept Language="ru" ConceptID="544" Rubric="Приостанавливать" />
+  <Concept Language="ru" ConceptID="545" Rubric="Зависший шаг" />
+  <Concept Language="ru" ConceptID="546" Rubric="Возобновить" />
+  <Concept Language="ru" ConceptID="547" Rubric="Прервать" />
+  <Concept Language="ru" ConceptID="548" Rubric="Заканчить" />
+  <Concept Language="ru" ConceptID="549" Rubric="Тайм-аут" />
+  <Concept Language="ru" ConceptID="550" Rubric="Уведомление прервано" />
+  <Concept Language="ru" ConceptID="551" Rubric="Уведомление завершено" />
+  <Concept Language="ru" ConceptID="552" Rubric="Уведомление отменено" />
+  <Concept Language="ru" ConceptID="553" Rubric="неполный" />
+  <Concept Language="ru" ConceptID="554" Rubric="Наблюдение" />
+  <Concept Language="ru" ConceptID="555" Rubric="Оценка" />
+  <Concept Language="ru" ConceptID="556" Rubric="Действие" />
+  <Concept Language="ru" ConceptID="557" Rubric="Инструктаж" />
+  <Concept Language="ru" ConceptID="558" Rubric="Подраздел" />
+  <Concept Language="ru" ConceptID="559" Rubric="Запись" />
+  <Concept Language="ru" ConceptID="560" Rubric="Административная запись" />
+  <Concept Language="ru" ConceptID="561" Rubric="Композиция (Макет)" />
+  <Concept Language="ru" ConceptID="563" Rubric="Уход за шагом путь" />
+  <Concept Language="ru" ConceptID="564" Rubric="Сноска" />
+  <Concept Language="ru" ConceptID="565" Rubric="Интервал событий" />
+  <Concept Language="ru" ConceptID="566" Rubric="Событие по точке во времени" />
+  <Concept Language="ru" ConceptID="567" Rubric="Элемент" />
+  <Concept Language="ru" ConceptID="568" Rubric="Статус архетипа" />
+  <Concept Language="ru" ConceptID="569" Rubric="Авторский макет" />
+  <Concept Language="ru" ConceptID="570" Rubric="Макет, созданный комитетом" />
+  <Concept Language="ru" ConceptID="571" Rubric="Макет, созданный организацией" />
+  <Concept Language="ru" ConceptID="572" Rubric="Отправленный на утверждение" />
+  <Concept Language="ru" ConceptID="573" Rubric="Кандидат" />
+  <Concept Language="ru" ConceptID="574" Rubric="Утвержденный" />
+  <Concept Language="ru" ConceptID="575" Rubric="Опубликованный" />
+  <Concept Language="ru" ConceptID="576" Rubric="Отклонен" />
+  <Concept Language="ru" ConceptID="577" Rubric="Устаревший" />
+  <Concept Language="ru" ConceptID="578" Rubric="Ключевые слова" />
+  <Concept Language="ru" ConceptID="579" Rubric="Имя" />
+  <Concept Language="ru" ConceptID="580" Rubric="Автор(ы)" />
+  <Concept Language="ru" ConceptID="581" Rubric="Детали" />
+  <Concept Language="ru" ConceptID="582" Rubric="Указания по использованию" />
+  <Concept Language="ru" ConceptID="583" Rubric="Предостережения" />
+  <Concept Language="ru" ConceptID="584" Rubric="Автор-создатель" />
+  <Concept Language="ru" ConceptID="585" Rubric="Область применения" />
+  <Concept Language="ru" ConceptID="586" Rubric="Активность" />
+  <Concept Language="ru" ConceptID="587" Rubric="Активности" />
+  <Concept Language="ru" ConceptID="588" Rubric="Мин:" />
+  <Concept Language="ru" ConceptID="589" Rubric="не повторять" />
+  <Concept Language="ru" ConceptID="590" Rubric="повторять, неограниченное" />
+  <Concept Language="ru" ConceptID="591" Rubric="повторяющаяся, ограниченная" />
+  <Concept Language="ru" ConceptID="592" Rubric="Правка" />
+  <Concept Language="ru" ConceptID="593" Rubric="Дата" />
+  <Concept Language="ru" ConceptID="594" Rubric="Организация" />
+  <Concept Language="ru" ConceptID="595" Rubric="В новом окне" />
+  <Concept Language="ru" ConceptID="596" Rubric="Сохранить как" />
+  <Concept Language="ru" ConceptID="597" Rubric="Сообщить об ошибке" />
+  <Concept Language="ru" ConceptID="598" Rubric="Опции" />
+  <Concept Language="ru" ConceptID="599" Rubric="Огранич." />
+  <Concept Language="ru" ConceptID="600" Rubric="Допустимые значения" />
+  <Concept Language="ru" ConceptID="601" Rubric="Группа значения" />
+  <Concept Language="ru" ConceptID="602" Rubric="Добавить существующий термин" />
+  <Concept Language="ru" ConceptID="603" Rubric="Добавить новый термин" />
+  <Concept Language="ru" ConceptID="604" Rubric="Авторы" />
+  <Concept Language="ru" ConceptID="605" Rubric="Вложенный Архетип" />
+  <Concept Language="ru" ConceptID="606" Rubric="Загрузка вложенного архетипа" />
+  <Concept Language="ru" ConceptID="607" Rubric="Не может специализироваться ссылки" />
+  <Concept Language="ru" ConceptID="608" Rubric="Другой контекст" />
+  <Concept Language="ru" ConceptID="609" Rubric="Открыть существующий архетип" />
+  <Concept Language="ru" ConceptID="610" Rubric="Время (единицы измерения)" />
+  <Concept Language="ru" ConceptID="611" Rubric="нс" />
+  <Concept Language="ru" ConceptID="612" Rubric="мкс" />
+  <Concept Language="ru" ConceptID="613" Rubric="мсек" />
+  <Concept Language="ru" ConceptID="614" Rubric="сек" />
+  <Concept Language="ru" ConceptID="615" Rubric="мин" />
+  <Concept Language="ru" ConceptID="616" Rubric="час" />
+  <Concept Language="ru" ConceptID="617" Rubric="день (ей)" />
+  <Concept Language="ru" ConceptID="618" Rubric="мес" />
+  <Concept Language="ru" ConceptID="619" Rubric="год" />
+  <Concept Language="ru" ConceptID="620" Rubric="неделя" />
+  <Concept Language="ru" ConceptID="621" Rubric="Узловые точки" />
+  <Concept Language="ru" ConceptID="622" Rubric="Критерии" />
+  <Concept Language="ru" ConceptID="623" Rubric="Ограничение определения" />
+  <Concept Language="ru" ConceptID="624" Rubric="Имя запроса" />
+  <Concept Language="ru" ConceptID="625" Rubric="Включать" />
+  <Concept Language="ru" ConceptID="626" Rubric="Исключать" />
+  <Concept Language="ru" ConceptID="627" Rubric="Просматривать" />
+  <Concept Language="ru" ConceptID="628" Rubric="Включить все" />
+  <Concept Language="ru" ConceptID="629" Rubric="Исключить все" />
+  <Concept Language="ru" ConceptID="630" Rubric="Как процента" />
+  <Concept Language="ru" ConceptID="631" Rubric="Удалить это ограничение" />
+  <Concept Language="ru" ConceptID="632" Rubric="Изменить краткое имя архетипа" />
+  <Concept Language="ru" ConceptID="633" Rubric="Идентификатор" />
+  <Concept Language="ru" ConceptID="634" Rubric="Пункт" />
+  <Concept Language="ru" ConceptID="635" Rubric="Интерпретируемое" />
+  <Concept Language="ru" ConceptID="636" Rubric="Кодированный текст" />
+  <Concept Language="ru" ConceptID="637" Rubric="Приложение/DICOM" />
+  <Concept Language="ru" ConceptID="638" Rubric="Формат" />
+  <Concept Language="ru" ConceptID="639" Rubric="Скопировать путь в буфер обмена" />
+  <Concept Language="ru" ConceptID="640" Rubric="фактический" />
+  <Concept Language="ru" ConceptID="641" Rubric="Нижний" />
+  <Concept Language="ru" ConceptID="642" Rubric="Верхний" />
+  <Concept Language="ru" ConceptID="643" Rubric="Интеграл" />
+  <Concept Language="ru" ConceptID="644" Rubric="Унитарный" />
+  <Concept Language="ru" ConceptID="645" Rubric="Целые и дробные" />
+  <Concept Language="ru" ConceptID="646" Rubric="Доля" />
+  <Concept Language="ru" ConceptID="647" Rubric="Проектирование" />
+  <Concept Language="ru" ConceptID="648" Rubric="свидетелем" />
+  <Concept Language="ru" ConceptID="649" Rubric="Допустимое число знаков после запятой" />
+  <Concept Language="ru" ConceptID="650" Rubric="Переводчик" />
+  <Concept Language="ru" ConceptID="651" Rubric="Аккредитация" />
+  <Concept Language="ru" ConceptID="652" Rubric="Комментарии" />
+  <Concept Language="ru" ConceptID="653" Rubric="Новое направление деятельности" />
+  <Concept Language="ru" ConceptID="654" Rubric="Участники" />
+  <Concept Language="ru" ConceptID="655" Rubric="Электрический потенциал Время" />
+  <Concept Language="ru" ConceptID="656" Rubric="Ссылка в EHR только" />
+  <Concept Language="ru" ConceptID="657" Rubric="Регулярные выражения URI" />
+  <Concept Language="ru" ConceptID="658" Rubric="Участник функции" />
+  <Concept Language="ru" ConceptID="659" Rubric="Ссылка" />
+  <Concept Language="ru" ConceptID="660" Rubric="Другие участий" />
+  <Concept Language="ru" ConceptID="661" Rubric="Цель" />
+  <Concept Language="ru" ConceptID="662" Rubric="Смысл" />
+  <Concept Language="ru" ConceptID="663" Rubric="Поиск" />
+  <Concept Language="ru" ConceptID="664" Rubric="Ошибка сети" />
+  <Concept Language="ru" ConceptID="665" Rubric="Пожалуйста, введите параметр для поиска" />
+  <Concept Language="ru" ConceptID="666" Rubric="Открыть существующий архетип из Web-" />
+  <Concept Language="ru" ConceptID="667" Rubric="Инструменты" />
+  <Concept Language="ru" ConceptID="668" Rubric="Выберите один блок слева и один справа:" />
+  <Concept Language="ru" ConceptID="669" Rubric="Использовать специализацию тоже?" />
+  <Concept Language="ru" ConceptID="670" Rubric="Доля времени" />
+  <Concept Language="ru" ConceptID="671" Rubric="Нет встроенного архетип матчей в {0}" />
+  <Concept Language="ru" ConceptID="672" Rubric="Назвать этот слот?" />
+  <Concept Language="ru" ConceptID="673" Rubric="Пункт" />
+  <Concept Language="ru" ConceptID="674" Rubric="Уход за вступление" />
+  <Concept Language="ru" ConceptID="675" Rubric="Назовите этот слот" />
+  <Concept Language="ru" ConceptID="676" Rubric="Переход" />
+  <Concept Language="ru" ConceptID="677" Rubric="Разрешить переход к" />
+  <Concept Language="ru" ConceptID="678" Rubric="Разрешить альтернативные состояние для этого действия" />
+  <Concept Language="ru" ConceptID="679" Rubric="Альтернативные состояния" />
+  <Concept Language="ru" ConceptID="680" Rubric="Файл {0} уже существует. Хотите заменить его?" />
+  <Concept Language="ru" ConceptID="681" Rubric="Экспорт" />
+  <Concept Language="ru" ConceptID="682" Rubric="Приложение/vnd.oasis.opendocument.text" />
+  <Concept Language="ru" ConceptID="683" Rubric="Приложение/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+  <Concept Language="ru" ConceptID="684" Rubric="ParsableText" />
+  <Concept Language="ru" ConceptID="685" Rubric="Показатель мощности" />
+  <Concept Language="ru" ConceptID="686" Rubric="Неверный имя файла архетипа {0}. Сохранить как {1}?" />
+  <Concept Language="ru" ConceptID="687" Rubric="Открыть архетип действия " />
+  <Concept Language="ru" ConceptID="688" Rubric="связаться" />
+  <Concept Language="ru" ConceptID="689" Rubric="источника заражения" />
+  <Concept Language="ru" ConceptID="690" Rubric="Авторское право" />
+  <Concept Language="ru" ConceptID="691" Rubric="Ссылки" />
+  <Concept Language="ru" ConceptID="692" Rubric="Переключение языка" />
+  <Concept Language="ru" ConceptID="693" Rubric="Найти" />
+  <Concept Language="ru" ConceptID="694" Rubric="Найти далее" />
+  <Concept Language="ru" ConceptID="695" Rubric="Найти ранее" />
+  <Concept Language="ru" ConceptID="696" Rubric="Ключ" />
+  <Concept Language="ru" ConceptID="697" Rubric="Значение" />
+  <Concept Language="ru" ConceptID="698" Rubric="Аннотации" />
+  <Concept Language="ru" ConceptID="699" Rubric="Специализация '{0}'?" />
+  <Concept Language="ru" ConceptID="700" Rubric="Да, специализировать это" />
+  <Concept Language="ru" ConceptID="701" Rubric="Да, но добавить новый узел" />
+  <Concept Language="ru" ConceptID="702" Rubric="Нет" />
+  <Concept Language="ru" ConceptID="703" Rubric="Изменения в структуре типа {0} может потерять некоторые элементы. Вы хотите продолжить?" />
+  <Concept Language="ru" ConceptID="704" Rubric="Связаться" />
+  <Concept Language="ru" ConceptID="705" Rubric="Ответственный в настоящее время" />
+  <Concept Language="ru" ConceptID="706" Rubric="Пожалуйста, введите новое краткое имя архетипа" />
+  <Concept Language="ru" ConceptID="707" Rubric="Специализированные" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
