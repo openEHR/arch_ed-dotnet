@@ -920,6 +920,7 @@ Public Class ApplicationOptionsForm
     End Sub
 
     Private Sub TranslateGUI()
+        Text = Filemanager.GetOpenEhrTerm(598, Text)
         UserDetailsTabPage.Text = Filemanager.GetOpenEhrTerm(722, UserDetailsTabPage.Text)
         FileLocationsTabPage.Text = Filemanager.GetOpenEhrTerm(723, FileLocationsTabPage.Text)
         HtmlTabPage.Text = Filemanager.GetOpenEhrTerm(724, HtmlTabPage.Text)
