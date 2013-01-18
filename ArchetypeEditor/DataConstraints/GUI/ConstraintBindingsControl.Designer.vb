@@ -32,7 +32,7 @@ Partial Class ConstraintBindingsControl
         Me.ID = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.ReleaseColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.SubsetColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.CodePhrase = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.CodePhraseColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
         CType(Me.Grid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -42,7 +42,7 @@ Partial Class ConstraintBindingsControl
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.Grid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.TerminologyColumn, Me.ID, Me.ReleaseColumn, Me.SubsetColumn, Me.CodePhrase})
+        Me.Grid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.TerminologyColumn, Me.ID, Me.ReleaseColumn, Me.SubsetColumn, Me.CodePhraseColumn})
         Me.Grid.Location = New System.Drawing.Point(33, 0)
         Me.Grid.Name = "Grid"
         Me.Grid.RowHeadersWidth = 25
@@ -100,13 +100,13 @@ Partial Class ConstraintBindingsControl
         Me.SubsetColumn.HeaderText = "Subset"
         Me.SubsetColumn.Name = "SubsetColumn"
         '
-        'CodePhrase
+        'CodePhraseColumn
         '
-        Me.CodePhrase.DataPropertyName = "CodePhrase"
-        Me.CodePhrase.HeaderText = "URI"
-        Me.CodePhrase.Name = "CodePhrase"
-        Me.CodePhrase.ReadOnly = True
-        Me.CodePhrase.Width = 300
+        Me.CodePhraseColumn.DataPropertyName = "CodePhrase"
+        Me.CodePhraseColumn.HeaderText = "URI"
+        Me.CodePhraseColumn.Name = "CodePhraseColumn"
+        Me.CodePhraseColumn.ReadOnly = True
+        Me.CodePhraseColumn.Width = 300
         '
         'ConstraintBindingsControl
         '
@@ -129,6 +129,6 @@ Partial Class ConstraintBindingsControl
     Friend WithEvents ID As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ReleaseColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents SubsetColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents CodePhrase As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents CodePhraseColumn As System.Windows.Forms.DataGridViewTextBoxColumn
 
 End Class

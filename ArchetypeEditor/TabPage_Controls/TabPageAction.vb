@@ -176,10 +176,9 @@ Public Class TabPageAction
         Return False
     End Function
 
-
     Public Property HasParticipation() As Boolean
         Get
-            Return Not Me.TabControlAction.TabPages.Item(AE_Constants.Instance.Participation) Is Nothing
+            Return Not TabControlAction.TabPages.Item(AE_Constants.Instance.Participation) Is Nothing
         End Get
         Set(ByVal value As Boolean)
             cbParticipation.Checked = value
@@ -199,10 +198,7 @@ Public Class TabPageAction
         If mActionDescription Is Nothing Then
             tpAction.Controls.Clear()
             mActionDescription = New TabPageStructure
-
-            'SRH: Jan 6 2010  EDT-585
             mActionDescription.IsMandatory = True
-
             tpAction.Controls.Add(mActionDescription)
             mActionDescription.Dock = DockStyle.Fill
         End If
@@ -237,9 +233,8 @@ Public Class TabPageAction
         mPathwaySpecification.Dock = DockStyle.Fill
     End Sub
 
-    Public Sub ProcessAction(ByVal Struct As Children)
-
-        For Each rm As RmStructureCompound In Struct
+    Public Sub ProcessAction(ByVal children As Children)
+        For Each rm As RmStructureCompound In children
             Select Case rm.Type
                 Case StructureType.ISM_TRANSITION
                     tpPathway.Controls.Clear()
@@ -251,8 +246,6 @@ Public Class TabPageAction
                     Dim an_action As RmStructure = rm.Children.Items(0)
                     tpAction.Controls.Clear()
                     mActionDescription = New TabPageStructure
-
-                    'SRH: Jan 6 2010  EDT-585
                     mActionDescription.IsMandatory = True
 
                     If an_action.Type = StructureType.Slot Then
@@ -272,38 +265,37 @@ Public Class TabPageAction
         Next
     End Sub
 
-    Public Sub BuildInterface(ByVal aContainer As Control, ByRef pos As Point, ByVal mandatory_only As Boolean)
+    Public Sub BuildInterface(ByVal container As Control, ByRef pos As Point, ByVal mandatory_only As Boolean)
         Dim spacer As Integer = 1
 
-        'leftmargin = pos.X
-        If aContainer.Name <> "tpInterface" Then
-            aContainer.Size = New Size
+        If container.Name <> "tpInterface" Then
+            container.Size = New Size
         End If
 
         If Not mActionDescription Is Nothing Then
-            mActionDescription.BuildInterface(aContainer, pos, mandatory_only)
+            mActionDescription.BuildInterface(container, pos, mandatory_only)
         End If
     End Sub
 
     Public Function SaveAsAction() As RmStructureCompound
-        Dim rm As New RmStructureCompound("Action", StructureType.ACTION)
+        Dim result As New RmStructureCompound("Action", StructureType.ACTION)
 
         If Not mPathwaySpecification Is Nothing Then
-            rm.Children.Add(mPathwaySpecification.PathwaySteps)
+            result.Children.Add(mPathwaySpecification.PathwaySteps)
         End If
 
         If Not mActionDescription Is Nothing Then
             Dim action_spec As New RmStructureCompound("activity_description", StructureType.ActivityDescription)
-            Dim rm_struct As RmStructure = mActionDescription.SaveAsStructure
+            Dim rm As RmStructure = mActionDescription.SaveAsStructure
 
-            If Not rm_struct Is Nothing Then
-                action_spec.Children.Add(rm_struct)
+            If Not rm Is Nothing Then
+                action_spec.Children.Add(rm)
             End If
 
-            rm.Children.Add(action_spec)
+            result.Children.Add(action_spec)
         End If
 
-        Return rm
+        Return result
     End Function
 
     Public Sub Translate()
@@ -317,6 +309,8 @@ Public Class TabPageAction
     End Sub
 
     Public Sub TranslateGUI()
+        cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, cbProtocol.Text)
+        cbParticipation.Text = Filemanager.GetOpenEhrTerm(654, cbParticipation.Text)
         tpAction.Title = Filemanager.GetOpenEhrTerm(509, "Activity description")
         tpPathway.Title = Filemanager.GetOpenEhrTerm(510, "Pathway")
         mPathwaySpecification.TranslateGUI()
@@ -331,7 +325,8 @@ Public Class TabPageAction
     End Sub
 
     Private Sub cbParticipation_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbParticipation.CheckedChanged
-        RaiseEvent ParticipationCheckChanged(Me.TabControlAction, cbParticipation.Checked)
+        RaiseEvent ParticipationCheckChanged(TabControlAction, cbParticipation.Checked)
+
         If Not mFileManager.FileLoading Then
             mFileManager.FileEdited = True
         End If

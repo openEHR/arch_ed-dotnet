@@ -29,9 +29,7 @@ Public Class IdentifierConstraintControl : Inherits ConstraintControl
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = aFileManager
-        If Main.Instance.DefaultLanguageCode <> "en" Then
-            Translate()
-        End If
+        Translate()
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -164,9 +162,9 @@ Public Class IdentifierConstraintControl : Inherits ConstraintControl
 
     Public Sub Translate()
         LabelTop.Text = Filemanager.GetOpenEhrTerm(663, LabelTop.Text)
-        lblIssuer.Text = Filemanager.GetOpenEhrTerm(671, lblIssuer.Text)
+        lblIssuer.Text = Filemanager.GetOpenEhrTerm(713, lblIssuer.Text)
         lblType.Text = Filemanager.GetOpenEhrTerm(443, lblType.Text)
-        lblAssigner.Text = Filemanager.GetOpenEhrTerm(670, lblAssigner.Text)
+        lblAssigner.Text = Filemanager.GetOpenEhrTerm(714, lblAssigner.Text)
     End Sub
 
     Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)

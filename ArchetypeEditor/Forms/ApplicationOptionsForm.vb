@@ -29,21 +29,16 @@ Public Class ApplicationOptionsForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents txtEmail As System.Windows.Forms.TextBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents txtUsername As System.Windows.Forms.TextBox
-    Friend WithEvents butCancel As System.Windows.Forms.Button
-    Friend WithEvents butOK As System.Windows.Forms.Button
+    Friend WithEvents CloseButton As System.Windows.Forms.Button
+    Friend WithEvents OkButton As System.Windows.Forms.Button
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
-    Friend WithEvents lblArchetypePath As System.Windows.Forms.Label
+    Friend WithEvents RepositoryPathLabel As System.Windows.Forms.Label
     Friend WithEvents RepositoryBrowseButton As System.Windows.Forms.Button
     Friend WithEvents RepositoryPathTextBox As System.Windows.Forms.TextBox
-    Friend WithEvents comboReferenceModel As System.Windows.Forms.ComboBox
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents ReferenceModelComboBox As System.Windows.Forms.ComboBox
+    Friend WithEvents ReferenceModelLabel As System.Windows.Forms.Label
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
-    Friend WithEvents gbUserDetails As System.Windows.Forms.GroupBox
-    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents StateMachineGroupBox As System.Windows.Forms.GroupBox
     Friend WithEvents Label_0 As System.Windows.Forms.Label
     Friend WithEvents Panel_0 As System.Windows.Forms.Panel
     Friend WithEvents Panel_2 As System.Windows.Forms.Panel
@@ -66,24 +61,22 @@ Public Class ApplicationOptionsForm
     Friend WithEvents AppearanceTabPage As System.Windows.Forms.TabPage
     Friend WithEvents DefaultsTabPage As System.Windows.Forms.TabPage
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents lblOccurrences As System.Windows.Forms.Label
-    Friend WithEvents comboOccurrences As System.Windows.Forms.ComboBox
-    Friend WithEvents txtOrganisation As System.Windows.Forms.TextBox
-    Friend WithEvents lblOrganisation As System.Windows.Forms.Label
+    Friend WithEvents OccurrencesLabel As System.Windows.Forms.Label
+    Friend WithEvents OccurrencesComboBox As System.Windows.Forms.ComboBox
     Friend WithEvents Panel_7 As System.Windows.Forms.Panel
     Friend WithEvents ParserGroupBox As System.Windows.Forms.GroupBox
     Friend WithEvents ParserXmlRadioButton As System.Windows.Forms.RadioButton
     Friend WithEvents ParserAdlRadioButton As System.Windows.Forms.RadioButton
-    Friend WithEvents chkWebSearch As System.Windows.Forms.CheckBox
-    Friend WithEvents lblURL As System.Windows.Forms.Label
-    Friend WithEvents txtURL As System.Windows.Forms.TextBox
-    Friend WithEvents lblTerminology As System.Windows.Forms.Label
-    Friend WithEvents txtTerminologyURL As System.Windows.Forms.TextBox
-    Friend WithEvents chkTerminology As System.Windows.Forms.CheckBox
-    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents SharedRepositoryUrlCheckBox As System.Windows.Forms.CheckBox
+    Friend WithEvents SharedRepositoryUrlLabel As System.Windows.Forms.Label
+    Friend WithEvents SharedRepositoryUrlTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents TerminologyServiceUrlLabel As System.Windows.Forms.Label
+    Friend WithEvents TerminologyServiceUrlTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents TerminologyServiceUrlCheckBox As System.Windows.Forms.CheckBox
+    Friend WithEvents AutoSaveLabel As System.Windows.Forms.Label
     Friend WithEvents numAutoSave As System.Windows.Forms.NumericUpDown
     Friend WithEvents XmlRepositoryPathTextBox As System.Windows.Forms.TextBox
-    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents XmlRepositoryPathLabel As System.Windows.Forms.Label
     Friend WithEvents XmlRepositoryBrowseButton As System.Windows.Forms.Button
     Friend WithEvents XmlRepositoryAutoSaveCheckBox As System.Windows.Forms.CheckBox
     Friend WithEvents RepositoryAutoSaveCheckBox As System.Windows.Forms.CheckBox
@@ -91,38 +84,37 @@ Public Class ApplicationOptionsForm
     Friend WithEvents XsltScriptPathTextBox As System.Windows.Forms.TextBox
     Friend WithEvents XsltScriptPathLabel As System.Windows.Forms.Label
     Friend WithEvents XsltScriptPathButton As System.Windows.Forms.Button
-    Friend WithEvents chkShowCommentsInHTML As System.Windows.Forms.CheckBox
-    Friend WithEvents chkShowTerminologyInHTML As System.Windows.Forms.CheckBox
+    Friend WithEvents ShowCommentsInHTMLCheckBox As System.Windows.Forms.CheckBox
+    Friend WithEvents ShowTerminologyInHTMLCheckBox As System.Windows.Forms.CheckBox
     Friend WithEvents XsltScriptPathExplanatoryLabel As System.Windows.Forms.Label
     Friend WithEvents XsltScriptPathCheckBox As System.Windows.Forms.CheckBox
     Friend WithEvents ShowLinksButtonCheckBox As System.Windows.Forms.CheckBox
     Friend WithEvents RestoreDefaultSharedRepositoryUrlButton As System.Windows.Forms.Button
     Friend WithEvents RestoreDefaultTerminologyServiceUrlButton As System.Windows.Forms.Button
+    Friend WithEvents txtOrganisation As System.Windows.Forms.TextBox
+    Friend WithEvents OrganisationLabel As System.Windows.Forms.Label
+    Friend WithEvents NameLabel As System.Windows.Forms.Label
+    Friend WithEvents txtUsername As System.Windows.Forms.TextBox
+    Friend WithEvents txtEmail As System.Windows.Forms.TextBox
+    Friend WithEvents EmailLabel As System.Windows.Forms.Label
     Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ApplicationOptionsForm))
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.txtEmail = New System.Windows.Forms.TextBox
-        Me.Label2 = New System.Windows.Forms.Label
-        Me.txtUsername = New System.Windows.Forms.TextBox
-        Me.lblArchetypePath = New System.Windows.Forms.Label
+        Me.RepositoryPathLabel = New System.Windows.Forms.Label
         Me.RepositoryPathTextBox = New System.Windows.Forms.TextBox
-        Me.butCancel = New System.Windows.Forms.Button
-        Me.butOK = New System.Windows.Forms.Button
+        Me.CloseButton = New System.Windows.Forms.Button
+        Me.OkButton = New System.Windows.Forms.Button
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.txtURL = New System.Windows.Forms.TextBox
-        Me.txtTerminologyURL = New System.Windows.Forms.TextBox
+        Me.SharedRepositoryUrlTextBox = New System.Windows.Forms.TextBox
+        Me.TerminologyServiceUrlTextBox = New System.Windows.Forms.TextBox
         Me.XmlRepositoryPathTextBox = New System.Windows.Forms.TextBox
         Me.XsltScriptPathTextBox = New System.Windows.Forms.TextBox
         Me.RepositoryBrowseButton = New System.Windows.Forms.Button
-        Me.comboReferenceModel = New System.Windows.Forms.ComboBox
-        Me.Label1 = New System.Windows.Forms.Label
+        Me.ReferenceModelComboBox = New System.Windows.Forms.ComboBox
+        Me.ReferenceModelLabel = New System.Windows.Forms.Label
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog
-        Me.gbUserDetails = New System.Windows.Forms.GroupBox
-        Me.txtOrganisation = New System.Windows.Forms.TextBox
-        Me.lblOrganisation = New System.Windows.Forms.Label
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.StateMachineGroupBox = New System.Windows.Forms.GroupBox
         Me.Panel_7 = New System.Windows.Forms.Panel
         Me.Label_7 = New System.Windows.Forms.Label
         Me.Panel_6 = New System.Windows.Forms.Panel
@@ -143,15 +135,21 @@ Public Class ApplicationOptionsForm
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog
         Me.TabConfiguration = New System.Windows.Forms.TabControl
         Me.UserDetailsTabPage = New System.Windows.Forms.TabPage
+        Me.txtOrganisation = New System.Windows.Forms.TextBox
+        Me.OrganisationLabel = New System.Windows.Forms.Label
+        Me.NameLabel = New System.Windows.Forms.Label
+        Me.txtUsername = New System.Windows.Forms.TextBox
+        Me.txtEmail = New System.Windows.Forms.TextBox
+        Me.EmailLabel = New System.Windows.Forms.Label
         Me.FileLocationsTabPage = New System.Windows.Forms.TabPage
         Me.RestoreDefaultTerminologyServiceUrlButton = New System.Windows.Forms.Button
         Me.RestoreDefaultSharedRepositoryUrlButton = New System.Windows.Forms.Button
-        Me.Label6 = New System.Windows.Forms.Label
+        Me.XmlRepositoryPathLabel = New System.Windows.Forms.Label
         Me.XmlRepositoryBrowseButton = New System.Windows.Forms.Button
-        Me.lblTerminology = New System.Windows.Forms.Label
-        Me.chkTerminology = New System.Windows.Forms.CheckBox
-        Me.lblURL = New System.Windows.Forms.Label
-        Me.chkWebSearch = New System.Windows.Forms.CheckBox
+        Me.TerminologyServiceUrlLabel = New System.Windows.Forms.Label
+        Me.TerminologyServiceUrlCheckBox = New System.Windows.Forms.CheckBox
+        Me.SharedRepositoryUrlLabel = New System.Windows.Forms.Label
+        Me.SharedRepositoryUrlCheckBox = New System.Windows.Forms.CheckBox
         Me.RepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
         Me.XmlRepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
         Me.HtmlTabPage = New System.Windows.Forms.TabPage
@@ -159,21 +157,20 @@ Public Class ApplicationOptionsForm
         Me.XsltScriptPathExplanatoryLabel = New System.Windows.Forms.Label
         Me.XsltScriptPathLabel = New System.Windows.Forms.Label
         Me.XsltScriptPathButton = New System.Windows.Forms.Button
-        Me.chkShowCommentsInHTML = New System.Windows.Forms.CheckBox
-        Me.chkShowTerminologyInHTML = New System.Windows.Forms.CheckBox
+        Me.ShowCommentsInHTMLCheckBox = New System.Windows.Forms.CheckBox
+        Me.ShowTerminologyInHTMLCheckBox = New System.Windows.Forms.CheckBox
         Me.AppearanceTabPage = New System.Windows.Forms.TabPage
         Me.ShowLinksButtonCheckBox = New System.Windows.Forms.CheckBox
-        Me.lblOccurrences = New System.Windows.Forms.Label
-        Me.comboOccurrences = New System.Windows.Forms.ComboBox
+        Me.OccurrencesLabel = New System.Windows.Forms.Label
+        Me.OccurrencesComboBox = New System.Windows.Forms.ComboBox
         Me.DefaultsTabPage = New System.Windows.Forms.TabPage
-        Me.Label5 = New System.Windows.Forms.Label
+        Me.AutoSaveLabel = New System.Windows.Forms.Label
         Me.numAutoSave = New System.Windows.Forms.NumericUpDown
         Me.ParserGroupBox = New System.Windows.Forms.GroupBox
         Me.ParserXmlRadioButton = New System.Windows.Forms.RadioButton
         Me.ParserAdlRadioButton = New System.Windows.Forms.RadioButton
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.gbUserDetails.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
+        Me.StateMachineGroupBox.SuspendLayout()
         Me.Panel_4.SuspendLayout()
         Me.TabConfiguration.SuspendLayout()
         Me.UserDetailsTabPage.SuspendLayout()
@@ -185,51 +182,15 @@ Public Class ApplicationOptionsForm
         Me.ParserGroupBox.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Label3
+        'RepositoryPathLabel
         '
-        Me.Label3.Location = New System.Drawing.Point(8, 54)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(104, 24)
-        Me.Label3.TabIndex = 3
-        Me.Label3.Text = "Email:"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txtEmail
-        '
-        Me.txtEmail.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtEmail.Location = New System.Drawing.Point(120, 56)
-        Me.txtEmail.Name = "txtEmail"
-        Me.txtEmail.Size = New System.Drawing.Size(469, 20)
-        Me.txtEmail.TabIndex = 4
-        '
-        'Label2
-        '
-        Me.Label2.Location = New System.Drawing.Point(24, 24)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(88, 24)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Name:"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txtUsername
-        '
-        Me.txtUsername.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtUsername.Location = New System.Drawing.Point(120, 24)
-        Me.txtUsername.Name = "txtUsername"
-        Me.txtUsername.Size = New System.Drawing.Size(469, 20)
-        Me.txtUsername.TabIndex = 2
-        '
-        'lblArchetypePath
-        '
-        Me.lblArchetypePath.AutoSize = True
-        Me.lblArchetypePath.Location = New System.Drawing.Point(19, 19)
-        Me.lblArchetypePath.Name = "lblArchetypePath"
-        Me.lblArchetypePath.Size = New System.Drawing.Size(130, 13)
-        Me.lblArchetypePath.TabIndex = 0
-        Me.lblArchetypePath.Text = "Archetype repository path:"
-        Me.lblArchetypePath.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        Me.RepositoryPathLabel.AutoSize = True
+        Me.RepositoryPathLabel.Location = New System.Drawing.Point(19, 19)
+        Me.RepositoryPathLabel.Name = "RepositoryPathLabel"
+        Me.RepositoryPathLabel.Size = New System.Drawing.Size(130, 13)
+        Me.RepositoryPathLabel.TabIndex = 0
+        Me.RepositoryPathLabel.Text = "Archetype repository path:"
+        Me.RepositoryPathLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'RepositoryPathTextBox
         '
@@ -241,45 +202,45 @@ Public Class ApplicationOptionsForm
         Me.RepositoryPathTextBox.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.RepositoryPathTextBox, "Leave blank for last directory used")
         '
-        'butCancel
+        'CloseButton
         '
-        Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(539, 304)
-        Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(80, 24)
-        Me.butCancel.TabIndex = 3
-        Me.butCancel.Text = "Cancel"
+        Me.CloseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CloseButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.CloseButton.Location = New System.Drawing.Point(539, 304)
+        Me.CloseButton.Name = "CloseButton"
+        Me.CloseButton.Size = New System.Drawing.Size(80, 24)
+        Me.CloseButton.TabIndex = 3
+        Me.CloseButton.Text = "Cancel"
         '
-        'butOK
+        'OkButton
         '
-        Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(449, 304)
-        Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(80, 24)
-        Me.butOK.TabIndex = 2
-        Me.butOK.Text = "OK"
+        Me.OkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.OkButton.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.OkButton.Location = New System.Drawing.Point(449, 304)
+        Me.OkButton.Name = "OkButton"
+        Me.OkButton.Size = New System.Drawing.Size(80, 24)
+        Me.OkButton.TabIndex = 2
+        Me.OkButton.Text = "OK"
         '
-        'txtURL
+        'SharedRepositoryUrlTextBox
         '
-        Me.txtURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.SharedRepositoryUrlTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtURL.Location = New System.Drawing.Point(19, 168)
-        Me.txtURL.Name = "txtURL"
-        Me.txtURL.Size = New System.Drawing.Size(490, 20)
-        Me.txtURL.TabIndex = 10
-        Me.ToolTip1.SetToolTip(Me.txtURL, "Http address of repository")
+        Me.SharedRepositoryUrlTextBox.Location = New System.Drawing.Point(19, 168)
+        Me.SharedRepositoryUrlTextBox.Name = "SharedRepositoryUrlTextBox"
+        Me.SharedRepositoryUrlTextBox.Size = New System.Drawing.Size(490, 20)
+        Me.SharedRepositoryUrlTextBox.TabIndex = 10
+        Me.ToolTip1.SetToolTip(Me.SharedRepositoryUrlTextBox, "Http address of repository")
         '
-        'txtTerminologyURL
+        'TerminologyServiceUrlTextBox
         '
-        Me.txtTerminologyURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TerminologyServiceUrlTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtTerminologyURL.Location = New System.Drawing.Point(19, 222)
-        Me.txtTerminologyURL.Name = "txtTerminologyURL"
-        Me.txtTerminologyURL.Size = New System.Drawing.Size(490, 20)
-        Me.txtTerminologyURL.TabIndex = 14
-        Me.ToolTip1.SetToolTip(Me.txtTerminologyURL, "Http address of repository")
+        Me.TerminologyServiceUrlTextBox.Location = New System.Drawing.Point(19, 222)
+        Me.TerminologyServiceUrlTextBox.Name = "TerminologyServiceUrlTextBox"
+        Me.TerminologyServiceUrlTextBox.Size = New System.Drawing.Size(490, 20)
+        Me.TerminologyServiceUrlTextBox.TabIndex = 14
+        Me.ToolTip1.SetToolTip(Me.TerminologyServiceUrlTextBox, "Http address of repository")
         '
         'XmlRepositoryPathTextBox
         '
@@ -313,81 +274,46 @@ Public Class ApplicationOptionsForm
         Me.RepositoryBrowseButton.Text = "Browse..."
         Me.RepositoryBrowseButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'comboReferenceModel
+        'ReferenceModelComboBox
         '
-        Me.comboReferenceModel.Location = New System.Drawing.Point(16, 56)
-        Me.comboReferenceModel.Name = "comboReferenceModel"
-        Me.comboReferenceModel.Size = New System.Drawing.Size(208, 21)
-        Me.comboReferenceModel.TabIndex = 2
+        Me.ReferenceModelComboBox.Location = New System.Drawing.Point(16, 56)
+        Me.ReferenceModelComboBox.Name = "ReferenceModelComboBox"
+        Me.ReferenceModelComboBox.Size = New System.Drawing.Size(208, 21)
+        Me.ReferenceModelComboBox.TabIndex = 2
         '
-        'Label1
+        'ReferenceModelLabel
         '
-        Me.Label1.Location = New System.Drawing.Point(16, 21)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(200, 32)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Default reference model:"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        Me.ReferenceModelLabel.Location = New System.Drawing.Point(16, 21)
+        Me.ReferenceModelLabel.Name = "ReferenceModelLabel"
+        Me.ReferenceModelLabel.Size = New System.Drawing.Size(200, 32)
+        Me.ReferenceModelLabel.TabIndex = 1
+        Me.ReferenceModelLabel.Text = "Default reference model:"
+        Me.ReferenceModelLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
-        'gbUserDetails
+        'StateMachineGroupBox
         '
-        Me.gbUserDetails.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.gbUserDetails.Controls.Add(Me.txtOrganisation)
-        Me.gbUserDetails.Controls.Add(Me.lblOrganisation)
-        Me.gbUserDetails.Controls.Add(Me.Label2)
-        Me.gbUserDetails.Controls.Add(Me.txtUsername)
-        Me.gbUserDetails.Controls.Add(Me.txtEmail)
-        Me.gbUserDetails.Controls.Add(Me.Label3)
-        Me.gbUserDetails.Location = New System.Drawing.Point(16, 7)
-        Me.gbUserDetails.Name = "gbUserDetails"
-        Me.gbUserDetails.Size = New System.Drawing.Size(602, 125)
-        Me.gbUserDetails.TabIndex = 23
-        Me.gbUserDetails.TabStop = False
-        Me.gbUserDetails.Text = "User details"
-        '
-        'txtOrganisation
-        '
-        Me.txtOrganisation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtOrganisation.Location = New System.Drawing.Point(120, 90)
-        Me.txtOrganisation.Name = "txtOrganisation"
-        Me.txtOrganisation.Size = New System.Drawing.Size(469, 20)
-        Me.txtOrganisation.TabIndex = 6
-        '
-        'lblOrganisation
-        '
-        Me.lblOrganisation.Location = New System.Drawing.Point(11, 86)
-        Me.lblOrganisation.Name = "lblOrganisation"
-        Me.lblOrganisation.Size = New System.Drawing.Size(103, 24)
-        Me.lblOrganisation.TabIndex = 5
-        Me.lblOrganisation.Text = "Organisation:"
-        Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.Panel_7)
-        Me.GroupBox1.Controls.Add(Me.Label_7)
-        Me.GroupBox1.Controls.Add(Me.Panel_6)
-        Me.GroupBox1.Controls.Add(Me.Label_6)
-        Me.GroupBox1.Controls.Add(Me.Panel_4)
-        Me.GroupBox1.Controls.Add(Me.Label_4)
-        Me.GroupBox1.Controls.Add(Me.Panel_1)
-        Me.GroupBox1.Controls.Add(Me.Label_1)
-        Me.GroupBox1.Controls.Add(Me.Panel_3)
-        Me.GroupBox1.Controls.Add(Me.Label_3)
-        Me.GroupBox1.Controls.Add(Me.Panel_2)
-        Me.GroupBox1.Controls.Add(Me.Label_2)
-        Me.GroupBox1.Controls.Add(Me.Panel_0)
-        Me.GroupBox1.Controls.Add(Me.Label_0)
-        Me.GroupBox1.Controls.Add(Me.Panel_5)
-        Me.GroupBox1.Controls.Add(Me.Label_5)
-        Me.GroupBox1.Location = New System.Drawing.Point(16, 8)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(464, 117)
-        Me.GroupBox1.TabIndex = 1
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "State machine colours"
+        Me.StateMachineGroupBox.Controls.Add(Me.Panel_7)
+        Me.StateMachineGroupBox.Controls.Add(Me.Label_7)
+        Me.StateMachineGroupBox.Controls.Add(Me.Panel_6)
+        Me.StateMachineGroupBox.Controls.Add(Me.Label_6)
+        Me.StateMachineGroupBox.Controls.Add(Me.Panel_4)
+        Me.StateMachineGroupBox.Controls.Add(Me.Label_4)
+        Me.StateMachineGroupBox.Controls.Add(Me.Panel_1)
+        Me.StateMachineGroupBox.Controls.Add(Me.Label_1)
+        Me.StateMachineGroupBox.Controls.Add(Me.Panel_3)
+        Me.StateMachineGroupBox.Controls.Add(Me.Label_3)
+        Me.StateMachineGroupBox.Controls.Add(Me.Panel_2)
+        Me.StateMachineGroupBox.Controls.Add(Me.Label_2)
+        Me.StateMachineGroupBox.Controls.Add(Me.Panel_0)
+        Me.StateMachineGroupBox.Controls.Add(Me.Label_0)
+        Me.StateMachineGroupBox.Controls.Add(Me.Panel_5)
+        Me.StateMachineGroupBox.Controls.Add(Me.Label_5)
+        Me.StateMachineGroupBox.Location = New System.Drawing.Point(16, 8)
+        Me.StateMachineGroupBox.Name = "StateMachineGroupBox"
+        Me.StateMachineGroupBox.Size = New System.Drawing.Size(464, 117)
+        Me.StateMachineGroupBox.TabIndex = 1
+        Me.StateMachineGroupBox.TabStop = False
+        Me.StateMachineGroupBox.Text = "State machine colours"
         '
         'Panel_7
         '
@@ -569,7 +495,12 @@ Public Class ApplicationOptionsForm
         '
         'UserDetailsTabPage
         '
-        Me.UserDetailsTabPage.Controls.Add(Me.gbUserDetails)
+        Me.UserDetailsTabPage.Controls.Add(Me.txtOrganisation)
+        Me.UserDetailsTabPage.Controls.Add(Me.OrganisationLabel)
+        Me.UserDetailsTabPage.Controls.Add(Me.NameLabel)
+        Me.UserDetailsTabPage.Controls.Add(Me.txtUsername)
+        Me.UserDetailsTabPage.Controls.Add(Me.txtEmail)
+        Me.UserDetailsTabPage.Controls.Add(Me.EmailLabel)
         Me.UserDetailsTabPage.Location = New System.Drawing.Point(4, 22)
         Me.UserDetailsTabPage.Name = "UserDetailsTabPage"
         Me.UserDetailsTabPage.Size = New System.Drawing.Size(635, 269)
@@ -577,21 +508,75 @@ Public Class ApplicationOptionsForm
         Me.UserDetailsTabPage.Text = "User Details"
         Me.UserDetailsTabPage.UseVisualStyleBackColor = True
         '
+        'txtOrganisation
+        '
+        Me.txtOrganisation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtOrganisation.Location = New System.Drawing.Point(139, 85)
+        Me.txtOrganisation.Name = "txtOrganisation"
+        Me.txtOrganisation.Size = New System.Drawing.Size(469, 20)
+        Me.txtOrganisation.TabIndex = 12
+        '
+        'OrganisationLabel
+        '
+        Me.OrganisationLabel.Location = New System.Drawing.Point(30, 81)
+        Me.OrganisationLabel.Name = "OrganisationLabel"
+        Me.OrganisationLabel.Size = New System.Drawing.Size(103, 24)
+        Me.OrganisationLabel.TabIndex = 11
+        Me.OrganisationLabel.Text = "Organisation:"
+        Me.OrganisationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'NameLabel
+        '
+        Me.NameLabel.Location = New System.Drawing.Point(43, 19)
+        Me.NameLabel.Name = "NameLabel"
+        Me.NameLabel.Size = New System.Drawing.Size(88, 24)
+        Me.NameLabel.TabIndex = 7
+        Me.NameLabel.Text = "Name:"
+        Me.NameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtUsername
+        '
+        Me.txtUsername.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtUsername.Location = New System.Drawing.Point(139, 19)
+        Me.txtUsername.Name = "txtUsername"
+        Me.txtUsername.Size = New System.Drawing.Size(469, 20)
+        Me.txtUsername.TabIndex = 8
+        '
+        'txtEmail
+        '
+        Me.txtEmail.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtEmail.Location = New System.Drawing.Point(139, 51)
+        Me.txtEmail.Name = "txtEmail"
+        Me.txtEmail.Size = New System.Drawing.Size(469, 20)
+        Me.txtEmail.TabIndex = 10
+        '
+        'EmailLabel
+        '
+        Me.EmailLabel.Location = New System.Drawing.Point(27, 49)
+        Me.EmailLabel.Name = "EmailLabel"
+        Me.EmailLabel.Size = New System.Drawing.Size(104, 24)
+        Me.EmailLabel.TabIndex = 9
+        Me.EmailLabel.Text = "Email:"
+        Me.EmailLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'FileLocationsTabPage
         '
         Me.FileLocationsTabPage.Controls.Add(Me.RestoreDefaultTerminologyServiceUrlButton)
         Me.FileLocationsTabPage.Controls.Add(Me.RestoreDefaultSharedRepositoryUrlButton)
         Me.FileLocationsTabPage.Controls.Add(Me.RepositoryPathTextBox)
         Me.FileLocationsTabPage.Controls.Add(Me.XmlRepositoryPathTextBox)
-        Me.FileLocationsTabPage.Controls.Add(Me.Label6)
+        Me.FileLocationsTabPage.Controls.Add(Me.XmlRepositoryPathLabel)
         Me.FileLocationsTabPage.Controls.Add(Me.XmlRepositoryBrowseButton)
-        Me.FileLocationsTabPage.Controls.Add(Me.lblTerminology)
-        Me.FileLocationsTabPage.Controls.Add(Me.txtTerminologyURL)
-        Me.FileLocationsTabPage.Controls.Add(Me.chkTerminology)
-        Me.FileLocationsTabPage.Controls.Add(Me.lblURL)
-        Me.FileLocationsTabPage.Controls.Add(Me.txtURL)
-        Me.FileLocationsTabPage.Controls.Add(Me.chkWebSearch)
-        Me.FileLocationsTabPage.Controls.Add(Me.lblArchetypePath)
+        Me.FileLocationsTabPage.Controls.Add(Me.TerminologyServiceUrlLabel)
+        Me.FileLocationsTabPage.Controls.Add(Me.TerminologyServiceUrlTextBox)
+        Me.FileLocationsTabPage.Controls.Add(Me.TerminologyServiceUrlCheckBox)
+        Me.FileLocationsTabPage.Controls.Add(Me.SharedRepositoryUrlLabel)
+        Me.FileLocationsTabPage.Controls.Add(Me.SharedRepositoryUrlTextBox)
+        Me.FileLocationsTabPage.Controls.Add(Me.SharedRepositoryUrlCheckBox)
+        Me.FileLocationsTabPage.Controls.Add(Me.RepositoryPathLabel)
         Me.FileLocationsTabPage.Controls.Add(Me.RepositoryBrowseButton)
         Me.FileLocationsTabPage.Controls.Add(Me.RepositoryAutoSaveCheckBox)
         Me.FileLocationsTabPage.Controls.Add(Me.XmlRepositoryAutoSaveCheckBox)
@@ -622,15 +607,15 @@ Public Class ApplicationOptionsForm
         Me.RestoreDefaultSharedRepositoryUrlButton.TabIndex = 11
         Me.RestoreDefaultSharedRepositoryUrlButton.Text = "Restore Default"
         '
-        'Label6
+        'XmlRepositoryPathLabel
         '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(19, 69)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(155, 13)
-        Me.Label6.TabIndex = 4
-        Me.Label6.Text = "Archetype XML repository path:"
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        Me.XmlRepositoryPathLabel.AutoSize = True
+        Me.XmlRepositoryPathLabel.Location = New System.Drawing.Point(19, 69)
+        Me.XmlRepositoryPathLabel.Name = "XmlRepositoryPathLabel"
+        Me.XmlRepositoryPathLabel.Size = New System.Drawing.Size(155, 13)
+        Me.XmlRepositoryPathLabel.TabIndex = 4
+        Me.XmlRepositoryPathLabel.Text = "Archetype XML repository path:"
+        Me.XmlRepositoryPathLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'XmlRepositoryBrowseButton
         '
@@ -644,43 +629,43 @@ Public Class ApplicationOptionsForm
         Me.XmlRepositoryBrowseButton.Text = "Browse..."
         Me.XmlRepositoryBrowseButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lblTerminology
+        'TerminologyServiceUrlLabel
         '
-        Me.lblTerminology.Location = New System.Drawing.Point(19, 194)
-        Me.lblTerminology.Name = "lblTerminology"
-        Me.lblTerminology.Size = New System.Drawing.Size(218, 24)
-        Me.lblTerminology.TabIndex = 12
-        Me.lblTerminology.Text = "URL for Terminology Service:"
-        Me.lblTerminology.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        Me.TerminologyServiceUrlLabel.Location = New System.Drawing.Point(19, 194)
+        Me.TerminologyServiceUrlLabel.Name = "TerminologyServiceUrlLabel"
+        Me.TerminologyServiceUrlLabel.Size = New System.Drawing.Size(218, 24)
+        Me.TerminologyServiceUrlLabel.TabIndex = 12
+        Me.TerminologyServiceUrlLabel.Text = "URL for terminology service:"
+        Me.TerminologyServiceUrlLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
-        'chkTerminology
+        'TerminologyServiceUrlCheckBox
         '
-        Me.chkTerminology.AutoSize = True
-        Me.chkTerminology.Location = New System.Drawing.Point(242, 203)
-        Me.chkTerminology.Name = "chkTerminology"
-        Me.chkTerminology.Size = New System.Drawing.Size(160, 17)
-        Me.chkTerminology.TabIndex = 13
-        Me.chkTerminology.Text = "Enable Terminology LookUp"
-        Me.chkTerminology.UseVisualStyleBackColor = True
+        Me.TerminologyServiceUrlCheckBox.AutoSize = True
+        Me.TerminologyServiceUrlCheckBox.Location = New System.Drawing.Point(242, 203)
+        Me.TerminologyServiceUrlCheckBox.Name = "TerminologyServiceUrlCheckBox"
+        Me.TerminologyServiceUrlCheckBox.Size = New System.Drawing.Size(150, 17)
+        Me.TerminologyServiceUrlCheckBox.TabIndex = 13
+        Me.TerminologyServiceUrlCheckBox.Text = "Enable terminology lookup"
+        Me.TerminologyServiceUrlCheckBox.UseVisualStyleBackColor = True
         '
-        'lblURL
+        'SharedRepositoryUrlLabel
         '
-        Me.lblURL.Location = New System.Drawing.Point(19, 141)
-        Me.lblURL.Name = "lblURL"
-        Me.lblURL.Size = New System.Drawing.Size(217, 24)
-        Me.lblURL.TabIndex = 8
-        Me.lblURL.Text = "URL for shared repository:"
-        Me.lblURL.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        Me.SharedRepositoryUrlLabel.Location = New System.Drawing.Point(19, 141)
+        Me.SharedRepositoryUrlLabel.Name = "SharedRepositoryUrlLabel"
+        Me.SharedRepositoryUrlLabel.Size = New System.Drawing.Size(217, 24)
+        Me.SharedRepositoryUrlLabel.TabIndex = 8
+        Me.SharedRepositoryUrlLabel.Text = "URL for shared repository:"
+        Me.SharedRepositoryUrlLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
-        'chkWebSearch
+        'SharedRepositoryUrlCheckBox
         '
-        Me.chkWebSearch.AutoSize = True
-        Me.chkWebSearch.Location = New System.Drawing.Point(241, 149)
-        Me.chkWebSearch.Name = "chkWebSearch"
-        Me.chkWebSearch.Size = New System.Drawing.Size(135, 17)
-        Me.chkWebSearch.TabIndex = 9
-        Me.chkWebSearch.Text = "Enable Internet Search"
-        Me.chkWebSearch.UseVisualStyleBackColor = True
+        Me.SharedRepositoryUrlCheckBox.AutoSize = True
+        Me.SharedRepositoryUrlCheckBox.Location = New System.Drawing.Point(241, 149)
+        Me.SharedRepositoryUrlCheckBox.Name = "SharedRepositoryUrlCheckBox"
+        Me.SharedRepositoryUrlCheckBox.Size = New System.Drawing.Size(132, 17)
+        Me.SharedRepositoryUrlCheckBox.TabIndex = 9
+        Me.SharedRepositoryUrlCheckBox.Text = "Enable internet search"
+        Me.SharedRepositoryUrlCheckBox.UseVisualStyleBackColor = True
         '
         'RepositoryAutoSaveCheckBox
         '
@@ -709,8 +694,8 @@ Public Class ApplicationOptionsForm
         Me.HtmlTabPage.Controls.Add(Me.XsltScriptPathTextBox)
         Me.HtmlTabPage.Controls.Add(Me.XsltScriptPathLabel)
         Me.HtmlTabPage.Controls.Add(Me.XsltScriptPathButton)
-        Me.HtmlTabPage.Controls.Add(Me.chkShowCommentsInHTML)
-        Me.HtmlTabPage.Controls.Add(Me.chkShowTerminologyInHTML)
+        Me.HtmlTabPage.Controls.Add(Me.ShowCommentsInHTMLCheckBox)
+        Me.HtmlTabPage.Controls.Add(Me.ShowTerminologyInHTMLCheckBox)
         Me.HtmlTabPage.Location = New System.Drawing.Point(4, 22)
         Me.HtmlTabPage.Name = "HtmlTabPage"
         Me.HtmlTabPage.Size = New System.Drawing.Size(635, 269)
@@ -760,32 +745,32 @@ Public Class ApplicationOptionsForm
         Me.XsltScriptPathButton.Text = "Browse..."
         Me.XsltScriptPathButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'chkShowCommentsInHTML
+        'ShowCommentsInHTMLCheckBox
         '
-        Me.chkShowCommentsInHTML.AutoSize = True
-        Me.chkShowCommentsInHTML.Location = New System.Drawing.Point(17, 135)
-        Me.chkShowCommentsInHTML.Name = "chkShowCommentsInHTML"
-        Me.chkShowCommentsInHTML.Size = New System.Drawing.Size(148, 17)
-        Me.chkShowCommentsInHTML.TabIndex = 6
-        Me.chkShowCommentsInHTML.Text = "Show comments in HTML"
-        Me.chkShowCommentsInHTML.UseVisualStyleBackColor = True
+        Me.ShowCommentsInHTMLCheckBox.AutoSize = True
+        Me.ShowCommentsInHTMLCheckBox.Location = New System.Drawing.Point(17, 135)
+        Me.ShowCommentsInHTMLCheckBox.Name = "ShowCommentsInHTMLCheckBox"
+        Me.ShowCommentsInHTMLCheckBox.Size = New System.Drawing.Size(148, 17)
+        Me.ShowCommentsInHTMLCheckBox.TabIndex = 6
+        Me.ShowCommentsInHTMLCheckBox.Text = "Show comments in HTML"
+        Me.ShowCommentsInHTMLCheckBox.UseVisualStyleBackColor = True
         '
-        'chkShowTerminologyInHTML
+        'ShowTerminologyInHTMLCheckBox
         '
-        Me.chkShowTerminologyInHTML.AutoSize = True
-        Me.chkShowTerminologyInHTML.Location = New System.Drawing.Point(17, 112)
-        Me.chkShowTerminologyInHTML.Name = "chkShowTerminologyInHTML"
-        Me.chkShowTerminologyInHTML.Size = New System.Drawing.Size(153, 17)
-        Me.chkShowTerminologyInHTML.TabIndex = 5
-        Me.chkShowTerminologyInHTML.Text = "Show terminology in HTML"
-        Me.chkShowTerminologyInHTML.UseVisualStyleBackColor = True
+        Me.ShowTerminologyInHTMLCheckBox.AutoSize = True
+        Me.ShowTerminologyInHTMLCheckBox.Location = New System.Drawing.Point(17, 112)
+        Me.ShowTerminologyInHTMLCheckBox.Name = "ShowTerminologyInHTMLCheckBox"
+        Me.ShowTerminologyInHTMLCheckBox.Size = New System.Drawing.Size(153, 17)
+        Me.ShowTerminologyInHTMLCheckBox.TabIndex = 5
+        Me.ShowTerminologyInHTMLCheckBox.Text = "Show terminology in HTML"
+        Me.ShowTerminologyInHTMLCheckBox.UseVisualStyleBackColor = True
         '
         'AppearanceTabPage
         '
         Me.AppearanceTabPage.Controls.Add(Me.ShowLinksButtonCheckBox)
-        Me.AppearanceTabPage.Controls.Add(Me.lblOccurrences)
-        Me.AppearanceTabPage.Controls.Add(Me.comboOccurrences)
-        Me.AppearanceTabPage.Controls.Add(Me.GroupBox1)
+        Me.AppearanceTabPage.Controls.Add(Me.OccurrencesLabel)
+        Me.AppearanceTabPage.Controls.Add(Me.OccurrencesComboBox)
+        Me.AppearanceTabPage.Controls.Add(Me.StateMachineGroupBox)
         Me.AppearanceTabPage.Location = New System.Drawing.Point(4, 22)
         Me.AppearanceTabPage.Name = "AppearanceTabPage"
         Me.AppearanceTabPage.Size = New System.Drawing.Size(635, 269)
@@ -803,31 +788,31 @@ Public Class ApplicationOptionsForm
         Me.ShowLinksButtonCheckBox.Text = "Show the Links button?"
         Me.ShowLinksButtonCheckBox.UseVisualStyleBackColor = True
         '
-        'lblOccurrences
+        'OccurrencesLabel
         '
-        Me.lblOccurrences.Location = New System.Drawing.Point(20, 142)
-        Me.lblOccurrences.Name = "lblOccurrences"
-        Me.lblOccurrences.Size = New System.Drawing.Size(93, 14)
-        Me.lblOccurrences.TabIndex = 2
-        Me.lblOccurrences.Text = "Occurrences:"
-        Me.lblOccurrences.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.OccurrencesLabel.Location = New System.Drawing.Point(20, 142)
+        Me.OccurrencesLabel.Name = "OccurrencesLabel"
+        Me.OccurrencesLabel.Size = New System.Drawing.Size(93, 14)
+        Me.OccurrencesLabel.TabIndex = 2
+        Me.OccurrencesLabel.Text = "Occurrences:"
+        Me.OccurrencesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'comboOccurrences
+        'OccurrencesComboBox
         '
-        Me.comboOccurrences.Items.AddRange(New Object() {"numeric", "lexical"})
-        Me.comboOccurrences.Location = New System.Drawing.Point(120, 139)
-        Me.comboOccurrences.Name = "comboOccurrences"
-        Me.comboOccurrences.Size = New System.Drawing.Size(113, 21)
-        Me.comboOccurrences.TabIndex = 3
-        Me.comboOccurrences.Text = "numeric"
+        Me.OccurrencesComboBox.Items.AddRange(New Object() {"numeric", "lexical"})
+        Me.OccurrencesComboBox.Location = New System.Drawing.Point(120, 139)
+        Me.OccurrencesComboBox.Name = "OccurrencesComboBox"
+        Me.OccurrencesComboBox.Size = New System.Drawing.Size(113, 21)
+        Me.OccurrencesComboBox.TabIndex = 3
+        Me.OccurrencesComboBox.Text = "numeric"
         '
         'DefaultsTabPage
         '
-        Me.DefaultsTabPage.Controls.Add(Me.Label5)
+        Me.DefaultsTabPage.Controls.Add(Me.AutoSaveLabel)
         Me.DefaultsTabPage.Controls.Add(Me.numAutoSave)
         Me.DefaultsTabPage.Controls.Add(Me.ParserGroupBox)
-        Me.DefaultsTabPage.Controls.Add(Me.comboReferenceModel)
-        Me.DefaultsTabPage.Controls.Add(Me.Label1)
+        Me.DefaultsTabPage.Controls.Add(Me.ReferenceModelComboBox)
+        Me.DefaultsTabPage.Controls.Add(Me.ReferenceModelLabel)
         Me.DefaultsTabPage.Location = New System.Drawing.Point(4, 22)
         Me.DefaultsTabPage.Name = "DefaultsTabPage"
         Me.DefaultsTabPage.Size = New System.Drawing.Size(635, 269)
@@ -835,14 +820,14 @@ Public Class ApplicationOptionsForm
         Me.DefaultsTabPage.Text = "Defaults"
         Me.DefaultsTabPage.UseVisualStyleBackColor = True
         '
-        'Label5
+        'AutoSaveLabel
         '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(16, 99)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(137, 13)
-        Me.Label5.TabIndex = 4
-        Me.Label5.Text = "Autosave interval (minutes):"
+        Me.AutoSaveLabel.AutoSize = True
+        Me.AutoSaveLabel.Location = New System.Drawing.Point(16, 99)
+        Me.AutoSaveLabel.Name = "AutoSaveLabel"
+        Me.AutoSaveLabel.Size = New System.Drawing.Size(137, 13)
+        Me.AutoSaveLabel.TabIndex = 4
+        Me.AutoSaveLabel.Text = "Autosave interval (minutes):"
         '
         'numAutoSave
         '
@@ -885,24 +870,23 @@ Public Class ApplicationOptionsForm
         '
         'ApplicationOptionsForm
         '
-        Me.AcceptButton = Me.butOK
+        Me.AcceptButton = Me.OkButton
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
-        Me.CancelButton = Me.butCancel
+        Me.CancelButton = Me.CloseButton
         Me.ClientSize = New System.Drawing.Size(643, 334)
         Me.Controls.Add(Me.TabConfiguration)
-        Me.Controls.Add(Me.butOK)
-        Me.Controls.Add(Me.butCancel)
+        Me.Controls.Add(Me.OkButton)
+        Me.Controls.Add(Me.CloseButton)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(600, 360)
         Me.Name = "ApplicationOptionsForm"
         Me.ShowInTaskbar = False
         Me.Text = "Options"
-        Me.gbUserDetails.ResumeLayout(False)
-        Me.gbUserDetails.PerformLayout()
-        Me.GroupBox1.ResumeLayout(False)
+        Me.StateMachineGroupBox.ResumeLayout(False)
         Me.Panel_4.ResumeLayout(False)
         Me.TabConfiguration.ResumeLayout(False)
         Me.UserDetailsTabPage.ResumeLayout(False)
+        Me.UserDetailsTabPage.PerformLayout()
         Me.FileLocationsTabPage.ResumeLayout(False)
         Me.FileLocationsTabPage.PerformLayout()
         Me.HtmlTabPage.ResumeLayout(False)
@@ -921,6 +905,8 @@ Public Class ApplicationOptionsForm
 #End Region
 
     Private Sub ApplicationOptionsForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        TranslateGUI()
+
         Dim ms As StateMachineType() = ReferenceModel.ValidStateMachineTypes
         Debug.Assert(ms.Length = 8)
         Label_0.Text = ms(0).ToString
@@ -931,6 +917,54 @@ Public Class ApplicationOptionsForm
         Label_5.Text = ms(5).ToString
         Label_6.Text = ms(6).ToString
         Label_7.Text = ms(7).ToString
+    End Sub
+
+    Private Sub TranslateGUI()
+        UserDetailsTabPage.Text = Filemanager.GetOpenEhrTerm(722, UserDetailsTabPage.Text)
+        FileLocationsTabPage.Text = Filemanager.GetOpenEhrTerm(723, FileLocationsTabPage.Text)
+        HtmlTabPage.Text = Filemanager.GetOpenEhrTerm(724, HtmlTabPage.Text)
+        AppearanceTabPage.Text = Filemanager.GetOpenEhrTerm(725, AppearanceTabPage.Text)
+        DefaultsTabPage.Text = Filemanager.GetOpenEhrTerm(726, DefaultsTabPage.Text)
+
+        OkButton.Text = Filemanager.GetOpenEhrTerm(165, OkButton.Text)
+        CloseButton.Text = Filemanager.GetOpenEhrTerm(166, CloseButton.Text)
+
+        NameLabel.Text = Filemanager.GetOpenEhrTerm(727, NameLabel.Text)
+        EmailLabel.Text = Filemanager.GetOpenEhrTerm(728, EmailLabel.Text)
+        OrganisationLabel.Text = Filemanager.GetOpenEhrTerm(729, OrganisationLabel.Text)
+
+        RepositoryPathLabel.Text = Filemanager.GetOpenEhrTerm(731, RepositoryPathLabel.Text)
+        RepositoryAutoSaveCheckBox.Text = Filemanager.GetOpenEhrTerm(732, RepositoryAutoSaveCheckBox.Text)
+        RepositoryBrowseButton.Text = Filemanager.GetOpenEhrTerm(627, RepositoryBrowseButton.Text)
+        XmlRepositoryPathLabel.Text = Filemanager.GetOpenEhrTerm(733, XmlRepositoryPathLabel.Text)
+        XmlRepositoryAutoSaveCheckBox.Text = Filemanager.GetOpenEhrTerm(734, XmlRepositoryAutoSaveCheckBox.Text)
+        XmlRepositoryBrowseButton.Text = Filemanager.GetOpenEhrTerm(627, XmlRepositoryBrowseButton.Text)
+        SharedRepositoryUrlLabel.Text = Filemanager.GetOpenEhrTerm(735, SharedRepositoryUrlLabel.Text)
+        SharedRepositoryUrlCheckBox.Text = Filemanager.GetOpenEhrTerm(736, SharedRepositoryUrlCheckBox.Text)
+        RestoreDefaultSharedRepositoryUrlButton.Text = Filemanager.GetOpenEhrTerm(730, RestoreDefaultSharedRepositoryUrlButton.Text)
+        TerminologyServiceUrlLabel.Text = Filemanager.GetOpenEhrTerm(737, TerminologyServiceUrlLabel.Text)
+        TerminologyServiceUrlCheckBox.Text = Filemanager.GetOpenEhrTerm(738, TerminologyServiceUrlCheckBox.Text)
+        RestoreDefaultTerminologyServiceUrlButton.Text = Filemanager.GetOpenEhrTerm(730, RestoreDefaultTerminologyServiceUrlButton.Text)
+
+        XsltScriptPathLabel.Text = Filemanager.GetOpenEhrTerm(739, XsltScriptPathLabel.Text)
+        XsltScriptPathCheckBox.Text = Filemanager.GetOpenEhrTerm(740, XsltScriptPathCheckBox.Text)
+        XsltScriptPathButton.Text = Filemanager.GetOpenEhrTerm(627, XsltScriptPathButton.Text)
+        XsltScriptPathExplanatoryLabel.Text = Filemanager.GetOpenEhrTerm(741, XsltScriptPathExplanatoryLabel.Text)
+        ShowTerminologyInHTMLCheckBox.Text = Filemanager.GetOpenEhrTerm(742, ShowTerminologyInHTMLCheckBox.Text)
+        ShowCommentsInHTMLCheckBox.Text = Filemanager.GetOpenEhrTerm(743, ShowCommentsInHTMLCheckBox.Text)
+
+        StateMachineGroupBox.Text = Filemanager.GetOpenEhrTerm(744, StateMachineGroupBox.Text)
+        OccurrencesLabel.Text = Filemanager.GetOpenEhrTerm(745, OccurrencesLabel.Text)
+        OccurrencesComboBox.Items.Clear()
+        OccurrencesComboBox.Items.Add(Filemanager.GetOpenEhrTerm(746, "numeric"))
+        OccurrencesComboBox.Items.Add(Filemanager.GetOpenEhrTerm(747, "lexical"))
+        ShowLinksButtonCheckBox.Text = Filemanager.GetOpenEhrTerm(748, ShowLinksButtonCheckBox.Text)
+
+        ReferenceModelComboBox.Text = Filemanager.GetOpenEhrTerm(749, ReferenceModelComboBox.Text)
+        ParserGroupBox.Text = Filemanager.GetOpenEhrTerm(750, ParserGroupBox.Text)
+        ParserAdlRadioButton.Text = Filemanager.GetOpenEhrTerm(751, ParserAdlRadioButton.Text)
+        ParserXmlRadioButton.Text = Filemanager.GetOpenEhrTerm(752, ParserXmlRadioButton.Text)
+        AutoSaveLabel.Text = Filemanager.GetOpenEhrTerm(753, AutoSaveLabel.Text)
     End Sub
 
     Private Sub RepositoryBrowseButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RepositoryBrowseButton.Click

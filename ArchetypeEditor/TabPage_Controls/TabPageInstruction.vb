@@ -188,7 +188,8 @@ Public Class TabPageInstruction
         If mFileManager.IsNew Then
             ClearActivityTabs()
 
-            Dim term As RmTerm = mFileManager.OntologyManager.AddTerm("Current Activity", "Current Activity")
+            Dim text As String = Filemanager.GetOpenEhrTerm(711, "Current Activity")
+            Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(text, text)
             mFileManager.OntologyManager.SetRmTermText(term)
             AddActivityTab(term.Text, New RmActivity(term.Code))
             TabControlInstruction.SelectedTab = TabControlInstruction.TabPages(0) 'set to first tab
@@ -275,7 +276,7 @@ Public Class TabPageInstruction
     End Sub
 
     Public Function SaveAsInstruction() As RmStructureCompound
-        Dim rm As New RmStructureCompound("Instruction", StructureType.INSTRUCTION)
+        Dim result As New RmStructureCompound("Instruction", StructureType.INSTRUCTION)
         Dim activities As New RmStructureCompound("activities", StructureType.Activities)
 
         For Each tp As Crownwood.Magic.Controls.TabPage In TabControlInstruction.TabPages
@@ -288,8 +289,8 @@ Public Class TabPageInstruction
             End If
         Next
 
-        rm.Children.Add(activities)
-        Return rm
+        result.Children.Add(activities)
+        Return result
     End Function
 
     Public Sub Translate()
@@ -307,7 +308,8 @@ Public Class TabPageInstruction
     End Sub
 
     Public Sub TranslateGUI()
-        cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, "Protocol")
+        cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, cbProtocol.Text)
+        cbParticipation.Text = Filemanager.GetOpenEhrTerm(654, cbParticipation.Text)
         toolTipAction.SetToolTip(butAddActivity, Filemanager.GetOpenEhrTerm(653, "New activity"))
         toolTipAction.SetToolTip(butRemoveActivity, Filemanager.GetOpenEhrTerm(586, "Remove activity"))
     End Sub
@@ -321,6 +323,7 @@ Public Class TabPageInstruction
 
     Private Sub cbParticipation_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbParticipation.CheckedChanged
         RaiseEvent ParticipationCheckChanged(TabControlInstruction, cbParticipation.Checked)
+
         If Not mFileManager.FileLoading Then
             mFileManager.FileEdited = True
         End If

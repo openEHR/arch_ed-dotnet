@@ -247,25 +247,25 @@ Public Class Options
         frm.XmlRepositoryPathTextBox.Text = mXmlRepositoryPath
         frm.XmlRepositoryAutoSaveCheckBox.Checked = mXmlRepositoryAutoSave
 
-        frm.txtTerminologyURL.Visible = Not TerminologyUrl Is Nothing
-        frm.lblTerminology.Visible = Not TerminologyUrl Is Nothing
-        frm.chkTerminology.Visible = Not TerminologyUrl Is Nothing
+        frm.TerminologyServiceUrlTextBox.Visible = Not TerminologyUrl Is Nothing
+        frm.TerminologyServiceUrlLabel.Visible = Not TerminologyUrl Is Nothing
+        frm.TerminologyServiceUrlCheckBox.Visible = Not TerminologyUrl Is Nothing
         frm.RestoreDefaultTerminologyServiceUrlButton.Visible = Not TerminologyUrl Is Nothing
 
         If Not TerminologyUrl Is Nothing Then
-            frm.txtTerminologyURL.Text = mTerminologyUrl.ToString
+            frm.TerminologyServiceUrlTextBox.Text = mTerminologyUrl.ToString
         End If
 
-        frm.comboOccurrences.Text = mOccurrencesView
-        frm.chkWebSearch.Checked = mAllowWebSearch
-        frm.chkTerminology.Checked = mAllowTerminologyLookUp
+        frm.OccurrencesComboBox.Text = mOccurrencesView
+        frm.SharedRepositoryUrlCheckBox.Checked = mAllowWebSearch
+        frm.TerminologyServiceUrlCheckBox.Checked = mAllowTerminologyLookUp
 
         For i As Integer = 0 To ReferenceModel.ValidReferenceModelNames.Length - 1
-            frm.comboReferenceModel.Items.Add(ReferenceModel.ValidReferenceModelNames(i))
+            frm.ReferenceModelComboBox.Items.Add(ReferenceModel.ValidReferenceModelNames(i))
         Next
 
         frm.numAutoSave.Value = CDec(mTimerMinutes)
-        frm.txtURL.Text = mArchetypeRepositoryUrl.ToString
+        frm.SharedRepositoryUrlTextBox.Text = mArchetypeRepositoryUrl.ToString
 
         If mDefaultParser = "xml" Then
             frm.ParserXmlRadioButton.Checked = True
@@ -275,11 +275,11 @@ Public Class Options
 
         frm.XsltScriptPathTextBox.Text = mXsltScriptPath
         frm.XsltScriptPathCheckBox.Checked = mUseXsltForHtml
-        frm.chkShowTerminologyInHTML.Checked = mShowTermsInHtml
-        frm.chkShowCommentsInHTML.Checked = mShowCommentsInHtml
+        frm.ShowTerminologyInHTMLCheckBox.Checked = mShowTermsInHtml
+        frm.ShowCommentsInHTMLCheckBox.Checked = mShowCommentsInHtml
         frm.ShowLinksButtonCheckBox.Checked = mShowLinksButton
 
-        frm.comboReferenceModel.SelectedIndex = mDefaultRM
+        frm.ReferenceModelComboBox.SelectedIndex = mDefaultRM
         frm.Panel_0.BackColor = mColors(0)
         frm.Panel_1.BackColor = mColors(1)
         frm.Panel_2.BackColor = mColors(2)
@@ -303,28 +303,28 @@ Public Class Options
 
             mXsltScriptPath = frm.XsltScriptPathTextBox.Text
             mUseXsltForHtml = frm.XsltScriptPathCheckBox.Checked
-            mShowTermsInHtml = frm.chkShowTerminologyInHTML.Checked
-            mShowCommentsInHtml = frm.chkShowCommentsInHTML.Checked
+            mShowTermsInHtml = frm.ShowTerminologyInHTMLCheckBox.Checked
+            mShowCommentsInHtml = frm.ShowCommentsInHTMLCheckBox.Checked
             mShowLinksButton = frm.ShowLinksButtonCheckBox.Checked
 
-            mDefaultRM = frm.comboReferenceModel.SelectedIndex
-            mOccurrencesView = frm.comboOccurrences.Text
+            mDefaultRM = frm.ReferenceModelComboBox.SelectedIndex
+            mOccurrencesView = frm.OccurrencesComboBox.Text
 
-            If Uri.IsWellFormedUriString(frm.txtTerminologyURL.Text, UriKind.Absolute) Then
-                mTerminologyUrl = New Uri(frm.txtTerminologyURL.Text)
-            ElseIf frm.txtTerminologyURL.Visible Then
-                MessageBox.Show("Invalid URL for Terminology Service: " & frm.txtTerminologyURL.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If Uri.IsWellFormedUriString(frm.TerminologyServiceUrlTextBox.Text, UriKind.Absolute) Then
+                mTerminologyUrl = New Uri(frm.TerminologyServiceUrlTextBox.Text)
+            ElseIf frm.TerminologyServiceUrlTextBox.Visible Then
+                MessageBox.Show("Invalid URL for Terminology Service: " & frm.TerminologyServiceUrlTextBox.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
 
-            If Uri.IsWellFormedUriString(frm.txtURL.Text, UriKind.Absolute) Then
-                mArchetypeRepositoryUrl = New Uri(frm.txtURL.Text)
+            If Uri.IsWellFormedUriString(frm.SharedRepositoryUrlTextBox.Text, UriKind.Absolute) Then
+                mArchetypeRepositoryUrl = New Uri(frm.SharedRepositoryUrlTextBox.Text)
             Else
-                MessageBox.Show("Invalid URL for Shared Repository: " & frm.txtURL.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("Invalid URL for Shared Repository: " & frm.SharedRepositoryUrlTextBox.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
 
             mTimerMinutes = CInt(frm.numAutoSave.Value)
-            mAllowWebSearch = frm.chkWebSearch.Checked
-            mAllowTerminologyLookUp = frm.chkTerminology.Checked
+            mAllowWebSearch = frm.SharedRepositoryUrlCheckBox.Checked
+            mAllowTerminologyLookUp = frm.TerminologyServiceUrlCheckBox.Checked
 
             If frm.ParserAdlRadioButton.Checked Then
                 mDefaultParser = "adl"
@@ -586,11 +586,11 @@ Public Class Options
     End Sub
 
     Private Sub RestoreDefaultTerminologyServiceUrlButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        CType(CType(sender, Control).FindForm(), ApplicationOptionsForm).txtTerminologyURL.Text = DefaultTerminologyUrl
+        CType(CType(sender, Control).FindForm(), ApplicationOptionsForm).TerminologyServiceUrlTextBox.Text = DefaultTerminologyUrl
     End Sub
 
     Private Sub RestoreDefaultSharedRepositoryUrlButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        CType(CType(sender, Control).FindForm(), ApplicationOptionsForm).txtURL.Text = defaultArchetypeRepositoryUrl
+        CType(CType(sender, Control).FindForm(), ApplicationOptionsForm).SharedRepositoryUrlTextBox.Text = defaultArchetypeRepositoryUrl
     End Sub
 
     Sub New()

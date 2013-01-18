@@ -185,22 +185,22 @@ Public Class TabPageDescription
         '
         Me.txtUse.AcceptsReturn = True
         Me.txtUse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtUse.Location = New System.Drawing.Point(3, 19)
+        Me.txtUse.Location = New System.Drawing.Point(3, 17)
         Me.txtUse.Multiline = True
         Me.txtUse.Name = "txtUse"
         Me.txtUse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtUse.Size = New System.Drawing.Size(790, 106)
+        Me.txtUse.Size = New System.Drawing.Size(790, 108)
         Me.txtUse.TabIndex = 4
         '
         'txtMisuse
         '
         Me.txtMisuse.AcceptsReturn = True
         Me.txtMisuse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtMisuse.Location = New System.Drawing.Point(3, 19)
+        Me.txtMisuse.Location = New System.Drawing.Point(3, 17)
         Me.txtMisuse.Multiline = True
         Me.txtMisuse.Name = "txtMisuse"
         Me.txtMisuse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtMisuse.Size = New System.Drawing.Size(790, 90)
+        Me.txtMisuse.Size = New System.Drawing.Size(790, 92)
         Me.txtMisuse.TabIndex = 6
         '
         'gbUse
@@ -240,11 +240,11 @@ Public Class TabPageDescription
         '
         Me.txtPurpose.AcceptsReturn = True
         Me.txtPurpose.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtPurpose.Location = New System.Drawing.Point(3, 19)
+        Me.txtPurpose.Location = New System.Drawing.Point(3, 17)
         Me.txtPurpose.Multiline = True
         Me.txtPurpose.Name = "txtPurpose"
         Me.txtPurpose.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtPurpose.Size = New System.Drawing.Size(555, 207)
+        Me.txtPurpose.Size = New System.Drawing.Size(555, 209)
         Me.txtPurpose.TabIndex = 0
         '
         'panelDescription
@@ -267,7 +267,7 @@ Public Class TabPageDescription
         '
         Me.CopyrightTextBox.Location = New System.Drawing.Point(16, 82)
         Me.CopyrightTextBox.Name = "CopyrightTextBox"
-        Me.CopyrightTextBox.Size = New System.Drawing.Size(200, 23)
+        Me.CopyrightTextBox.Size = New System.Drawing.Size(200, 21)
         Me.CopyrightTextBox.TabIndex = 3
         '
         'CopyrightLabel
@@ -309,7 +309,7 @@ Public Class TabPageDescription
         Me.comboLifeCycle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.comboLifeCycle.Location = New System.Drawing.Point(16, 26)
         Me.comboLifeCycle.Name = "comboLifeCycle"
-        Me.comboLifeCycle.Size = New System.Drawing.Size(200, 23)
+        Me.comboLifeCycle.Size = New System.Drawing.Size(200, 21)
         Me.comboLifeCycle.TabIndex = 1
         '
         'lblKeyword
@@ -326,10 +326,9 @@ Public Class TabPageDescription
         Me.listKeyword.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.listKeyword.ItemHeight = 15
         Me.listKeyword.Location = New System.Drawing.Point(48, 130)
         Me.listKeyword.Name = "listKeyword"
-        Me.listKeyword.Size = New System.Drawing.Size(168, 79)
+        Me.listKeyword.Size = New System.Drawing.Size(168, 69)
         Me.listKeyword.TabIndex = 36
         '
         'TabDescription
@@ -340,8 +339,8 @@ Public Class TabPageDescription
         Me.TabDescription.Location = New System.Drawing.Point(2, 2)
         Me.TabDescription.Name = "TabDescription"
         Me.TabDescription.PositionTop = True
-        Me.TabDescription.SelectedIndex = 1
-        Me.TabDescription.SelectedTab = Me.tpAuthor
+        Me.TabDescription.SelectedIndex = 0
+        Me.TabDescription.SelectedTab = Me.tpDescDetails
         Me.TabDescription.Size = New System.Drawing.Size(796, 500)
         Me.TabDescription.TabIndex = 15
         Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation, Me.tpReferences})
@@ -353,6 +352,7 @@ Public Class TabPageDescription
         Me.tpAuthor.Controls.Add(Me.gbAuthor)
         Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
         Me.tpAuthor.Name = "tpAuthor"
+        Me.tpAuthor.Selected = False
         Me.tpAuthor.Size = New System.Drawing.Size(796, 475)
         Me.tpAuthor.TabIndex = 1
         Me.tpAuthor.Title = "Authorship"
@@ -392,7 +392,7 @@ Public Class TabPageDescription
         '
         Me.txtCurrentContact.Location = New System.Drawing.Point(115, 35)
         Me.txtCurrentContact.Name = "txtCurrentContact"
-        Me.txtCurrentContact.Size = New System.Drawing.Size(426, 23)
+        Me.txtCurrentContact.Size = New System.Drawing.Size(426, 21)
         Me.txtCurrentContact.TabIndex = 1
         '
         'gbContributors
@@ -426,10 +426,9 @@ Public Class TabPageDescription
         Me.listContributors.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.listContributors.ItemHeight = 15
         Me.listContributors.Location = New System.Drawing.Point(64, 24)
         Me.listContributors.Name = "listContributors"
-        Me.listContributors.Size = New System.Drawing.Size(712, 124)
+        Me.listContributors.Size = New System.Drawing.Size(712, 121)
         Me.listContributors.TabIndex = 36
         '
         'butAddContributor
@@ -538,7 +537,7 @@ Public Class TabPageDescription
         '
         Me.txtDate.Location = New System.Drawing.Point(117, 116)
         Me.txtDate.Name = "txtDate"
-        Me.txtDate.Size = New System.Drawing.Size(160, 23)
+        Me.txtDate.Size = New System.Drawing.Size(160, 21)
         Me.txtDate.TabIndex = 10
         '
         'lblOrganisation
@@ -554,7 +553,7 @@ Public Class TabPageDescription
         '
         Me.txtOrganisation.Location = New System.Drawing.Point(117, 84)
         Me.txtOrganisation.Name = "txtOrganisation"
-        Me.txtOrganisation.Size = New System.Drawing.Size(424, 23)
+        Me.txtOrganisation.Size = New System.Drawing.Size(424, 21)
         Me.txtOrganisation.TabIndex = 7
         '
         'lblName
@@ -570,7 +569,7 @@ Public Class TabPageDescription
         '
         Me.txtOriginalAuthor.Location = New System.Drawing.Point(117, 20)
         Me.txtOriginalAuthor.Name = "txtOriginalAuthor"
-        Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 23)
+        Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 21)
         Me.txtOriginalAuthor.TabIndex = 1
         '
         'lblEmail
@@ -586,7 +585,7 @@ Public Class TabPageDescription
         '
         Me.txtOriginalEmail.Location = New System.Drawing.Point(117, 52)
         Me.txtOriginalEmail.Name = "txtOriginalEmail"
-        Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 23)
+        Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 21)
         Me.txtOriginalEmail.TabIndex = 4
         '
         'tpDescDetails
@@ -600,7 +599,6 @@ Public Class TabPageDescription
         Me.tpDescDetails.Controls.Add(Me.gbMisuse)
         Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
         Me.tpDescDetails.Name = "tpDescDetails"
-        Me.tpDescDetails.Selected = False
         Me.tpDescDetails.Size = New System.Drawing.Size(796, 475)
         Me.tpDescDetails.TabIndex = 0
         Me.tpDescDetails.Title = "Details"
@@ -674,7 +672,7 @@ Public Class TabPageDescription
         '
         Me.txtTranslationAccreditation.Location = New System.Drawing.Point(152, 120)
         Me.txtTranslationAccreditation.Name = "txtTranslationAccreditation"
-        Me.txtTranslationAccreditation.Size = New System.Drawing.Size(160, 23)
+        Me.txtTranslationAccreditation.Size = New System.Drawing.Size(160, 21)
         Me.txtTranslationAccreditation.TabIndex = 6
         '
         'lblTranslatorOrganisation
@@ -690,7 +688,7 @@ Public Class TabPageDescription
         '
         Me.txtTranslatorOrganisation.Location = New System.Drawing.Point(152, 88)
         Me.txtTranslatorOrganisation.Name = "txtTranslatorOrganisation"
-        Me.txtTranslatorOrganisation.Size = New System.Drawing.Size(424, 23)
+        Me.txtTranslatorOrganisation.Size = New System.Drawing.Size(424, 21)
         Me.txtTranslatorOrganisation.TabIndex = 4
         '
         'lblTranslatorName
@@ -706,7 +704,7 @@ Public Class TabPageDescription
         '
         Me.txtTranslatorName.Location = New System.Drawing.Point(152, 24)
         Me.txtTranslatorName.Name = "txtTranslatorName"
-        Me.txtTranslatorName.Size = New System.Drawing.Size(424, 23)
+        Me.txtTranslatorName.Size = New System.Drawing.Size(424, 21)
         Me.txtTranslatorName.TabIndex = 0
         '
         'lblTranslatorEmail
@@ -722,7 +720,7 @@ Public Class TabPageDescription
         '
         Me.txtTranslatorEmail.Location = New System.Drawing.Point(152, 56)
         Me.txtTranslatorEmail.Name = "txtTranslatorEmail"
-        Me.txtTranslatorEmail.Size = New System.Drawing.Size(424, 23)
+        Me.txtTranslatorEmail.Size = New System.Drawing.Size(424, 21)
         Me.txtTranslatorEmail.TabIndex = 1
         '
         'tpReferences
@@ -749,11 +747,11 @@ Public Class TabPageDescription
         '
         Me.txtReferences.AcceptsReturn = True
         Me.txtReferences.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtReferences.Location = New System.Drawing.Point(3, 19)
+        Me.txtReferences.Location = New System.Drawing.Point(3, 17)
         Me.txtReferences.Multiline = True
         Me.txtReferences.Name = "txtReferences"
         Me.txtReferences.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtReferences.Size = New System.Drawing.Size(790, 453)
+        Me.txtReferences.Size = New System.Drawing.Size(790, 455)
         Me.txtReferences.TabIndex = 0
         '
         'TabPageDescription
@@ -1069,15 +1067,16 @@ Public Class TabPageDescription
     End Sub
 
     Public Sub Translate()
-        Dim fileState As Boolean = Filemanager.Master.FileLoading
+        Dim wasLoading As Boolean = Filemanager.Master.FileLoading
         Filemanager.Master.FileLoading = True
         SaveDescription() ' in the previous language = mCurrentLanguage
         SaveTranslation()
+
         ' Now mark the texts as needing translation in case this is a new language
         mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         SetDescriptionDetailValues(True)
         SetTranslationValues()
-        Filemanager.Master.FileLoading = fileState
+        Filemanager.Master.FileLoading = wasLoading
     End Sub
 
     Private Sub TranslateGUI()
@@ -1103,28 +1102,32 @@ Public Class TabPageDescription
         gbContributors.Text = Filemanager.GetOpenEhrTerm(604, gbContributors.Text)
         gbCurrentResponsibility.Text = Filemanager.GetOpenEhrTerm(705, gbCurrentResponsibility.Text)
         lblCurrentContact.Text = Filemanager.GetOpenEhrTerm(704, lblCurrentContact.Text)
+        UseYourNameButton.Text = Filemanager.GetOpenEhrTerm(716, UseYourNameButton.Text)
+        UseYourEmailButton.Text = Filemanager.GetOpenEhrTerm(717, UseYourEmailButton.Text)
+        UseYourOrganisationButton.Text = Filemanager.GetOpenEhrTerm(718, UseYourOrganisationButton.Text)
+        CurrentContactButton.Text = Filemanager.GetOpenEhrTerm(719, CurrentContactButton.Text)
+        UseAllAuthorDefaultsButton.Text = Filemanager.GetOpenEhrTerm(720, UseAllAuthorDefaultsButton.Text)
+        TodayButton.Text = Filemanager.GetOpenEhrTerm(721, TodayButton.Text)
     End Sub
 
     Private Function MakeLifeCycleTable() As DataTable
         ' Create a new DataTable titled 'Languages'
-        Dim lifeCycleTable As DataTable = New DataTable("LifeCycles")
-        ' Add two column objects to the table.
+        Dim result As DataTable = New DataTable("LifeCycles")
+
         'First the language ID = two letter ISO code
         Dim idColumn As DataColumn = New DataColumn
         idColumn.DataType = System.Type.GetType("System.String")
         idColumn.ColumnName = "code"
-        lifeCycleTable.Columns.Add(idColumn)
+        result.Columns.Add(idColumn)
+
         'Second the language text from windows/ISO list
-        Dim LifeCycleColumn As DataColumn = New DataColumn
-        LifeCycleColumn.DataType = System.Type.GetType("System.String")
-        LifeCycleColumn.ColumnName = "LifeCycle"
-        lifeCycleTable.Columns.Add(LifeCycleColumn)
-        ' Create an array for DataColumn objects.
-        Dim keys(0) As DataColumn
-        keys(0) = idColumn
-        lifeCycleTable.PrimaryKey = keys
-        ' Return the new DataTable.
-        Return lifeCycleTable
+        Dim lifeCycleColumn As DataColumn = New DataColumn
+        lifeCycleColumn.DataType = System.Type.GetType("System.String")
+        lifeCycleColumn.ColumnName = "LifeCycle"
+        result.Columns.Add(lifeCycleColumn)
+
+        result.PrimaryKey = New DataColumn() {idColumn}
+        Return result
     End Function
 
     Private Sub LoadAuthorStatesTableCombo()
@@ -1146,13 +1149,11 @@ Public Class TabPageDescription
 
         'Debug.Assert(mLifeCycleStatesTable.Rows.Count = 0, "Did not clear lifecycletable")
 
-        Dim row As DataRow() = Filemanager.Master.OntologyManager.CodeForGroupID(23) ' LifeCycle states
-
-        For Each data_row As DataRow In row
-            Dim new_row As DataRow = mLifeCycleStatesTable.NewRow
-            new_row(0) = data_row(1)
-            new_row(1) = data_row(2)
-            mLifeCycleStatesTable.Rows.Add(new_row)
+        For Each r As DataRow In Filemanager.Master.OntologyManager.CodeForGroupID(23) ' LifeCycle states
+            Dim row As DataRow = mLifeCycleStatesTable.NewRow
+            row(0) = r(1)
+            row(1) = r(2)
+            mLifeCycleStatesTable.Rows.Add(row)
         Next
 
         mLifeCycleStatesTable.AcceptChanges()
@@ -1164,14 +1165,14 @@ Public Class TabPageDescription
 
     Private Sub TabPageDescription_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
-        Dim temp_isloading As Boolean = Filemanager.Master.FileLoading
+        Dim wasLoading As Boolean = Filemanager.Master.FileLoading
         Filemanager.Master.FileLoading = True
 
         If Main.Instance.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
 
-        Filemanager.Master.FileLoading = temp_isloading
+        Filemanager.Master.FileLoading = wasLoading
     End Sub
 
     Private Sub TextUpdated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged, txtMisuse.TextChanged, CopyrightTextBox.TextChanged, txtReferences.TextChanged
@@ -1181,11 +1182,11 @@ Public Class TabPageDescription
     End Sub
 
     Private Sub ButAddKeyWord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddKeyWord.Click
-        Dim ipb As New InputForm
-        ipb.lblInput.Text = Filemanager.GetOpenEhrTerm(578, "Keyword")
+        Dim form As New InputForm
+        form.lblInput.Text = Filemanager.GetOpenEhrTerm(578, "Keyword")
 
-        If ipb.ShowDialog(ParentForm) = Windows.Forms.DialogResult.OK Then
-            listKeyword.Items.Add(ipb.txtInput.Text)
+        If form.ShowDialog(ParentForm) = Windows.Forms.DialogResult.OK Then
+            listKeyword.Items.Add(form.txtInput.Text)
             Filemanager.Master.FileEdited = True
         End If
     End Sub
@@ -1218,11 +1219,11 @@ Public Class TabPageDescription
     End Sub
 
     Private Sub butAddContributor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddContributor.Click
-        Dim ipb As New InputForm
-        ipb.lblInput.Text = Filemanager.GetOpenEhrTerm(604, "Contributors")
+        Dim form As New InputForm
+        form.lblInput.Text = Filemanager.GetOpenEhrTerm(604, "Contributors")
 
-        If ipb.ShowDialog = Windows.Forms.DialogResult.OK Then
-            listContributors.Items.Add(ipb.txtInput.Text)
+        If form.ShowDialog = Windows.Forms.DialogResult.OK Then
+            listContributors.Items.Add(form.txtInput.Text)
             Filemanager.Master.FileEdited = True
         End If
     End Sub

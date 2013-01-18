@@ -1883,7 +1883,7 @@ Public Class Designer
             Dim frm As New WebSearchForm
 
             If Main.Instance.DefaultLanguageCode <> "en" Then
-                frm.Text = Filemanager.GetOpenEhrTerm(666, frm.Text)
+                frm.Text = Filemanager.GetOpenEhrTerm(153, frm.Text)
                 frm.gbSearch.Text = Filemanager.GetOpenEhrTerm(663, frm.gbSearch.Text)
                 frm.btnSearch.Text = frm.gbSearch.Text
                 frm.comboSearch.Items.Clear()
@@ -2301,7 +2301,7 @@ Public Class Designer
         FileMenu.Text = Filemanager.GetOpenEhrTerm(43, FileMenu.Text, language)
         MenuFileNew.Text = Filemanager.GetOpenEhrTerm(151, MenuFileNew.Text, language)
         MenuFileOpen.Text = Filemanager.GetOpenEhrTerm(61, MenuFileOpen.Text, language)
-        MenuFileOpenFromWeb.Text = Filemanager.GetOpenEhrTerm(666, MenuFileOpenFromWeb.Text, language)
+        MenuFileOpenFromWeb.Text = Filemanager.GetOpenEhrTerm(153, MenuFileOpenFromWeb.Text, language)
         MenuFileSave.Text = Filemanager.GetOpenEhrTerm(183, MenuFileSave.Text, language)
         menuFileNewWindow.Text = Filemanager.GetOpenEhrTerm(595, menuFileNewWindow.Text, language)
         MenuFileSaveAs.Text = Filemanager.GetOpenEhrTerm(596, MenuFileSaveAs.Text, language)
@@ -2351,6 +2351,8 @@ Public Class Designer
         cbPersonState.Text = Filemanager.GetOpenEhrTerm(82, cbPersonState.Text, language)
 
         'Display tab on Designer
+        butHTML1.Text = Filemanager.GetOpenEhrTerm(724, butHTML1.Text, language)
+        butDisplayFind.Text = Filemanager.GetOpenEhrTerm(693, butDisplayFind.Text, language)
         butPrint.Text = Filemanager.GetOpenEhrTerm(520, butPrint.Text, language)
 
         'Interface tab
@@ -3239,7 +3241,7 @@ Public Class Designer
                 frm.butCancel.Text = Filemanager.GetOpenEhrTerm(166, "Cancel")
             Else
                 frm.gbExistingArchetype.Text = Filemanager.GetOpenEhrTerm(609, "Open existing archetypes")
-                frm.gbArchetypeFromWeb.Text = Filemanager.GetOpenEhrTerm(666, "Open Archetype from Web")
+                frm.gbArchetypeFromWeb.Text = Filemanager.GetOpenEhrTerm(153, "Open Archetype from Web")
                 frm.butCancel.Text = Filemanager.GetOpenEhrTerm(63, "Exit")
             End If
 
@@ -3956,7 +3958,7 @@ Public Class Designer
 
         ' Set Tooltips
         Me.ToolBarOpen.ToolTipText = Filemanager.GetOpenEhrTerm(609, "Open Archetype")
-        Me.ToolBarOpenFromWeb.ToolTipText = Filemanager.GetOpenEhrTerm(666, "Open Archetype from Web")
+        Me.ToolBarOpenFromWeb.ToolTipText = Filemanager.GetOpenEhrTerm(153, "Open Archetype from Web")
         Me.ToolBarNew.ToolTipText = Filemanager.GetOpenEhrTerm(151, "New")
         Me.ToolBarPrint.ToolTipText = Filemanager.GetOpenEhrTerm(520, "Print")
         Me.ToolBarSave.ToolTipText = Filemanager.GetOpenEhrTerm(183, "Save")

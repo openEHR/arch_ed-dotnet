@@ -117,12 +117,12 @@ Public Class OntologyManager
         End Get
     End Property
 
-    Public ReadOnly Property HasTermBinding(ByVal a_terminology As String, ByVal a_code As String, ByVal a_path As String) As Boolean
+    Public ReadOnly Property HasTermBinding(ByVal terminology As String, ByVal code As String, ByVal path As String) As Boolean
         Get
             Dim key(2) As Object
-            key(0) = a_terminology
-            key(1) = a_path
-            key(2) = a_code
+            key(0) = terminology
+            key(1) = path
+            key(2) = code
             Return Not TermBindingsTable.Rows.Find(key) Is Nothing
         End Get
     End Property
@@ -680,33 +680,6 @@ Public Class OntologyManager
         Return TerminologyServer.Instance.CodesForGrouperID(GroupID, language)
     End Function
 
-    Private Function MakeSubjectOfDataTable() As DataTable
-        ' Create a new DataTable titled 'Languages'
-        Dim SoCTable As DataTable = New DataTable("SubjectOfData")
-        ' Add three column objects to the table.
-
-        Dim LanguageColumn As DataColumn = New DataColumn
-        LanguageColumn.DataType = System.Type.GetType("System.String")
-        LanguageColumn.ColumnName = "Language"
-        SoCTable.Columns.Add(LanguageColumn)
-        Dim idColumn As DataColumn = New DataColumn
-        idColumn.DataType = System.Type.GetType("System.Int32")
-        idColumn.ColumnName = "TermId"
-        idColumn.AutoIncrement = False
-        SoCTable.Columns.Add(idColumn)
-        Dim PhraseColumn As DataColumn = New DataColumn
-        PhraseColumn.DataType = System.Type.GetType("System.String")
-        PhraseColumn.ColumnName = "Phrase"
-        SoCTable.Columns.Add(PhraseColumn)
-        ' Create an array for DataColumn objects.
-        Dim keys(1) As DataColumn
-        keys(0) = LanguageColumn
-        keys(1) = idColumn
-        SoCTable.PrimaryKey = keys
-        ' Return the new DataTable.
-        Return SoCTable
-    End Function
-
     Public Sub SetBestLanguage()
         ' set the specific language if it is present e.g. en-US, en-AU
         Dim bestLanguage As String
@@ -726,47 +699,67 @@ Public Class OntologyManager
         End If
     End Sub
 
+    Private Function MakeSubjectOfDataTable() As DataTable
+        ' Create a new DataTable titled 'Languages'
+        Dim result As DataTable = New DataTable("SubjectOfData")
+
+        Dim languageColumn As New DataColumn
+        languageColumn.DataType = System.Type.GetType("System.String")
+        languageColumn.ColumnName = "Language"
+        result.Columns.Add(languageColumn)
+
+        Dim idColumn As New DataColumn
+        idColumn.DataType = System.Type.GetType("System.Int32")
+        idColumn.ColumnName = "TermId"
+        idColumn.AutoIncrement = False
+        result.Columns.Add(idColumn)
+
+        Dim phraseColumn As New DataColumn
+        phraseColumn.DataType = System.Type.GetType("System.String")
+        phraseColumn.ColumnName = "Phrase"
+        result.Columns.Add(phraseColumn)
+
+        result.PrimaryKey = New DataColumn() {languageColumn, idColumn}
+        Return result
+    End Function
+
     Private Function MakeLanguagesTable() As DataTable
         ' Create a new DataTable titled 'Languages'
-        Dim LangTable As DataTable = New DataTable("Languages")
-        ' Add two column objects to the table.
+        Dim result As DataTable = New DataTable("Languages")
+
         'First the language ID = two letter ISO code
-        Dim idColumn As DataColumn = New DataColumn
+        Dim idColumn As New DataColumn
         idColumn.DataType = System.Type.GetType("System.String")
         idColumn.ColumnName = "id"
-        LangTable.Columns.Add(idColumn)
+        result.Columns.Add(idColumn)
+
         'Second the language text from windows/ISO list
-        Dim LanguageColumn As DataColumn = New DataColumn
-        LanguageColumn.DataType = System.Type.GetType("System.String")
-        LanguageColumn.ColumnName = "Language"
-        LangTable.Columns.Add(LanguageColumn)
-        ' Create an array for DataColumn objects.
-        Dim keys(0) As DataColumn
-        keys(0) = idColumn
-        LangTable.PrimaryKey = keys
-        ' Return the new DataTable.
-        Return LangTable
+        Dim languageColumn As New DataColumn
+        languageColumn.DataType = System.Type.GetType("System.String")
+        languageColumn.ColumnName = "Language"
+        result.Columns.Add(languageColumn)
+
+        result.PrimaryKey = New DataColumn() {idColumn}
+        Return result
     End Function
 
     Private Function MakeTerminologiesTable() As DataTable
         ' Create a new DataTable titled 'Terminology'
-        Dim TermTable As DataTable = New DataTable("Terminologies")
-        ' Add two column objects to the table.
-        Dim TermColumn As DataColumn = New DataColumn
-        TermColumn.DataType = System.Type.GetType("System.String")
-        TermColumn.ColumnName = "Terminology"
-        TermTable.Columns.Add(TermColumn)
-        Dim DescriptionColumn As DataColumn = New DataColumn
-        DescriptionColumn.DataType = System.Type.GetType("System.String")
-        DescriptionColumn.ColumnName = "Description"
-        TermTable.Columns.Add(DescriptionColumn)
-        ' Create an array for DataColumn objects.
-        Dim keys(0) As DataColumn
-        keys(0) = TermColumn
-        TermTable.PrimaryKey = keys
-        ' Return the new DataTable.
-        TermTable.DefaultView.AllowNew = False
-        Return TermTable
+        Dim result As DataTable = New DataTable("Terminologies")
+
+        Dim terminologyColumn As New DataColumn
+        terminologyColumn.DataType = System.Type.GetType("System.String")
+        terminologyColumn.ColumnName = "Terminology"
+        result.Columns.Add(terminologyColumn)
+
+        Dim descriptionColumn As New DataColumn
+        descriptionColumn.DataType = System.Type.GetType("System.String")
+        descriptionColumn.ColumnName = "Description"
+        result.Columns.Add(descriptionColumn)
+
+        result.PrimaryKey = New DataColumn() {terminologyColumn}
+        result.DefaultView.AllowNew = False
+        Return result
     End Function
 
     Private Function MakeConstraintBindingsTable() As DataTable
@@ -777,51 +770,43 @@ Public Class OntologyManager
 
         'Also - we may need to know for all terminology - when it was added - ie what revision
 
-        Dim result As DataTable = New DataTable("ConstraintBindings")
+        Dim result As New DataTable("ConstraintBindings")
 
         'Short name or ID of terminology
-        Dim termColumn As DataColumn = New DataColumn
-        termColumn.DataType = System.Type.GetType("System.String")
-        termColumn.ColumnName = "Terminology"
-        result.Columns.Add(termColumn)
+        Dim terminologyColumn As New DataColumn
+        terminologyColumn.DataType = System.Type.GetType("System.String")
+        terminologyColumn.ColumnName = "Terminology"
+        result.Columns.Add(terminologyColumn)
 
         'AcCode acNNNN
-        Dim iDColumn As DataColumn = New DataColumn
-        iDColumn.DataType = System.Type.GetType("System.String")
-        iDColumn.ColumnName = "ID"
-        result.Columns.Add(iDColumn)
+        Dim idColumn As New DataColumn
+        idColumn.DataType = System.Type.GetType("System.String")
+        idColumn.ColumnName = "ID"
+        result.Columns.Add(idColumn)
 
-        'Release
-        Dim releaseColumn As DataColumn = New DataColumn
+        Dim releaseColumn As New DataColumn
         releaseColumn.DataType = System.Type.GetType("System.String")
         releaseColumn.ColumnName = "Release"
         releaseColumn.DefaultValue = ""
         result.Columns.Add(releaseColumn)
 
-        'Subset
-        Dim subsetColumn As DataColumn = New DataColumn
+        Dim subsetColumn As New DataColumn
         subsetColumn.DataType = System.Type.GetType("System.String")
         subsetColumn.ColumnName = "Subset"
         subsetColumn.DefaultValue = ""
         result.Columns.Add(subsetColumn)
 
-        'URI
-        Dim uriColumn As DataColumn = New DataColumn
+        Dim uriColumn As New DataColumn
         uriColumn.DataType = System.Type.GetType("System.String")
         uriColumn.ColumnName = "CodePhrase"
         uriColumn.DefaultValue = ""
         result.Columns.Add(uriColumn)
 
-        ' Return the new DataTable.
-        Dim keys(1) As DataColumn
-        keys(0) = termColumn
-        keys(1) = iDColumn
-        result.PrimaryKey = keys
-
+        result.PrimaryKey = New DataColumn() {terminologyColumn, idColumn}
         Return result
     End Function
 
-    Private Function MakeTermBindingTable() As DataTable
+    Private Function MakeTermBindingsTable() As DataTable
         ' Note - there are no versions of the Terminology at present
         ' as if the knowledge model shifted fundamentally then I believe
         ' that the archetype would have to be released with a new version
@@ -829,188 +814,144 @@ Public Class OntologyManager
 
         'Also - we may need to know for all terminology - when it was added - ie what revision
 
-        Dim BindingsTable As DataTable
-        BindingsTable = New DataTable("TermBindings")
-        ' Add six column objects to the table.
-        'CODE
-        Dim TermColumn As DataColumn = New DataColumn  ' the code in the terminology
-        TermColumn.DataType = System.Type.GetType("System.String")
-        TermColumn.ColumnName = "Terminology"
-        BindingsTable.Columns.Add(TermColumn)
+        Dim result As New DataTable("TermBindings")
 
-        'PATH
-        Dim PathColumn As DataColumn = New DataColumn
-        PathColumn.DataType = System.Type.GetType("System.String")
-        PathColumn.ColumnName = "Path"  ' the path - could be a node or the full path of a node +/- criteria
-        BindingsTable.Columns.Add(PathColumn)
-        Dim CodeColumn As DataColumn = New DataColumn
-        CodeColumn.DataType = System.Type.GetType("System.String")
-        CodeColumn.ColumnName = "Code"
-        CodeColumn.DefaultValue = ""
-        BindingsTable.Columns.Add(CodeColumn)
-        'RELEASE
-        Dim ReleaseColumn As DataColumn = New DataColumn
-        ReleaseColumn.DataType = System.Type.GetType("System.String")
-        ReleaseColumn.ColumnName = "Release"
-        ReleaseColumn.DefaultValue = ""
-        BindingsTable.Columns.Add(ReleaseColumn)
-        ' Return the new DataTable.
-        Dim keys(2) As DataColumn
-        keys(0) = TermColumn
-        keys(1) = PathColumn
-        keys(2) = CodeColumn
-        BindingsTable.PrimaryKey = keys
+        Dim terminologyColumn As New DataColumn  ' the code in the terminology
+        terminologyColumn.DataType = System.Type.GetType("System.String")
+        terminologyColumn.ColumnName = "Terminology"
+        result.Columns.Add(terminologyColumn)
 
-        Return BindingsTable
+        Dim pathColumn As New DataColumn
+        pathColumn.DataType = System.Type.GetType("System.String")
+        pathColumn.ColumnName = "Path"  ' the path - could be a node or the full path of a node +/- criteria
+        result.Columns.Add(pathColumn)
+
+        Dim codeColumn As New DataColumn
+        codeColumn.DataType = System.Type.GetType("System.String")
+        codeColumn.ColumnName = "Code"
+        codeColumn.DefaultValue = ""
+        result.Columns.Add(codeColumn)
+
+        Dim releaseColumn As New DataColumn
+        releaseColumn.DataType = System.Type.GetType("System.String")
+        releaseColumn.ColumnName = "Release"
+        releaseColumn.DefaultValue = ""
+        result.Columns.Add(releaseColumn)
+
+        result.PrimaryKey = New DataColumn() {terminologyColumn, pathColumn, codeColumn}
+        Return result
     End Function
 
     Private Function MakeTermBindingCriteriaTable() As DataTable
-        Dim BindingCriteriaTable As New DataTable("TermBindingCriteria")
+        Dim result As New DataTable("TermBindingCriteria")
 
-        ' Add six column objects to the table.
-        Dim terminologyColumn As DataColumn = New DataColumn
+        Dim terminologyColumn As New DataColumn
         terminologyColumn.DataType = GetType(String)
         terminologyColumn.ColumnName = "Terminology"
-        BindingCriteriaTable.Columns.Add(terminologyColumn)
+        result.Columns.Add(terminologyColumn)
 
-        Dim PathColumn As DataColumn = New DataColumn
-        PathColumn.DataType = GetType(String)
-        PathColumn.ColumnName = "Path"
-        BindingCriteriaTable.Columns.Add(PathColumn)
+        Dim pathColumn As New DataColumn
+        pathColumn.DataType = GetType(String)
+        pathColumn.ColumnName = "Path"
+        result.Columns.Add(pathColumn)
 
-        Dim CodeColumn As DataColumn = New DataColumn
-        CodeColumn.DataType = GetType(String)
-        CodeColumn.ColumnName = "Code"
-        BindingCriteriaTable.Columns.Add(CodeColumn)
+        Dim codeColumn As New DataColumn
+        codeColumn.DataType = GetType(String)
+        codeColumn.ColumnName = "Code"
+        result.Columns.Add(codeColumn)
 
-        Dim ReleaseColumn As DataColumn = New DataColumn
-        ReleaseColumn.DataType = GetType(String)
-        ReleaseColumn.ColumnName = "Release"
-        ReleaseColumn.DefaultValue = ""
-        BindingCriteriaTable.Columns.Add(ReleaseColumn)
+        Dim releaseColumn As New DataColumn
+        releaseColumn.DataType = GetType(String)
+        releaseColumn.ColumnName = "Release"
+        releaseColumn.DefaultValue = ""
+        result.Columns.Add(releaseColumn)
 
-        Dim CriteriaColumn As New DataColumn
-        CriteriaColumn.DataType = GetType(String)
-        CriteriaColumn.ColumnName = "Criteria"
-        CriteriaColumn.DefaultValue = ""
-        BindingCriteriaTable.Columns.Add(CriteriaColumn)
+        Dim criteriaColumn As New DataColumn
+        criteriaColumn.DataType = GetType(String)
+        criteriaColumn.ColumnName = "Criteria"
+        criteriaColumn.DefaultValue = ""
+        result.Columns.Add(criteriaColumn)
 
-        ' Return the new DataTable.
-        Dim keys(3) As DataColumn
-        keys(0) = terminologyColumn
-        keys(1) = PathColumn
-        keys(2) = CodeColumn
-        keys(3) = CriteriaColumn
-        BindingCriteriaTable.PrimaryKey = keys
-
-        Return BindingCriteriaTable
+        result.PrimaryKey = New DataColumn() {terminologyColumn, pathColumn, codeColumn, criteriaColumn}
+        Return result
     End Function
 
     Private Function MakeDefinitionsTable(ByVal nm As String) As DataTable
         ' Create a new DataTable titled 'TermDefinitions' or 'ConstraintDefinitions'
-        Dim result As DataTable
-        result = New DataTable(nm)
+        Dim result As New DataTable(nm)
 
-        ' Add Four column objects to the table.
-        ' The id is the language of the term defintion
-        Dim idColumn As DataColumn = New DataColumn
+        ' The id is the language of the term definition
+        Dim idColumn As New DataColumn
         idColumn.DataType = System.Type.GetType("System.String")
         idColumn.ColumnName = "id"
         result.Columns.Add(idColumn)
 
-        Dim CodeColumn As DataColumn = New DataColumn
-        CodeColumn.DataType = System.Type.GetType("System.String")
-        CodeColumn.ColumnName = "Code"
-        result.Columns.Add(CodeColumn)
+        Dim codeColumn As New DataColumn
+        codeColumn.DataType = System.Type.GetType("System.String")
+        codeColumn.ColumnName = "Code"
+        result.Columns.Add(codeColumn)
 
-        Dim TextColumn As DataColumn = New DataColumn
-        TextColumn.DataType = System.Type.GetType("System.String")
-        TextColumn.ColumnName = "Text"
-        result.Columns.Add(TextColumn)
+        Dim textColumn As New DataColumn
+        textColumn.DataType = System.Type.GetType("System.String")
+        textColumn.ColumnName = "Text"
+        result.Columns.Add(textColumn)
 
-        Dim DescriptionColumn As DataColumn = New DataColumn
-        DescriptionColumn.DataType = System.Type.GetType("System.String")
-        DescriptionColumn.ColumnName = "Description"
-        DescriptionColumn.DefaultValue = "*"
-        result.Columns.Add(DescriptionColumn)
+        Dim descriptionColumn As New DataColumn
+        descriptionColumn.DataType = System.Type.GetType("System.String")
+        descriptionColumn.ColumnName = "Description"
+        descriptionColumn.DefaultValue = "*"
+        result.Columns.Add(descriptionColumn)
 
-        Dim CommentColumn As DataColumn = New DataColumn
-        CommentColumn.DataType = System.Type.GetType("System.String")
-        CommentColumn.ColumnName = "Comment"
-        CommentColumn.DefaultValue = ""
-        result.Columns.Add(CommentColumn)
+        Dim commentColumn As New DataColumn
+        commentColumn.DataType = System.Type.GetType("System.String")
+        commentColumn.ColumnName = "Comment"
+        commentColumn.DefaultValue = ""
+        result.Columns.Add(commentColumn)
 
-        Dim TermAsObjectColumn As DataColumn = New DataColumn
-        TermAsObjectColumn.DataType = System.Type.GetType("System.Object")
-        TermAsObjectColumn.ColumnName = "TermAsObject"
-        TermAsObjectColumn.DefaultValue = ""
-        result.Columns.Add(TermAsObjectColumn)
+        Dim termAsObjectColumn As New DataColumn
+        termAsObjectColumn.DataType = System.Type.GetType("System.Object")
+        termAsObjectColumn.ColumnName = "TermAsObject"
+        termAsObjectColumn.DefaultValue = ""
+        result.Columns.Add(termAsObjectColumn)
 
         ' Support temporary correct ordering of internal codelists to match order in Definition
-        Dim listOrderColumn As DataColumn = New DataColumn
+        Dim listOrderColumn As New DataColumn
         listOrderColumn.DataType = System.Type.GetType("System.Int32")
         listOrderColumn.ColumnName = "ListOrder"
         result.Columns.Add(listOrderColumn)
 
-        ' Return the new DataTable.
-        Dim keys(1) As DataColumn
-        keys(0) = idColumn
-        keys(1) = CodeColumn
-        result.PrimaryKey = keys
-
+        result.PrimaryKey = New DataColumn() {idColumn, codeColumn}
         Return result
     End Function
 
     Private Sub InitialiseTables()
-        Dim new_relation As DataRelation
-        ' make the tables
         mLanguagesTable = MakeLanguagesTable()
-        mLanguageDS.Tables.Add(mLanguagesTable)
-
         mTermDefinitionTable = MakeDefinitionsTable("TermDefinitions")
-        mLanguageDS.Tables.Add(mTermDefinitionTable)
-
         mConstraintDefinitionTable = MakeDefinitionsTable("ConstraintDefinitions")
-        mLanguageDS.Tables.Add(mConstraintDefinitionTable)
-
-        ' add relations
-        new_relation = New DataRelation("LanguageTerms", mLanguagesTable.Columns(0), mTermDefinitionTable.Columns(0))
-        mLanguageDS.Relations.Add(new_relation)
-
-        new_relation = New DataRelation("LanguageConstraints", mLanguagesTable.Columns(0), mConstraintDefinitionTable.Columns(0))
-        mLanguageDS.Relations.Add(new_relation)
-
         mTerminologiesTable = MakeTerminologiesTable()
-        mLanguageDS.Tables.Add(mTerminologiesTable)
-
-        ' TermBinding
-        mTermBindingsTable = MakeTermBindingTable()
-        mLanguageDS.Tables.Add(mTermBindingsTable)
-
-        new_relation = New DataRelation("TerminologiesBindings", mTerminologiesTable.Columns(0), mTermBindingsTable.Columns(0))
-        mLanguageDS.Relations.Add(new_relation)
-
-        ' TermBindingCriteria
+        mTermBindingsTable = MakeTermBindingsTable()
         mTermBindingCriteriaTable = MakeTermBindingCriteriaTable()
-        mLanguageDS.Tables.Add(mTermBindingCriteriaTable)
-        Dim termBindingColumns As DataColumn() = {mTermBindingsTable.Columns(0), mTermBindingsTable.Columns(1), mTermBindingsTable.Columns(2)}
-        Dim termBindingCriteriaColumns As DataColumn() = {mTermBindingCriteriaTable.Columns(0), mTermBindingCriteriaTable.Columns(1), mTermBindingCriteriaTable.Columns(2)}
-        new_relation = New DataRelation("TermBindingTermBindingCriteria", termBindingColumns, termBindingCriteriaColumns)
-
-        mLanguageDS.Relations.Add(new_relation)
-
         mConstraintBindingsTable = MakeConstraintBindingsTable()
-        mLanguageDS.Tables.Add(mConstraintBindingsTable)
-
-        new_relation = New DataRelation("TerminologiesConstraintBindings", mConstraintDefinitionTable.Columns(1), mConstraintBindingsTable.Columns(1), False)
-        mLanguageDS.Relations.Add(new_relation)
-
         mSubjectOfDataTable = MakeSubjectOfDataTable()
+
+        mLanguageDS.Tables.Add(mLanguagesTable)
+        mLanguageDS.Tables.Add(mTermDefinitionTable)
+        mLanguageDS.Tables.Add(mConstraintDefinitionTable)
+        mLanguageDS.Tables.Add(mTerminologiesTable)
+        mLanguageDS.Tables.Add(mTermBindingsTable)
+        mLanguageDS.Tables.Add(mTermBindingCriteriaTable)
+        mLanguageDS.Tables.Add(mConstraintBindingsTable)
         mLanguageDS.Tables.Add(mSubjectOfDataTable)
 
-        ' add relations
-        new_relation = New DataRelation("LanguageSubjectOfData", mLanguagesTable.Columns(0), mSubjectOfDataTable.Columns(0))
-        mLanguageDS.Relations.Add(new_relation)
+        Dim termBindingColumns As DataColumn() = {mTermBindingsTable.Columns(0), mTermBindingsTable.Columns(1), mTermBindingsTable.Columns(2)}
+        Dim termBindingCriteriaColumns As DataColumn() = {mTermBindingCriteriaTable.Columns(0), mTermBindingCriteriaTable.Columns(1), mTermBindingCriteriaTable.Columns(2)}
+
+        mLanguageDS.Relations.Add(New DataRelation("LanguageTerms", mLanguagesTable.Columns(0), mTermDefinitionTable.Columns(0)))
+        mLanguageDS.Relations.Add(New DataRelation("LanguageConstraints", mLanguagesTable.Columns(0), mConstraintDefinitionTable.Columns(0)))
+        mLanguageDS.Relations.Add(New DataRelation("TerminologiesBindings", mTerminologiesTable.Columns(0), mTermBindingsTable.Columns(0)))
+        mLanguageDS.Relations.Add(New DataRelation("TermBindingTermBindingCriteria", termBindingColumns, termBindingCriteriaColumns))
+        mLanguageDS.Relations.Add(New DataRelation("TerminologiesConstraintBindings", mConstraintDefinitionTable.Columns(1), mConstraintBindingsTable.Columns(1), False))
+        mLanguageDS.Relations.Add(New DataRelation("LanguageSubjectOfData", mLanguagesTable.Columns(0), mSubjectOfDataTable.Columns(0)))
     End Sub
 
     Public Function GetTerminologyDescription(ByVal TerminologyCode As String) As String
