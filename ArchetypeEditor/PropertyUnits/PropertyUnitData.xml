@@ -79,6 +79,7 @@
   <Property id="80" Text="Time Fraction" openEHR="709" />
   <Property id="81" Text="Refractive power" openEHR="685" />
   <Property id="82" Text="Rate of Change - Pressure" openEHR="708" />
+  <Property id="84" Text="Rate of Change - Frequency" openEHR="754" />
   <Unit property_id="0" Text="m" name="meter" conversion="1" primary="true" />
   <Unit property_id="0" Text="cm" name="centimeter" conversion="0.01" primary="false" />
   <Unit property_id="0" Text="µm" name="micrometer" conversion="1" coefficient="-6" primary="false" />
@@ -558,4 +559,6 @@
   <Unit property_id="56" Text="10^12" conversion="1" coefficient="12" primary="false" />
   <Unit property_id="82" Text="Pa/s" name="Pascals per second" conversion="1" primary="false" />
   <Unit property_id="82" Text="daPa/s" name="decaPascals per second" primary="false" />
+  <Unit property_id="84" Text="Hz/s" name="Hertz per second" conversion="1" primary="false" />
+  <Unit property_id="84" Text="KHz/s" name="Kilohertz per second" primary="false" />
 </PropertyUnits>
