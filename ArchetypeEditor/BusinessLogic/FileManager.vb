@@ -37,28 +37,33 @@ Public Class FileManagerLocal
             mOntologyManager = Value
         End Set
     End Property
+
     Public ReadOnly Property ArchetypeAvailable() As Boolean
         Get
             Return mArchetypeEngine.ArchetypeAvailable()
         End Get
     End Property
+
     Public Property IsNew() As Boolean
         Get
             Return mIsNew
         End Get
         Set(ByVal Value As Boolean)
             mIsNew = Value
+
             If Value Then
                 mParserSynchronised = False
             End If
         End Set
     End Property
+
     Public WriteOnly Property ObjectToSave() As Object
         Set(ByVal Value As Object)
             'Containing object must have a "PrepareToSave" sub
             mObjectToSave = Value
         End Set
     End Property
+
     Public Property WorkingDirectory() As String
         Get
             Return mWorkingDirectory
@@ -67,11 +72,13 @@ Public Class FileManagerLocal
             mWorkingDirectory = Value
         End Set
     End Property
+
     Public ReadOnly Property ParserType() As String
         Get
             Return mArchetypeEngine.TypeName()
         End Get
     End Property
+
     Public Property FileName() As String
         Get
             Return mFileName
@@ -80,16 +87,19 @@ Public Class FileManagerLocal
             mFileName = Value
         End Set
     End Property
-    Public ReadOnly Property OpenFileError() As Boolean
+
+    Public ReadOnly Property HasOpenFileError() As Boolean
         Get
             Return mHasOpenFileError
         End Get
     End Property
-    Public ReadOnly Property WriteFileError() As Boolean
+
+    Public ReadOnly Property HasWriteFileError() As Boolean
         Get
             Return mHasWriteFileError
         End Get
     End Property
+
     Public Property FileEdited() As Boolean
         Get
             Return mIsFileDirty
@@ -104,16 +114,14 @@ Public Class FileManagerLocal
             End If
         End Set
     End Property
-    'EDT-584 - to allow out of date archetypes to be updated
+
     Public Sub FileUpdateRequired()
         'allows override of file edited when loading
-        Dim temp As Boolean
-        temp = mIsFileLoading
+        Dim wasLoading As Boolean = mIsFileLoading
         mIsFileLoading = False
         FileEdited = True
-        mIsFileLoading = temp
+        mIsFileLoading = wasLoading
     End Sub
-
 
     Public Property ParserSynchronised() As Boolean
         Get
@@ -183,12 +191,6 @@ Public Class FileManagerLocal
         End Set
     End Property
 
-    Public ReadOnly Property Status() As String
-        Get
-            Return mArchetypeEngine.Status
-        End Get
-    End Property
-
     Public ReadOnly Property Archetype() As Archetype
         Get
             Return mArchetypeEngine.Archetype()
@@ -198,81 +200,75 @@ Public Class FileManagerLocal
     Private InitialisedTerminologies As Collections.Generic.List(Of String)
     Private webError As Boolean
 
-    Public Function OpenArchetype(ByVal aFileName As String) As Boolean
-        Try
-            mPriorFileName = FileName
+    Public Sub OpenArchetype(ByVal aFileName As String)
+        Dim errorMessage As String = Nothing
 
-            'Need to check file name for eMail extensions
+        mPriorFileName = FileName
+        FileName = aFileName
+        Dim extension As String = IO.Path.GetExtension(aFileName).ToLowerInvariant
 
-            'Dim i As Integer = aFileName.LastIndexOf("."c)
+        If extension = ".adl" Then
+            If mArchetypeEngine Is Nothing Or ParserType.ToLowerInvariant() = "xml" Then
+                mOntologyManager.Ontology = Nothing
+                mArchetypeEngine = Nothing
+                mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
+            End If
+        ElseIf extension = ".xml" Then
+            If mArchetypeEngine Is Nothing Or ParserType.ToLowerInvariant() = "adl" Then
+                mOntologyManager.Ontology = Nothing
+                mArchetypeEngine = Nothing
+                mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface
+            End If
+        Else
+            errorMessage = "File type '" & extension & "' is not supported."
+        End If
 
-            'If i = 0 Then
-            '    Return False
-            'Else
-            '    Dim ext As String = aFileName.Substring(0, i).ToLowerInvariant
-            '    If ext <> "adl" Or ext <> "xml" Then
-            '        'could be an email temporary name
+        If errorMessage Is Nothing Then
+            Try
+                mArchetypeEngine.OpenFile(aFileName, Me)
 
-            '    End If
-            'End If
+                ' if this archtype comes from the web, aFileName will be the URL.
+                ' In this case we have to download the file temporarily on the users system so that it can be opened in the Editor.
+                ' It will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
+                ' User has to save the file manually if a local copy of it is wanted.
+                ' This avoids data and file overflow.
 
-            FileName = aFileName
+                If aFileName.StartsWith(System.IO.Path.GetTempPath) Then
+                    IO.File.SetAttributes(aFileName, IO.FileAttributes.Normal)
+                    IO.File.Delete(aFileName)
 
-            If aFileName.ToLowerInvariant().EndsWith(".adl") Then
-                If mArchetypeEngine Is Nothing Or ParserType.ToLowerInvariant() = "xml" Then
-                    mOntologyManager.Ontology = Nothing
-                    mArchetypeEngine = Nothing
-                    mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
+                    'Set the file name to the current directory and not the temp folder
+                    FileName = IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), IO.Path.GetFileName(aFileName))
                 End If
-            ElseIf aFileName.ToLowerInvariant().EndsWith(".xml") Then
-                If mArchetypeEngine Is Nothing Or ParserType.ToLowerInvariant() = "adl" Then
-                    mOntologyManager.Ontology = Nothing
-                    mArchetypeEngine = Nothing
-                    mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface
+
+                If mArchetypeEngine.OpenFileError Then
+                    errorMessage = mArchetypeEngine.Status
+                Else
+                    mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
+                    mOntologyManager.SetBestLanguage()
+
+                    mPriorFileName = Nothing
+                    FileEdited = False
+                    CheckFileNameAgainstArchetypeId()
                 End If
-            Else
-                MessageBox.Show("File type: " & aFileName & " is not supported", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                Return False    ' FIXME: spaghetti code!
-            End If
+            Catch e As Exception
+                FileName = mPriorFileName
+                mPriorFileName = Nothing
+                errorMessage = mArchetypeEngine.Status
 
-            mHasOpenFileError = False
-            mArchetypeEngine.OpenFile(aFileName, Me)
+                If Not errorMessage Is Nothing Then
+                    errorMessage += Environment.NewLine + e.Message
+                End If
+            End Try
+        End If
 
-            ' if this archtype comes from the web, aFileName will be the URL.
-            ' In this case we have to download the file temporarily on the users system so that it can be opened in the Editor.
-            ' It will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
-            ' User has to save the file manually if a local copy of it is wanted.
-            ' This avoids data and file overflow.
+        mHasOpenFileError = Not errorMessage Is Nothing
 
-            If aFileName.StartsWith(System.IO.Path.GetTempPath) Then
-                'SRH 22 Aug 2009 - [EDT-570]
-                System.IO.File.SetAttributes(aFileName, IO.FileAttributes.Normal)
-                System.IO.File.Delete(aFileName)
-                'From VB subassembly (to be avoided)
-                'Kill(aFileName)
-                'Set the file name to the current directory and not the temp folder
-                FileName = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), System.IO.Path.GetFileName(aFileName))
-            End If
-
-            If mArchetypeEngine.OpenFileError Then
-                mHasOpenFileError = True
-                Return False    ' FIXME: spaghetti code!
-            End If
-
-            mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
-            mOntologyManager.SetBestLanguage()
-
-            mPriorFileName = Nothing
-            FileEdited = False
-            CheckFileNameAgainstArchetypeId()
-
-            Return True ' FIXME: spaghetti code!
-        Catch e As Exception
-            ' Need to indicate reason for exception
-            FileName = mPriorFileName
-            mPriorFileName = Nothing
-        End Try
-    End Function
+        If mHasOpenFileError Then
+            errorMessage = AE_Constants.Instance.ErrorLoading & ": " & aFileName + Environment.NewLine + errorMessage
+            MessageBox.Show(errorMessage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
 
     Private Sub CheckFileNameAgainstArchetypeId()
         Dim name As String = IO.Path.GetFileNameWithoutExtension(FileName)

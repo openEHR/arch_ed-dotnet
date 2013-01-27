@@ -894,10 +894,10 @@ Public Class TabPageStructure
         End Select
     End Function
 
-    Private Sub OpenArchetype(ByVal an_archetype_name As String)
-        mFileManager.OpenArchetype(an_archetype_name)
+    Private Sub OpenArchetype(ByVal fileName As String)
+        mFileManager.OpenArchetype(fileName)
 
-        If mFileManager.ArchetypeAvailable Then
+        If Not mFileManager.HasOpenFileError Then
             Dim lbl As New Label
             lbl.Location = New System.Drawing.Point(120, 2)
             lbl.Width = 320
@@ -906,8 +906,6 @@ Public Class TabPageStructure
             lbl.Text = mFileManager.Archetype.Archetype_ID.ToString
             mStructureControl.PanelStructureHeader.Controls.Add(lbl)
             lbl.BringToFront()
-        Else
-            MessageBox.Show(AE_Constants.Instance.ErrorLoading & ": " & an_archetype_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
 

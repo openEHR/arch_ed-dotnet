@@ -377,7 +377,6 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub DuplicateHistory(ByVal rm As RmStructureCompound, ByRef RelNode As XMLParser.C_ATTRIBUTE)
-
             Dim xmlHistory, xmlEvent As XMLParser.C_COMPLEX_OBJECT
             Dim a As XMLParser.C_ATTRIBUTE
             Dim an_event As RmEvent

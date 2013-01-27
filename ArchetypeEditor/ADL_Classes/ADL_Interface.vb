@@ -28,7 +28,6 @@ Namespace ArchetypeEditor.ADL_Classes
         Private mWriteFileError As Boolean
         Protected disposed As Boolean = False
 
-
         Public ReadOnly Property FileName() As String Implements Parser.FileName
             Get
                 Return mFileName
@@ -89,7 +88,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Sub Serialise(ByVal a_format As String) Implements Parser.Serialise
-            If Me.AvailableFormats.Contains(a_format) Then
+            If AvailableFormats.Contains(a_format) Then
                 Try
                     adlArchetype.MakeParseTree()
                     EIF_adlInterface.serialise_archetype(Eiffel.String(a_format))
@@ -100,42 +99,33 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
+        Public Sub OpenFile(ByVal aFileName As String, ByVal filemanager As FileManagerLocal) Implements Parser.OpenFile
+            mOpenFileError = True
+            mFileName = aFileName
 
-        Public Sub OpenFile(ByVal FileName As String, ByVal a_filemanager As FileManagerLocal) Implements Parser.OpenFile
+            ' Ensure that the parser reads regardless of the local culture.
+            Dim currentCulture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CurrentCulture
+            Dim replaceCulture As Boolean = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator <> "."
 
-            Dim current_culture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CurrentCulture
-            Dim replace_culture As Boolean
-
-            mOpenFileError = True  ' default unless all goes wel
-            mFileName = FileName
-
-            ' ADDED 2004-11-18
-            ' Sam Heard
-            ' This code is essential to ensure that the parser reads regardless of the local culture
-
-            If System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator <> "." Then
-                replace_culture = True
+            If replaceCulture Then
                 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture()
             End If
 
-            EIF_adlInterface.open_adl_file(Eiffel.String(FileName))
+            EIF_adlInterface.open_adl_file(Eiffel.String(aFileName))
 
-            ' check that file openned successfully by checking status
             If EIF_adlInterface.archetype_source_loaded Then
                 EIF_adlInterface.parse_archetype()
+
                 If EIF_adlInterface.parse_succeeded Then
-                    Dim the_ontology As ADL_Ontology
-                    the_ontology = New ADL_Ontology(EIF_adlInterface)
-                    a_filemanager.OntologyManager.Ontology = the_ontology
-                    adlArchetype = New ADL_Archetype(EIF_adlInterface.adl_engine.archetype, EIF_adlInterface.adl_engine, a_filemanager)
-                    If EIF_adlInterface.archetype_available Then
-                        mOpenFileError = False
-                    End If
+                    Dim ontology As New ADL_Ontology(EIF_adlInterface)
+                    filemanager.OntologyManager.Ontology = ontology
+                    adlArchetype = New ADL_Archetype(EIF_adlInterface.adl_engine.archetype, EIF_adlInterface.adl_engine, filemanager)
+                    mOpenFileError = Not EIF_adlInterface.archetype_available
                 End If
             End If
 
-            If replace_culture Then
-                System.Threading.Thread.CurrentThread.CurrentCulture = current_culture
+            If replaceCulture Then
+                System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture
             End If
         End Sub
 

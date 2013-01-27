@@ -75,7 +75,7 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Public Sub Serialise(ByVal a_format As String) Implements Parser.Serialise
-            If Me.AvailableFormats.Contains(a_format) Then
+            If AvailableFormats.Contains(a_format) Then
                 Try
                     mArchetype.MakeParseTree()
                 Catch e As Exception
@@ -85,38 +85,29 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
+        Public Sub OpenFile(ByVal aFileName As String, ByVal filemanager As FileManagerLocal) Implements Parser.OpenFile
+            mOpenFileError = True
+            mFileName = aFileName
 
-        Public Sub OpenFile(ByVal a_file_name As String, ByVal a_filemanager As FileManagerLocal) Implements Parser.OpenFile
+            ' Ensure that the parser reads regardless of the local culture.
+            Dim currentCulture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CurrentCulture
+            Dim replaceCulture As Boolean = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator <> "."
 
-            Dim current_culture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CurrentCulture
-            Dim replace_culture As Boolean
-
-            mOpenFileError = True  ' default unless all goes wel
-            mFileName = a_file_name
-
-            ' ADDED 2004-11-18
-            ' Sam Heard
-            ' This code is essential to ensure that the parser reads regardless of the local culture
-
-            If System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator <> "." Then
-                replace_culture = True
+            If replaceCulture Then
                 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture()
             End If
 
-            mXmlParser.OpenFile(a_file_name)
+            mXmlParser.OpenFile(aFileName)
 
-            ' check that file openned successfully by checking status
             If Not mXmlParser.OpenFileError Then
-                Dim the_ontology As XML_Classes.XML_Ontology
-                the_ontology = New XML_Classes.XML_Ontology(mXmlParser)
-                a_filemanager.OntologyManager.Ontology = the_ontology
-                mArchetype = New XML_Archetype(mXmlParser, a_filemanager)
-                If mXmlParser.ArchetypeAvailable Then
-                    mOpenFileError = False
-                End If
+                Dim ontology As New XML_Classes.XML_Ontology(mXmlParser)
+                filemanager.OntologyManager.Ontology = ontology
+                mArchetype = New XML_Archetype(mXmlParser, filemanager)
+                mOpenFileError = Not mXmlParser.ArchetypeAvailable
             End If
-            If replace_culture Then
-                System.Threading.Thread.CurrentThread.CurrentCulture = current_culture
+
+            If replaceCulture Then
+                System.Threading.Thread.CurrentThread.CurrentCulture = currentCulture
             End If
         End Sub
 
@@ -126,9 +117,7 @@ Namespace ArchetypeEditor.XML_Classes
 
         Public Function GetCanonicalArchetype() As XMLParser.ARCHETYPE Implements Parser.GetCanonicalArchetype
             mArchetype.MakeParseTree()
-            Dim canonicalArchetype As XMLParser.ARCHETYPE = mXmlParser.GetCanonicalArchetype()
-
-            Return canonicalArchetype
+            Return mXmlParser.GetCanonicalArchetype()
         End Function
 
         Public Sub WriteFile(ByVal a_file_name As String, ByVal output_format As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile

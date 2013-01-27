@@ -1905,235 +1905,223 @@ Public Class Designer
 
         ' stop auto updating of controls
         Dim previousEditedState As Boolean = mFileManager.FileEdited
-
         mFileManager.FileEdited = False
         mFileManager.FileLoading = True
-        Dim watch As Stopwatch = Stopwatch.StartNew()
+        mFileManager.OpenArchetype(filename)
 
-        If Not mFileManager.OpenArchetype(filename) Then
-            MessageBox.Show(mFileManager.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Cursor = System.Windows.Forms.Cursors.Default
+        If mFileManager.HasOpenFileError Then
             mFileManager.ParserReset()
             mFileManager.FileLoading = False
             mFileManager.FileEdited = previousEditedState
-            Exit Sub            ' FIXME: Spaghetti code!
-        End If
-
-        Debug.WriteLine(filename + ": " + CStr(watch.Elapsed.TotalSeconds))
-
-        Dim i As Integer
-
-        For i = 2 To 5
-            Dim tbb As ToolBarButton = DisplayToolBar.Buttons(i)
-            tbb.Visible = mFileManager.AvailableFormats.Contains(tbb.Tag)
-        Next
-
-        Filemanager.ClearEmbedded()
-
-        mFileManager.IsNew = False
-
-        ' stop the handler while we get all the languages
-        RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
-        ResetDefaults()
-
-        Dim a_term As RmTerm = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
-
-        If Not a_term Is Nothing Then
-            txtConceptInFull.Text = a_term.Text
-            TxtConceptDescription.Text = a_term.Description
-            txtConceptComment.Text = a_term.Comment
-        End If
-
-        If mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
-            Dim tn As TreeNode
-            Dim tnc As TreeNodeCollection
-            Dim ct As CodeAndTerm()
-
-            tnc = tvSpecialisation.Nodes
-            ct = Main.Instance.GetSpecialisationChain(mFileManager.Archetype.ConceptCode, mFileManager)
-
-            For i = 0 To ct.Length - 1
-                tn = New TreeNode
-                tn.Text = ct(i).Text
-                tn.Tag = ct(i).Code
-                tnc.Add(tn)
-                tnc = tn.Nodes
+        Else
+            For i As Integer = 2 To 5
+                Dim tbb As ToolBarButton = DisplayToolBar.Buttons(i)
+                tbb.Visible = mFileManager.AvailableFormats.Contains(tbb.Tag)
             Next
 
-            tvSpecialisation.ExpandAll()
-            gbSpecialisation.Show()
-        End If
+            Filemanager.ClearEmbedded()
+            mFileManager.IsNew = False
 
-        If mFileManager.Archetype.hasData Then
-            Select Case mFileManager.Archetype.RmEntity
+            ' stop the handler while we get all the languages
+            RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
+            ResetDefaults()
 
-                Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
-                    Dim rm As RmStructureCompound
-                    ' allow restriction of subject of data
-                    InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
+            Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
 
-                    ' deal with the various groups of information appropriate to the type
-                    Select Case mFileManager.Archetype.RmEntity
-                        Case StructureType.ENTRY
-                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
-                                cbParticipation.Checked = True
-                                SetUpParticipations()
-                            End If
+            If Not term Is Nothing Then
+                txtConceptInFull.Text = term.Text
+                TxtConceptDescription.Text = term.Description
+                txtConceptComment.Text = term.Comment
+            End If
 
-                            For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
-                                Select Case rm.Type
-                                    Case StructureType.Data
-                                        ProcessEventSeries(rm)
-                                    Case StructureType.Protocol
-                                        ProcessProtocol(rm, TabDesign)
-                                End Select
-                            Next
+            If mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
+                Dim tnc As TreeNodeCollection = tvSpecialisation.Nodes
+                Dim ct As CodeAndTerm() = Main.Instance.GetSpecialisationChain(mFileManager.Archetype.ConceptCode, mFileManager)
 
-                        Case StructureType.OBSERVATION
-                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
-                                cbParticipation.Checked = True
-                                SetUpParticipations()
-                            End If
+                For i As Integer = 0 To ct.Length - 1
+                    Dim tn As New TreeNode
+                    tn.Text = ct(i).Text
+                    tn.Tag = ct(i).Code
+                    tnc.Add(tn)
+                    tnc = tn.Nodes
+                Next
 
-                            'Ensures there is a data structure even if empty
-                            SetUpDataStructure()
+                tvSpecialisation.ExpandAll()
+                gbSpecialisation.Show()
+            End If
 
-                            For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
-                                Select Case rm.Type
-                                    Case StructureType.Data
-                                        For Each rm_s As RmStructureCompound In rm.Children
-                                            Select Case rm_s.Type
-                                                Case StructureType.History
-                                                    ProcessEventSeries(rm_s)
-                                                Case Else
-                                                    'Redundant
-                                                    ProcessDataStructure(rm_s)
-                                            End Select
-                                        Next
+            If mFileManager.Archetype.hasData Then
+                Select Case mFileManager.Archetype.RmEntity
 
-                                    Case StructureType.State
-                                        Debug.Assert(rm.Children.Count > 0)
+                    Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
+                        Dim rm As RmStructureCompound
+                        ' allow restriction of subject of data
+                        InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
 
-                                        Dim rm_1 As RmStructure = rm.Children.Items(0)
-
-                                        If rm_1.Type = StructureType.History Then
-                                            ProcessStateEventSeries(rm_1)
-                                        Else
-                                            ProcessState(rm_1)
-                                        End If
-
-                                    Case StructureType.Protocol
-                                        Debug.Assert(rm.Children.Count > 0)
-                                        ProcessProtocol(rm.Children.Items(0), TabDesign)
-                                End Select
-                            Next
-
-                        Case StructureType.EVALUATION
-                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
-                                cbParticipation.Checked = True
-                                SetUpParticipations()
-                            End If
-
-                            SetUpDataStructure()
-
-                            For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
-                                Select Case rm.Type
-                                    Case StructureType.Data
-                                        If rm.Children.Count > 0 Then
-                                            ProcessDataStructure(rm.Children.Items(0))
-                                        End If
-                                    Case StructureType.Protocol
-                                        ProcessProtocol(rm.Children.Items(0), TabDesign)
-                                End Select
-                            Next
-
-                        Case StructureType.INSTRUCTION
-                            SetUpInstruction()
-                            mTabPageInstruction.ProcessInstruction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
-
-                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
-                                mTabPageInstruction.HasParticipation = True
-                                SetUpParticipations()
-                            End If
-
-                            For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
-                                If rmStruct.Type = StructureType.Protocol Then
-                                    mTabPageInstruction.cbProtocol.Checked = True
-                                    ProcessProtocol(rmStruct.Children.Items(0), mTabPageInstruction.TabControlInstruction)
+                        ' deal with the various groups of information appropriate to the type
+                        Select Case mFileManager.Archetype.RmEntity
+                            Case StructureType.ENTRY
+                                If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                    cbParticipation.Checked = True
+                                    SetUpParticipations()
                                 End If
-                            Next
 
-                        Case StructureType.ACTION
-                            SetUpAction()
-                            mTabPageAction.ProcessAction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
+                                For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
+                                    Select Case rm.Type
+                                        Case StructureType.Data
+                                            ProcessEventSeries(rm)
+                                        Case StructureType.Protocol
+                                            ProcessProtocol(rm, TabDesign)
+                                    End Select
+                                Next
 
-                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
-                                mTabPageAction.HasParticipation = True
-                                SetUpParticipations()
-                            End If
-
-                            For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
-                                If rmStruct.Type = StructureType.Protocol Then
-                                    mTabPageAction.cbProtocol.Checked = True
-                                    ProcessProtocol(rmStruct.Children.Items(0), mTabPageAction.TabControlAction)
+                            Case StructureType.OBSERVATION
+                                If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                    cbParticipation.Checked = True
+                                    SetUpParticipations()
                                 End If
-                            Next
 
-                        Case StructureType.ADMIN_ENTRY
-                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
-                                cbParticipation.Checked = True
-                                SetUpParticipations()
+                                'Ensures there is a data structure even if empty
+                                SetUpDataStructure()
+
+                                For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
+                                    Select Case rm.Type
+                                        Case StructureType.Data
+                                            For Each rm_s As RmStructureCompound In rm.Children
+                                                Select Case rm_s.Type
+                                                    Case StructureType.History
+                                                        ProcessEventSeries(rm_s)
+                                                    Case Else
+                                                        'Redundant
+                                                        ProcessDataStructure(rm_s)
+                                                End Select
+                                            Next
+
+                                        Case StructureType.State
+                                            Debug.Assert(rm.Children.Count > 0)
+
+                                            Dim rm_1 As RmStructure = rm.Children.Items(0)
+
+                                            If rm_1.Type = StructureType.History Then
+                                                ProcessStateEventSeries(rm_1)
+                                            Else
+                                                ProcessState(rm_1)
+                                            End If
+
+                                        Case StructureType.Protocol
+                                            Debug.Assert(rm.Children.Count > 0)
+                                            ProcessProtocol(rm.Children.Items(0), TabDesign)
+                                    End Select
+                                Next
+
+                            Case StructureType.EVALUATION
+                                If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                    cbParticipation.Checked = True
+                                    SetUpParticipations()
+                                End If
+
+                                SetUpDataStructure()
+
+                                For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
+                                    Select Case rm.Type
+                                        Case StructureType.Data
+                                            If rm.Children.Count > 0 Then
+                                                ProcessDataStructure(rm.Children.Items(0))
+                                            End If
+                                        Case StructureType.Protocol
+                                            ProcessProtocol(rm.Children.Items(0), TabDesign)
+                                    End Select
+                                Next
+
+                            Case StructureType.INSTRUCTION
+                                SetUpInstruction()
+                                mTabPageInstruction.ProcessInstruction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
+
+                                If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                    mTabPageInstruction.HasParticipation = True
+                                    SetUpParticipations()
+                                End If
+
+                                For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
+                                    If rmStruct.Type = StructureType.Protocol Then
+                                        mTabPageInstruction.cbProtocol.Checked = True
+                                        ProcessProtocol(rmStruct.Children.Items(0), mTabPageInstruction.TabControlInstruction)
+                                    End If
+                                Next
+
+                            Case StructureType.ACTION
+                                SetUpAction()
+                                mTabPageAction.ProcessAction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
+
+                                If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                    mTabPageAction.HasParticipation = True
+                                    SetUpParticipations()
+                                End If
+
+                                For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
+                                    If rmStruct.Type = StructureType.Protocol Then
+                                        mTabPageAction.cbProtocol.Checked = True
+                                        ProcessProtocol(rmStruct.Children.Items(0), mTabPageAction.TabControlAction)
+                                    End If
+                                Next
+
+                            Case StructureType.ADMIN_ENTRY
+                                If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                    cbParticipation.Checked = True
+                                    SetUpParticipations()
+                                End If
+
+                                rm = CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Items(0)
+                                SetUpDataStructure()
+
+                                If rm.Children.Count > 0 Then
+                                    ProcessDataStructure(rm.Children.Items(0))
+                                End If
+                        End Select
+
+                        ' fill the subject of data if required
+                        Dim cp As CodePhrase = CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship
+
+                        If Not cp Is Nothing Then
+                            If cp.Codes.Count > 0 Then
+                                mRestrictedSubject.AsCodePhrase = cp
                             End If
-
-                            rm = CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Items(0)
-                            SetUpDataStructure()
-
-                            If rm.Children.Count > 0 Then
-                                ProcessDataStructure(rm.Children.Items(0))
-                            End If
-                    End Select
-
-                    ' fill the subject of data if required
-                    Dim cp As CodePhrase = CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship
-
-                    If Not cp Is Nothing Then
-                        If cp.Codes.Count > 0 Then
-                            mRestrictedSubject.AsCodePhrase = cp
                         End If
-                    End If
 
-                Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table, StructureType.Cluster
-                    SetUpStructure()
-                    mTabPageDataStructure.ProcessStructure(mFileManager.Archetype.Definition)
+                    Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table, StructureType.Cluster
+                        SetUpStructure()
+                        mTabPageDataStructure.ProcessStructure(mFileManager.Archetype.Definition)
 
-                Case StructureType.Element
-                    SetUpStructure()
-                    mTabPageDataStructure.ProcessElement(mFileManager.Archetype.Definition)
+                    Case StructureType.Element
+                        SetUpStructure()
+                        mTabPageDataStructure.ProcessElement(mFileManager.Archetype.Definition)
 
-                Case StructureType.SECTION
-                    SetUpSection()
-                    mTabPageSection.ProcessSection(mFileManager.Archetype.Definition)
+                    Case StructureType.SECTION
+                        SetUpSection()
+                        mTabPageSection.ProcessSection(mFileManager.Archetype.Definition)
 
-                Case StructureType.COMPOSITION
-                    InitialiseRestrictedSet(RestrictedSet.TermSet.Setting)
-                    SetUpComposition()
-                    mTabPageComposition.ProcessComposition(mFileManager.Archetype.Definition)
-            End Select
+                    Case StructureType.COMPOSITION
+                        InitialiseRestrictedSet(RestrictedSet.TermSet.Setting)
+                        SetUpComposition()
+                        mTabPageComposition.ProcessComposition(mFileManager.Archetype.Definition)
+                End Select
+            End If
+
+            ReferenceModel.SetArchetypedClass(mFileManager.Archetype.Archetype_ID.ReferenceModelEntity)
+            SetUpArchetype(mFileManager.Archetype.RmEntity)
+
+            AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
+            ListLanguages.SelectedValue = mFileManager.OntologyManager.LanguageCode
+            Translate(ListLanguages.SelectedValue)
+
+            If Not mTermBindingPanel Is Nothing Then
+                mTermBindingPanel.PopulatePathTree()
+            End If
+
+            mFileManager.FileLoading = False
+            MenuFileSpecialise.Visible = True
         End If
 
-        ReferenceModel.SetArchetypedClass(mFileManager.Archetype.Archetype_ID.ReferenceModelEntity)
-        SetUpArchetype(mFileManager.Archetype.RmEntity)
-
-        AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
-        ListLanguages.SelectedValue = mFileManager.OntologyManager.LanguageCode
-        Translate(ListLanguages.SelectedValue)
-
-        If Not mTermBindingPanel Is Nothing Then
-            mTermBindingPanel.PopulatePathTree()
-        End If
-
-        mFileManager.FileLoading = False
-        MenuFileSpecialise.Visible = True
         Cursor = System.Windows.Forms.Cursors.Default
     End Sub
 
