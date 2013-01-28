@@ -18,95 +18,73 @@ Option Explicit On
 Option Strict On
 
 Friend Class Duration
-    Private sISODuration As String
-    Private sUnits As String
-    'Private iValue As Integer
-    Private iValue As Decimal
-    'Private yr As Integer
-    'Private mo As Integer
-    'Private w As Integer
-    'Private d As Integer
-    'Private h As Integer
-    'Private m As Integer
-    'Private s As Long
-    'Private fractionalSecond As Double
+    Private mIsoDuration As String
+    Private mIsoUnits As String
+    Private mDuration As Decimal
 
-    Property ISO_duration() As String
+    Public Property ISO_duration() As String
         Get
-            Return sISODuration
+            Return mIsoDuration
         End Get
         Set(ByVal Value As String)
-            sISODuration = Value.Trim("| ".ToCharArray())
+            mIsoDuration = Value.Trim("| ".ToCharArray())
             ProcessIso()
         End Set
     End Property
-    'Property GUI_duration() As Integer
-    Property GUI_duration() As Decimal
+
+    Public ReadOnly Property IsoUnits() As String
         Get
-            Return iValue
+            Return mIsoUnits
         End Get
-        'Set(ByVal Value As Integer)
-        Set(ByVal Value As Decimal)
-            Debug.Assert(sUnits <> "", "Value set before units") 'ToDo: Stop this dependency
-            iValue = Value
-            SetIsoDuration()
-        End Set
-    End Property
-    Property ISO_Units() As String
-        Get
-            Return sUnits
-        End Get
-        Set(ByVal Value As String)
-            If Main.ISO_TimeUnits.IsValidIsoUnit(Value) Then
-                If sUnits <> Value Then
-                    sUnits = Value
-                    SetIsoDuration()
-                End If
-            Else
-                Debug.Assert(False, Value & " is not a valid ISO Unit")
-                Throw New Exception(Value & " is not a valid ISO Unit")
-            End If
-        End Set
     End Property
 
-    Private Function toDuration(ByVal units As String) As String
-        Select Case units
-            Case "min", "mo"
-                Return "M"
-            Case "a"
-                Return "Y"
-            Case "wk"
-                Return "W"
-            Case Else 'D, H, S
-                Return units.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
-        End Select
-    End Function
+    Public ReadOnly Property Duration() As Decimal
+        Get
+            Return mDuration
+        End Get
+    End Property
 
-    Private Sub SetIsoDuration()
-        If sUnits = "millisec" Then
-            sISODuration = "PT" & (iValue / 1000).ToString & "S"
+    Public Sub SetIsoDuration(ByVal value As Decimal, ByVal units As String)
+        mDuration = value
+        mIsoUnits = Main.ISO_TimeUnits.GetIsoUnitForDuration(units)
+
+        If Not Main.ISO_TimeUnits.IsValidIsoUnit(mIsoUnits) Then
+            mIsoUnits = ""
+            mIsoDuration = ""
         Else
-            If (sUnits.ToLowerInvariant = "d") Or (sUnits.ToLowerInvariant = "mo") Or (sUnits.ToLowerInvariant = "wk") Or (sUnits.ToLowerInvariant = "a") Then
-                sISODuration = "P" & iValue.ToString & toDuration(sUnits)
+            If mIsoUnits = "d" Or mIsoUnits = "mo" Or mIsoUnits = "wk" Or mIsoUnits = "a" Then
+                mIsoDuration = "P"
             Else
-                sISODuration = "PT" & iValue.ToString & toDuration(sUnits)
+                mIsoDuration = "PT"
+            End If
+
+            If mIsoUnits = "millisec" Then
+                mIsoDuration += (mDuration / 1000).ToString + "S"
+            Else
+                mIsoDuration += mDuration.ToString
+
+                Select Case mIsoUnits
+                    Case "min", "mo"
+                        mIsoDuration += "M"
+                    Case "a"
+                        mIsoDuration += "Y"
+                    Case "wk"
+                        mIsoDuration += "W"
+                    Case Else 'D, H, S
+                        mIsoDuration += mIsoUnits.ToUpperInvariant
+                End Select
             End If
         End If
     End Sub
 
     Private Sub ProcessIso()
-        Dim str As String
-        Dim y() As String
         Dim ymwd As String
 
         ' drop the leading P and convert to lower
-        str = sISODuration.Substring(1).ToLowerInvariant
+        Dim str As String = mIsoDuration.Substring(1).ToLowerInvariant
+        Dim y() As String = str.Split(("t".ToCharArray))
 
-        'SH: EDT-518 - support wk, mth, yr
-        'y = str.Split("d".ToCharArray())
-        y = str.Split(("t".ToCharArray))
         If y.Length > 1 Then
-            'ymwd = Val(y(0)).ToString
             ymwd = y(0)
             str = y(1)
         Else
@@ -123,6 +101,7 @@ Friend Class Duration
         If Not String.IsNullOrEmpty(ymwd) Then
             'Yrs
             y = ymwd.Split("y".ToCharArray)
+
             If y.Length > 1 Then
                 yr = CInt(y(0))
                 ymwd = y(1)
@@ -130,14 +109,16 @@ Friend Class Duration
 
             'Process months
             y = ymwd.Split("m".ToCharArray)
+
             If y.Length > 1 Then
                 mo = CInt(y(0))
-                sUnits = "mo"
+                mIsoUnits = "mo"
                 ymwd = y(1)
             End If
 
             'Process weeks
             y = ymwd.Split("w".ToCharArray)
+
             If y.Length > 1 Then
                 w = CInt(y(0))
                 ymwd = y(1)
@@ -146,6 +127,7 @@ Friend Class Duration
             'Process days
             y = ymwd.Split("d".ToCharArray)
             If y.Length > 1 Then
+
                 d = CInt(y(0))
                 ymwd = y(1)
             End If
@@ -158,68 +140,65 @@ Friend Class Duration
 
         'Process time
         If Not String.IsNullOrEmpty(str) Then
-
             y = str.Split("h"c)
+
             If y.Length > 1 Then
                 h = CInt(Val(y(0)))
                 str = y(1)
             End If
+
             y = str.Split("m"c)
+
             If y.Length > 1 Then
                 m = CInt(Val(y(0)))
                 str = y(1)
             End If
+
             y = str.Split("s"c)
+
             If y.Length > 1 Then
                 s = CLng(Val(y(0)))
                 fractionalSecond = Val(y(0)) - s
             End If
         End If
 
-        If sUnits <> "mo" Then
-            If sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("y") Then
-                sUnits = "a"
-            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("w") Then
-                sUnits = "wk"
-            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("d") Then
-                sUnits = "d"
-            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("h") Then
-                sUnits = "h"
-            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("m") Then
-                sUnits = "min"
-            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("s") Then
-                'If InStr(s.ToString, ".") > 0 Then
+        If mIsoUnits <> "mo" Then
+            If mIsoDuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("y") Then
+                mIsoUnits = "a"
+            ElseIf mIsoDuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("w") Then
+                mIsoUnits = "wk"
+            ElseIf mIsoDuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("d") Then
+                mIsoUnits = "d"
+            ElseIf mIsoDuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("h") Then
+                mIsoUnits = "h"
+            ElseIf mIsoDuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("m") Then
+                mIsoUnits = "min"
+            ElseIf mIsoDuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("s") Then
                 If InStr(fractionalSecond.ToString, ".") > 0 Then
                     ' this means there is a decimal point and the period must have been in millisecs
-                    'If InStr(iValue.ToString, ".") Then
-                    '    iValue = s * 1000
-                    'iValue = CInt((fractionalSecond - s) * 1000)
-                    sUnits = "millisec"
-                    'End If
+                    mIsoUnits = "millisec"
                 Else
-                    sUnits = "s"
+                    mIsoUnits = "s"
                 End If
             End If
 
-            If sUnits = "a" Then
-                iValue = yr
-            ElseIf sUnits = "wk" Then
-                iValue = (yr * 52) + w
-            ElseIf sUnits = "d" Then
-                iValue = (yr * 52) + (w * 7) + d
-            ElseIf sUnits = "h" Then
-                iValue = (d * 24) + h
-
-            ElseIf sUnits = "min" Then
-                iValue = (((d * 24) + h) * 60) + m
-
-            ElseIf sUnits = "s" Then
-                iValue = (((((d * 24) + h) * 60) + m) * 60) + s
-            ElseIf sUnits = "millisec" Then
-                iValue = CDec((((((((d * 24) + h) * 60) + m) * 60) + s + fractionalSecond) * 1000))
+            If mIsoUnits = "a" Then
+                mDuration = yr
+            ElseIf mIsoUnits = "wk" Then
+                mDuration = (yr * 52) + w
+            ElseIf mIsoUnits = "d" Then
+                mDuration = (yr * 52) + (w * 7) + d
+            ElseIf mIsoUnits = "h" Then
+                mDuration = (d * 24) + h
+            ElseIf mIsoUnits = "min" Then
+                mDuration = (((d * 24) + h) * 60) + m
+            ElseIf mIsoUnits = "s" Then
+                mDuration = (((((d * 24) + h) * 60) + m) * 60) + s
+            ElseIf mIsoUnits = "millisec" Then
+                mDuration = CDec((((((((d * 24) + h) * 60) + m) * 60) + s + fractionalSecond) * 1000))
             End If
         Else
-            iValue = mo
+            mDuration = mo
         End If
     End Sub
 End Class

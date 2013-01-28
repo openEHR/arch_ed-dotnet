@@ -974,15 +974,14 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             Dim durationIso As New Duration
-            durationIso.ISO_Units = Main.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
 
             If c.HasMinimum Then
-                durationIso.GUI_duration = CInt(c.MinimumValue)
+                durationIso.SetIsoDuration(c.MinimumValue, c.MinMaxValueUnits)
                 lower = durationIso.ISO_duration
             End If
 
             If c.HasMaximum Then
-                durationIso.GUI_duration = CInt(c.MaximumValue)
+                durationIso.SetIsoDuration(c.MaximumValue, c.MinMaxValueUnits)
                 upper = durationIso.ISO_duration
             End If
 
@@ -1017,7 +1016,7 @@ Namespace ArchetypeEditor.XML_Classes
                 End With
 
                 If c.HasAssumedValue Then
-                    durationIso.GUI_duration = CInt(c.AssumedValue)
+                    durationIso.SetIsoDuration(c.AssumedValue, c.MinMaxValueUnits)
                     d.assumed_value = durationIso.ISO_duration
                 End If
 

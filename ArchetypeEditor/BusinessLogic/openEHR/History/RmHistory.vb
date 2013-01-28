@@ -113,8 +113,8 @@ Class RmHistory
                 Case "period"
                     Try
                         Dim d As Duration = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(attribute)
-                        Period = d.GUI_duration
-                        PeriodUnits = d.ISO_Units
+                        Period = d.Duration
+                        PeriodUnits = d.IsoUnits
                         isPeriodic = True
                     Catch e As Exception
                         MessageBox.Show(String.Format("History[{1}]/period attribute - {0}", Me.NodeId, e.Message))
@@ -168,8 +168,8 @@ Class RmHistory
                         Try
                             Dim d As Duration = _
                                 ArchetypeEditor.XML_Classes.XML_Tools.GetDuration(an_attribute)
-                            Me.Period = d.GUI_duration
-                            Me.PeriodUnits = d.ISO_Units
+                            Me.Period = d.Duration
+                            Me.PeriodUnits = d.IsoUnits
                             Me.isPeriodic = True
                         Catch e As Exception
                             MessageBox.Show(String.Format("History[{1}]/period attribute - {0}", Me.NodeId, e.Message))

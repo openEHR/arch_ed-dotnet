@@ -204,8 +204,8 @@ Class RmEvent
                 Case "offset"
                     Try
                         Dim d As Duration = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(attribute)
-                        Offset = d.GUI_duration
-                        OffsetUnits = d.ISO_Units
+                        Offset = d.Duration
+                        OffsetUnits = d.IsoUnits
                     Catch e As Exception
                         MessageBox.Show(String.Format("Event[{1}]/offset attribute - {0}", Me.NodeId, e.Message))
                     End Try
@@ -213,8 +213,8 @@ Class RmEvent
                 Case "width"
                     Try
                         Dim d As Duration = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(attribute)
-                        Width = d.GUI_duration
-                        WidthUnits = d.ISO_Units
+                        Width = d.Duration
+                        WidthUnits = d.IsoUnits
                     Catch e As Exception
                         MessageBox.Show(String.Format("Event[{1}]/width attribute - {0}", Me.NodeId, e.Message))
                     End Try
@@ -344,8 +344,8 @@ Class RmEvent
                     Case "offset"
                         Try
                             Dim d As Duration = ArchetypeEditor.XML_Classes.XML_Tools.GetDuration(an_attribute)
-                            Offset = d.GUI_duration
-                            OffsetUnits = d.ISO_Units
+                            Offset = d.Duration
+                            OffsetUnits = d.IsoUnits
                         Catch e As Exception
                             MessageBox.Show(String.Format("Error: Event[{0}]/offset attribute - {1}", NodeId, e.Message))
                         End Try
@@ -354,8 +354,8 @@ Class RmEvent
 
                         Try
                             Dim d As Duration = ArchetypeEditor.XML_Classes.XML_Tools.GetDuration(an_attribute)
-                            Width = d.GUI_duration
-                            WidthUnits = d.ISO_Units
+                            Width = d.Duration
+                            WidthUnits = d.IsoUnits
                         Catch e As Exception
                             MessageBox.Show(String.Format("Error: Event[{1}]/width attribute - {0}", NodeId, e.Message))
                         End Try
