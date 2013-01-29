@@ -91,7 +91,7 @@ Namespace ArchetypeEditor.XML_Classes
             mXML_Description.other_details = otherDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
             mXML_Description.lifecycle_state = LifeCycleStateAsString
 
-            If Not mArchetypePackageURI Is Nothing Then
+            If Not String.IsNullOrEmpty(mArchetypePackageURI) Then
                 mXML_Description.resource_package_uri = mArchetypePackageURI
             End If
 
@@ -119,16 +119,13 @@ Namespace ArchetypeEditor.XML_Classes
             Return mXML_Description
         End Function
 
-        Sub New(ByVal an_xml_archetype_description As XMLParser.RESOURCE_DESCRIPTION, ByVal a_language_code As String)
-            mXML_Description = an_xml_archetype_description
+        Sub New(ByVal description As XMLParser.RESOURCE_DESCRIPTION, ByVal language As String)
+            mXML_Description = description
             mADL_Version = "2.0" ' this is actually the archetype model rather than ADL
+            mArchetypePackageURI = description.resource_package_uri
 
-            If Not mXML_Description.resource_package_uri Is Nothing Then
-                mArchetypePackageURI = mXML_Description.resource_package_uri
-            End If
-
-            If Not mXML_Description.original_author Is Nothing Then
-                For Each di As XMLParser.StringDictionaryItem In mXML_Description.original_author
+            If Not description.original_author Is Nothing Then
+                For Each di As XMLParser.StringDictionaryItem In description.original_author
                     Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "name"
                             mOriginalAuthor = di.Value
@@ -142,8 +139,14 @@ Namespace ArchetypeEditor.XML_Classes
                 Next
             End If
 
-            If Not mXML_Description.other_details Is Nothing Then
-                For Each di As XMLParser.StringDictionaryItem In mXML_Description.other_details
+            If Not description.other_contributors Is Nothing Then
+                For Each s As String In description.other_contributors
+                    mOtherContributors.Add(s)
+                Next
+            End If
+
+            If Not description.other_details Is Nothing Then
+                For Each di As XMLParser.StringDictionaryItem In description.other_details
                     Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "references"
                             mReferences = di.Value
@@ -152,16 +155,11 @@ Namespace ArchetypeEditor.XML_Classes
                     End Select
                 Next
             End If
-            If Not mXML_Description.other_contributors Is Nothing Then
-                For Each s As String In mXML_Description.other_contributors
-                    mOtherContributors.Add(s)
-                Next
-            End If
 
-            MyBase.LifeCycleStateAsString = mXML_Description.lifecycle_state
+            MyBase.LifeCycleStateAsString = description.lifecycle_state
 
-            If mXML_Description.details Is Nothing OrElse mXML_Description.details.Length = 0 Then
-                mArchetypeDetails.AddOrReplace(a_language_code, New ArchetypeDescriptionItem(a_language_code))
+            If description.details Is Nothing OrElse description.details.Length = 0 Then
+                mArchetypeDetails.AddOrReplace(language, New ArchetypeDescriptionItem(language))
             End If
         End Sub
 
@@ -170,17 +168,17 @@ Namespace ArchetypeEditor.XML_Classes
             mOriginalAuthor = Main.Instance.Options.UserName
         End Sub
 
-        Sub New(ByVal adl_description As ADL_Classes.ADL_Description)
+        Sub New(ByVal description As ADL_Classes.ADL_Description)
             mXML_Description = New XMLParser.RESOURCE_DESCRIPTION()
-            LifeCycleState = adl_description.LifeCycleState
-            ArchetypePackageURI = adl_description.ArchetypePackageURI
-            OriginalAuthor = adl_description.OriginalAuthor
-            OriginalAuthorDate = adl_description.OriginalAuthorDate
-            OriginalAuthorEmail = adl_description.OriginalAuthorEmail
-            OriginalAuthorOrganisation = adl_description.OriginalAuthorOrganisation
-            OtherContributors = adl_description.OtherContributors
-            References = adl_description.References
-            CurrentContact = adl_description.CurrentContact
+            ArchetypePackageURI = description.ArchetypePackageURI
+            OriginalAuthor = description.OriginalAuthor
+            OriginalAuthorDate = description.OriginalAuthorDate
+            OriginalAuthorEmail = description.OriginalAuthorEmail
+            OriginalAuthorOrganisation = description.OriginalAuthorOrganisation
+            OtherContributors = description.OtherContributors
+            References = description.References
+            CurrentContact = description.CurrentContact
+            LifeCycleState = description.LifeCycleState
         End Sub
 
     End Class

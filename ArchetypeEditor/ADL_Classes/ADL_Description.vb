@@ -15,6 +15,7 @@
 '
 
 Option Explicit On 
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 Imports AM = XMLParser.OpenEhr.V1.Its.Xml.AM
 Imports XMLParser
 
@@ -54,7 +55,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             mADL_Description.set_lifecycle_state(Eiffel.String(LifeCycleStateAsString))
 
-            If Not mArchetypePackageURI Is Nothing Then
+            If Not String.IsNullOrEmpty(mArchetypePackageURI) Then
                 mADL_Description.set_resource_package_uri(Eiffel.String(mArchetypePackageURI))
             End If
 
@@ -83,73 +84,69 @@ Namespace ArchetypeEditor.ADL_Classes
             Return mADL_Description
         End Function
 
-        Sub New(ByVal an_adl_archetype_description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION)
-            mADL_Description = an_adl_archetype_description
+        Sub New(ByVal description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION)
+            mADL_Description = description
 
-            If Not mADL_Description.resource_package_uri Is Nothing Then
-                mArchetypePackageURI = mADL_Description.resource_package_uri.as_string.to_cil
+            If Not description.resource_package_uri Is Nothing Then
+                mArchetypePackageURI = description.resource_package_uri.as_string.to_cil
             End If
 
-            If mADL_Description.original_author.has(Eiffel.String("name")) Then
-                mOriginalAuthor = mADL_Description.original_author.item(Eiffel.String("name")).to_cil()
+            If description.original_author.has(Eiffel.String("name")) Then
+                mOriginalAuthor = description.original_author.item(Eiffel.String("name")).to_cil
             End If
 
-            If mADL_Description.original_author.has(Eiffel.String("email")) Then
-                mOriginalAuthorEmail = mADL_Description.original_author.item(Eiffel.String("email")).to_cil
+            If description.original_author.has(Eiffel.String("email")) Then
+                mOriginalAuthorEmail = description.original_author.item(Eiffel.String("email")).to_cil
             End If
 
-            If mADL_Description.original_author.has(Eiffel.String("organisation")) Then
-                mOriginalAuthorOrganisation = mADL_Description.original_author.item(Eiffel.String("organisation")).to_cil
+            If description.original_author.has(Eiffel.String("organisation")) Then
+                mOriginalAuthorOrganisation = description.original_author.item(Eiffel.String("organisation")).to_cil
             End If
 
-            If mADL_Description.original_author.has(Eiffel.String("date")) Then
-                mOriginalAuthorDate = mADL_Description.original_author.item(Eiffel.String("date")).to_cil
+            If description.original_author.has(Eiffel.String("date")) Then
+                mOriginalAuthorDate = description.original_author.item(Eiffel.String("date")).to_cil
             End If
 
-            If Not mADL_Description.other_contributors Is Nothing Then
-                For i As Integer = 1 To mADL_Description.other_contributors.count
-                    mOtherContributors.Add(mADL_Description.other_contributors.i_th(i).to_cil)
+            If Not description.other_contributors Is Nothing Then
+                For i As Integer = 1 To description.other_contributors.count
+                    mOtherContributors.Add(description.other_contributors.i_th(i).to_cil)
                 Next
             End If
 
-            If Not mADL_Description.other_details Is Nothing Then
-                If mADL_Description.other_details.has(Eiffel.String("references")) Then
-                    mReferences = mADL_Description.other_details.item(Eiffel.String("references")).to_cil()
+            If Not description.other_details Is Nothing Then
+                If description.other_details.has(Eiffel.String("references")) Then
+                    mReferences = description.other_details.item(Eiffel.String("references")).to_cil
                 End If
 
-                If mADL_Description.other_details.has(Eiffel.String(CurrentContactKey)) Then
-                    mCurrentContact = mADL_Description.other_details.item(Eiffel.String(CurrentContactKey)).to_cil()
+                If description.other_details.has(Eiffel.String(CurrentContactKey)) Then
+                    mCurrentContact = description.other_details.item(Eiffel.String(CurrentContactKey)).to_cil
                 End If
             End If
 
-            MyBase.LifeCycleStateAsString = mADL_Description.lifecycle_state.to_cil
+            MyBase.LifeCycleStateAsString = description.lifecycle_state.to_cil
 
-            If mADL_Description.details.count = 0 Then
+            If description.details.count = 0 Then
                 mArchetypeDetails.AddOrReplace(Filemanager.Master.OntologyManager.LanguageCode, New ArchetypeDescriptionItem(Filemanager.Master.OntologyManager.LanguageCode))
             End If
         End Sub
 
-        Sub New(ByVal an_archetype_description As ArchetypeDescription, ByVal a_language As String)
-            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(Eiffel.String(Main.Instance.Options.UserName), Eiffel.String(a_language))
-
-            If Not an_archetype_description.ArchetypePackageURI Is Nothing Then
-                mArchetypePackageURI = an_archetype_description.ArchetypePackageURI
-            End If
-
-            mOriginalAuthor = an_archetype_description.OriginalAuthor
-            mOriginalAuthorEmail = an_archetype_description.OriginalAuthorEmail
-            mOriginalAuthorOrganisation = an_archetype_description.OriginalAuthorOrganisation
-            mOriginalAuthorDate = an_archetype_description.OriginalAuthorDate
-            mOtherContributors = an_archetype_description.OtherContributors
-            mReferences = an_archetype_description.References
-            mCurrentContact = an_archetype_description.CurrentContact
-
-            MyBase.LifeCycleState = an_archetype_description.LifeCycleState
+        Sub New(ByVal description As ArchetypeDescription, ByVal language As String)
+            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(Eiffel.String(Main.Instance.Options.UserName), Eiffel.String(language))
+            mArchetypePackageURI = description.ArchetypePackageURI
+            mOriginalAuthor = description.OriginalAuthor
+            mOriginalAuthorEmail = description.OriginalAuthorEmail
+            mOriginalAuthorOrganisation = description.OriginalAuthorOrganisation
+            mOriginalAuthorDate = description.OriginalAuthorDate
+            mOtherContributors = description.OtherContributors
+            mReferences = description.References
+            mCurrentContact = description.CurrentContact
+            LifeCycleState = description.LifeCycleState
         End Sub
 
-        Sub New(ByVal original_language As String)
-            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(Eiffel.String(Main.Instance.Options.UserName), Eiffel.String(original_language))
+        Sub New(ByVal language As String)
+            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(Eiffel.String(Main.Instance.Options.UserName), Eiffel.String(language))
         End Sub
+
     End Class
 End Namespace
 '
