@@ -71,7 +71,6 @@
   <Language code="kk" Description="Kazakh" />
   <Language code="km" Description="Khmer" />
   <Language code="ko" Description="Korean" />
-  <Language code="ko" Description="Korean (Johab)" />
   <Language code="lv" Description="Latvian" />
   <Language code="lt" Description="Lithuanian" />
   <Language code="mk" Description="FYRO Macedonian ms Malaysian" />
@@ -81,7 +80,8 @@
   <Language code="no" Description="Norwegian" />
   <Language code="pl" Description="Polish" />
   <Language code="pt-br" Description="Portuguese (Brazil)" />
-  <Language code="pt" Description="Portuguese (Portugal)" />
+  <Language code="pt-pt" Description="Portuguese (Portugal)" />
+  <Language code="pt" Description="Portuguese" />
   <Language code="rm" Description="Rhaeto-Romanic" />
   <Language code="ro" Description="Romanian" />
   <Language code="ro-mo" Description="Romanian (Moldavia)" />
