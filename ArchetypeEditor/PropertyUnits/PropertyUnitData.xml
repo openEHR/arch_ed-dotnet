@@ -561,4 +561,5 @@
   <Unit property_id="82" Text="daPa/s" name="decaPascals per second" primary="false" />
   <Unit property_id="84" Text="Hz/s" name="Hertz per second" conversion="1" primary="false" />
   <Unit property_id="84" Text="KHz/s" name="Kilohertz per second" primary="false" />
+  <Unit property_id="82" Text="mm[H20]/s" name="millimeters of water per second" primary="false" />
 </PropertyUnits>
