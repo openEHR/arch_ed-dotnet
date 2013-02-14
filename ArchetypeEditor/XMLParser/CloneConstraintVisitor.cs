@@ -1104,7 +1104,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                 SortedList<string, StringDictionaryItem> dictionaryItem = new SortedList<string, StringDictionaryItem>();
                 o.start();
 
-                while (o.key_for_iteration() != null)
+                while (!o.off())
                 {
                     StringDictionaryItem item = new StringDictionaryItem();
                     item.id = o.key_for_iteration().ToString();
