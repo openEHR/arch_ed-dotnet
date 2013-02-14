@@ -1185,8 +1185,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>"$(FrameworkSDKDir)bin\corflags.exe" "$(TargetPath)" /nologo /32bit+</PostBuildEvent>
   </PropertyGroup>
   <Target Name="BeforeBuild" Outputs="AssemblyVersion.vb">
     <Exec Command="AssemblyVersion.cmd $(Configuration) VB &gt; AssemblyVersion.vb" Outputs="AssemblyVersion.vb">
