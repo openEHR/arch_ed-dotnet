@@ -31,7 +31,7 @@
 
           <h1><a name="ArchetypeEditorReleases-CurrentBetaRelease"></a>Current Beta Release</h1>
 
-          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor2.2"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/TRUNK/ArchetypeEditor" rel="nofollow">Archetype Editor 2.2.876</a></span> 29 November 2012</h2>
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor2.2"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/TRUNK/ArchetypeEditor" rel="nofollow">Archetype Editor 2.2.898</a></span> 19 February 2013</h2>
 
           <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
           <ul>
@@ -69,6 +69,7 @@
             <li>Allow <b>constraint bindings</b> to be edited directly at the node definition.</li>
             <li>Allow <b>constraint bindings</b> and <b>term bindings</b> to use and browse any terminology.</li>
             <li>Allow <b>assumed value</b> to be set in any data, not just on patient state.</li>
+            <li>Allow <b>assumed value</b> to be deleted.</li>
             <li>Allow each <b>contributor</b> to be edited.</li>
             <li>Allow the <b>copyright</b> to be edited.</li>
             <li>Allow the <b>current contact</b> to be recorded.</li>
@@ -83,6 +84,11 @@
             <li>When specialising a multiple-occurrence node, the node is cloned only if the user requests.</li>
             <li>When specialising a cluster by cloning, all of the cluster's children are copied too.</li>
             <li>Added g/m2.7 and 10^x property units.</li>
+            <li>Added <b>Rate of Change - Pressure</b> property units (daPa/s).</li>
+            <li>Added <b>Rate of Change - Frequency</b> property units (Hz/s).</li>
+            <li>Added more <b>Japanese</b> translations.</li>
+            <li>Added <b>Russian</b> translations.</li>
+            <li>Internationalised many parts of the user interface, ready for translation into other languages.</li>
             <li>Fixed the file recovery dialog to appear when appropriate during start-up.</li>
             <li>Fixed specialising of <b>XML</b> archetypes.</li>
             <li>Fixed saving name constraints of <b>XML ELEMENT</b> archetypes.</li>
@@ -92,6 +98,7 @@
             <li>Fixed action patterns in <b>XML INSTRUCTION</b> archetypes.</li>
             <li>Fixed loading math_function, width, fixed interval and offset in <b>OBSERVATION</b> archetypes.</li>
             <li>Fixed loading occurrences of sub-sections in <b>SECTION</b> archetypes.</li>
+            <li>Fixed error when loading an empty <b>resource_package_uri</b> from ADL.</li>
             <li>Fixed errors when loading <b>term bindings</b> and <b>constraint bindings</b>.</li>
             <li>Fixed some problems editing the <b>Term Bindings</b> Complex tab.</li>
             <li>Fixed displaying <b>URI</b> constraints within a <b>choice</b> element.</li>
@@ -102,6 +109,8 @@
             <li>Fixed saving a <b>Single</b> or <b>Table</b> structure with a slot.</li>
             <li>Fixed saving of <b>assumed value</b> for <b>DV_CODED_TEXT</b> internal codes.</li>
             <li>Fixed saving of <b>assumed value</b> for <b>DV_PROPORTION</b>.</li>
+            <li>Fixed saving of <b>assumed value</b> for <b>DV_DURATION</b>.</li>
+            <li>Fixed saving of <b>DV_QUANTITY</b> or <b>DV_PROPORTION</b> with a non-zero precision.</li>
             <li>Fixed saving to XML of <b>is_integral</b> for <b>DV_PROPORTION</b>.</li>
             <li>Fixed saving <b>COMPOSITION</b> archetypes with a <b>Table</b> structure.</li>
             <li>Fixed saving <b>Participation</b> occurrences in <b>COMPOSITION</b> archetypes.</li>
@@ -670,7 +679,7 @@
           <li value="0"><a href="release_notes.html">Release notes</a></li>
           <li value="0"><a href="Menu/HowTo/archetype_editor.htm">Getting started</a></li>
         </ul>
-        <p>Copyright 2012 openEHR Foundation - $LastChangedDate$ $LastChangedRevision$</p>
+        <p>Copyright 2013 openEHR Foundation - $LastChangedDate$ $LastChangedRevision$</p>
       </div>
     </div>
   </body>
