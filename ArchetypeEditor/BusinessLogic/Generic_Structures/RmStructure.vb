@@ -157,12 +157,12 @@ Public Class RmStructure
         End Get
     End Property
 
-    Public Function CanRemove(ByVal archetypeSpecialisationDepth As Integer) As Boolean
+    Public Overridable Function CanRemove(ByVal archetypeSpecialisationDepth As Integer) As Boolean
         Dim depth As Integer = SpecialisationDepth()
         Return archetypeSpecialisationDepth = depth And (depth = 0 Or NodeId.StartsWith("at0.") Or NodeId.IndexOf(".0.") > -1)
     End Function
 
-    Public Function CanSpecialise(ByVal archetypeSpecialisationDepth As Integer) As Boolean
+    Public Overridable Function CanSpecialise(ByVal archetypeSpecialisationDepth As Integer) As Boolean
         Dim depth As Integer = SpecialisationDepth()
         Return archetypeSpecialisationDepth > 0 And (depth < archetypeSpecialisationDepth Or Occurrences.IsMultiple)
     End Function

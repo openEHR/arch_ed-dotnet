@@ -62,7 +62,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     Public Overrides ReadOnly Property CanChangeDataType() As Boolean
         Get
-            Return Not IsReference And (CanRemove Or (Not CanSpecialise And Constraint.Kind = ConstraintKind.Any))
+            Return Element.CanChangeDataType(mFileManager.OntologyManager.NumberOfSpecialisations)
         End Get
     End Property
 

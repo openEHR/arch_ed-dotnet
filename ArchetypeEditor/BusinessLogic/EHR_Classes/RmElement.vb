@@ -38,6 +38,10 @@ Public Class RmElement
         End Set
     End Property
 
+    Public Overridable Function CanChangeDataType(ByVal archetypeSpecialisationDepth As Integer) As Boolean
+        Return archetypeSpecialisationDepth = SpecialisationDepth()
+    End Function
+
     Public Overrides ReadOnly Property Type() As StructureType
         Get
             Return StructureType.Element

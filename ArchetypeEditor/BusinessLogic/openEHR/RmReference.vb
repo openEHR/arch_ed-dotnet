@@ -67,6 +67,10 @@ Public Class RmReference
         End Set
     End Property
 
+    Public Overrides Function CanChangeDataType(ByVal archetypeSpecialisationDepth As Integer) As Boolean
+        Return False
+    End Function
+
     Public Overrides ReadOnly Property DataType() As String
         Get
             Debug.Assert(Not mElement Is Nothing, "rm Argument is nothing")
