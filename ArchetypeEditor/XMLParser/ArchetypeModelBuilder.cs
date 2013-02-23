@@ -66,17 +66,17 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
 
         public static string ArchetypeDigest(ARCHETYPE archetype)
         {
-            System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
+            XmlWriterSettings settings = new XmlWriterSettings();
             settings.Encoding = Encoding.UTF8;
             settings.OmitXmlDeclaration = true;
             settings.Indent = false;
 
-            System.IO.MemoryStream archetypeStream = AmSerializer.Serialize(settings, archetype);
-            AmSerializer.ValidateArchetype(archetypeStream);
+            MemoryStream stream = AmSerializer.Serialize(settings, archetype);
+            AmSerializer.ValidateArchetype(stream);
 
 //#if DEBUG
 //            archetypeStream.Position = 0;
-//            System.IO.StreamReader reader = new System.IO.StreamReader(archetypeStream);
+//            StreamReader reader = new System.IO.StreamReader(archetypeStream);
 //            using (System.IO.StreamWriter writer = new System.IO.StreamWriter("CanonicalArchetype.xml", false, Encoding.UTF8))
 //            {
 //                writer.Write(reader.ReadToEnd());
@@ -84,16 +84,18 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
 //                reader.Close();
 //            }
 //#endif
-            byte[] data = archetypeStream.ToArray();
+            byte[] data = stream.ToArray();
 
             // Remove UTF-8 BOM 
             int offset = 0;
+
             if (data.Length < 1)
                 throw new ApplicationException("Canonical archetype model must have length greater than 0");
 
             if (data[0] == 239) // UTF-8 BOM: EF BB BF (239 187 191)
             {
                 offset = 3;
+
                 if (data.Length <= offset)
                     throw new ApplicationException("Canonical archetype model must have length greater than the BOM offset");
             }
@@ -103,9 +105,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
 
             MD5 md5 = new MD5CryptoServiceProvider();
             SoapHexBinary hexEncoder = new SoapHexBinary(md5.ComputeHash(data, offset, data.Length-offset));
-            string digest = hexEncoder.ToString();
-
-            return digest;
+            return hexEncoder.ToString();
         }
     }
 }

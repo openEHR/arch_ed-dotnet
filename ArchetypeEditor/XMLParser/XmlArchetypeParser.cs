@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 using XMLParser.OpenEhr.V1.Its.Xml.AM;
 
 [assembly: CLSCompliant(true)]
@@ -167,7 +170,7 @@ namespace XMLParser
                 SetArchetypeDigest();
 
                 System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
+                XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
                 settings.Encoding = Encoding.UTF8;
                 ms = AmSerializer.Serialize(settings, _archetype);
@@ -362,8 +365,8 @@ namespace XMLParser
             try
             {
                 System.IO.StringReader stringReader = new System.IO.StringReader(xmlString);
-                System.Xml.XmlReader xml_reader = System.Xml.XmlReader.Create(stringReader);
-                System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
+                XmlReader xml_reader = XmlReader.Create(stringReader);
+                XmlSerializer xmlSerialiser = new XmlSerializer(typeof(ARCHETYPE));
 				ARCHETYPE new_archetype = xmlSerialiser.Deserialize(xml_reader) as ARCHETYPE;
                 xml_reader.Close();
 
@@ -387,9 +390,8 @@ namespace XMLParser
 
             try
             {
-                System.Xml.XmlReader xml_reader
-                    = System.Xml.XmlReader.Create(a_file_name);
-                System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
+                XmlReader xml_reader = XmlReader.Create(a_file_name);
+                XmlSerializer xmlSerialiser = new XmlSerializer(typeof(ARCHETYPE));
 				ARCHETYPE new_archetype = xmlSerialiser.Deserialize(xml_reader) as ARCHETYPE;
                 xml_reader.Close();
 
@@ -415,11 +417,11 @@ namespace XMLParser
 
                 SetArchetypeDigest();
 
-                System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
+                XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
                 settings.Encoding = Encoding.UTF8;
 
-                System.Xml.XmlWriter xml_writer = System.Xml.XmlWriter.Create(a_file_name, settings);
+                XmlWriter xml_writer = XmlWriter.Create(a_file_name, settings);
                 AmSerializer.Serialize(xml_writer, _archetype);
 
                 xml_writer.Close();

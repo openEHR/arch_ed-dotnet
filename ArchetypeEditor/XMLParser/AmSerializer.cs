@@ -22,10 +22,10 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
 #else
         private const string SCHEMA_LOCATOR_PATTERN = "{0}.Schemas.{1}.xsd";
 #endif
-        static System.Xml.Serialization.XmlSerializer xmlSchemaSerializer;
+        static XmlSerializer xmlSchemaSerializer;
         static object xmlSchemaSerializerLock = new object();
 
-        static System.Xml.Serialization.XmlSerializer XmlSchemaSerializer
+        static XmlSerializer XmlSchemaSerializer
         {
             get
             {
@@ -34,7 +34,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                     lock (xmlSchemaSerializerLock)
                     {
                         if (xmlSchemaSerializer == null)
-                            xmlSchemaSerializer = new System.Xml.Serialization.XmlSerializer(typeof(XmlSchema));
+                            xmlSchemaSerializer = new XmlSerializer(typeof(XmlSchema));
                     }
                 }
                 return xmlSchemaSerializer;
@@ -104,9 +104,9 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
         }
 
         private static object archetypeSerialiserLock = new object();
-        private static volatile System.Xml.Serialization.XmlSerializer archetypeSerialiser = null;
+        private static volatile XmlSerializer archetypeSerialiser = null;
 
-        static private System.Xml.Serialization.XmlSerializer ArchetypeSerialiser
+        static private XmlSerializer ArchetypeSerialiser
         {
             get
             {
@@ -115,8 +115,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                     lock (archetypeSerialiserLock)
                     {
                         if (archetypeSerialiser == null)
-                            archetypeSerialiser =
-                                new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
+                            archetypeSerialiser = new XmlSerializer(typeof(ARCHETYPE));
                     }
                 }
                 return archetypeSerialiser;
@@ -128,37 +127,31 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             ArchetypeSerialiser.Serialize(writer, archetype);
         }
 
-        public static System.IO.MemoryStream Serialize(XmlWriterSettings settings, ARCHETYPE archetype)
+        public static MemoryStream Serialize(XmlWriterSettings settings, ARCHETYPE archetype)
         {
-            System.IO.MemoryStream stream = new System.IO.MemoryStream();
+            MemoryStream result = new MemoryStream();
+
             if (settings != null)
-            {
-                System.Xml.XmlWriter writer = System.Xml.XmlWriter.Create(stream, settings);
-                ArchetypeSerialiser.Serialize(writer, archetype);
-            }
+                ArchetypeSerialiser.Serialize(XmlWriter.Create(result, settings), archetype);
             else
-                ArchetypeSerialiser.Serialize(stream, archetype);
+                ArchetypeSerialiser.Serialize(result, archetype);
 
-            if (stream == null)
-                throw new ApplicationException("stream must not be null");
-
-            return stream;
+            return result;
         }
 
-        public static void ValidateArchetype(System.IO.MemoryStream archetypeStream)
+        public static void ValidateArchetype(MemoryStream archetypeStream)
         {
             long position = archetypeStream.Position;
             archetypeStream.Position = 0;
 
-            System.Xml.XmlReaderSettings settings = new System.Xml.XmlReaderSettings();
+            XmlReaderSettings settings = new XmlReaderSettings();
             settings.Schemas.Add(ArchetypeSchemaSet);
-            settings.ValidationType = System.Xml.ValidationType.Schema;
+            settings.ValidationType = ValidationType.Schema;
 
-            using (System.Xml.XmlReader reader = System.Xml.XmlReader.Create(archetypeStream, settings))
+            using (XmlReader reader = XmlReader.Create(archetypeStream, settings))
             {
-                //System.Xml.XmlDocument archetypeDoc = new System.Xml.XmlDocument();
-                //    archetypeDoc.Load(reader);
                 ARCHETYPE archetype = ArchetypeSerialiser.Deserialize(reader) as ARCHETYPE;
+
                 if (archetype == null)
                     throw new ApplicationException("application must not be null");
 
@@ -170,14 +163,13 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
 
         public static bool ValidateArchetype(ARCHETYPE archetype)
         {
-            System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
+            XmlWriterSettings settings = new XmlWriterSettings();
             settings.Encoding = Encoding.UTF8;
             settings.OmitXmlDeclaration = true;
             settings.Indent = false;
 
-            System.IO.MemoryStream stream = Serialize(settings, archetype);
+            MemoryStream stream = Serialize(settings, archetype);
             AmSerializer.ValidateArchetype(stream);
-
             return true;
         }
     }

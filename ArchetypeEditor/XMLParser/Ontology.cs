@@ -867,33 +867,12 @@ namespace XMLParser
             return null;
         }
 
-        private ArrayList CodesUsed(ARCHETYPE an_archetype)
-        {
-            ArrayList result = new ArrayList();
-            result.Add(an_archetype.concept);
-
-            string parentConceptId = "";
-            string[] strings = an_archetype.concept.Split(new char[] { '.' });
-
-            for (int i = 0; i < strings.Length - 1; i++)
-            {
-                if (i > 0)
-                    parentConceptId += ".";
-                parentConceptId += strings[i];
-
-                result.Add(parentConceptId);
-            }
-
-            //Get all ac and at codes used in the archetype
-            AddTerms(result, an_archetype.definition);
-            return result;
-        }
-
         private void AddTerms(ArrayList result, C_OBJECT obj)
         {
             if (obj.GetType() == typeof(C_COMPLEX_OBJECT))
             {
                 C_COMPLEX_OBJECT co = (C_COMPLEX_OBJECT)obj;
+
                 //Add the node id
                 if (!string.IsNullOrEmpty(obj.node_id) && !result.Contains(obj.node_id))
                     result.Add(obj.node_id);
@@ -913,8 +892,8 @@ namespace XMLParser
             else if(obj.GetType() == typeof(C_CODE_PHRASE))
             {
                 C_CODE_PHRASE ct = (C_CODE_PHRASE)obj;
+
                //Check reference 
-                
                 if (ct.terminology_id != null)                 
                 {
                     if (ct.terminology_id.value.ToString().ToLowerInvariant() == "local" && ct.code_list != null)
@@ -931,11 +910,12 @@ namespace XMLParser
             else if (obj.GetType() == typeof(C_DV_ORDINAL))
             {
                 C_DV_ORDINAL co = (C_DV_ORDINAL)obj;
+                
                 if (co.list != null && co.list.Length > 0)
                 {
                     foreach (DV_ORDINAL o in co.list)
                     {
-                        if(o.symbol != null && o.symbol.defining_code != null)
+                        if (o.symbol != null && o.symbol.defining_code != null)
                         {
                             if (!result.Contains(o.symbol.defining_code.code_string))
                                 result.Add(o.symbol.defining_code.code_string); 
@@ -958,7 +938,9 @@ namespace XMLParser
 
         public void RemoveUnusedCodes()
         {
-            ArrayList termsUsed = CodesUsed(_archetype);
+            ArrayList termsUsed = new ArrayList();
+            termsUsed.Add(_archetype.concept);
+            AddTerms(termsUsed, _archetype.definition);
            
             foreach (string language in AvailableLanguages())
             {
@@ -967,6 +949,23 @@ namespace XMLParser
             }
 
             RemoveUnusedTerminologies();
+        }
+
+        private void RemoveUnusedTerms(CodeDefinitionSet languageSet, ArrayList termsUsed)
+        {
+            if (languageSet != null && languageSet.items != null)
+            {
+                int archetypeSpecialisationDepth = NumberOfSpecialisations;
+                ArrayList items = new ArrayList();
+
+                foreach (ARCHETYPE_TERM term in languageSet.items)
+                {
+                    if (termsUsed.Contains(term.code) || term.code.Split('.').Length - 1 < archetypeSpecialisationDepth)
+                        items.Add(term);
+                }
+
+                languageSet.items = (ARCHETYPE_TERM[])items.ToArray(typeof(ARCHETYPE_TERM));
+            }
         }
 
         private void RemoveUnusedTerminologies()
@@ -1059,41 +1058,6 @@ namespace XMLParser
                 }
                 else
                     return terminologySets;
-            }
-        }
-
-        private void RemoveTermsByIndex(CodeDefinitionSet languageSet, int[] indexes)
-        {
-            ArrayList temp = new ArrayList(languageSet.items);
-
-            foreach (int i in indexes)
-            {
-                temp.RemoveAt(i);
-            }
-
-            languageSet.items = (ARCHETYPE_TERM[])temp.ToArray(typeof(ARCHETYPE_TERM));
-        }
-
-        private void RemoveUnusedTerms(CodeDefinitionSet languageSet, ArrayList termsUsed)
-        {
-            ArrayList indexOfTermsNotUsed = new ArrayList();
-
-            if (languageSet != null && languageSet.items != null)
-            {
-                for (int i = languageSet.items.Length - 1; i >= 0; i--)
-                {
-                    ARCHETYPE_TERM at = languageSet.items[i];
-
-                    if (!termsUsed.Contains(at.code))
-                    {
-                        indexOfTermsNotUsed.Add(i);
-                    }
-                }
-
-                if (indexOfTermsNotUsed.Count > 0)
-                {
-                    RemoveTermsByIndex(languageSet, (int[])indexOfTermsNotUsed.ToArray(typeof(int)));
-                }
             }
         }
 
