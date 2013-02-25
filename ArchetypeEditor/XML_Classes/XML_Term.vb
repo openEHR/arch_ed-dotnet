@@ -20,27 +20,24 @@ Namespace ArchetypeEditor.XML_Classes
 
     Class XML_Term
         Inherits RmTerm
-        Private a_Xml_Term As XMLParser.ARCHETYPE_TERM
+        Private mXmlTerm As XMLParser.ARCHETYPE_TERM
 
         Public ReadOnly Property XML_Term() As XMLParser.ARCHETYPE_TERM
             Get
                 SetItem("text", sText)
                 SetItem("description", sDescription)
-
-                If Not (sComment Is Nothing OrElse sComment = "") Then
-                    SetItem("comment", sComment)
-                End If
+                SetItem("comment", sComment)
 
                 For Each k As String In OtherAnnotations.Keys
                     SetItem(k, CStr(sAnnotations.Item(k)))
                 Next
 
-                Return a_Xml_Term
+                Return mXmlTerm
             End Get
         End Property
 
         Private Function GetItem(ByVal key As String) As String
-            For Each di As XMLParser.StringDictionaryItem In a_Xml_Term.items
+            For Each di As XMLParser.StringDictionaryItem In mXmlTerm.items
                 If di.id = key Then
                     Return di.Value
                 End If
@@ -49,51 +46,56 @@ Namespace ArchetypeEditor.XML_Classes
             Return ""
         End Function
 
-        Private Sub SetItem(ByVal Item As String, ByVal Value As String)
-            Dim i As Integer
-            Dim new_items() As XMLParser.StringDictionaryItem
+        Private Sub SetItem(ByVal id As String, ByVal Value As String)
+            If Not String.IsNullOrEmpty(Value) Then
+                Dim i As Integer
+                Dim items() As XMLParser.StringDictionaryItem = mXmlTerm.items
+                Dim item As XMLParser.StringDictionaryItem = Nothing
 
-            If Not a_Xml_Term.items Is Nothing Then
-                ' set the value of the item
-                For Each di As XMLParser.StringDictionaryItem In a_Xml_Term.items
-                    If di.id = Item Then
-                        di.Value = Value
-                        Return  'FIXME: REMOVE SPAGHETTI CODE! ... return if it is found, but without this goto!
+                If items Is Nothing Then
+                    i = 0
+                    items = New XMLParser.StringDictionaryItem(1) {}
+                Else
+                    For Each di As XMLParser.StringDictionaryItem In items
+                        If di.id = id Then
+                            di.Value = Value
+                            item = di
+                        End If
+                    Next
+
+                    If item Is Nothing Then
+                        i = items.Length
+                        Array.Resize(items, i + 1)
                     End If
-                Next
+                End If
 
-                new_items = a_Xml_Term.items
-                i = new_items.Length
-                Array.Resize(new_items, i + 1)
-            Else
-                new_items = CType(Array.CreateInstance(GetType(XMLParser.StringDictionaryItem), 1), XMLParser.StringDictionaryItem())
-                i = 0
+                If item Is Nothing Then
+                    item = New XMLParser.StringDictionaryItem()
+                    item.id = id
+                    item.Value = Value
+                    items(i) = item
+                    mXmlTerm.items = items
+                End If
             End If
-
-            Dim new_di As New XMLParser.StringDictionaryItem()
-            new_di.id = Item
-            new_di.value = Value
-            new_items(i) = new_di
-            a_Xml_Term.items = new_items
         End Sub
 
         Sub New(ByVal ID As String)
             MyBase.new(ID)
-            a_Xml_Term = New XMLParser.ARCHETYPE_TERM()
-            a_Xml_Term.code = ID
+            mXmlTerm = New XMLParser.ARCHETYPE_TERM()
+            mXmlTerm.code = ID
         End Sub
 
-        Sub New(ByVal a_Term As RmTerm)
-            MyBase.New(a_Term.Code)
-            sText = a_Term.Text
-            sDescription = a_Term.Description
-            sComment = a_Term.Comment
-            sAnnotations = a_Term.OtherAnnotations
-            a_Xml_Term = New XMLParser.ARCHETYPE_TERM()
-            a_Xml_Term.items = CType(Array.CreateInstance(GetType(XMLParser.StringDictionaryItem), 1), XMLParser.StringDictionaryItem())
-            a_Xml_Term.items(0) = New XMLParser.StringDictionaryItem
-            a_Xml_Term.items(0).id = "text"
-            a_Xml_Term.code = a_Term.Code
+        Sub New(ByVal term As RmTerm)
+            MyBase.New(term.Code)
+            sText = term.Text
+            sDescription = term.Description
+            sComment = term.Comment
+            sAnnotations = term.OtherAnnotations
+            mXmlTerm = New XMLParser.ARCHETYPE_TERM()
+            mXmlTerm.items = CType(Array.CreateInstance(GetType(XMLParser.StringDictionaryItem), 1), XMLParser.StringDictionaryItem())
+            mXmlTerm.items(0) = New XMLParser.StringDictionaryItem
+            mXmlTerm.items(0).id = "text"
+            mXmlTerm.code = term.Code
             SetItem("text", sText)
             SetItem("description", sDescription)
             SetItem("comment", sComment)
@@ -107,17 +109,17 @@ Namespace ArchetypeEditor.XML_Classes
             MyBase.New(code)
             sText = text
             sDescription = description
-            a_Xml_Term = New XMLParser.ARCHETYPE_TERM()
-            a_Xml_Term.code = code
+            mXmlTerm = New XMLParser.ARCHETYPE_TERM()
+            mXmlTerm.code = code
             SetItem("text", sText)
             SetItem("description", sDescription)
         End Sub
 
-        Sub New(ByVal an_xmlTerm As XMLParser.ARCHETYPE_TERM)
-            MyBase.New(an_xmlTerm.code)
-            a_Xml_Term = an_xmlTerm
+        Sub New(ByVal term As XMLParser.ARCHETYPE_TERM)
+            MyBase.New(term.code)
+            mXmlTerm = term
 
-            For Each di As XMLParser.StringDictionaryItem In an_xmlTerm.items
+            For Each di As XMLParser.StringDictionaryItem In term.items
                 Select Case di.id.ToLowerInvariant()
                     Case "text"
                         sText = di.Value

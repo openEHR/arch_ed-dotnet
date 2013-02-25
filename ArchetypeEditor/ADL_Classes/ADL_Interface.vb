@@ -133,89 +133,60 @@ Namespace ArchetypeEditor.ADL_Classes
             adlArchetype = New ADL_Archetype(EIF_adlInterface.adl_engine, adlArchetypeID, LanguageCode)
         End Sub
 
-        Public Sub AddTermDefinitionsFromTable(ByVal a_table As DataTable, ByVal primary_language As String)
-            Dim term As ADL_Term
-            Dim EifLanguage As EiffelKernel.STRING_8
-
+        Public Sub AddTermDefinitionsFromTable(ByVal table As DataTable, ByVal primaryLanguage As String)
             'First pass do primary language only
-            For Each dRow As DataRow In a_table.Rows
+            For Each dRow As DataRow In table.Rows
                 Dim language As String = CType(dRow(0), String)
-                If primary_language = language Then
-                    EifLanguage = Eiffel.String(language)
 
-                    'If TypeOf dRow(4) Is System.DBNull Then
-                    '    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
-                    'Else
-                    '    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)), CStr(dRow(4)))
-                    'End If
+                If primaryLanguage = language Then
+                    Dim term As New ADL_Term(CType(dRow(5), RmTerm))
 
-                    term = New ADL_Term(CType(dRow(5), RmTerm))
-
-                    EIF_adlInterface.ontology.add_term_definition(EifLanguage, term.EIF_Term)
+                    If term.IsConstraint Then
+                        EIF_adlInterface.ontology.add_constraint_definition(Eiffel.String(language), term.EIF_Term)
+                    Else
+                        EIF_adlInterface.ontology.add_term_definition(Eiffel.String(language), term.EIF_Term)
+                    End If
                 End If
             Next
 
             'Then subsequent languages
-            For Each dRow As DataRow In a_table.Rows
+            For Each dRow As DataRow In table.Rows
                 Dim language As String = CType(dRow(0), String)
-                If primary_language <> language Then
-                    EifLanguage = Eiffel.String(language)
-                    'term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), CType(dRow(4), String))
-                    term = New ADL_Term(CType(dRow(5), RmTerm))
-                    EIF_adlInterface.ontology.replace_term_definition(EifLanguage, term.EIF_Term, False)
+
+                If primaryLanguage <> language Then
+                    Dim term As New ADL_Term(CType(dRow(5), RmTerm))
+
+                    If term.IsConstraint Then
+                        EIF_adlInterface.ontology.replace_term_definition(Eiffel.String(language), term.EIF_Term, False)
+                    Else
+                        EIF_adlInterface.ontology.replace_constraint_definition(Eiffel.String(language), term.EIF_Term, False)
+                    End If
                 End If
             Next
         End Sub
 
-        Public Sub AddConstraintDefinitionsFromTable(ByVal a_table As DataTable, ByVal primary_language As String)
-            Dim term As ADL_Term
-            Dim language As EiffelKernel.STRING_8
-
-            'First pass do primary language only
-            For Each dRow As DataRow In a_table.Rows
-                If primary_language = CType(dRow(0), String) Then
-                    language = Eiffel.String(CType(dRow(0), String))
-                    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
-                    EIF_adlInterface.ontology.add_constraint_definition(language, term.EIF_Term)
-                End If
-            Next
-
-            'Then subsequent languages
-            For Each dRow As DataRow In a_table.Rows
-                If primary_language <> CType(dRow(0), String) Then
-                    language = Eiffel.String(CType(dRow(0), String))
-                    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
-                    EIF_adlInterface.ontology.replace_constraint_definition(language, term.EIF_Term, False)
-                End If
-            Next
-        End Sub
-
-        Public Sub AddTermBindingsFromTable(ByVal a_table As DataTable)
-            Dim path As EiffelKernel.STRING_8
+        Public Sub AddTermBindingsFromTable(ByVal table As DataTable)
             Dim codePhrase As openehr.openehr.rm.data_types.text.CODE_PHRASE
 
-            For Each dRow As DataRow In a_table.Rows
-                path = Eiffel.String(CType(dRow(1), String))
-
-                ' HKF: 8 Dec 2008
-                'codePhrase = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
-                '    Eiffel.String(CType(dRow(0), String) & "::" & CType(dRow(2), String)))
+            For Each dRow As DataRow In table.Rows
+                Dim path As EiffelKernel.STRING_8 = Eiffel.String(CType(dRow(1), String))
                 Dim terminologyId As String = CType(dRow(0), String)
+
                 If Not dRow.IsNull(3) Then
                     Dim version As String = CType(dRow(3), String)
-                    If version <> String.Empty Then
+
+                    If version <> "" Then
                         terminologyId &= "(" & version & ")"
                     End If
                 End If
-                codePhrase = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
-                    Eiffel.String(terminologyId & "::" & CType(dRow(2), String)))
 
+                codePhrase = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(Eiffel.String(terminologyId & "::" & CType(dRow(2), String)))
                 EIF_adlInterface.ontology.add_term_binding(codePhrase, path)
             Next
         End Sub
 
-        Public Sub AddConstraintBindingsFromTable(ByVal a_table As DataTable)
-            For Each dRow As DataRow In a_table.Rows
+        Public Sub AddConstraintBindingsFromTable(ByVal table As DataTable)
+            For Each dRow As DataRow In table.Rows
                 Dim terminology As EiffelKernel.STRING_8 = Eiffel.String(CType(dRow(0), String))
                 Dim acCode As EiffelKernel.STRING_8 = Eiffel.String(CType(dRow(1), String))
                 Dim path As openehr.common_libs.basic.URI = openehr.common_libs.basic.Create.URI.make_from_string(Eiffel.String(CType(dRow(4), String)))
@@ -225,9 +196,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Function GetCanonicalArchetype() As XMLParser.ARCHETYPE Implements Parser.GetCanonicalArchetype
             adlArchetype.MakeParseTree()
-            Dim canonicalArchetype As XMLParser.ARCHETYPE = adlArchetype.GetCanonicalArchetype()
-
-            Return canonicalArchetype
+            Return adlArchetype.GetCanonicalArchetype()
         End Function
 
         Public Sub WriteFile(ByVal FileName As String, ByVal output_format As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile

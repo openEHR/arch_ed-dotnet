@@ -43,26 +43,20 @@ Public Class RmTerm
             If sAnnotations Is Nothing Then
                 sAnnotations = New System.Collections.SortedList
             End If
+
             Return sAnnotations
         End Get
     End Property
 
     ReadOnly Property IsConstraint() As Boolean
         Get
-            Dim result As Boolean = False
-
-            If IsValidTermCode(Code) Then
-                Dim s As String = Code.Substring(0, 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                result = s = "ac"
-            End If
-
-            Return result
+            Return IsValidTermCode(Code) AndAlso Code.Substring(0, 2).ToLowerInvariant = "ac"
         End Get
     End Property
 
     Friend Shared Function IsValidTermCode(ByVal termCode As String) As Boolean
-        Dim rx As New System.Text.RegularExpressions.Regex("a[ct](0\.[0-9]{1,4}|[0-9]{4})(\.[0-9]{1,3})*")
-        Return Not termCode Is Nothing AndAlso rx.IsMatch(termCode)
+        Dim regex As New System.Text.RegularExpressions.Regex("a[ct](0\.[0-9]{1,4}|[0-9]{4})(\.[0-9]{1,3})*")
+        Return Not termCode Is Nothing AndAlso regex.IsMatch(termCode)
     End Function
 
     Sub New(ByVal Code As String)

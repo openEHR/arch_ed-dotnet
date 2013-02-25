@@ -328,7 +328,7 @@ Public Class FileManagerLocal
         result.Archetype.concept = Archetype.ConceptCode
         result.Archetype.definition.node_id = result.Archetype.concept
 
-        Dim xmlOntology As ArchetypeEditor.XML_Classes.XML_Ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(result)
+        Dim xmlOntology As New ArchetypeEditor.XML_Classes.XML_Ontology(result)
 
         'Set the root id which can be different than the concept ID
         Dim definition As ArcheTypeDefinitionBasic = Archetype.Definition
@@ -351,7 +351,7 @@ Public Class FileManagerLocal
         result.Archetype.ontology.term_definitions = Nothing
 
         xmlOntology.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable)
-        xmlOntology.AddConstraintDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable)
+        xmlOntology.AddTermDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable)
         xmlOntology.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
         xmlOntology.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
 
@@ -451,7 +451,7 @@ Public Class FileManagerLocal
         Next
 
         result.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable, mOntologyManager.PrimaryLanguageCode)
-        result.AddConstraintDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable, mOntologyManager.PrimaryLanguageCode)
+        result.AddTermDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable, mOntologyManager.PrimaryLanguageCode)
         result.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
         result.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
 

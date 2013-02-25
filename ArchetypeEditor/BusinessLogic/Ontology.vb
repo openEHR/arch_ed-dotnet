@@ -17,41 +17,34 @@
 Option Strict On
 
 Public MustInherit Class Ontology
-    Protected keys(1) As Object
-    Protected iSpecialisations As Integer
-    Protected a_Term As RmTerm
-
     Public MustOverride ReadOnly Property PrimaryLanguageCode() As String
     Public MustOverride ReadOnly Property LanguageCode() As String
     Public MustOverride ReadOnly Property NumberOfSpecialisations() As Integer
     Public MustOverride Sub Reset()
-    Public MustOverride Function HasTermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
-    Public MustOverride Function TermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As String
-    Public MustOverride Function HasConstraintBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
-    Public MustOverride Function ConstraintBinding(ByVal a_terminology_id As String, ByVal a_path As String) As String
+    Public MustOverride Function HasTermBinding(ByVal terminologyId As String, ByVal path As String) As Boolean
+    Public MustOverride Function TermBinding(ByVal terminologyId As String, ByVal path As String) As String
+    Public MustOverride Function HasConstraintBinding(ByVal erminologyId As String, ByVal path As String) As Boolean
+    Public MustOverride Function ConstraintBinding(ByVal terminologyId As String, ByVal path As String) As String
     Public MustOverride Function LanguageAvailable(ByVal code As String) As Boolean
     Public MustOverride Function IsMultiLanguage() As Boolean
     Public MustOverride Function TerminologyAvailable(ByVal code As String) As Boolean
     Public MustOverride Sub SetLanguage(ByVal code As String)
-    Public MustOverride Sub SetPrimaryLanguage(ByVal LanguageCode As String)
-    Public MustOverride Function SpecialiseTerm(ByVal Text As String, ByVal Description As String, ByVal Id As String) As RmTerm
+    Public MustOverride Sub SetPrimaryLanguage(ByVal languageCode As String)
+    Public MustOverride Function SpecialiseTerm(ByVal text As String, ByVal description As String, ByVal id As String) As RmTerm
     Public MustOverride Function NextTermId() As String
     Public MustOverride Function NextConstraintID() As String
-    Public MustOverride Sub AddTerm(ByVal a_Term As RmTerm)
-    Public MustOverride Function HasTermCode(ByVal a_term_code As String) As Boolean
-    Public MustOverride Sub ReplaceTerm(ByVal a_Term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
-    'Public MustOverride Sub DeleteTerm(ByVal a_Term As RmTerm)
-    Public MustOverride Sub AddConstraint(ByVal a_Term As RmTerm)
-    Public MustOverride Sub ReplaceConstraint(ByVal a_Term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
-    Public MustOverride Sub AddLanguage(ByVal LanguageCode As String)
-    Public MustOverride Sub RemoveTermBinding(ByVal sTerminology As String, ByVal sCode As String)
-    Public MustOverride Sub RemoveConstraintBinding(ByVal sTerminology As String, ByVal sCode As String)
-    Public MustOverride Sub AddorReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
-    Public MustOverride Sub AddorReplaceConstraintBinding(ByVal sTerminology As String, ByVal sCode As String, ByVal sQuery As String)
-    Public MustOverride Function TermForCode(ByVal Code As String, ByVal LanguageCode As String) As RmTerm
-    Public MustOverride Sub PopulateAllTerms(ByRef TheOntologyManager As OntologyManager)
-    Public MustOverride Sub PopulateTermsInLanguage(ByRef TheOntologyManager As OntologyManager, ByVal LanguageCode As String)
-
+    Public MustOverride Sub AddTerm(ByVal term As RmTerm)
+    Public MustOverride Function HasTermCode(ByVal termCode As String) As Boolean
+    Public MustOverride Sub ReplaceTerm(ByVal term As RmTerm, ByVal ReplaceTranslations As Boolean)
+    Public MustOverride Sub AddConstraint(ByVal term As RmTerm)
+    Public MustOverride Sub AddLanguage(ByVal languageCode As String)
+    Public MustOverride Sub RemoveTermBinding(ByVal terminology As String, ByVal code As String)
+    Public MustOverride Sub RemoveConstraintBinding(ByVal terminology As String, ByVal code As String)
+    Public MustOverride Sub AddorReplaceTermBinding(ByVal terminology As String, ByVal path As String, ByVal code As String, ByVal release As String)
+    Public MustOverride Sub AddorReplaceConstraintBinding(ByVal terminology As String, ByVal code As String, ByVal query As String)
+    Public MustOverride Function TermForCode(ByVal code As String, ByVal languageCode As String) As RmTerm
+    Public MustOverride Sub PopulateAllTerms(ByRef ontologyManager As OntologyManager)
+    Public MustOverride Sub PopulateTermsInLanguage(ByRef ontologyManager As OntologyManager, ByVal languageCode As String)
 End Class
 
 

@@ -303,10 +303,17 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Public Overrides Sub ReplaceTerm(ByVal term As RmTerm, Optional ByVal replaceTranslations As Boolean = False)
+        Public Overrides Sub ReplaceTerm(ByVal term As RmTerm, ByVal replaceTranslations As Boolean)
             If EIF_adlInterface.archetype_available Then
-                If Not term.IsConstraint Then
-                    Dim adlTerm As ADL_Term = New ADL_Term(term)
+                Dim adlTerm As New ADL_Term(term)
+
+                If term.IsConstraint Then
+                    If EIF_adlInterface.ontology.has_constraint_code(adlTerm.EIF_Term.code) Then
+                        EIF_adlInterface.ontology.replace_constraint_definition(EIF_adlInterface.current_language, adlTerm.EIF_Term, replaceTranslations)
+                    Else
+                        Debug.Assert(False, "Constraint code not available: " & adlTerm.Code)
+                    End If
+                Else
                     Dim language As EiffelKernel.STRING_8
 
                     If term.Language <> "" Then
@@ -315,17 +322,11 @@ Namespace ArchetypeEditor.ADL_Classes
                         language = EIF_adlInterface.current_language
                     End If
 
-                    Try
-                        If EIF_adlInterface.ontology.has_term_code(adlTerm.EIF_Term.code) Then
-                            EIF_adlInterface.ontology.replace_term_definition(language, adlTerm.EIF_Term, replaceTranslations)
-                        Else
-                            Debug.Assert(False, "Term code is not available: " & adlTerm.Code)
-                        End If
-                    Catch e As Exception
-                        Debug.Assert(False, e.Message)
-                    End Try
-                Else
-                    Debug.Assert(False, "Term is a constraint and should not be passed")
+                    If EIF_adlInterface.ontology.has_term_code(adlTerm.EIF_Term.code) Then
+                        EIF_adlInterface.ontology.replace_term_definition(language, adlTerm.EIF_Term, replaceTranslations)
+                    Else
+                        Debug.Assert(False, "Term code is not available: " & adlTerm.Code)
+                    End If
                 End If
             End If
         End Sub
@@ -360,33 +361,12 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Public Overrides Sub ReplaceConstraint(ByVal term As RmTerm, Optional ByVal replaceTranslations As Boolean = False)
-            If EIF_adlInterface.archetype_available Then
-                If term.IsConstraint Then
-                    Dim adlTerm As New ADL_Term(term)
-
-                    Try
-                        If EIF_adlInterface.ontology.has_constraint_code(adlTerm.EIF_Term.code) Then
-                            EIF_adlInterface.ontology.replace_constraint_definition(EIF_adlInterface.current_language, adlTerm.EIF_Term, replaceTranslations)
-                        Else
-                            Debug.Assert(False, "Constraint code not available: " & adlTerm.Code)
-                        End If
-                    Catch e As Exception
-                        Debug.Assert(False, e.Message)
-                    End Try
-                Else
-                    Debug.Assert(False, "Code is not a constraint code: " & term.Code)
-                End If
-            End If
-        End Sub
-
         Private Sub PopulateLanguages(ByRef ontologyManager As OntologyManager)
             If EIF_adlInterface.archetype_available And Not EIF_adlInterface.ontology.languages_available.empty() Then
                 'A new ontology always adds the current language - but this may not be available in the archetype, so clear ..
                 ontologyManager.LanguagesTable.Clear()
-                Dim i As Integer
 
-                For i = EIF_adlInterface.ontology.languages_available.lower() To EIF_adlInterface.ontology.languages_available.upper()
+                For i As Integer = EIF_adlInterface.ontology.languages_available.lower() To EIF_adlInterface.ontology.languages_available.upper()
                     ontologyManager.AddLanguage(CType(EIF_adlInterface.ontology.languages_available.i_th(i), EiffelKernel.STRING_8).to_cil())
                 Next
             End If
@@ -395,68 +375,36 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Sub PopulateTerminologies(ByRef ontologyManager As OntologyManager)
             ' populate the terminology table in TermLookUp
             If EIF_adlInterface.archetype_available Then
-                Dim i As Integer
-
-                For i = EIF_adlInterface.ontology.terminologies_available.lower() To EIF_adlInterface.ontology.terminologies_available.upper()
+                For i As Integer = EIF_adlInterface.ontology.terminologies_available.lower() To EIF_adlInterface.ontology.terminologies_available.upper()
                     ontologyManager.AddTerminology(CType(EIF_adlInterface.ontology.terminologies_available.i_th(i), EiffelKernel.STRING_8).to_cil())
                 Next
             End If
         End Sub
 
-        Private Sub PopulateTermDefinitions(ByRef ontologyManager As OntologyManager, ByVal language As String)
-            ' populate the TermDefinitions table in TermLookUp
-            If EIF_adlInterface.archetype_available And Not EIF_adlInterface.ontology.term_definitions.empty() Then
-                Dim linklist As EiffelStructures.traversing.LINEAR_REFERENCE = EIF_adlInterface.ontology.term_codes
-                linklist.start()
+        Private Sub PopulateTermDefinitions(ByVal codes As EiffelStructures.traversing.LINEAR_REFERENCE, ByVal table As DataTable, ByVal language As String, ByVal isConstraint As Boolean)
+            codes.start()
 
-                Do While Not linklist.off
-                    Dim term As ADL_Term
-                    Dim row As DataRow
-                    Dim s As EiffelKernel.STRING_8 = CType(linklist.item, EiffelKernel.STRING_8)
+            Do While Not codes.off
+                Dim code As EiffelKernel.STRING_8 = CType(codes.item, EiffelKernel.STRING_8)
+                Dim term As ADL_Term
 
-                    If language = "" Then
-                        ' set the term for all languages
-                        For Each terminologyRow As DataRow In ontologyManager.LanguagesTable.Rows
-                            ' take each term from the ADL ontology
-                            Dim adlTerm As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM = EIF_adlInterface.ontology.term_definition(Eiffel.String(terminologyRow(0)), s)
+                If isConstraint Then
+                    term = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(Eiffel.String(language), code))
+                Else
+                    term = New ADL_Term(EIF_adlInterface.ontology.term_definition(Eiffel.String(language), code))
+                End If
 
-                            If adlTerm Is Nothing Then
-                                Debug.Assert(False, "Term not in this language")
-                                term = New ADL_Term(s.to_cil)
-                                term.Text = "#Error#"
-                                term.Description = "#Error#"
-                                term.Comment = ""
-                            Else
-                                term = New ADL_Term(adlTerm)
-                            End If
+                Dim row As DataRow = table.NewRow
+                row(0) = language
+                row(1) = term.Code
+                row(2) = term.Text
+                row(3) = term.Description
+                row(4) = term.Comment
+                row(5) = term
+                table.Rows.Add(row)
 
-                            ' and if it is not an internal ID for machine processing
-                            row = ontologyManager.TermDefinitionTable.NewRow
-                            row(0) = terminologyRow(0)
-                            row(1) = term.Code
-                            row(2) = term.Text
-                            row(3) = term.Description
-                            row(4) = term.Comment
-                            row(5) = term
-                            ' add it to the GUI ontology
-                            ontologyManager.TermDefinitionTable.Rows.Add(row)
-                        Next
-                    Else
-                        'Add the new language to the GUI ontology
-                        term = New ADL_Term(EIF_adlInterface.ontology.term_definition(Eiffel.String(language), s))
-                        row = ontologyManager.TermDefinitionTable.NewRow
-                        row(0) = language
-                        row(1) = term.Code
-                        row(2) = term.Text
-                        row(3) = term.Description
-                        row(4) = term.Comment
-                        row(5) = term
-                        ontologyManager.TermDefinitionTable.Rows.Add(row)
-                    End If
-
-                    linklist.forth()
-                Loop
-            End If
+                codes.forth()
+            Loop
         End Sub
 
         Private Sub PopulateTermBindings(ByRef ontologyManager As OntologyManager)
@@ -495,46 +443,6 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Private Sub PopulateConstraintDefinitions(ByRef ontologyManager As OntologyManager, ByVal language As String)
-            ' populate the ConstraintDefinitions table in TermLookUp
-            If EIF_adlInterface.archetype_available And Not EIF_adlInterface.ontology.constraint_definitions.empty() Then
-                Dim linklist As EiffelStructures.traversing.LINEAR_REFERENCE = EIF_adlInterface.ontology.constraint_codes
-                linklist.start()
-
-                Do While Not linklist.off
-                    Dim term As ADL_Term
-                    Dim row As DataRow
-                    Dim s As EiffelKernel.STRING_8 = CType(linklist.item, EiffelKernel.STRING_8)
-
-                    If language = "" Then
-                        ' set the constraints for all languages
-                        For Each terminologyRow As DataRow In ontologyManager.LanguagesTable.Rows
-                            ' take each constraint from the ADL ontology
-                            term = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(Eiffel.String(terminologyRow(0)), s))
-                            row = ontologyManager.ConstraintDefinitionTable.NewRow
-                            row(0) = terminologyRow(0)
-                            row(1) = term.Code
-                            row(2) = term.Text
-                            row(3) = term.Description
-                            'Add it to the GUI
-                            ontologyManager.ConstraintDefinitionTable.Rows.Add(row)
-                        Next
-                    Else
-                        'Add the new language to the GUI ontology
-                        term = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(Eiffel.String(language), s))
-                        row = ontologyManager.ConstraintDefinitionTable.NewRow
-                        row(0) = language
-                        row(1) = term.Code
-                        row(2) = term.Text
-                        row(3) = term.Description
-                        ontologyManager.ConstraintDefinitionTable.Rows.Add(row)
-                    End If
-
-                    linklist.forth()
-                Loop
-            End If
-        End Sub
-
         Private Sub PopulateConstraintBindings(ByRef ontologyManager As OntologyManager)
             ' populate the ConstraintBindings table in TermLookUp
             If EIF_adlInterface.archetype_available And Not EIF_adlInterface.ontology.constraint_bindings.empty() Then
@@ -560,17 +468,30 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Overrides Sub PopulateTermsInLanguage(ByRef ontologyManager As OntologyManager, ByVal language As String)
-            PopulateTermDefinitions(ontologyManager, language)
-            PopulateConstraintDefinitions(ontologyManager, language)
+            If EIF_adlInterface.archetype_available Then
+                If language = "" Then
+                    ' set the term for all languages
+                    For Each terminologyRow As DataRow In ontologyManager.LanguagesTable.Rows
+                        PopulateTermsInLanguage(ontologyManager, CType(terminologyRow(0), String))
+                    Next
+                Else
+                    If Not EIF_adlInterface.ontology.term_definitions.empty() Then
+                        PopulateTermDefinitions(EIF_adlInterface.ontology.term_codes, ontologyManager.TermDefinitionTable, language, False)
+                    End If
+
+                    If Not EIF_adlInterface.ontology.constraint_definitions.empty() Then
+                        PopulateTermDefinitions(EIF_adlInterface.ontology.constraint_codes, ontologyManager.ConstraintDefinitionTable, language, True)
+                    End If
+                End If
+            End If
         End Sub
 
         Public Overrides Sub PopulateAllTerms(ByRef ontologyManager As OntologyManager)
             If EIF_adlInterface.archetype_available Then
                 PopulateLanguages(ontologyManager)
                 PopulateTerminologies(ontologyManager)
-                PopulateTermDefinitions(ontologyManager, "")
+                PopulateTermsInLanguage(ontologyManager, "")
                 PopulateTermBindings(ontologyManager)
-                PopulateConstraintDefinitions(ontologyManager, "")
                 PopulateConstraintBindings(ontologyManager)
             End If
         End Sub

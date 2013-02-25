@@ -118,11 +118,11 @@ namespace XMLParser
             return "";
         }
 
-        public void ReplaceTermDefinition(string language_code, ARCHETYPE_TERM a_term, bool replace_translations)
+        public void ReplaceTermDefinition(string languageCode, ARCHETYPE_TERM term, bool replaceTranslations)
         {
-            string code = a_term.code.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            string code = term.code.ToLowerInvariant();
 
-            System.Diagnostics.Debug.Assert(HasTermCode(a_term.code), "Does not have code " + code);
+            System.Diagnostics.Debug.Assert(HasTermCode(term.code), "Does not have code " + code);
             CodeDefinitionSet[] definitions;
 
             if (code.StartsWith("at"))
@@ -134,48 +134,48 @@ namespace XMLParser
             {
                 foreach (CodeDefinitionSet ls in definitions)
                 {
-                    if (ls.language == language_code)
+                    if (ls.language == languageCode)
                     {
-                        ReplaceTerm(ls, a_term);
+                        ReplaceTerm(ls, term);
                     }
-                    else if (replace_translations && language_code == PrimaryLanguageCode)
+                    else if (replaceTranslations && languageCode == PrimaryLanguageCode)
                     {           
-                        foreach (StringDictionaryItem di in a_term.items)
+                        foreach (StringDictionaryItem di in term.items)
                         {                            
-                            di.Value = string.Format("*{0}({1})", di.Value, language_code);
+                            di.Value = string.Format("*{0}({1})", di.Value, languageCode);
                         }
 
-                        ReplaceTerm(ls, a_term);
+                        ReplaceTerm(ls, term);
                     }
                 }
             }
         }
                
-        private void ReplaceTerm(CodeDefinitionSet a_language_set, ARCHETYPE_TERM a_term)
+        private void ReplaceTerm(CodeDefinitionSet languageSet, ARCHETYPE_TERM term)
         {
-            a_language_set.items [GetIndexOfTerm(a_language_set, a_term)] = a_term;
+            languageSet.items [GetIndexOfTerm(languageSet, term)] = term;
         }
         
-        private int GetIndexOfTerm(CodeDefinitionSet a_language_set, ARCHETYPE_TERM a_term)
+        private int GetIndexOfTerm(CodeDefinitionSet languageSet, ARCHETYPE_TERM term)
         {
             int i;
 
-            for (i = 0; i < a_language_set.items.Length; i++)
+            for (i = 0; i < languageSet.items.Length; i++)
             {
-                if (a_language_set.items[i].code == a_term.code)
+                if (languageSet.items[i].code == term.code)
                     return i;
             }
 
             return -1;
         }
 
-        private ARCHETYPE_TERM FindTermForCode(string a_code, ARCHETYPE_TERM[] terms)
+        private ARCHETYPE_TERM FindTermForCode(string code, ARCHETYPE_TERM[] terms)
         {
-            a_code = a_code.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            code = code.ToLowerInvariant();
 
             foreach (ARCHETYPE_TERM at in terms)
             {
-                if (at.code.ToLower(System.Globalization.CultureInfo.InvariantCulture) == a_code)
+                if (at.code.ToLowerInvariant() == code)
                     return at;
             }
 
@@ -206,7 +206,7 @@ namespace XMLParser
                         {
                             StringDictionaryItem di = at.items[j];
                             StringDictionaryItem new_di = new StringDictionaryItem();
-                            new_di.id = di.id ;
+                            new_di.id = di.id;
                             new_di.Value = string.Format("{0}{1}({2})", "*", di.Value, _archetype.original_language.code_string);
                             new_items[j] = new_di;
                         }
@@ -260,38 +260,24 @@ namespace XMLParser
                 AvailableTerminologies().Add(terminology);
         }
 
-        public bool HasTermCode(string a_term_code)
+        public bool HasTermCode(string code)
         {
-            a_term_code = a_term_code.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            code = code.ToLowerInvariant();
+            CodeDefinitionSet[] definitions;
 
-            if (a_term_code.StartsWith("at"))
-            {
-                CodeDefinitionSet[] definitions = _archetype.ontology.term_definitions;
-
-                if (definitions != null && definitions.Length > 0 && definitions[0].items != null)
-                {
-                    foreach (ARCHETYPE_TERM at in definitions[0].items)
-                    {
-                        if (at.code.ToLower(System.Globalization.CultureInfo.InvariantCulture) == a_term_code)
-                            return true;
-                    }
-                }
-            }
-            else if (a_term_code.StartsWith("ac"))
-            {
-                CodeDefinitionSet[] definitions = _archetype.ontology.constraint_definitions;
-
-                if (definitions != null && definitions.Length > 0 && definitions[0].items != null)
-                {
-                    foreach (ARCHETYPE_TERM ac in definitions[0].items)
-                    {
-                        if (ac.code.ToLower(System.Globalization.CultureInfo.InvariantCulture) == a_term_code)
-                            return true;
-                    }
-                }
-            }
+            if (code.StartsWith("at"))
+                definitions = _archetype.ontology.term_definitions;
             else
-                System.Diagnostics.Debug.Assert(false, a_term_code + " does not appear to be a valid code");
+                definitions = _archetype.ontology.constraint_definitions;
+
+            if (definitions != null && definitions.Length > 0 && definitions[0].items != null)
+            {
+                foreach (ARCHETYPE_TERM term in definitions[0].items)
+                {
+                    if (term.code.ToLowerInvariant() == code)
+                        return true;
+                }
+            }
                 
             return false;
         }
@@ -361,7 +347,7 @@ namespace XMLParser
 
                     ts.items = bindings;
                     bindings[i] = binding = new TERM_BINDING_ITEM();
-                    binding.code = archetypePath.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+                    binding.code = archetypePath.ToLowerInvariant();
                 }
 
                 if (binding.value == null)
@@ -406,7 +392,7 @@ namespace XMLParser
 
                     ts.items = bindings;
                     bindings[i] = binding = new CONSTRAINT_BINDING_ITEM();
-                    binding.code = acCode.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+                    binding.code = acCode.ToLowerInvariant();
                 }
 
                 binding.value = query;
