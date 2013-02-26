@@ -45,13 +45,33 @@ Namespace ArchetypeEditor.XML_Classes
             End Set
         End Property
 
+        Public Overrides Property Uid() As String
+            Get
+                Dim result As String = Nothing
+
+                If Not mXmlArchetype.uid Is Nothing Then
+                    result = mXmlArchetype.uid.value
+                End If
+
+                Return result
+            End Get
+            Set(ByVal Value As String)
+                If String.IsNullOrEmpty(Value) Then
+                    mXmlArchetype.uid = Nothing
+                Else
+                    mXmlArchetype.uid = New HIER_OBJECT_ID()
+                    mXmlArchetype.uid.value = Value
+                End If
+            End Set
+        End Property
+
         Public Overrides ReadOnly Property ArchetypeAvailable() As Boolean
             Get
                 Return mArchetypeParser.ArchetypeAvailable
             End Get
         End Property
 
-        Public Overrides Property Archetype_ID() As ArchetypeID
+        Public Overrides ReadOnly Property Archetype_ID() As ArchetypeID
             Get
                 Try
                     Return mArchetypeID
@@ -60,9 +80,6 @@ Namespace ArchetypeEditor.XML_Classes
                     Return Nothing
                 End Try
             End Get
-            Set(ByVal Value As ArchetypeID)
-                SetArchetypeId(Value)
-            End Set
         End Property
 
         Public Overrides Sub UpdateArchetypeId() 'Forces changes made to ArchetypeID to be updated in parser
@@ -90,6 +107,7 @@ Namespace ArchetypeEditor.XML_Classes
                 If mXmlArchetype.parent_archetype_id Is Nothing Then
                     mXmlArchetype.parent_archetype_id = New XMLParser.ARCHETYPE_ID
                 End If
+
                 mXmlArchetype.parent_archetype_id.value = Value
             End Set
         End Property
@@ -2164,7 +2182,6 @@ Namespace ArchetypeEditor.XML_Classes
                 mArchetypeID = New ArchetypeID(mXmlArchetype.archetype_id.value)
             End If
 
-            ' get the parent ID
             If Not mXmlArchetype.parent_archetype_id Is Nothing Then
                 sParentArchetypeID = mXmlArchetype.parent_archetype_id.value
             End If

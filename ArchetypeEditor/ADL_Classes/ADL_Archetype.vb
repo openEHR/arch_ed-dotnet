@@ -45,11 +45,28 @@ Namespace ArchetypeEditor.ADL_Classes
             End Get
             Set(ByVal Value As String)
                 adlArchetype.set_concept(Eiffel.String(Value))
-                adlArchetype.definition.set_object_id(adlArchetype.concept) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                adlArchetype.definition.set_object_id(adlArchetype.concept)
 
                 System.Diagnostics.Debug.Assert(ConceptCode = Value)
                 System.Diagnostics.Debug.Assert(adlEngine.archetype.concept.to_cil = Value)
                 System.Diagnostics.Debug.Assert(adlArchetype.definition.node_id.to_cil = Value)
+            End Set
+        End Property
+
+        Public Overrides Property Uid() As String
+            Get
+                Dim result As String = Nothing
+
+                If Not adlArchetype.uid Is Nothing Then
+                    result = adlArchetype.uid.ToString
+                End If
+
+                Return result
+            End Get
+            Set(ByVal Value As String)
+                If Not String.IsNullOrEmpty(Value) Then
+                    adlArchetype.set_uid(Eiffel.String(Value))
+                End If
             End Set
         End Property
 
@@ -59,7 +76,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End Get
         End Property
 
-        Public Overrides Property Archetype_ID() As ArchetypeID
+        Public Overrides ReadOnly Property Archetype_ID() As ArchetypeID
             Get
                 Try
                     Return mArchetypeID
@@ -68,9 +85,6 @@ Namespace ArchetypeEditor.ADL_Classes
                     Return Nothing
                 End Try
             End Get
-            Set(ByVal Value As ArchetypeID)
-                SetArchetypeId(Value)
-            End Set
         End Property
 
         Public Overrides Sub UpdateArchetypeId() 'Forces changes made to ArchetypeID to be updated in parser
@@ -1894,18 +1908,17 @@ Namespace ArchetypeEditor.ADL_Classes
             mDescription = New ADL_Description(adlEngine.archetype.original_language.code_string.to_cil) ' nothing to pass
         End Sub
 
-        Sub New(ByRef an_Archetype As openehr.openehr.am.archetype.ARCHETYPE, ByRef an_ADL_Engine As openehr.adl_parser.syntax.adl.ADL_ENGINE, ByVal a_filemanager As FileManagerLocal)
+        Sub New(ByRef anArchetype As openehr.openehr.am.archetype.ARCHETYPE, ByRef an_ADL_Engine As openehr.adl_parser.syntax.adl.ADL_ENGINE, ByVal a_filemanager As FileManagerLocal)
             ' call to create an in memory archetype from the ADL parser
-            MyBase.New(an_Archetype.ontology.primary_language.to_cil)
+            MyBase.New(anArchetype.ontology.primary_language.to_cil)
 
-            adlArchetype = an_Archetype
+            adlArchetype = anArchetype
             adlEngine = an_ADL_Engine
-            mArchetypeID = New ArchetypeID(an_Archetype.archetype_id.as_string.to_cil)
+            mArchetypeID = New ArchetypeID(adlArchetype.archetype_id.as_string.to_cil)
             ReferenceModel.SetArchetypedClass(mArchetypeID.ReferenceModelEntity)
 
-            ' get the parent ID
-            If Not an_Archetype.parent_archetype_id Is Nothing Then
-                sParentArchetypeID = an_Archetype.parent_archetype_id.as_string.to_cil
+            If Not adlArchetype.parent_archetype_id Is Nothing Then
+                sParentArchetypeID = adlArchetype.parent_archetype_id.as_string.to_cil
             End If
 
             mDescription = New ADL_Description(adlArchetype.description)
@@ -1913,6 +1926,7 @@ Namespace ArchetypeEditor.ADL_Classes
             If Not adlArchetype.translations Is Nothing AndAlso adlArchetype.translations.count > 0 Then
                 ' add translation details
                 adlArchetype.translations.start()
+
                 Do While Not adlArchetype.translations.off
                     Dim transDetails As ADL_TranslationDetails = New ADL_TranslationDetails(CType(adlArchetype.translations.item_for_iteration, openehr.openehr.rm.common.resource.TRANSLATION_DETAILS))
                     mTranslationDetails.Add(transDetails.Language, transDetails)
@@ -1922,32 +1936,30 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Select Case mArchetypeID.ReferenceModelEntity
                 Case StructureType.COMPOSITION
-                    cDefinition = New ADL_COMPOSITION(an_Archetype.definition, a_filemanager)
-                    cDefinition.RootNodeId = adlArchetype.concept.to_cil 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    cDefinition = New ADL_COMPOSITION(adlArchetype.definition, a_filemanager)
+                    cDefinition.RootNodeId = adlArchetype.concept.to_cil
                 Case StructureType.SECTION
-                    cDefinition = New ADL_SECTION(an_Archetype.definition, a_filemanager)
+                    cDefinition = New ADL_SECTION(adlArchetype.definition, a_filemanager)
                 Case StructureType.List, StructureType.Tree, StructureType.Single
-                    cDefinition = New RmStructureCompound(an_Archetype.definition, a_filemanager)
+                    cDefinition = New RmStructureCompound(adlArchetype.definition, a_filemanager)
                 Case StructureType.Table
-                    cDefinition = New RmTable(an_Archetype.definition, a_filemanager)
+                    cDefinition = New RmTable(adlArchetype.definition, a_filemanager)
                 Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
-                    cDefinition = New ADL_ENTRY(an_Archetype.definition, a_filemanager)
-                    cDefinition.RootNodeId = adlArchetype.concept.to_cil 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    cDefinition = New ADL_ENTRY(adlArchetype.definition, a_filemanager)
+                    cDefinition.RootNodeId = adlArchetype.concept.to_cil
                 Case StructureType.Cluster
-                    cDefinition = New RmCluster(an_Archetype.definition, a_filemanager)
+                    cDefinition = New RmCluster(adlArchetype.definition, a_filemanager)
                 Case StructureType.Element
-                    cDefinition = New ADL_RmElement(an_Archetype.definition, a_filemanager)
+                    cDefinition = New ADL_RmElement(adlArchetype.definition, a_filemanager)
                 Case Else
                     Debug.Assert(False)
             End Select
 
             'get the bit with the life cycle version - not possible at the moment
-            Dim y() As String
-            y = an_Archetype.archetype_id.as_string.to_cil.Split(".")
+            Dim y() As String = adlArchetype.archetype_id.as_string.to_cil.Split(".")
 
             If y.Length > 2 Then
-                Dim i As Integer
-                For i = 2 To y.Length - 1
+                For i As Integer = 2 To y.Length - 1
                     sLifeCycle = sLifeCycle & y(i)
                 Next
             End If
@@ -1966,7 +1978,6 @@ Namespace ArchetypeEditor.ADL_Classes
             adlArchetype = adlEngine.archetype
             mArchetypeID = New ArchetypeID(adlArchetype.archetype_id.as_string.to_cil)
 
-            ' get the parent ID
             If Not adlArchetype.parent_archetype_id Is Nothing Then
                 sParentArchetypeID = adlArchetype.parent_archetype_id.as_string.to_cil
             End If

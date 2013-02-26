@@ -325,6 +325,12 @@ Public Class FileManagerLocal
         'Create a new parser
         Dim result As New XMLParser.XmlArchetypeParser()
         result.NewArchetype(Archetype.Archetype_ID.ToString, mOntologyManager.PrimaryLanguageCode, Main.Instance.DefaultLanguageCodeSet)
+
+        If Not Archetype.Uid Is Nothing Then
+            result.Archetype.uid = New XMLParser.HIER_OBJECT_ID()
+            result.Archetype.uid.value = Archetype.Uid
+        End If
+
         result.Archetype.concept = Archetype.ConceptCode
         result.Archetype.definition.node_id = result.Archetype.concept
 
@@ -425,6 +431,7 @@ Public Class FileManagerLocal
         'Create a new parser
         Dim result As New ArchetypeEditor.ADL_Classes.ADL_Interface()
         result.NewArchetype(Archetype.Archetype_ID, mOntologyManager.PrimaryLanguageCode)
+        result.Archetype.Uid = Archetype.Uid
         result.Archetype.ConceptCode = Archetype.ConceptCode
 
         If mOntologyManager.NumberOfSpecialisations > 0 Then

@@ -816,7 +816,12 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
         {
             ARCHETYPE result = new ARCHETYPE();
 
-            // 0..1 uid HIER_OBJECT_ID (not implemented in adl object)            
+            if (archetype.uid() != null)
+            {
+                HIER_OBJECT_ID uid = new HIER_OBJECT_ID();
+                uid.value = archetype.uid().value().ToString();
+                result.uid = uid;
+            }
 
             if (archetype.archetype_id() != null)
             {

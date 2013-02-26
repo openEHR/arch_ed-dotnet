@@ -29,7 +29,8 @@ Public MustInherit Class Archetype
 
     MustOverride Property LifeCycle() As String
     MustOverride Property ConceptCode() As String
-    MustOverride Property Archetype_ID() As ArchetypeID
+    MustOverride Property Uid() As String
+    MustOverride ReadOnly Property Archetype_ID() As ArchetypeID
     MustOverride ReadOnly Property ArchetypeAvailable() As Boolean
     MustOverride ReadOnly Property Paths(ByVal languageCode As String, ByVal parserIsSynchronised As Boolean, Optional ByVal Logical As Boolean = False) As String()
 
@@ -43,6 +44,7 @@ Public MustInherit Class Archetype
             Return mArchetypeID.ReferenceModelEntity
         End Get
     End Property
+
     Public Property Description() As ArchetypeDescription
         Get
             Return mDescription
@@ -72,6 +74,7 @@ Public MustInherit Class Archetype
         '    'will need a whole rule engine to do this
         'End Set
     End Property
+
     Public Overridable Property ParentArchetype() As String
         Get
             Return sParentArchetypeID
@@ -80,11 +83,13 @@ Public MustInherit Class Archetype
             sParentArchetypeID = Value
         End Set
     End Property
+
     Public ReadOnly Property hasData() As Boolean
         Get
             Return Not cDefinition Is Nothing
         End Get
     End Property
+
     Public Property Version() As Integer
         Get
             Return iVersion
@@ -93,6 +98,7 @@ Public MustInherit Class Archetype
             iVersion = Value
         End Set
     End Property
+
     Public Property Definition() As ArcheTypeDefinitionBasic
         Get
             Return cDefinition
@@ -102,6 +108,7 @@ Public MustInherit Class Archetype
             mSynchronised = False
         End Set
     End Property
+
     Public Property Extendable() As Boolean
         Get
             'FIXME - can it be specialised?
