@@ -157,9 +157,9 @@ Namespace ArchetypeEditor.ADL_Classes
                     Dim term As New ADL_Term(CType(dRow(5), RmTerm))
 
                     If term.IsConstraint Then
-                        EIF_adlInterface.ontology.replace_term_definition(Eiffel.String(language), term.EIF_Term, False)
-                    Else
                         EIF_adlInterface.ontology.replace_constraint_definition(Eiffel.String(language), term.EIF_Term, False)
+                    Else
+                        EIF_adlInterface.ontology.replace_term_definition(Eiffel.String(language), term.EIF_Term, False)
                     End If
                 End If
             Next
