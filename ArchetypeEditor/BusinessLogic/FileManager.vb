@@ -27,15 +27,12 @@ Public Class FileManagerLocal
     Private mWorkingDirectory As String
     Private mIsNew As Boolean = False
     Private mObjectToSave As Object
-    Private mOntologyManager As New OntologyManager(Me)
+    Private mOntologyManager As OntologyManager
 
-    Public Property OntologyManager() As OntologyManager
+    Public ReadOnly Property OntologyManager() As OntologyManager
         Get
             Return mOntologyManager
         End Get
-        Set(ByVal Value As OntologyManager)
-            mOntologyManager = Value
-        End Set
     End Property
 
     Public ReadOnly Property ArchetypeAvailable() As Boolean
@@ -786,6 +783,13 @@ Public Class FileManagerLocal
     End Sub
 
     Sub New()
+        If Filemanager.Master Is Nothing Then
+            Filemanager.Master = Me
+        End If
+
+        mOntologyManager = New OntologyManager(Me)
+        Main.Instance.Options.ValidateConfiguration()
+
         Select Case Main.Instance.Options.DefaultParser
             Case "adl"
                 mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
@@ -799,6 +803,7 @@ Public Delegate Sub FileManagerEventHandler(ByVal e As FileManagerEventArgs)
 
 Public Class FileManagerEventArgs
     Private mIsFileDirty As Boolean
+
     Public ReadOnly Property IsFileDirty() As Boolean
         Get
             Return mIsFileDirty
@@ -811,11 +816,6 @@ Public Class FileManagerEventArgs
 End Class
 
 Class Filemanager
-    'Inherits FileManagerLocal
-    ' Allows Designer wide access to FileManager, while enabling local access if required
-
-    ' FileManager Singleton
-    'Private Shared mInstance As FileManagerLocal
     Private Shared mFileManagerCollection As New ArrayList
     Shared Event IsFileDirtyChanged As FileManagerEventHandler
     Private Shared mHasEmbedded As Boolean = False
@@ -824,6 +824,7 @@ Class Filemanager
         ' used by embedded archetypes to set the GUI to filechanged
         RaiseEvent IsFileDirtyChanged(New FileManagerEventArgs(isChanged))
     End Sub
+
     Private Sub OnIsFileDirtyChanged(ByVal IsFileDirty As Boolean)
         RaiseEvent IsFileDirtyChanged(New FileManagerEventArgs(IsFileDirty))
     End Sub
@@ -841,6 +842,7 @@ Class Filemanager
             mFileManagerCollection.Insert(0, Value)
         End Set
     End Property
+
     Public Shared ReadOnly Property HasFileToSave() As Boolean
         Get
             For Each f As FileManagerLocal In mFileManagerCollection
@@ -848,9 +850,11 @@ Class Filemanager
                     Return True
                 End If
             Next
+
             Return False
         End Get
     End Property
+
     Public Shared ReadOnly Property HasEmbedded() As Boolean
         Get
             Return mHasEmbedded
@@ -871,6 +875,7 @@ Class Filemanager
     Public Shared Sub RemoveEmbedded(ByVal f As FileManagerLocal)
         If mHasEmbedded Then
             mFileManagerCollection.Remove(f)
+
             If mFileManagerCollection.Count = 1 Then
                 mHasEmbedded = False
             End If
@@ -888,7 +893,6 @@ Class Filemanager
     Public Shared Function SaveFiles(ByVal askToSave As Boolean) As Boolean
         For Each f As FileManagerLocal In mFileManagerCollection
             'SRH: Jan 2009 EDT-495,276 - force a regeneration as this means the archetype is always up to date when saved
-            'If f.FileEdited Then 
             If mFileManagerCollection.Count > 1 Or askToSave Then
                 Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & " '" & f.Archetype.Archetype_ID.ToString & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
                     Case Windows.Forms.DialogResult.Cancel
@@ -909,13 +913,14 @@ Class Filemanager
                     Return False
                 End If
             End If
-            'End If
         Next
+
         Return True
     End Function
 
     Public Shared Sub AutoFileSave()
         Dim i As Integer
+
         For Each f As FileManagerLocal In mFileManagerCollection
             If f.FileEdited Then
                 i = i + 1

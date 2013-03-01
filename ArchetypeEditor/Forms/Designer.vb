@@ -96,7 +96,6 @@ Public Class Designer
 
         AddHandler Filemanager.IsFileDirtyChanged, AddressOf FileManager_IsFileDirtyChanged
         mFileManager = New FileManagerLocal
-        Filemanager.Master = mFileManager
         mFileManager.ObjectToSave = Me
 
         DesignerInitialiser() ' see Internal functions region

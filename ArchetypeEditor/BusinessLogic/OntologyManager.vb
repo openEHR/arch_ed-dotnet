@@ -1002,7 +1002,6 @@ Public Class OntologyManager
     Sub New(ByVal fileManager As FileManagerLocal)
         mLanguageDS = New DataSet("LanguageDataSet")
         InitialiseTables()
-        Main.Instance.Options.ValidateConfiguration()
         mFileManager = fileManager
     End Sub
 
