@@ -16,6 +16,8 @@
 
 Option Strict On
 
+Imports ArchetypeEditor.DataConstraints.GUI
+
 Public Class TextConstraintControl : Inherits ConstraintControl
 
 #Region " Windows Form Designer generated code "
@@ -88,6 +90,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Friend WithEvents ConstraintBindingsGrid As ConstraintBindingsControl
     Friend WithEvents AssumedValueComboBox As System.Windows.Forms.ComboBox
     Friend WithEvents AssumedValueCheckBox As System.Windows.Forms.CheckBox
+    Friend WithEvents ToolTip2 As System.Windows.Forms.ToolTip
     Friend WithEvents TermConstraintLabel As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -123,6 +126,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.Code = New System.Windows.Forms.ColumnHeader
         Me.Description = New System.Windows.Forms.ColumnHeader
         Me.ConstraintBindingsGrid = New ConstraintBindingsControl
+        Me.ToolTip2 = New System.Windows.Forms.ToolTip(Me.components)
         Me.gbAllowableValues.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -382,6 +386,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.ListViewSelected.ShowItemToolTips = True
         Me.ListViewSelected.Size = New System.Drawing.Size(317, 50)
         Me.ListViewSelected.TabIndex = 10
+        Me.ToolTip2.SetToolTip(Me.ListViewSelected, "Selected code")
         Me.ListViewSelected.UseCompatibleStateImageBehavior = False
         Me.ListViewSelected.View = System.Windows.Forms.View.Details
         '
@@ -821,16 +826,20 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub listAllowableValues_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listAllowableValues.MouseEnter
-        ToolTip1.SetToolTip(listAllowableValues, listAllowableValues.Items.Count.ToString + " internal codes")
+        '// IMCN 20 Feb 2013 - removed unhelpful tooltip!!
+        '// ToolTip1.SetToolTip(listAllowableValues, listAllowableValues.Items.Count.ToString + " internal codes")
+
     End Sub
 
     Private Sub menuCopyTerm_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCopyTerm.Click
         Dim term As RmTerm = SelectedTerm()
 
         If Not term Is Nothing Then
-            Dim clipText As String = "local::" + term.Code + "::" + term.Text + vbLf
+            '//IMCN 20 Feb 2013 - removed vbLF which was being copied into TD DefaultValue attribute
+            Dim clipText As String = "local::" + term.Code + "::" + term.Text '** + vbLf
             Clipboard.SetText(clipText)
-            ToolTip1.Show("Copied to clipboard" + vbCrLf + clipText, listAllowableValues, 5000)
+            '// IMCN 20 Feb 2013 - added second tooltip for ListSelectedValues 
+            ToolTip2.Show("Copied to clipboard" + vbCrLf + clipText + vbLf, listAllowableValues, 5000)
         End If
     End Sub
 
