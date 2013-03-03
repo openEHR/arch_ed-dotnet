@@ -378,11 +378,30 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     End Sub
 
 #End Region
+    '//AEPR-20 IMCN 03 March 2013
+    Dim mPreviousDialogFilePath As String
 
     Protected ReadOnly Property Constraint() As Constraint_Slot
         Get
             Return CType(mConstraint, Constraint_Slot)
         End Get
+    End Property
+    '//AEPR-20 IMCN 03 March 2013
+    '// Persist the most recently selected dialogFilePath
+    Private Property PreviousDialogFilePath() As String
+        Get
+            If mPreviousDialogFilePath = "" Then
+                If mFileManager.WorkingDirectory <> "" Then
+                    mPreviousDialogFilePath = mFileManager.WorkingDirectory
+                Else
+                    mPreviousDialogFilePath = Main.Instance.Options.RepositoryPath
+                End If
+            End If
+            Return mPreviousDialogFilePath
+        End Get
+        Set(ByVal value As String)
+            mPreviousDialogFilePath = value
+        End Set
     End Property
 
     Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
@@ -434,6 +453,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             End If
         End If
     End Sub
+
 
     Private Sub butSlotRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butExcludeRemove.Click, butIncludeRemove.Click
         Dim list As Windows.Forms.ListBox
@@ -570,9 +590,14 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
 
         Dim fd As New OpenFileDialog
         fd.Filter = description & "|" & patterns
-        fd.InitialDirectory = Main.Instance.Options.RepositoryPath
 
+        '//AEPR-20 IMCN 03 March 2013
+        fd.InitialDirectory = PreviousDialogFilePath
+        
         If fd.ShowDialog(Me) = DialogResult.OK Then
+
+            '//AEPR-20 IMCN 03 March 2013
+            PreviousDialogFilePath = IO.Path.GetDirectoryName(fd.FileName)
             Dim name As String = IO.Path.GetFileNameWithoutExtension(fd.FileName)
 
             If Not ReferenceModel.IsAbstract(Constraint.RM_ClassType) Then
