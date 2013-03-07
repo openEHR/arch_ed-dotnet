@@ -21,7 +21,7 @@ Public Class Options
     Private mDefaultParser As String
     Private mTimerMinutes As Integer = 10
     Private mAllowWebSearch As Boolean
-    Private defaultArchetypeRepositoryUrl As String = "http://openehr.org/knowledge/services/ArchetypeFinderBean?wsdl"
+    Private defaultArchetypeRepositoryUrl As String = "http://openehr.org/ckm/services/ArchetypeFinderBean?wsdl"
     Private mArchetypeRepositoryUrl As New Uri(defaultArchetypeRepositoryUrl)
     Private mAllowTerminologyLookUp As Boolean
     Private mDefaultTerminologyUrl As String
@@ -409,9 +409,12 @@ Public Class Options
                                     mAllowWebSearch = Boolean.Parse(y(1).Trim)
                                 Case "SharedRepositoryUrl"
                                     Dim obsoleteUrl As String = "archetypes.com.au/archetypefinder/services/ArchetypeFinderBean?wsdl"
+
+                                    '//AEPR-24 07 March 2013 IMCN - Updated default Foundation CKM webservice URI
+                                    Dim obsoleteUrl2 As String = "openehr.org/knowledge/services/ArchetypeFinderBean?wsdl"
                                     Dim url As String = y(1).Trim
 
-                                    If url.EndsWith(obsoleteUrl) Then
+                                    If url.EndsWith(obsoleteUrl) Or url.EndsWith(obsoleteUrl2) Then
                                         url = defaultArchetypeRepositoryUrl
                                     End If
 
