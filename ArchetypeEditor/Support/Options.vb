@@ -409,8 +409,6 @@ Public Class Options
                                     mAllowWebSearch = Boolean.Parse(y(1).Trim)
                                 Case "SharedRepositoryUrl"
                                     Dim obsoleteUrl As String = "archetypes.com.au/archetypefinder/services/ArchetypeFinderBean?wsdl"
-
-                                    '//AEPR-24 07 March 2013 IMCN - Updated default Foundation CKM webservice URI
                                     Dim obsoleteUrl2 As String = "openehr.org/knowledge/services/ArchetypeFinderBean?wsdl"
                                     Dim url As String = y(1).Trim
 

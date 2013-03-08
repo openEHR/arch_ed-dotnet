@@ -378,7 +378,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     End Sub
 
 #End Region
-    '//AEPR-20 IMCN 03 March 2013
+
     Dim mPreviousDialogFilePath As String
 
     Protected ReadOnly Property Constraint() As Constraint_Slot
@@ -386,9 +386,9 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             Return CType(mConstraint, Constraint_Slot)
         End Get
     End Property
-    '//AEPR-20 IMCN 03 March 2013
-    '// Persist the most recently selected dialogFilePath
-    Private Property PreviousDialogFilePath() As String
+
+    ' Remember the most recently selected dialog file path, but only for this particular slot control.
+    Protected Property PreviousDialogFilePath() As String
         Get
             If mPreviousDialogFilePath = "" Then
                 If mFileManager.WorkingDirectory <> "" Then
@@ -397,6 +397,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
                     mPreviousDialogFilePath = Main.Instance.Options.RepositoryPath
                 End If
             End If
+
             Return mPreviousDialogFilePath
         End Get
         Set(ByVal value As String)
@@ -453,7 +454,6 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             End If
         End If
     End Sub
-
 
     Private Sub butSlotRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butExcludeRemove.Click, butIncludeRemove.Click
         Dim list As Windows.Forms.ListBox
@@ -529,8 +529,6 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             End If
 
             For Each s As String In names
-                'SRH Aug 20 2008 - now have full IDs so this doesn't work
-                's = s.Replace(".", specialisation & "\.")
                 Dim i As Integer = s.LastIndexOf(".")
                 s = String.Format("{0}{1}{2}", s.Substring(0, i), specialisation, s.Substring(i))
                 s = s.Replace(".", "\.")
@@ -590,13 +588,9 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
 
         Dim fd As New OpenFileDialog
         fd.Filter = description & "|" & patterns
-
-        '//AEPR-20 IMCN 03 March 2013
         fd.InitialDirectory = PreviousDialogFilePath
-        
-        If fd.ShowDialog(Me) = DialogResult.OK Then
 
-            '//AEPR-20 IMCN 03 March 2013
+        If fd.ShowDialog(Me) = DialogResult.OK Then
             PreviousDialogFilePath = IO.Path.GetDirectoryName(fd.FileName)
             Dim name As String = IO.Path.GetFileNameWithoutExtension(fd.FileName)
 
@@ -611,7 +605,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
-    Private Sub AddFilestoListBox(ByVal directory As System.IO.DirectoryInfo, ByVal pattern As String, ByVal clipFileName As Boolean)
+    Private Sub AddFilesToListBox(ByVal directory As IO.DirectoryInfo, ByVal pattern As String, ByVal clipFileName As Boolean)
         For Each f As IO.FileInfo In directory.GetFiles(pattern, IO.SearchOption.AllDirectories)
             Dim fileName As String = IO.Path.ChangeExtension(f.Name, Nothing)
 
@@ -619,31 +613,26 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
                 fileName = fileName.Substring(fileName.IndexOf(".") + 1)
             End If
 
-            'SRH: 19 Jan 2009 - EDT-503 - Show archetypes whether ADL or XML
             If Not AvailableArchetypesListBox.Items.Contains(fileName) Then
                 AvailableArchetypesListBox.Items.Insert(0, fileName)
             End If
         Next
     End Sub
-    'SRH: 19 Jan 2009 - EDT-503 - Show archetypes whether ADL or XML
 
-    'Private Sub RetrieveFiles(ByVal directory As System.IO.DirectoryInfo, ByVal fileExtension As String)
-    Private Sub RetrieveFiles(ByVal directory As System.IO.DirectoryInfo, ByVal fileExtensions As ArrayList)
+    Private Sub RetrieveFiles(ByVal directory As IO.DirectoryInfo, ByVal fileExtensions As ArrayList)
         Dim s As String
 
         If ReferenceModel.IsAbstract(Constraint.RM_ClassType) Then
             For Each t As StructureType In ReferenceModel.Specialisations(Constraint.RM_ClassType)
-                'SRH: 19 Jan 2009 - EDT-503 - Show archetypes whether ADL or XML
                 For Each fileType As String In fileExtensions
                     s = String.Format("{0}-{1}.*.{2}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(t), fileType)
-                    AddFilestoListBox(directory, s, False)
+                    AddFilesToListBox(directory, s, False)
                 Next
             Next
         Else
-            'SRH: 19 Jan 2009 - EDT-503 - Show archetypes whether ADL or XML
             For Each fileType As String In fileExtensions
                 s = String.Format("{0}-{1}.*.{2}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(Constraint.RM_ClassType), fileType)
-                AddFilestoListBox(directory, s, True)
+                AddFilesToListBox(directory, s, True)
             Next
         End If
     End Sub
@@ -652,13 +641,10 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Dim errorMessage As String = Nothing
 
         Cursor = Cursors.WaitCursor
-        Dim d As New System.IO.DirectoryInfo(Main.Instance.Options.RepositoryPath)
+        Dim d As New IO.DirectoryInfo(Main.Instance.Options.RepositoryPath)
 
         If d.Exists Then
             Try
-                'SRH: 19 Jan 2009 - EDT-503 - Show archetypes whether ADL or XML
-
-                'RetrieveFiles(d, Filemanager.Master.ParserType)
                 RetrieveFiles(d, Filemanager.Master.AvailableFormats)
             Catch ex As Exception
                 errorMessage = AE_Constants.Instance.ErrorLoading & " '" & Main.Instance.Options.RepositoryPath & "':" & Environment.NewLine & ex.Message

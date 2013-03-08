@@ -348,9 +348,8 @@ Public Class OntologyManager
     Private Function ReplaceTranslations(ByVal term As RmTerm) As Boolean
         Dim result As Boolean = False
 
-        '//AEPR-21 IMCN 03 March 2013 - added check to ensure that archetype is not opening for the first time
         If mLanguageCode = PrimaryLanguageCode And mOntology.IsMultiLanguage Then
-            If mReplaceTranslations = 0 And Not mFileManager.FileLoading = True Then
+            If mReplaceTranslations = 0 And Not mFileManager.FileLoading Then
                 mReplaceTranslations = 1
                 Dim message As String = AE_Constants.Instance.ReplaceTranslations + Environment.NewLine + term.Code + " = """ + term.Text + """"
 
