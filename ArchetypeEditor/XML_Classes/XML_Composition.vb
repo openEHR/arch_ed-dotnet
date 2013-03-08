@@ -18,7 +18,7 @@ Option Explicit On
 
 Namespace ArchetypeEditor.XML_Classes
 
-    Class XML_COMPOSITION
+    Class XML_Composition
         Inherits RmComposition
 
         Sub New(ByVal definition As XMLParser.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal)
@@ -30,14 +30,7 @@ Namespace ArchetypeEditor.XML_Classes
             For Each attribute As XMLParser.C_ATTRIBUTE In definition.attributes
                 Select Case attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                     Case "category"
-                        If attribute.children.Length > 0 Then
-                            Dim t As Constraint_Text = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(attribute.children(0))
-
-                            If t.AllowableValues.HasCode("431") Then
-                                'isPersistent defaults to false (openehr::433) for event
-                                mIsPersistent = True
-                            End If
-                        End If
+                        IsPersistent = attribute.children.Length > 0 AndAlso XML_RmElement.ProcessText(attribute.children(0)).AllowableValues.HasCode("431")
                     Case "context"
                         If attribute.children.Length > 0 Then
                             Dim complexObj As XMLParser.C_COMPLEX_OBJECT = attribute.children(0)

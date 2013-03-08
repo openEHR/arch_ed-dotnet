@@ -18,6 +18,7 @@
 Public Class RmComposition : Inherits ArchetypeDefinitionAbstract
 
     Protected mIsPersistent As Boolean = False
+
     Public Property IsPersistent() As Boolean
         Get
             Return mIsPersistent
@@ -26,24 +27,39 @@ Public Class RmComposition : Inherits ArchetypeDefinitionAbstract
             mIsPersistent = Value
         End Set
     End Property
+
     Protected mParticipations As RmStructureCompound
+
     Public Property Participations() As RmStructureCompound
         Get
             Return mParticipations
         End Get
         Set(ByVal value As RmStructureCompound)
             mParticipations = value
-            mParticipations.NodeId = "participations" ' the attribute name
+
+            If Not mParticipations Is Nothing Then
+                mParticipations.NodeId = "participations" ' the attribute name
+            End If
         End Set
     End Property
 
-    Public Sub ResetParticipations()
-        mParticipations = Nothing
-    End Sub
-
     Public ReadOnly Property HasParticipations() As Boolean
         Get
-            Return (Not mParticipations Is Nothing AndAlso mParticipations.Children.Count > 0)
+            Return Not IsPersistent AndAlso Not mParticipations Is Nothing AndAlso mParticipations.Children.Count > 0
+        End Get
+    End Property
+
+    Public ReadOnly Property CategoryCodePhrase() As CodePhrase
+        Get
+            Dim result As New CodePhrase("openehr")
+
+            If IsPersistent Then
+                result.Codes.Add("431") ' persistent
+            Else
+                result.Codes.Add("433") ' event
+            End If
+
+            Return result
         End Get
     End Property
 

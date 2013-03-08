@@ -1384,66 +1384,52 @@ Namespace ArchetypeEditor.ADL_Classes
             Next
         End Sub
 
-        Private Sub BuildComposition(ByVal Rm As RmComposition, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        Private Sub BuildComposition(ByVal rm As RmComposition, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             Dim a As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("category"))
-            Dim t As New Constraint_Text
-            t.TypeOfTextConstraint = TextConstraintType.Terminology ' coded_text
-            t.AllowableValues.TerminologyID = "openehr"
-
-            If Rm.IsPersistent Then
-                t.AllowableValues.Codes.Add("431") ' persistent
-            Else
-                t.AllowableValues.Codes.Add("433") ' event
-            End If
-
-            BuildCodedTextInternal(a, t.AllowableValues, "")
+            BuildCodedTextInternal(a, rm.CategoryCodePhrase, "")
 
             Dim eventContext As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = Nothing
 
-            If Rm.HasParticipations Then
+            If rm.HasParticipations Then
                 a = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("context"))
                 eventContext = mAomFactory.create_c_complex_object_anonymous(a, Eiffel.String("EVENT_CONTEXT"))
-                BuildParticipations(eventContext, Rm.Participations)
+                BuildParticipations(eventContext, rm.Participations)
             End If
 
             ' Deal with the content and context
-            If Rm.Data.Count > 0 Then
-                For Each child As RmStructure In Rm.Data
-                    Select Case child.Type
-                        Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree
-                            If eventContext Is Nothing Then
-                                a = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("context"))
-                                eventContext = mAomFactory.create_c_complex_object_anonymous(a, Eiffel.String("EVENT_CONTEXT"))
-                            End If
+            For Each child As RmStructure In rm.Data
+                Select Case child.Type
+                    Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree
+                        If eventContext Is Nothing Then
+                            a = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("context"))
+                            eventContext = mAomFactory.create_c_complex_object_anonymous(a, Eiffel.String("EVENT_CONTEXT"))
+                        End If
 
-                            a = mAomFactory.create_c_attribute_single(eventContext, Eiffel.String("other_context"))
-                            BuildStructure(child, mAomFactory.create_c_complex_object_identified(a, Eiffel.String(ReferenceModel.RM_StructureName(child.Type)), Eiffel.String(child.NodeId)))
+                        a = mAomFactory.create_c_attribute_single(eventContext, Eiffel.String("other_context"))
+                        BuildStructure(child, mAomFactory.create_c_complex_object_identified(a, Eiffel.String(ReferenceModel.RM_StructureName(child.Type)), Eiffel.String(child.NodeId)))
 
-                        Case StructureType.Slot
-                            If eventContext Is Nothing Then
-                                a = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("context"))
-                                eventContext = mAomFactory.create_c_complex_object_anonymous(a, Eiffel.String("EVENT_CONTEXT"))
-                            End If
+                    Case StructureType.Slot
+                        If eventContext Is Nothing Then
+                            a = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("context"))
+                            eventContext = mAomFactory.create_c_complex_object_anonymous(a, Eiffel.String("EVENT_CONTEXT"))
+                        End If
 
-                            a = mAomFactory.create_c_attribute_single(eventContext, Eiffel.String("other_context"))
-                            BuildSlotFromRm(a, child)
+                        a = mAomFactory.create_c_attribute_single(eventContext, Eiffel.String("other_context"))
+                        BuildSlotFromRm(a, child)
 
-                        Case StructureType.SECTION
-                            If CType(child, RmSection).Children.Count > 0 Then
-                                a = mAomFactory.create_c_attribute_multiple(CadlObj, _
-                                    Eiffel.String("content"), _
-                                    MakeCardinality(CType(child, RmSection).Children.Cardinality, CType(child, RmSection).Children.Cardinality.Ordered))
+                    Case StructureType.SECTION
+                        If CType(child, RmSection).Children.Count > 0 Then
+                            a = mAomFactory.create_c_attribute_multiple(CadlObj, Eiffel.String("content"), MakeCardinality(CType(child, RmSection).Children.Cardinality, CType(child, RmSection).Children.Cardinality.Ordered))
 
-                                For Each slot As RmSlot In CType(child, RmSection).Children
-                                    BuildSlotFromRm(a, slot)
-                                Next
-                            End If
+                            For Each slot As RmSlot In CType(child, RmSection).Children
+                                BuildSlotFromRm(a, slot)
+                            Next
+                        End If
 
-                        Case Else
-                            Debug.Assert(False)
-                    End Select
-                Next
-            End If
+                    Case Else
+                        Debug.Assert(False)
+                End Select
+            Next
         End Sub
 
         Protected Sub BuildRootElement(ByVal element As RmElement, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -1936,7 +1922,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Select Case mArchetypeID.ReferenceModelEntity
                 Case StructureType.COMPOSITION
-                    cDefinition = New ADL_COMPOSITION(adlArchetype.definition, a_filemanager)
+                    cDefinition = New ADL_Composition(adlArchetype.definition, a_filemanager)
                     cDefinition.RootNodeId = adlArchetype.concept.to_cil
                 Case StructureType.SECTION
                     cDefinition = New ADL_SECTION(adlArchetype.definition, a_filemanager)

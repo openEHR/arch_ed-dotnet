@@ -41,14 +41,9 @@ Public Class RmEntry
 
     Public ReadOnly Property HasParticipationConstraint() As Boolean
         Get
-            Return Me.ProviderIsMandatory Or HasOtherParticipations
+            Return ProviderIsMandatory Or HasOtherParticipations
         End Get
     End Property
-
-    Public Sub ResetParticipations()
-        Me.ProviderIsMandatory = False
-        mOtherParticipations = Nothing
-    End Sub
 
     Protected mOtherParticipations As RmStructureCompound
 
@@ -63,10 +58,15 @@ Public Class RmEntry
             If mOtherParticipations Is Nothing Then
                 mOtherParticipations = New RmStructureCompound("other_participations", StructureType.OtherParticipations)
             End If
+
             Return mOtherParticipations
         End Get
         Set(ByVal value As RmStructureCompound)
             mOtherParticipations = value
+
+            If mOtherParticipations Is Nothing Then
+                ProviderIsMandatory = False
+            End If
         End Set
     End Property
 

@@ -1612,65 +1612,52 @@ Namespace ArchetypeEditor.XML_Classes
             Next
         End Sub
 
-        Private Sub BuildComposition(ByVal Rm As RmComposition, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
+        Private Sub BuildComposition(ByVal rm As RmComposition, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
             Dim a As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(xmlObj, "category", New RmExistence(1).XmlExistence)
-
-            Dim t As New Constraint_Text
-            t.TypeOfTextConstraint = TextConstraintType.Terminology ' coded_text
-            t.AllowableValues.TerminologyID = "openehr"
-
-            If Rm.IsPersistent Then
-                t.AllowableValues.Codes.Add("431") ' persistent
-            Else
-                t.AllowableValues.Codes.Add("433") ' event
-            End If
-
-            BuildCodedTextInternal(a, t.AllowableValues, "")
+            BuildCodedTextInternal(a, rm.CategoryCodePhrase, "")
 
             Dim eventContext As XMLParser.C_COMPLEX_OBJECT = Nothing
 
-            If Rm.HasParticipations Then
+            If rm.HasParticipations Then
                 a = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
                 eventContext = mAomFactory.MakeComplexObject(a, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
-                BuildParticipations(eventContext, Rm.Participations)
+                BuildParticipations(eventContext, rm.Participations)
             End If
 
             ' Deal with the content and context
-            If Rm.Data.Count > 0 Then
-                For Each child As RmStructure In Rm.Data
-                    Select Case child.Type
-                        Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree
-                            If eventContext Is Nothing Then
-                                a = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
-                                eventContext = mAomFactory.MakeComplexObject(a, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
-                            End If
+            For Each child As RmStructure In rm.Data
+                Select Case child.Type
+                    Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree
+                        If eventContext Is Nothing Then
+                            a = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
+                            eventContext = mAomFactory.MakeComplexObject(a, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+                        End If
 
-                            a = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
-                            BuildStructure(child, mAomFactory.MakeComplexObject(a, ReferenceModel.RM_StructureName(child.Type), child.NodeId, MakeOccurrences(New RmCardinality(1, 1))))
+                        a = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
+                        BuildStructure(child, mAomFactory.MakeComplexObject(a, ReferenceModel.RM_StructureName(child.Type), child.NodeId, MakeOccurrences(New RmCardinality(1, 1))))
 
-                        Case StructureType.Slot
-                            If eventContext Is Nothing Then
-                                a = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
-                                eventContext = mAomFactory.MakeComplexObject(a, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
-                            End If
+                    Case StructureType.Slot
+                        If eventContext Is Nothing Then
+                            a = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
+                            eventContext = mAomFactory.MakeComplexObject(a, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+                        End If
 
-                            a = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
-                            BuildSlotFromRm(a, child)
+                        a = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
+                        BuildSlotFromRm(a, child)
 
-                        Case StructureType.SECTION
-                            If CType(child, RmSection).Children.Count > 0 Then
-                                a = mAomFactory.MakeMultipleAttribute(xmlObj, "content", MakeCardinality(Rm.Data.Cardinality), child.Existence.XmlExistence)
+                    Case StructureType.SECTION
+                        If CType(child, RmSection).Children.Count > 0 Then
+                            a = mAomFactory.MakeMultipleAttribute(xmlObj, "content", MakeCardinality(rm.Data.Cardinality), child.Existence.XmlExistence)
 
-                                For Each slot As RmSlot In CType(child, RmSection).Children
-                                    BuildSlotFromRm(a, slot)
-                                Next
-                            End If
+                            For Each slot As RmSlot In CType(child, RmSection).Children
+                                BuildSlotFromRm(a, slot)
+                            Next
+                        End If
 
-                        Case Else
-                            Debug.Assert(False)
-                    End Select
-                Next
-            End If
+                    Case Else
+                        Debug.Assert(False)
+                End Select
+            Next
         End Sub
 
         Protected Sub BuildRootElement(ByVal element As RmElement, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
@@ -2248,7 +2235,7 @@ Namespace ArchetypeEditor.XML_Classes
 
                 Select Case mArchetypeID.ReferenceModelEntity
                     Case StructureType.COMPOSITION
-                        cDefinition = New XML_COMPOSITION(mXmlArchetype.definition, a_filemanager)
+                        cDefinition = New XML_Composition(mXmlArchetype.definition, a_filemanager)
                     Case StructureType.SECTION
                         cDefinition = New XML_SECTION(mXmlArchetype.definition, a_filemanager)
                     Case StructureType.List, StructureType.Tree, StructureType.Single

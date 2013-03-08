@@ -81,17 +81,20 @@ Public MustInherit Class ArchetypeDefinitionAbstract
             End If
         End Set
     End Property
+
     Public Property NameConstraint() As Constraint_Text Implements ArchetypeDefinition.NameConstraint
         Get
             If mRuntimeConstraint Is Nothing Then
                 mRuntimeConstraint = New Constraint_Text
             End If
+
             Return mRuntimeConstraint
         End Get
         Set(ByVal Value As Constraint_Text)
             mRuntimeConstraint = Value
         End Set
     End Property
+
     Public Property RootNodeId() As String Implements ArchetypeDefinition.RootNodeId
         Get
             Return mNodeID
@@ -102,14 +105,12 @@ Public MustInherit Class ArchetypeDefinitionAbstract
     End Property
 
     Public Function GetChildByNodeId(ByVal aNodeId As String) As RmStructure Implements ArchetypeDefinition.GetChildByNodeId
-
         If mNodeID = aNodeId Then
             Debug.Assert(False)
             Return Nothing
         Else
             Return mChildren.GetChildByNodeId(aNodeId)
         End If
-
     End Function
 End Class
 

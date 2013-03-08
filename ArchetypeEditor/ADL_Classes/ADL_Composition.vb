@@ -19,8 +19,8 @@ Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
 
-Class ADL_COMPOSITION
-    Inherits RmComposition
+    Class ADL_Composition
+        Inherits RmComposition
 
         Sub New(ByRef definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal)
             MyBase.New()
@@ -33,14 +33,7 @@ Class ADL_COMPOSITION
 
                 Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                     Case "category"
-                        If attribute.has_children Then
-                            Dim t As Constraint_Text = ADL_RmElement.ProcessText(attribute.children.first)
-
-                            If t.AllowableValues.HasCode("431") Then
-                                'isPersistent defaults to false (openehr::433) for event
-                                mIsPersistent = True
-                            End If
-                        End If
+                        IsPersistent = attribute.has_children AndAlso ADL_RmElement.ProcessText(attribute.children.first).AllowableValues.HasCode("431")
                     Case "context"
                         If attribute.has_children Then
                             Dim complexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = attribute.children.first
@@ -48,7 +41,7 @@ Class ADL_COMPOSITION
                             For j As Integer = 1 To complexObj.attributes.count
                                 Dim a As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = complexObj.attributes.i_th(j)
 
-                                Select a.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                                Select Case a.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                                     Case "participations"
                                         Participations = New RmStructureCompound(a, StructureType.OtherParticipations, fileManager)
                                     Case "other_context"

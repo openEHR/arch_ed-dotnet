@@ -33,7 +33,7 @@ Public MustInherit Class RmChildren
             'SRH: 11 Jan 2009 - EDT-502 - added check for cardinality to be set to minimum
             Dim minCardinalityCount As Integer = 0
 
-            For Each child As RmStructure In Me.List
+            For Each child As RmStructure In List
                 If Not TypeOf child Is RmReference AndAlso child.Occurrences.MinCount > 0 Then
                     minCardinalityCount += child.Occurrences.MinCount
                 End If
@@ -56,7 +56,7 @@ Public MustInherit Class RmChildren
             'SRH: 11 Jan 2009 - EDT-502 - added check for existence to be mandatory if contains any mandatory children (only relevant for structures as protocol or state)
             'Try
             '    If mExistence.MinCount = 0 Then
-            '        For Each child As RmStructure In Me.List
+            '        For Each child As RmStructure In List
             '            If TypeOf child Is RmStructureCompound Then
             '                If CType(child, RmStructureCompound).Children.Cardinality.MinCount > 0 Then
             '                    mExistence.MinCount = 1
@@ -82,11 +82,11 @@ Public MustInherit Class RmChildren
     End Property
 
     Public Sub Add(ByVal an_RM_Structure As RmStructure)
-        Me.List.Add(an_RM_Structure)
+        List.Add(an_RM_Structure)
     End Sub
 
     Public Function GetChildByNodeId(ByVal aNodeId As String) As RmStructure
-        For Each child As RmStructure In Me.List
+        For Each child As RmStructure In List
             If child.NodeId = aNodeId Then
                 Return child
             End If
@@ -114,11 +114,11 @@ Public Class Children
 
     Public ReadOnly Property Items() As RmStructure()
         Get
-            Dim result(MyBase.List.Count - 1) As RmStructure
+            Dim result(List.Count - 1) As RmStructure
             Dim i As Integer
 
-            For i = 0 To MyBase.List.Count - 1
-                result(i) = CType(MyBase.List.Item(i), RmStructure)
+            For i = 0 To List.Count - 1
+                result(i) = CType(List.Item(i), RmStructure)
             Next
 
             Return result
@@ -155,8 +155,7 @@ Public Class Children
         Dim result As New Children(mParentStructureType)
 
         For Each rm As RmStructure In Items
-            Dim struct As RmStructure = rm.Copy
-            result.Add(rm)
+            result.Add(rm.Copy)
         Next
 
         Return result
@@ -165,7 +164,7 @@ Public Class Children
     Public Shadows Sub Add(ByVal an_RM_Structure As RmStructure)
         If an_RM_Structure IsNot Nothing AndAlso ReferenceModel.IsValidChild(mParentStructureType, an_RM_Structure.Type) Then
             'Is valid child traps post condition of false as should not arise
-            MyBase.List.Add(an_RM_Structure)
+            List.Add(an_RM_Structure)
         End If
     End Sub
 
