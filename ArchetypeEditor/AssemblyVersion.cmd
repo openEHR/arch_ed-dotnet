@@ -27,8 +27,8 @@ if /i "%2" == "VB" (
 )
 
 if /i "%1" == "Release" (
-	for /f "delims=:MS" %%R in ('svnversion') do (
-		set Revision=%%R
+	for /f "delims=-; tokens=2" %%R in ('git describe --match Revision') do (
+		set /a Revision=%%R + 100
 		goto WriteAssemblyVersion
 	)
 
