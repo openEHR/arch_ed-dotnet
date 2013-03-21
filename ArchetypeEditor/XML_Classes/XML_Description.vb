@@ -8,10 +8,6 @@
 '	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$Source: source/vb.net/archetype_editor/ADL_Classes/SCCS/s.XML_Description.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate: 2006-05-17 18:54:30 +0930 (Wed, 17 May 2006) $"
-'
 '
 'option Strict On 
 Option Explicit On 

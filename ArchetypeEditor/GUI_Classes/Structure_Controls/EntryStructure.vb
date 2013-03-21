@@ -8,10 +8,6 @@
 '	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$Source: source/vb.net/archetype_editor/GUI_Classes/Structure_Controls/SCCS/s.EntryStructure.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
-'
 '
 
 Option Explicit On 

@@ -9,10 +9,6 @@
 ::	copyright:   "Copyright 2007 Ocean Informatics Pty Ltd"
 ::	license:     "See notice at bottom of class"
 ::
-::	file:        "$URL:$"
-::	revision:    "$LastChangedRevision:$"
-::	last_change: "$LastChangedDate:$"
-::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 setlocal EnableDelayedExpansion

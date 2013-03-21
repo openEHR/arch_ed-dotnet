@@ -8,10 +8,6 @@
 '	copyright:   "Copyright (c) 2004,2005,2006, 2007 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL: http://svn.openehr.org/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/BusinessLogic/EHR_Classes/RmTerm.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate: 2007-03-10 19:10:56 +0000 (Sat, 10 Mar 2007) $"
-'
 '
 
 Public Class Term

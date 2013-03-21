@@ -8,10 +8,6 @@
 '	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL: http://svn.openehr.org/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/Support/ParsingTools.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate: 2006-05-17 18:54:30 +0930 (Wed, 17 May 2006) $"
-'
 '
 Public Class ParsingTools
 

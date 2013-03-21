@@ -8,10 +8,6 @@
 '	copyright:   "Copyright (c) 2004,2005,2006,2007 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL: http://svn.openehr.org/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/BusinessLogic/RmExistence.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate: 2007-01-09 20:45:11 +1030 (Tue, 09 Jan 2007) $"
-'
 '
 'Written by Jana Graenz, Sam Heard
 '13.02.2007, 11.2007

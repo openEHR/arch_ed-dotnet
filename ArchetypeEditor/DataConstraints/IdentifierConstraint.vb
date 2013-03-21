@@ -7,10 +7,6 @@
 '	copyright:   "Copyright (c) 2005 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL: http://svn.openehr.org/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/DataConstraints/UriConstraint.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate: 2007-08-04 18:00:56 +1000 (Sat, 04 Aug 2007) $"
-'
 
 Option Strict On
 

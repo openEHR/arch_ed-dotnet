@@ -8,10 +8,6 @@
 '	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL: http://svn.openehr.org/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/TabPage_Controls/TabPageInstruction.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate: 2006-02-20 10:03:02 +0930 (Mon, 20 Feb 2006) $"
-'
 '
 
 Option Explicit On 

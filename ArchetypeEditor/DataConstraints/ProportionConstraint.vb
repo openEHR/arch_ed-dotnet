@@ -7,10 +7,6 @@
 '	copyright:   "Copyright (c) 2005 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL: http://svn.openehr.org/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/DataConstraints/RatioConstraint.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate: 2005-07-27 21:03:30 +0930 (Wed, 27 Jul 2005) $"
-'
 
 Option Strict On
 
