@@ -1,9 +1,0 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Ots.Properties" GeneratedClassName="Settings">
-  <Profiles />
-  <Settings>
-    <Setting Name="Ots_OtsWebService_OTSWebService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://ots.oceaninformatics.com/OTS/OTSService.asmx</Value>
-    </Setting>
-  </Settings>
-</SettingsFile>

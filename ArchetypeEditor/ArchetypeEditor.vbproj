@@ -93,7 +93,7 @@
   <ItemGroup>
     <Reference Include="EiffelSoftware.Runtime, Version=6.2.7.1629, Culture=neutral, PublicKeyToken=def26f296efef469">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>AdlParser\EiffelSoftware.Runtime.dll</HintPath>
+      <HintPath>..\AdlParser\EiffelSoftware.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="MagicLibrary, Version=1.7.0.0, Culture=neutral, PublicKeyToken=3a6eb82f876a49bc">
       <SpecificVersion>False</SpecificVersion>
@@ -101,7 +101,7 @@
     </Reference>
     <Reference Include="OceanInformatics.AdlParser, Version=0.0.0.624, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>AdlParser\OceanInformatics.AdlParser.dll</HintPath>
+      <HintPath>..\AdlParser\OceanInformatics.AdlParser.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -207,7 +207,6 @@
     <Content Include="Help\ArchetypeEditor.chm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="MagicLibrary.dll" />
     <Content Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -215,7 +214,6 @@
     <Content Include="PropertyUnits\PropertyUnitData.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Support\ChangeLog.htm" />
     <EmbeddedResource Include="DataConstraintsView\IdentifierViewControl.resx">
       <DependentUpon>IdentifierViewControl.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -1093,8 +1091,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="AdlParser\EiffelSoftware.Runtime.dll" />
-    <Content Include="AdlParser\OceanInformatics.AdlParser.dll" />
     <None Include="My Project\Settings.settings">
       <CustomToolNamespace>My</CustomToolNamespace>
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -1175,8 +1171,6 @@
     </Content>
     <None Include="OpenEHRSplash.png" />
     <None Include="openEHR.PNG" />
-    <None Include="AssemblyVersion.cmd">
-    </None>
     <None Include="PropertyUnits\PropertyUnits.xsx">
       <DependentUpon>PropertyUnits.xsd</DependentUpon>
     </None>
@@ -1190,11 +1184,11 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="TerminologyLookup\TerminologyLookup.csproj">
+    <ProjectReference Include="..\TerminologyLookup\TerminologyLookup.csproj">
       <Project>{17E21C39-3735-4C5B-A091-3A7EF42C7CBB}</Project>
       <Name>TerminologyLookup</Name>
     </ProjectReference>
-    <ProjectReference Include="XMLParser\XMLParser.csproj">
+    <ProjectReference Include="..\XMLParser\XMLParser.csproj">
       <Project>{927EB444-A45E-4703-946F-78EB37FAD96E}</Project>
       <Name>XMLParser</Name>
     </ProjectReference>
@@ -1207,7 +1201,7 @@
     </PostBuildEvent>
   </PropertyGroup>
   <Target Name="BeforeBuild" Outputs="AssemblyVersion.vb">
-    <Exec Command="AssemblyVersion.cmd $(Configuration) VB &gt; AssemblyVersion.vb" Outputs="AssemblyVersion.vb">
+    <Exec Command="..\AssemblyVersion.cmd $(Configuration) VB &gt; AssemblyVersion.vb" Outputs="AssemblyVersion.vb">
       <Output ItemName="Compile" TaskParameter="Outputs" />
     </Exec>
   </Target>
