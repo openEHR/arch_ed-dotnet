@@ -48,7 +48,13 @@ Var StartMenuGroup
 
 # Installer attributes
 Name "${PRODUCT_LONG_NAME} ${VERSION}"
-OutFile "InstallExe\${PRODUCT_SHORT_NAME}Setup_${VERSION}.${BUILD}.exe"
+
+!ifdef OUTFILE_DIR
+    OutFile "${OUTFILE_DIR}\${PRODUCT_SHORT_NAME}Setup_${VERSION}.${BUILD}.exe"
+!else
+    OutFile "${PRODUCT_SHORT_NAME}Setup_${VERSION}.${BUILD}.exe"
+!endif
+
 InstallDir "$PROGRAMFILES\openEHR\Archetype Editor"
 CRCCheck on
 XPStyle on
