@@ -102,7 +102,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
                 Dim clone As ArchetypeTreeNode
                 Dim el As RmElement = TryCast(child.Item.RM_Class, RmElement)
 
-                If el Is Nothing Then
+                If el Is Nothing OrElse Not child.Item.CanSpecialise() Then
                     clone = child.SpecialisedClone(fileManager)
                 Else
                     Dim ref As RmReference = New RmReference(el)
