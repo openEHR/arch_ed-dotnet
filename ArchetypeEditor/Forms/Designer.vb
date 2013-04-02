@@ -2029,8 +2029,7 @@ Public Class Designer
                                 Next
 
                             Case StructureType.INSTRUCTION
-                                SetUpInstruction()
-                                mTabPageInstruction.ProcessInstruction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
+                                SetUpInstruction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
 
                                 If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
                                     mTabPageInstruction.HasParticipation = True
@@ -2529,7 +2528,7 @@ Public Class Designer
 
                 If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
                     If Not mTabPageInstruction Is Nothing Then
-                        mTabPageInstruction.toRichText(text, 2)
+                        mTabPageInstruction.ToRichText(text, 2)
                     End If
                 ElseIf mFileManager.Archetype.RmEntity = StructureType.ACTION Then
                     If Not mTabPageAction Is Nothing Then
@@ -3075,7 +3074,7 @@ Public Class Designer
         HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_section.htm")
     End Sub
 
-    Private Sub SetUpEventSeries(Optional ByVal NodeId As String = "")
+    Private Sub SetUpEventSeries(ByVal nodeId As String)
         Dim tp As New Crownwood.Magic.Controls.TabPage
         mTabPageDataEventSeries = New TabpageHistory
         tp.Name = "tpDataEventSeries"
@@ -3092,19 +3091,19 @@ Public Class Designer
         chkEventSeries.Checked = True
         mFileManager.FileLoading = wasLoading
 
-        If NodeId = "" Then
+        If nodeId = "" Then
             ' a new EventSeries so set Id and add a baseline event as default
             mTabPageDataEventSeries.NodeId = mFileManager.OntologyManager.AddTerm("Event Series", "@ internal @").Code
             mTabPageDataEventSeries.AddBaseLineEvent()
         Else
-            mTabPageDataEventSeries.NodeId = NodeId
+            mTabPageDataEventSeries.NodeId = nodeId
         End If
 
         HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
         HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_EventSeries.htm")
     End Sub
 
-    Private Sub SetUpInstruction()
+    Private Sub SetUpInstruction(ByVal attributes As Children)
         ' reset the data structure tab page
         mTabPageInstruction = New TabPageInstruction
 
@@ -3114,6 +3113,7 @@ Public Class Designer
 
         ' add it to the collection of components that require translation
         mComponentsCollection.Add(mTabPageInstruction)
+        mTabPageInstruction.ProcessInstruction(attributes)
 
         HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
         HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_instruction.htm")
@@ -3142,13 +3142,13 @@ Public Class Designer
         Select Case archetypedClass
             Case StructureType.OBSERVATION
                 SetUpDataStructure()
-                SetUpEventSeries()
+                SetUpEventSeries("")
                 InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
             Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                 SetUpDataStructure()
                 InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
             Case StructureType.INSTRUCTION
-                SetUpInstruction()
+                SetUpInstruction(Nothing)
                 InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
             Case StructureType.ACTION
                 SetUpAction()
@@ -3526,14 +3526,12 @@ Public Class Designer
         mComponentsCollection.Add(mTabPageStateStructure)
     End Sub
 
-    Private Sub ProcessEventSeries(ByVal a_EventSeries As RmHistory)
-        Dim tp As New Crownwood.Magic.Controls.TabPage
+    Private Sub ProcessEventSeries(ByVal eventSeries As RmHistory)
+        SetUpEventSeries(eventSeries.NodeId)
+        mTabPageDataEventSeries.ProcessEventSeries(eventSeries)
 
-        SetUpEventSeries(a_EventSeries.NodeId)
-        mTabPageDataEventSeries.ProcessEventSeries(a_EventSeries)
-
-        If Not a_EventSeries.Data Is Nothing Then
-            ProcessDataStructure(a_EventSeries.Data)
+        If Not eventSeries.Data Is Nothing Then
+            ProcessDataStructure(eventSeries.Data)
         End If
     End Sub
 
@@ -4021,7 +4019,7 @@ Public Class Designer
                     ' if one is already built
                     TabStructure.TabPages.Add(mTabPagesCollection.Item("tpDataEventSeries"))
                 Else
-                    SetUpEventSeries()
+                    SetUpEventSeries("")
                 End If
 
                 ' now set the selected tab page to this one

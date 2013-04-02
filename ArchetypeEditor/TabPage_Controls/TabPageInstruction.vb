@@ -15,7 +15,6 @@ Option Strict On
 Public Class TabPageInstruction
     Inherits System.Windows.Forms.UserControl
 
-    Private mIsloading As Boolean
     Private mActionSpecification As TabPageStructure
     Private tpNewActivity As New Crownwood.Magic.Controls.TabPage
     Friend WithEvents mOccurrences As OccurrencesPanel
@@ -173,25 +172,11 @@ Public Class TabPageInstruction
     End Property
 
     Private Sub TabPageInstruction_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        mIsloading = True
-
         If Main.Instance.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
 
         HelpProviderInstruction.HelpNamespace = Main.Instance.Options.HelpLocationPath
-
-        If mFileManager.IsNew Then
-            ClearActivityTabs()
-
-            Dim text As String = Filemanager.GetOpenEhrTerm(711, "Current Activity")
-            Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(text, text)
-            mFileManager.OntologyManager.SetRmTermText(term)
-            AddActivityTab(term.Text, New RmActivity(term.Code))
-            TabControlInstruction.SelectedTab = TabControlInstruction.TabPages(0) 'set to first tab
-        End If
-
-        mIsloading = False
     End Sub
 
     Public ReadOnly Property ComponentType() As StructureType
@@ -200,7 +185,7 @@ Public Class TabPageInstruction
         End Get
     End Property
 
-    Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
+    Public Sub ToRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
         For Each tp As Crownwood.Magic.Controls.TabPage In TabControlInstruction.TabPages
             If Not tp Is tpNewActivity Then
                 Dim uc As Control = tp.Controls(0)
@@ -231,31 +216,36 @@ Public Class TabPageInstruction
         '	}
         '}
 
-        mIsloading = True
         ClearActivityTabs()
 
-        For Each rm As RmStructureCompound In attributes
-            Select Case rm.Type
-                Case StructureType.Activities
-                    For Each activity As RmActivity In rm.Children
-                        AddActivityTab(mFileManager.OntologyManager.GetText(activity.NodeId), activity)
-                    Next
-                Case StructureType.Protocol
-                    'do nothing
-                Case Else
-                    Debug.Assert(False, rm.Type.ToString & " - type not handled for attribute 'activities'")
-            End Select
-        Next
+        If attributes Is Nothing Then
+            Dim text As String = Filemanager.GetOpenEhrTerm(711, "Current Activity")
+            Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(text, text)
+            mFileManager.OntologyManager.SetRmTermText(term)
+            AddActivityTab(term.Text, New RmActivity(term.Code))
+        Else
+            For Each rm As RmStructureCompound In attributes
+                Select Case rm.Type
+                    Case StructureType.Activities
+                        For Each activity As RmActivity In rm.Children
+                            AddActivityTab(mFileManager.OntologyManager.GetText(activity.NodeId), activity)
+                        Next
+                    Case StructureType.Protocol
+                        'do nothing
+                    Case Else
+                        Debug.Assert(False, rm.Type.ToString & " - type not handled for attribute 'activities'")
+                End Select
+            Next
+        End If
 
         TabControlInstruction.SelectedTab = TabControlInstruction.TabPages(0) 'set to first tab
-        mIsloading = False
     End Sub
 
-    Public Sub BuildInterface(ByVal aContainer As Control, ByRef pos As Point, ByVal mandatory_only As Boolean)
+    Public Sub BuildInterface(ByVal container As Control, ByRef pos As Point, ByVal mandatoryOnly As Boolean)
         Dim spacer As Integer = 1
 
-        If aContainer.Name <> "tpInterface" Then
-            aContainer.Size = New Size
+        If container.Name <> "tpInterface" Then
+            container.Size = New Size
         End If
 
         For Each tp As Crownwood.Magic.Controls.TabPage In TabControlInstruction.TabPages
@@ -263,9 +253,9 @@ Public Class TabPageInstruction
                 Dim uc As Control = tp.Controls(0)
 
                 If TypeOf uc Is TabPageActivity Then
-                    CType(uc, TabPageActivity).BuildInterface(aContainer, pos, mandatory_only)
+                    CType(uc, TabPageActivity).BuildInterface(container, pos, mandatoryOnly)
                 ElseIf TypeOf uc Is TabPageStructure Then 'Protocol
-                    CType(uc, TabPageStructure).BuildInterface(aContainer, pos, mandatory_only)
+                    CType(uc, TabPageStructure).BuildInterface(container, pos, mandatoryOnly)
                 End If
             End If
         Next
@@ -277,10 +267,10 @@ Public Class TabPageInstruction
 
         For Each tp As Crownwood.Magic.Controls.TabPage In TabControlInstruction.TabPages
             If Not tp Is tpNewActivity Then
-                Dim uc As Control = tp.Controls(0)
+                Dim uc As TabPageActivity = TryCast(tp.Controls(0), TabPageActivity)
 
-                If TypeOf (uc) Is TabPageActivity Then
-                    activities.Children.Add(CType(uc, TabPageActivity).Activity)
+                If Not uc Is Nothing Then
+                    activities.Children.Add(uc.Activity)
                 End If
             End If
         Next
