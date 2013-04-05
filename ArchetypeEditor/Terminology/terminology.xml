@@ -828,6 +828,11 @@
   <PrimaryRubric Id="752" Language="en" />
   <PrimaryRubric Id="753" Language="en" />
   <PrimaryRubric Id="754" Language="en" />
+  <PrimaryRubric Id="755" Language="en" />
+  <PrimaryRubric Id="756" Language="en" />
+  <PrimaryRubric Id="757" Language="en" />
+  <PrimaryRubric Id="758" Language="en" />
+  <PrimaryRubric Id="759" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1514,6 +1519,11 @@
   <Concept Language="en" ConceptID="752" Rubric="XML" />
   <Concept Language="en" ConceptID="753" Rubric="Autosave interval (minutes):" />
   <Concept Language="en" ConceptID="754" Rubric="Rate of Change - Frequency" />
+  <Concept Language="en" ConceptID="755" Rubric="Canonical Archetype Model" />
+  <Concept Language="en" ConceptID="756" Rubric="Enter the new concept ('-' is not allowed)." />
+  <Concept Language="en" ConceptID="757" Rubric="Translator" />
+  <Concept Language="en" ConceptID="758" Rubric="Node meaning in terminologies" />
+  <Concept Language="en" ConceptID="759" Rubric="Reasons why null" />
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />
@@ -6540,6 +6550,694 @@
   <Concept Language="ru" ConceptID="709" Rubric="Доля времени" />
   <Concept Language="ru" ConceptID="710" Rubric="Использовать специализацию тоже?" />
   <Concept Language="ru" ConceptID="712" Rubric="Нет встроенного архетип матчей в {0}" />
+  <Concept Language="sl" ConceptID="0" Rubric="sam" />
+  <Concept Language="sl" ConceptID="3" Rubric="fetus" />
+  <Concept Language="sl" ConceptID="6" Rubric="darovalec" />
+  <Concept Language="sl" ConceptID="7" Rubric="materina stara mama" />
+  <Concept Language="sl" ConceptID="8" Rubric="materin star oče" />
+  <Concept Language="sl" ConceptID="9" Rubric="oče" />
+  <Concept Language="sl" ConceptID="10" Rubric="mati" />
+  <Concept Language="sl" ConceptID="11" Rubric="Dovoli vse" />
+  <Concept Language="sl" ConceptID="12" Rubric="Datum in čas" />
+  <Concept Language="sl" ConceptID="13" Rubric="Datum in delni čas" />
+  <Concept Language="sl" ConceptID="14" Rubric="Samo čas" />
+  <Concept Language="sl" ConceptID="15" Rubric="Poln datum" />
+  <Concept Language="sl" ConceptID="16" Rubric="Delen datum" />
+  <Concept Language="sl" ConceptID="17" Rubric="Delen datum z mesecem" />
+  <Concept Language="sl" ConceptID="18" Rubric="Poln čas uu:mm:ss" />
+  <Concept Language="sl" ConceptID="20" Rubric="Delni čas" />
+  <Concept Language="sl" ConceptID="21" Rubric="Delni čas z minutami" />
+  <Concept Language="sl" ConceptID="22" Rubric="zakonski partner" />
+  <Concept Language="sl" ConceptID="23" Rubric="brat" />
+  <Concept Language="sl" ConceptID="24" Rubric="sestra" />
+  <Concept Language="sl" ConceptID="25" Rubric="polbrat" />
+  <Concept Language="sl" ConceptID="26" Rubric="polsestra" />
+  <Concept Language="sl" ConceptID="27" Rubric="brat, sestra" />
+  <Concept Language="sl" ConceptID="28" Rubric="otrok" />
+  <Concept Language="sl" ConceptID="29" Rubric="hči" />
+  <Concept Language="sl" ConceptID="31" Rubric="sin" />
+  <Concept Language="sl" ConceptID="32" Rubric="Podatkovni subjekt" />
+  <Concept Language="sl" ConceptID="33" Rubric="Datumsko-časovne omejitve" />
+  <Concept Language="sl" ConceptID="34" Rubric="Noben" />
+  <Concept Language="sl" ConceptID="35" Rubric="Prikaži vse" />
+  <Concept Language="sl" ConceptID="36" Rubric="očetov star oče" />
+  <Concept Language="sl" ConceptID="37" Rubric="očetova stara mama" />
+  <Concept Language="sl" ConceptID="38" Rubric="mamin stric" />
+  <Concept Language="sl" ConceptID="39" Rubric="mamina teta" />
+  <Concept Language="sl" ConceptID="40" Rubric="očetov stric" />
+  <Concept Language="sl" ConceptID="41" Rubric="očetova teta" />
+  <Concept Language="sl" ConceptID="42" Rubric="Menijske oznake" />
+  <Concept Language="sl" ConceptID="43" Rubric="Datoteka" />
+  <Concept Language="sl" ConceptID="44" Rubric="Pogled" />
+  <Concept Language="sl" ConceptID="45" Rubric="Objaviti" />
+  <Concept Language="sl" ConceptID="46" Rubric="Jezik" />
+  <Concept Language="sl" ConceptID="47" Rubric="Terminologija" />
+  <Concept Language="sl" ConceptID="48" Rubric="Pomoč" />
+  <Concept Language="sl" ConceptID="49" Rubric="Oznake v obrazcu" />
+  <Concept Language="sl" ConceptID="50" Rubric="Arhetip" />
+  <Concept Language="sl" ConceptID="51" Rubric="Model" />
+  <Concept Language="sl" ConceptID="52" Rubric="Kratek opis koncepta" />
+  <Concept Language="sl" ConceptID="53" Rubric="Različica" />
+  <Concept Language="sl" ConceptID="54" Rubric="Koncept" />
+  <Concept Language="sl" ConceptID="56" Rubric="Neomejen" />
+  <Concept Language="sl" ConceptID="57" Rubric="Ime arhetipne datoteke" />
+  <Concept Language="sl" ConceptID="58" Rubric="Urejevalnik arhetipov" />
+  <Concept Language="sl" ConceptID="59" Rubric="Namigi" />
+  <Concept Language="sl" ConceptID="60" Rubric="Spremeni podatkovni tip" />
+  <Concept Language="sl" ConceptID="61" Rubric="Odpri" />
+  <Concept Language="sl" ConceptID="62" Rubric="Nova  (Ctrl+N)" />
+  <Concept Language="sl" ConceptID="63" Rubric="Izhod" />
+  <Concept Language="sl" ConceptID="64" Rubric="Zbirka arhetipov" />
+  <Concept Language="sl" ConceptID="65" Rubric="Sveženj" />
+  <Concept Language="sl" ConceptID="66" Rubric="Dokončati" />
+  <Concept Language="sl" ConceptID="67" Rubric="Razpoložljivi jeziki" />
+  <Concept Language="sl" ConceptID="68" Rubric="Dodaj nov jezik" />
+  <Concept Language="sl" ConceptID="69" Rubric="Spremeni jezik" />
+  <Concept Language="sl" ConceptID="70" Rubric="Razpoložljive terminologije" />
+  <Concept Language="sl" ConceptID="71" Rubric="Dodaj novo terminologijo" />
+  <Concept Language="sl" ConceptID="72" Rubric="Osnove uporabe" />
+  <Concept Language="sl" ConceptID="73" Rubric="Licenca" />
+  <Concept Language="sl" ConceptID="74" Rubric="O openEHR" />
+  <Concept Language="sl" ConceptID="75" Rubric="O urejevalniku arhetipov" />
+  <Concept Language="sl" ConceptID="76" Rubric="Glava arhetipa" />
+  <Concept Language="sl" ConceptID="77" Rubric="Vhodni model" />
+  <Concept Language="sl" ConceptID="78" Rubric="Protokol" />
+  <Concept Language="sl" ConceptID="79" Rubric="Stan osebe z zgodovino" />
+  <Concept Language="sl" ConceptID="80" Rubric="Podatki" />
+  <Concept Language="sl" ConceptID="81" Rubric="Zaporedje dogodkov" />
+  <Concept Language="sl" ConceptID="82" Rubric="Stan osebe" />
+  <Concept Language="sl" ConceptID="83" Rubric="Prikaz" />
+  <Concept Language="sl" ConceptID="84" Rubric="Uporabniški vmesnik" />
+  <Concept Language="sl" ConceptID="85" Rubric="Zgradba" />
+  <Concept Language="sl" ConceptID="86" Rubric="Termini" />
+  <Concept Language="sl" ConceptID="87" Rubric="Omejitve" />
+  <Concept Language="sl" ConceptID="88" Rubric="Jeziki in terminologije" />
+  <Concept Language="sl" ConceptID="89" Rubric="Definicije terminov" />
+  <Concept Language="sl" ConceptID="90" Rubric="Kod" />
+  <Concept Language="sl" ConceptID="91" Rubric="Besedilo" />
+  <Concept Language="sl" ConceptID="93" Rubric="Povezave" />
+  <Concept Language="sl" ConceptID="96" Rubric="Pot" />
+  <Concept Language="sl" ConceptID="97" Rubric="Izdaja" />
+  <Concept Language="sl" ConceptID="98" Rubric="Načrt" />
+  <Concept Language="sl" ConceptID="99" Rubric="Dodaj povezavo" />
+  <Concept Language="sl" ConceptID="100" Rubric="Svojstven" />
+  <Concept Language="sl" ConceptID="101" Rubric="Vse" />
+  <Concept Language="sl" ConceptID="102" Rubric="Kompleksen" />
+  <Concept Language="sl" ConceptID="103" Rubric="Shrani kot RTF" />
+  <Concept Language="sl" ConceptID="104" Rubric="Izberi..." />
+  <Concept Language="sl" ConceptID="105" Rubric="Enojen" />
+  <Concept Language="sl" ConceptID="106" Rubric="Seznam" />
+  <Concept Language="sl" ConceptID="107" Rubric="Drevo" />
+  <Concept Language="sl" ConceptID="108" Rubric="Tabela" />
+  <Concept Language="sl" ConceptID="109" Rubric="Nov element" />
+  <Concept Language="sl" ConceptID="110" Rubric="Pripetljaji" />
+  <Concept Language="sl" ConceptID="111" Rubric="Max:" />
+  <Concept Language="sl" ConceptID="112" Rubric="Neomejeno" />
+  <Concept Language="sl" ConceptID="113" Rubric="Opis" />
+  <Concept Language="sl" ConceptID="114" Rubric="Omejitve v realnem času" />
+  <Concept Language="sl" ConceptID="115" Rubric="Količina" />
+  <Concept Language="sl" ConceptID="116" Rubric="Lastnost" />
+  <Concept Language="sl" ConceptID="117" Rubric="Enote" />
+  <Concept Language="sl" ConceptID="118" Rubric="Ni določen" />
+  <Concept Language="sl" ConceptID="119" Rubric="Koncentracija" />
+  <Concept Language="sl" ConceptID="120" Rubric="Prešteti" />
+  <Concept Language="sl" ConceptID="121" Rubric="Energija" />
+  <Concept Language="sl" ConceptID="122" Rubric="Dolžina" />
+  <Concept Language="sl" ConceptID="123" Rubric="Glasnost" />
+  <Concept Language="sl" ConceptID="124" Rubric="Množica" />
+  <Concept Language="sl" ConceptID="125" Rubric="Pritisk" />
+  <Concept Language="sl" ConceptID="126" Rubric="Pretok, količina" />
+  <Concept Language="sl" ConceptID="127" Rubric="Temperatura" />
+  <Concept Language="sl" ConceptID="128" Rubric="Čas" />
+  <Concept Language="sl" ConceptID="129" Rubric="Obseg" />
+  <Concept Language="sl" ConceptID="130" Rubric="Delo" />
+  <Concept Language="sl" ConceptID="131" Rubric="Določi najmanjšo vrednost" />
+  <Concept Language="sl" ConceptID="132" Rubric="Določi največjo vrednost" />
+  <Concept Language="sl" ConceptID="133" Rubric="Dogodki" />
+  <Concept Language="sl" ConceptID="134" Rubric="Seznam dogodkov" />
+  <Concept Language="sl" ConceptID="135" Rubric="Odpri (Ctrl + O)" />
+  <Concept Language="sl" ConceptID="136" Rubric="Nespremenljiv" />
+  <Concept Language="sl" ConceptID="137" Rubric="Dogodki v rednem času" />
+  <Concept Language="sl" ConceptID="138" Rubric="Podrobnosti o dogodku" />
+  <Concept Language="sl" ConceptID="139" Rubric="Nova omejitev" />
+  <Concept Language="sl" ConceptID="140" Rubric="Trenutek" />
+  <Concept Language="sl" ConceptID="141" Rubric="Presledek" />
+  <Concept Language="sl" ConceptID="142" Rubric="Trajanje" />
+  <Concept Language="sl" ConceptID="143" Rubric="Nespremenljiv presledek" />
+  <Concept Language="sl" ConceptID="144" Rubric="maksimum" />
+  <Concept Language="sl" ConceptID="145" Rubric="minimum" />
+  <Concept Language="sl" ConceptID="146" Rubric="povprečje" />
+  <Concept Language="sl" ConceptID="147" Rubric="sprememba" />
+  <Concept Language="sl" ConceptID="148" Rubric="celoten" />
+  <Concept Language="sl" ConceptID="149" Rubric="razlika" />
+  <Concept Language="sl" ConceptID="150" Rubric="Interni kodi" />
+  <Concept Language="sl" ConceptID="151" Rubric="Nova" />
+  <Concept Language="sl" ConceptID="152" Rubric="Odstrani" />
+  <Concept Language="sl" ConceptID="153" Rubric="Odpri obstoječi arhetip na Webu" />
+  <Concept Language="sl" ConceptID="155" Rubric="Dodaj" />
+  <Concept Language="sl" ConceptID="156" Rubric="Vrstilen" />
+  <Concept Language="sl" ConceptID="157" Rubric="Pravi/nepravi" />
+  <Concept Language="sl" ConceptID="158" Rubric="Predvidena vrednost" />
+  <Concept Language="sl" ConceptID="159" Rubric="Pravi" />
+  <Concept Language="sl" ConceptID="160" Rubric="Nepravi" />
+  <Concept Language="sl" ConceptID="161" Rubric="Datum in čas" />
+  <Concept Language="sl" ConceptID="162" Rubric="Urejeno" />
+  <Concept Language="sl" ConceptID="163" Rubric="Vrstica" />
+  <Concept Language="sl" ConceptID="164" Rubric="Stolpec" />
+  <Concept Language="sl" ConceptID="165" Rubric="V redu" />
+  <Concept Language="sl" ConceptID="166" Rubric="Opusti" />
+  <Concept Language="sl" ConceptID="167" Rubric="Tab tipka" />
+  <Concept Language="sl" ConceptID="168" Rubric="Odsečni model" />
+  <Concept Language="sl" ConceptID="169" Rubric="Ime" />
+  <Concept Language="sl" ConceptID="170" Rubric="Nastavek" />
+  <Concept Language="sl" ConceptID="171" Rubric="Vhodni nastavki" />
+  <Concept Language="sl" ConceptID="172" Rubric="Vključuje vhodne " />
+  <Concept Language="sl" ConceptID="173" Rubric="Izključuje vhodne:" />
+  <Concept Language="sl" ConceptID="174" Rubric="Odsečni nastavki" />
+  <Concept Language="sl" ConceptID="175" Rubric="Vključuje odsečne" />
+  <Concept Language="sl" ConceptID="176" Rubric="Izključuje odsečne:" />
+  <Concept Language="sl" ConceptID="177" Rubric="Stanje" />
+  <Concept Language="sl" ConceptID="179" Rubric="Izdvojiti" />
+  <Concept Language="sl" ConceptID="180" Rubric="Določen odmik" />
+  <Concept Language="sl" ConceptID="182" Rubric="Odkloniti podpis" />
+  <Concept Language="sl" ConceptID="183" Rubric="Shrani" />
+  <Concept Language="sl" ConceptID="184" Rubric="Zapri" />
+  <Concept Language="sl" ConceptID="185" Rubric="Podrobneje razgradi..." />
+  <Concept Language="sl" ConceptID="186" Rubric="Specializacija" />
+  <Concept Language="sl" ConceptID="187" Rubric="Izvorni jezik" />
+  <Concept Language="sl" ConceptID="188" Rubric="v" />
+  <Concept Language="sl" ConceptID="189" Rubric="novorojenček" />
+  <Concept Language="sl" ConceptID="192" Rubric="Način udeležbe" />
+  <Concept Language="sl" ConceptID="193" Rubric="ni specificirana" />
+  <Concept Language="sl" ConceptID="194" Rubric="avdiovizualno - asinhrono; posnet video" />
+  <Concept Language="sl" ConceptID="195" Rubric="avdiovizualno - v živo; video konferenca" />
+  <Concept Language="sl" ConceptID="196" Rubric="posnet video" />
+  <Concept Language="sl" ConceptID="197" Rubric="video telefon" />
+  <Concept Language="sl" ConceptID="198" Rubric="video konferenca" />
+  <Concept Language="sl" ConceptID="199" Rubric="avdio - asinhrono; narekovano; glasovno sporočilo" />
+  <Concept Language="sl" ConceptID="200" Rubric="narekovano" />
+  <Concept Language="sl" ConceptID="201" Rubric="glasovno sporočilo" />
+  <Concept Language="sl" ConceptID="202" Rubric="avdio - v živo; telefon; internetni telefon; telekonferenca" />
+  <Concept Language="sl" ConceptID="203" Rubric="telekonferenca" />
+  <Concept Language="sl" ConceptID="204" Rubric="telefon" />
+  <Concept Language="sl" ConceptID="205" Rubric="internetni telefon" />
+  <Concept Language="sl" ConceptID="206" Rubric="asinhrona besedila; elektronska pošta; fax; pisma; SMS sporočila" />
+  <Concept Language="sl" ConceptID="207" Rubric="E- pošta" />
+  <Concept Language="sl" ConceptID="208" Rubric="Fax" />
+  <Concept Language="sl" ConceptID="209" Rubric="SMS sporočila" />
+  <Concept Language="sl" ConceptID="210" Rubric="Tipkana sporočila" />
+  <Concept Language="sl" ConceptID="211" Rubric="Ročno napisana sporočila" />
+  <Concept Language="sl" ConceptID="212" Rubric="besedila v živo; internetni klepet; SMS klepet; interaktivno pisanje " />
+  <Concept Language="sl" ConceptID="213" Rubric="internetni klepet" />
+  <Concept Language="sl" ConceptID="214" Rubric="SMS klepet" />
+  <Concept Language="sl" ConceptID="215" Rubric="interaktivno pisanje" />
+  <Concept Language="sl" ConceptID="216" Rubric="komunikacija iz oči v oči" />
+  <Concept Language="sl" ConceptID="217" Rubric="znakovna (neverbalna  komunikacija iz oči v oči)" />
+  <Concept Language="sl" ConceptID="218" Rubric="znakovna video komunikacija" />
+  <Concept Language="sl" ConceptID="219" Rubric="fizična prisotnost" />
+  <Concept Language="sl" ConceptID="220" Rubric="fizično na daljavo" />
+  <Concept Language="sl" ConceptID="221" Rubric="prevedeno besedilo" />
+  <Concept Language="sl" ConceptID="222" Rubric="interpretiran avdio" />
+  <Concept Language="sl" ConceptID="223" Rubric="interpretirano iz oči v oči" />
+  <Concept Language="sl" ConceptID="224" Rubric="interpretirana video komunikacija" />
+  <Concept Language="sl" ConceptID="225" Rubric="doma" />
+  <Concept Language="sl" ConceptID="226" Rubric="Postavitev" />
+  <Concept Language="sl" ConceptID="227" Rubric="nujna medicinska oskrba" />
+  <Concept Language="sl" ConceptID="228" Rubric="primarna zdravstvena oskrba" />
+  <Concept Language="sl" ConceptID="229" Rubric="primarna zdravstvena nega" />
+  <Concept Language="sl" ConceptID="230" Rubric="primarna sorodstvena zdravstvena oskrba" />
+  <Concept Language="sl" ConceptID="231" Rubric="babiška nega" />
+  <Concept Language="sl" ConceptID="232" Rubric="sekundarna medicinska oskrba" />
+  <Concept Language="sl" ConceptID="233" Rubric="sekundarna medicinska nega" />
+  <Concept Language="sl" ConceptID="234" Rubric="sekundarna sorodstvena zdravstvena oskrba" />
+  <Concept Language="sl" ConceptID="235" Rubric="dopolnilna zdravstvena oskrba" />
+  <Concept Language="sl" ConceptID="236" Rubric="zobozdravstvo" />
+  <Concept Language="sl" ConceptID="237" Rubric="nega na domu" />
+  <Concept Language="sl" ConceptID="238" Rubric="ostala oskrba" />
+  <Concept Language="sl" ConceptID="239" Rubric="Potrjevanje razloga" />
+  <Concept Language="sl" ConceptID="240" Rubric="podpisan" />
+  <Concept Language="sl" ConceptID="241" Rubric="nameravan" />
+  <Concept Language="sl" ConceptID="242" Rubric="zahtevan" />
+  <Concept Language="sl" ConceptID="243" Rubric="Življenski cilj različice" />
+  <Concept Language="sl" ConceptID="244" Rubric="osnutek" />
+  <Concept Language="sl" ConceptID="245" Rubric="Aktiven" />
+  <Concept Language="sl" ConceptID="246" Rubric="neaktiven" />
+  <Concept Language="sl" ConceptID="247" Rubric="čaka na odobritev" />
+  <Concept Language="sl" ConceptID="248" Rubric="Revizija spremembe tipa" />
+  <Concept Language="sl" ConceptID="249" Rubric="stvaritev" />
+  <Concept Language="sl" ConceptID="250" Rubric="dopolnilo" />
+  <Concept Language="sl" ConceptID="251" Rubric="sprememba" />
+  <Concept Language="sl" ConceptID="252" Rubric="sinteza" />
+  <Concept Language="sl" ConceptID="253" Rubric="Neznan" />
+  <Concept Language="sl" ConceptID="254" Rubric="roditelj" />
+  <Concept Language="sl" ConceptID="255" Rubric="biološka mati" />
+  <Concept Language="sl" ConceptID="256" Rubric="biološki oče" />
+  <Concept Language="sl" ConceptID="257" Rubric="sestrična, bratranec" />
+  <Concept Language="sl" ConceptID="258" Rubric="mati posvojenca" />
+  <Concept Language="sl" ConceptID="259" Rubric="oče posvojenca" />
+  <Concept Language="sl" ConceptID="260" Rubric="posvojen sin" />
+  <Concept Language="sl" ConceptID="261" Rubric="posvojena hči" />
+  <Concept Language="sl" ConceptID="262" Rubric="mačeha" />
+  <Concept Language="sl" ConceptID="263" Rubric="očim" />
+  <Concept Language="sl" ConceptID="264" Rubric="skrbnik" />
+  <Concept Language="sl" ConceptID="265" Rubric="sopotni(k/ca)" />
+  <Concept Language="sl" ConceptID="266" Rubric="Primer matematične funkcije" />
+  <Concept Language="sl" ConceptID="267" Rubric="način" />
+  <Concept Language="sl" ConceptID="268" Rubric="srednji" />
+  <Concept Language="sl" ConceptID="270" Rubric="Brez okusa" />
+  <Concept Language="sl" ConceptID="271" Rubric="Brez informacije" />
+  <Concept Language="sl" ConceptID="272" Rubric="Maskiran" />
+  <Concept Language="sl" ConceptID="273" Rubric="Ne uporaben" />
+  <Concept Language="sl" ConceptID="274" Rubric="openEHR sestavne komponente" />
+  <Concept Language="sl" ConceptID="275" Rubric="Zgodovina" />
+  <Concept Language="sl" ConceptID="276" Rubric="Nek dogodek" />
+  <Concept Language="sl" ConceptID="277" Rubric="Reduciraj tabelo v preprosto vrednost" />
+  <Concept Language="sl" ConceptID="278" Rubric="Konstante" />
+  <Concept Language="sl" ConceptID="279" Rubric="Izberi Meni &gt; Datoteka &gt; Nova ali izberi [Nova] gumb v orodni vrstivi in ponovno poženi " />
+  <Concept Language="sl" ConceptID="280" Rubric=" in vse reference" />
+  <Concept Language="sl" ConceptID="281" Rubric="Razširi vse" />
+  <Concept Language="sl" ConceptID="282" Rubric="Zruši vse" />
+  <Concept Language="sl" ConceptID="283" Rubric="Dodaj referenco" />
+  <Concept Language="sl" ConceptID="284" Rubric="Urejevalnik arhetipov" />
+  <Concept Language="sl" ConceptID="285" Rubric="Izbral(a) si jezik, v katerega terminologije še niso povsem prevedene. Ali želiš ta jezik uporabljati?" />
+  <Concept Language="sl" ConceptID="286" Rubric="Jezik ni bil sistemsko dodan urejevalniku" />
+  <Concept Language="sl" ConceptID="287" Rubric="Trenuten arhetip" />
+  <Concept Language="sl" ConceptID="288" Rubric="Zavreči spremembe v" />
+  <Concept Language="sl" ConceptID="289" Rubric="Ni mogel najti" />
+  <Concept Language="sl" ConceptID="290" Rubric="Določi najprej besedilo koncepta" />
+  <Concept Language="sl" ConceptID="291" Rubric="Odstrani informacijo o stanju" />
+  <Concept Language="sl" ConceptID="292" Rubric="Nalaganje informacij o napaki" />
+  <Concept Language="sl" ConceptID="293" Rubric="Shranjevanje informacij o napaki" />
+  <Concept Language="sl" ConceptID="294" Rubric="Kod arhetipnega vozlišča ali ID ni sprejemljiv" />
+  <Concept Language="sl" ConceptID="295" Rubric="Shrani spremembe v" />
+  <Concept Language="sl" ConceptID="296" Rubric="Nepravilen format" />
+  <Concept Language="sl" ConceptID="297" Rubric="Ni definicije za" />
+  <Concept Language="sl" ConceptID="298" Rubric="Ime stolpičnega objekta je že uporabljeno" />
+  <Concept Language="sl" ConceptID="299" Rubric="Nadaljuj in skrči seznam na eno vrednost -" />
+  <Concept Language="sl" ConceptID="300" Rubric="Izbrano vozlišče ni element:" />
+  <Concept Language="sl" ConceptID="301" Rubric="Najprej izberi predmet na levi strani" />
+  <Concept Language="sl" ConceptID="302" Rubric="Nadaljuj in skrči drevesno strukturo povsem v seznam vrednosti - vsi predmeti v razvejišču bodo prazni" />
+  <Concept Language="sl" ConceptID="303" Rubric="Ime je že uporabljeno" />
+  <Concept Language="sl" ConceptID="304" Rubric="Ne moreš izbrisati" />
+  <Concept Language="sl" ConceptID="305" Rubric="Vnesi novo ime za" />
+  <Concept Language="sl" ConceptID="306" Rubric="Ne moreš preimenovati" />
+  <Concept Language="sl" ConceptID="307" Rubric="Ta lastnost še ni razpoložljiva" />
+  <Concept Language="sl" ConceptID="308" Rubric="Pretvori to omejitev - Pozor, izgubil(a) boš podatke." />
+  <Concept Language="sl" ConceptID="309" Rubric="Pretvori znakovni niz v besedilo" />
+  <Concept Language="sl" ConceptID="310" Rubric="Pretvori besedilo v znakovni niz" />
+  <Concept Language="sl" ConceptID="311" Rubric="Pretvori navadne vrednosti v dovoljene vrednosti " />
+  <Concept Language="sl" ConceptID="312" Rubric="Nastavek" />
+  <Concept Language="sl" ConceptID="313" Rubric="Razvejišče" />
+  <Concept Language="sl" ConceptID="314" Rubric="Odsek" />
+  <Concept Language="sl" ConceptID="315" Rubric="Boolean tip spremenljivke" />
+  <Concept Language="sl" ConceptID="316" Rubric="kot" />
+  <Concept Language="sl" ConceptID="317" Rubric="Pretvori textovne vrednosti v navadne vrednosti" />
+  <Concept Language="sl" ConceptID="318" Rubric="Pretvori interni kod v prosto besedilo" />
+  <Concept Language="sl" ConceptID="320" Rubric="Izbira" />
+  <Concept Language="sl" ConceptID="321" Rubric="Razmerje" />
+  <Concept Language="sl" ConceptID="322" Rubric="Novo razvejišče" />
+  <Concept Language="sl" ConceptID="323" Rubric="Nov stolpec" />
+  <Concept Language="sl" ConceptID="324" Rubric="Nova vrstica" />
+  <Concept Language="sl" ConceptID="325" Rubric="Preimenuj" />
+  <Concept Language="sl" ConceptID="326" Rubric="Spremeni strukturo" />
+  <Concept Language="sl" ConceptID="327" Rubric="Ta povezava že obstaja - dodati moraš kriterij" />
+  <Concept Language="sl" ConceptID="329" Rubric="Interval količine" />
+  <Concept Language="sl" ConceptID="330" Rubric="Interval celih števil" />
+  <Concept Language="sl" ConceptID="332" Rubric="Nastavi absoluten maksimum" />
+  <Concept Language="sl" ConceptID="333" Rubric="Nastavi absoluten minimum" />
+  <Concept Language="sl" ConceptID="334" Rubric="Električni tok" />
+  <Concept Language="sl" ConceptID="335" Rubric="Površina" />
+  <Concept Language="sl" ConceptID="336" Rubric="Specifična prostornina" />
+  <Concept Language="sl" ConceptID="337" Rubric="Specifična površina" />
+  <Concept Language="sl" ConceptID="338" Rubric="Hitrost" />
+  <Concept Language="sl" ConceptID="339" Rubric="Pospešek" />
+  <Concept Language="sl" ConceptID="340" Rubric="Moment" />
+  <Concept Language="sl" ConceptID="341" Rubric="Kotna hitrost" />
+  <Concept Language="sl" ConceptID="342" Rubric="Kotni pospešek" />
+  <Concept Language="sl" ConceptID="343" Rubric="Kotni moment" />
+  <Concept Language="sl" ConceptID="344" Rubric="Površinski vztrajnostni moment" />
+  <Concept Language="sl" ConceptID="345" Rubric="Masni vztrajnostni moment" />
+  <Concept Language="sl" ConceptID="346" Rubric="Moment pretočnega razmerja" />
+  <Concept Language="sl" ConceptID="347" Rubric="Masno pretočno razmerje" />
+  <Concept Language="sl" ConceptID="348" Rubric="Masni pretok" />
+  <Concept Language="sl" ConceptID="349" Rubric="Masa na enoto površine" />
+  <Concept Language="sl" ConceptID="350" Rubric="Gostota" />
+  <Concept Language="sl" ConceptID="351" Rubric="Masni pretok/Prostornino" />
+  <Concept Language="sl" ConceptID="352" Rubric="Masni pretok/Silo" />
+  <Concept Language="sl" ConceptID="354" Rubric="Specifična teža" />
+  <Concept Language="sl" ConceptID="355" Rubric="Sila" />
+  <Concept Language="sl" ConceptID="356" Rubric="Površinska napetost" />
+  <Concept Language="sl" ConceptID="357" Rubric="Sila, Telo" />
+  <Concept Language="sl" ConceptID="358" Rubric="Gravitacijska sila" />
+  <Concept Language="sl" ConceptID="359" Rubric="Moment" />
+  <Concept Language="sl" ConceptID="360" Rubric="Viskoznost, Dinamična" />
+  <Concept Language="sl" ConceptID="361" Rubric="Viskoznost, Kinematična" />
+  <Concept Language="sl" ConceptID="362" Rubric="Difuzijski koeficient" />
+  <Concept Language="sl" ConceptID="363" Rubric="Moč" />
+  <Concept Language="sl" ConceptID="364" Rubric="Energija, linearno" />
+  <Concept Language="sl" ConceptID="365" Rubric="Energija na enoto površine" />
+  <Concept Language="sl" ConceptID="366" Rubric="Gostota energije" />
+  <Concept Language="sl" ConceptID="367" Rubric="Moč, linearno" />
+  <Concept Language="sl" ConceptID="368" Rubric="Pretok moči" />
+  <Concept Language="sl" ConceptID="369" Rubric="Gostota moči" />
+  <Concept Language="sl" ConceptID="370" Rubric="Specifična energija" />
+  <Concept Language="sl" ConceptID="371" Rubric="Specifična toplota, Plinska konstanta" />
+  <Concept Language="sl" ConceptID="372" Rubric="Toplotna prevodnost" />
+  <Concept Language="sl" ConceptID="373" Rubric="Koeficient toplotne prevodnosti" />
+  <Concept Language="sl" ConceptID="374" Rubric="Napetost, Električni potencial" />
+  <Concept Language="sl" ConceptID="375" Rubric="Upornost" />
+  <Concept Language="sl" ConceptID="377" Rubric="Jakost električnega polja" />
+  <Concept Language="sl" ConceptID="378" Rubric="Magnetni pretok" />
+  <Concept Language="sl" ConceptID="379" Rubric="Magnetna upornost" />
+  <Concept Language="sl" ConceptID="380" Rubric="Pravilno kvalificiran" />
+  <Concept Language="sl" ConceptID="381" Rubric="Količina(Eq)" />
+  <Concept Language="sl" ConceptID="382" Rubric="Frekvenca" />
+  <Concept Language="sl" ConceptID="384" Rubric="Količina(mol)" />
+  <Concept Language="sl" ConceptID="385" Rubric="Masa(IU)" />
+  <Concept Language="sl" ConceptID="386" Rubric="Multi media" />
+  <Concept Language="sl" ConceptID="387" Rubric="*audio/DVI4 (en)" />
+  <Concept Language="sl" ConceptID="388" Rubric="*audio/G722 (en)" />
+  <Concept Language="sl" ConceptID="389" Rubric="*audio/G723 (en)" />
+  <Concept Language="sl" ConceptID="390" Rubric="*audio/G726-16 (en)" />
+  <Concept Language="sl" ConceptID="391" Rubric="*audio/G726-24 (en)" />
+  <Concept Language="sl" ConceptID="392" Rubric="*audio/G726-32 (en)" />
+  <Concept Language="sl" ConceptID="393" Rubric="*audio/G726-40 (en)" />
+  <Concept Language="sl" ConceptID="394" Rubric="*audio/G728 (en)" />
+  <Concept Language="sl" ConceptID="395" Rubric="*audio/L8 (en)" />
+  <Concept Language="sl" ConceptID="396" Rubric="*audio/L16 (en)" />
+  <Concept Language="sl" ConceptID="397" Rubric="*audio/LPC (en)" />
+  <Concept Language="sl" ConceptID="398" Rubric="*audio/G729 (en)" />
+  <Concept Language="sl" ConceptID="399" Rubric="*audio/G729D (en)" />
+  <Concept Language="sl" ConceptID="400" Rubric="*audio/G729E (en)" />
+  <Concept Language="sl" ConceptID="401" Rubric="*video/BT656 (en)" />
+  <Concept Language="sl" ConceptID="402" Rubric="*video/CelB (en)" />
+  <Concept Language="sl" ConceptID="403" Rubric="*video/JPEG (en)" />
+  <Concept Language="sl" ConceptID="404" Rubric="*video/H261 (en)" />
+  <Concept Language="sl" ConceptID="405" Rubric="*video/H263 (en)" />
+  <Concept Language="sl" ConceptID="406" Rubric="*video/H263-1998 (en)" />
+  <Concept Language="sl" ConceptID="407" Rubric="*video/H263-2000 (en)" />
+  <Concept Language="sl" ConceptID="408" Rubric="*video/MPV (en)" />
+  <Concept Language="sl" ConceptID="409" Rubric="*audio/mpeg (en)" />
+  <Concept Language="sl" ConceptID="410" Rubric="*audio/mpeg4-generic (en)" />
+  <Concept Language="sl" ConceptID="411" Rubric="*audio/L20 (en)" />
+  <Concept Language="sl" ConceptID="412" Rubric="*audio/L24 (en)" />
+  <Concept Language="sl" ConceptID="413" Rubric="avdio/telefonski dogodek" />
+  <Concept Language="sl" ConceptID="414" Rubric="*video/quicktime (en)" />
+  <Concept Language="sl" ConceptID="415" Rubric="besedilo/koledar" />
+  <Concept Language="sl" ConceptID="416" Rubric="besedilo/adresar" />
+  <Concept Language="sl" ConceptID="417" Rubric="besedilo/html" />
+  <Concept Language="sl" ConceptID="418" Rubric="preprosto besedilo" />
+  <Concept Language="sl" ConceptID="419" Rubric="besedilo/rtf" />
+  <Concept Language="sl" ConceptID="420" Rubric="besedilo/sgml" />
+  <Concept Language="sl" ConceptID="421" Rubric="besedilo/ s tab ločene vrednosti" />
+  <Concept Language="sl" ConceptID="422" Rubric="besedilo/ URI seznam" />
+  <Concept Language="sl" ConceptID="423" Rubric="besedilo/xml" />
+  <Concept Language="sl" ConceptID="424" Rubric="besedilo/xml - zunaj razčlenjene entitete" />
+  <Concept Language="sl" ConceptID="425" Rubric="slika/cgm" />
+  <Concept Language="sl" ConceptID="426" Rubric="slika/gif" />
+  <Concept Language="sl" ConceptID="427" Rubric="slika/png" />
+  <Concept Language="sl" ConceptID="428" Rubric="slika/tiff" />
+  <Concept Language="sl" ConceptID="429" Rubric="slika/jepg" />
+  <Concept Language="sl" ConceptID="430" Rubric="URI - identifikator resursov" />
+  <Concept Language="sl" ConceptID="431" Rubric="vztrajen" />
+  <Concept Language="sl" ConceptID="432" Rubric="Kategorija sestava" />
+  <Concept Language="sl" ConceptID="433" Rubric="Dogodek" />
+  <Concept Language="sl" ConceptID="434" Rubric="proces" />
+  <Concept Language="sl" ConceptID="435" Rubric="laboratorij" />
+  <Concept Language="sl" ConceptID="436" Rubric="slikanje" />
+  <Concept Language="sl" ConceptID="437" Rubric="Številčne vrednosti" />
+  <Concept Language="sl" ConceptID="438" Rubric="Vrednosti" />
+  <Concept Language="sl" ConceptID="439" Rubric="Samo za branje" />
+  <Concept Language="sl" ConceptID="440" Rubric="Odvleci ikono do mesta kjer nastaviš podatkovni tip" />
+  <Concept Language="sl" ConceptID="441" Rubric="Prosto besedilo" />
+  <Concept Language="sl" ConceptID="442" Rubric="Ali nadomestim ta termin z njegovim prevodom?" />
+  <Concept Language="sl" ConceptID="443" Rubric="Tip" />
+  <Concept Language="sl" ConceptID="444" Rubric="Prosto ali kodirano besedilo" />
+  <Concept Language="sl" ConceptID="445" Rubric="Masa(enote)" />
+  <Concept Language="sl" ConceptID="446" Rubric="Obvezno" />
+  <Concept Language="sl" ConceptID="447" Rubric="ponavljati" />
+  <Concept Language="sl" ConceptID="448" Rubric="opcija" />
+  <Concept Language="sl" ConceptID="449" Rubric="Imenovalec" />
+  <Concept Language="sl" ConceptID="450" Rubric="Števec" />
+  <Concept Language="sl" ConceptID="497" Rubric="Ravninski kot" />
+  <Concept Language="sl" ConceptID="498" Rubric="Električni naboj" />
+  <Concept Language="sl" ConceptID="499" Rubric="Jakost svetlobe" />
+  <Concept Language="sl" ConceptID="500" Rubric="Prostorski kot" />
+  <Concept Language="sl" ConceptID="501" Rubric="Električna kapaciteta" />
+  <Concept Language="sl" ConceptID="502" Rubric="Električna konduktanca" />
+  <Concept Language="sl" ConceptID="503" Rubric="Gostota magnetnega pretoka" />
+  <Concept Language="sl" ConceptID="504" Rubric="Svetlobni pretok" />
+  <Concept Language="sl" ConceptID="505" Rubric="osvetljenost" />
+  <Concept Language="sl" ConceptID="506" Rubric="Radioaktivnost" />
+  <Concept Language="sl" ConceptID="507" Rubric="Sorazmerje" />
+  <Concept Language="sl" ConceptID="508" Rubric="Energijska doza" />
+  <Concept Language="sl" ConceptID="509" Rubric="Opis aktivnosti" />
+  <Concept Language="sl" ConceptID="510" Rubric="Pešpot" />
+  <Concept Language="sl" ConceptID="511" Rubric="večkraten" />
+  <Concept Language="sl" ConceptID="513" Rubric="Sestavni del" />
+  <Concept Language="sl" ConceptID="514" Rubric="Kontekst" />
+  <Concept Language="sl" ConceptID="515" Rubric="Vsebina" />
+  <Concept Language="sl" ConceptID="516" Rubric="Datumski ali časovni interval" />
+  <Concept Language="sl" ConceptID="517" Rubric="aplikacija/msword" />
+  <Concept Language="sl" ConceptID="518" Rubric="aplikacija/pdf" />
+  <Concept Language="sl" ConceptID="519" Rubric="aplikacija/rtf" />
+  <Concept Language="sl" ConceptID="520" Rubric="Tiskanje" />
+  <Concept Language="sl" ConceptID="521" Rubric="upad" />
+  <Concept Language="sl" ConceptID="522" Rubric="porast" />
+  <Concept Language="sl" ConceptID="523" Rubric="izbrisan" />
+  <Concept Language="sl" ConceptID="524" Rubric="Začeti" />
+  <Concept Language="sl" ConceptID="525" Rubric="Instrukcijska stanja" />
+  <Concept Language="sl" ConceptID="526" Rubric="Planiran" />
+  <Concept Language="sl" ConceptID="527" Rubric="Zakasnjen" />
+  <Concept Language="sl" ConceptID="528" Rubric="Odpovedan" />
+  <Concept Language="sl" ConceptID="529" Rubric="Načrtovan" />
+  <Concept Language="sl" ConceptID="530" Rubric="Odložen" />
+  <Concept Language="sl" ConceptID="531" Rubric="Preklican" />
+  <Concept Language="sl" ConceptID="532" Rubric="Dokončan" />
+  <Concept Language="sl" ConceptID="533" Rubric="Pretečen" />
+  <Concept Language="sl" ConceptID="534" Rubric="Prehodna navodila" />
+  <Concept Language="sl" ConceptID="535" Rubric="Začeten" />
+  <Concept Language="sl" ConceptID="536" Rubric="Planski korak" />
+  <Concept Language="sl" ConceptID="537" Rubric="Zakasniti" />
+  <Concept Language="sl" ConceptID="538" Rubric="Obnoviti" />
+  <Concept Language="sl" ConceptID="539" Rubric="Načrtovati" />
+  <Concept Language="sl" ConceptID="540" Rubric="Začetek" />
+  <Concept Language="sl" ConceptID="541" Rubric="Naredi" />
+  <Concept Language="sl" ConceptID="542" Rubric="Zakasnjen korak" />
+  <Concept Language="sl" ConceptID="543" Rubric="Aktiven korak" />
+  <Concept Language="sl" ConceptID="544" Rubric="Odložiti" />
+  <Concept Language="sl" ConceptID="545" Rubric="Korak odložitve" />
+  <Concept Language="sl" ConceptID="546" Rubric="Povzeti" />
+  <Concept Language="sl" ConceptID="547" Rubric="Preklicati" />
+  <Concept Language="sl" ConceptID="548" Rubric="Konec" />
+  <Concept Language="sl" ConceptID="549" Rubric="Prekinitev" />
+  <Concept Language="sl" ConceptID="550" Rubric="Uradno prekinjeno" />
+  <Concept Language="sl" ConceptID="551" Rubric="Uradno dokončano" />
+  <Concept Language="sl" ConceptID="552" Rubric="Uradno odpovedano" />
+  <Concept Language="sl" ConceptID="553" Rubric="nepopoln" />
+  <Concept Language="sl" ConceptID="554" Rubric="Opazovanje" />
+  <Concept Language="sl" ConceptID="555" Rubric="Vrednotenje" />
+  <Concept Language="sl" ConceptID="556" Rubric="Akcija" />
+  <Concept Language="sl" ConceptID="557" Rubric="Navodilo" />
+  <Concept Language="sl" ConceptID="558" Rubric="Pod-oddelek" />
+  <Concept Language="sl" ConceptID="559" Rubric="Vstop" />
+  <Concept Language="sl" ConceptID="560" Rubric="Administracijski vstop" />
+  <Concept Language="sl" ConceptID="561" Rubric="Sestavek" />
+  <Concept Language="sl" ConceptID="563" Rubric="Korak na poti nege" />
+  <Concept Language="sl" ConceptID="564" Rubric="Reference" />
+  <Concept Language="sl" ConceptID="565" Rubric="Razmik dogodka" />
+  <Concept Language="sl" ConceptID="566" Rubric="Trenutek dogodka" />
+  <Concept Language="sl" ConceptID="567" Rubric="Element" />
+  <Concept Language="sl" ConceptID="568" Rubric="Avtorski življenski cikel" />
+  <Concept Language="sl" ConceptID="569" Rubric="Avtorski osnutek" />
+  <Concept Language="sl" ConceptID="570" Rubric="Osnutek odbora" />
+  <Concept Language="sl" ConceptID="571" Rubric="Organizacijski osnutek" />
+  <Concept Language="sl" ConceptID="572" Rubric="Vročen" />
+  <Concept Language="sl" ConceptID="573" Rubric="Kandidat" />
+  <Concept Language="sl" ConceptID="574" Rubric="Odobren kandidat" />
+  <Concept Language="sl" ConceptID="575" Rubric="Objavljen" />
+  <Concept Language="sl" ConceptID="576" Rubric="Zavrnjen" />
+  <Concept Language="sl" ConceptID="577" Rubric="Zastarel" />
+  <Concept Language="sl" ConceptID="578" Rubric="Ključna beseda" />
+  <Concept Language="sl" ConceptID="579" Rubric="Ime" />
+  <Concept Language="sl" ConceptID="580" Rubric="Avtorstvo" />
+  <Concept Language="sl" ConceptID="581" Rubric="Podrobnosti" />
+  <Concept Language="sl" ConceptID="582" Rubric="Uporaba" />
+  <Concept Language="sl" ConceptID="583" Rubric="Napačna uporaba" />
+  <Concept Language="sl" ConceptID="584" Rubric="Izviren avtor" />
+  <Concept Language="sl" ConceptID="585" Rubric="Namen" />
+  <Concept Language="sl" ConceptID="586" Rubric="Aktivnost" />
+  <Concept Language="sl" ConceptID="587" Rubric="Aktivnosti" />
+  <Concept Language="sl" ConceptID="588" Rubric="Min:" />
+  <Concept Language="sl" ConceptID="589" Rubric="ne ponovljivo" />
+  <Concept Language="sl" ConceptID="590" Rubric="neskončnokrat ponovljivo" />
+  <Concept Language="sl" ConceptID="591" Rubric="končnokrat ponovljivo" />
+  <Concept Language="sl" ConceptID="592" Rubric="Uredi" />
+  <Concept Language="sl" ConceptID="593" Rubric="Datum" />
+  <Concept Language="sl" ConceptID="594" Rubric="Organizacija" />
+  <Concept Language="sl" ConceptID="595" Rubric="Novo okno" />
+  <Concept Language="sl" ConceptID="596" Rubric="Shrani kot" />
+  <Concept Language="sl" ConceptID="597" Rubric="Poročanje o napaki v programu" />
+  <Concept Language="sl" ConceptID="598" Rubric="Možnosti" />
+  <Concept Language="sl" ConceptID="599" Rubric="Omejen" />
+  <Concept Language="sl" ConceptID="600" Rubric="Dovoljene vrednosti" />
+  <Concept Language="sl" ConceptID="601" Rubric="Enotne vrednosti" />
+  <Concept Language="sl" ConceptID="602" Rubric="Dodaj obstoječi izraz" />
+  <Concept Language="sl" ConceptID="603" Rubric="Dodaj novi izraz" />
+  <Concept Language="sl" ConceptID="604" Rubric="Sodelavci" />
+  <Concept Language="sl" ConceptID="605" Rubric="Vpet arhetip" />
+  <Concept Language="sl" ConceptID="606" Rubric="Naloži vpet arhetip" />
+  <Concept Language="sl" ConceptID="607" Rubric="Ne morem ločiti referenc" />
+  <Concept Language="sl" ConceptID="608" Rubric="Drug kontekst" />
+  <Concept Language="sl" ConceptID="609" Rubric="Odpri obstoječi arhetip" />
+  <Concept Language="sl" ConceptID="610" Rubric="Časovne okrajšave" />
+  <Concept Language="sl" ConceptID="611" Rubric="nanosek" />
+  <Concept Language="sl" ConceptID="612" Rubric="mikrosek" />
+  <Concept Language="sl" ConceptID="613" Rubric="milisek" />
+  <Concept Language="sl" ConceptID="614" Rubric="sek" />
+  <Concept Language="sl" ConceptID="615" Rubric="mini" />
+  <Concept Language="sl" ConceptID="616" Rubric="ura" />
+  <Concept Language="sl" ConceptID="617" Rubric="dan" />
+  <Concept Language="sl" ConceptID="618" Rubric="mesec" />
+  <Concept Language="sl" ConceptID="619" Rubric="leto" />
+  <Concept Language="sl" ConceptID="620" Rubric="teden" />
+  <Concept Language="sl" ConceptID="621" Rubric="Vozlišče" />
+  <Concept Language="sl" ConceptID="622" Rubric="Kriterij" />
+  <Concept Language="sl" ConceptID="623" Rubric="Definicije omejitev" />
+  <Concept Language="sl" ConceptID="624" Rubric="Naziv za povpraševanje" />
+  <Concept Language="sl" ConceptID="625" Rubric="Vključiti" />
+  <Concept Language="sl" ConceptID="626" Rubric="Izključiti" />
+  <Concept Language="sl" ConceptID="627" Rubric="Brskati..." />
+  <Concept Language="sl" ConceptID="628" Rubric="Vključiti vse" />
+  <Concept Language="sl" ConceptID="629" Rubric="Izključiti vse" />
+  <Concept Language="sl" ConceptID="630" Rubric="Kot odstotek" />
+  <Concept Language="sl" ConceptID="631" Rubric="Izbriši to omejitev" />
+  <Concept Language="sl" ConceptID="632" Rubric="ID arhetipa" />
+  <Concept Language="sl" ConceptID="633" Rubric="Identifikator" />
+  <Concept Language="sl" ConceptID="634" Rubric="Paragraf" />
+  <Concept Language="sl" ConceptID="635" Rubric="Razčlenjen" />
+  <Concept Language="sl" ConceptID="636" Rubric="Kodirano besedilo" />
+  <Concept Language="sl" ConceptID="637" Rubric="aplikacija/dicom" />
+  <Concept Language="sl" ConceptID="638" Rubric="Format" />
+  <Concept Language="sl" ConceptID="639" Rubric="Preslikaj pot v arhiv" />
+  <Concept Language="sl" ConceptID="640" Rubric="pravi" />
+  <Concept Language="sl" ConceptID="641" Rubric="Nižji" />
+  <Concept Language="sl" ConceptID="642" Rubric="Višji" />
+  <Concept Language="sl" ConceptID="643" Rubric="Celoten" />
+  <Concept Language="sl" ConceptID="644" Rubric="Enoten" />
+  <Concept Language="sl" ConceptID="645" Rubric="Celoštevilčen in decimalen" />
+  <Concept Language="sl" ConceptID="646" Rubric="Decimalen" />
+  <Concept Language="sl" ConceptID="647" Rubric="Definicija" />
+  <Concept Language="sl" ConceptID="648" Rubric="priča" />
+  <Concept Language="sl" ConceptID="649" Rubric="Omejeno št. decimalnih mest" />
+  <Concept Language="sl" ConceptID="650" Rubric="Prevod" />
+  <Concept Language="sl" ConceptID="651" Rubric="Akreditiv" />
+  <Concept Language="sl" ConceptID="652" Rubric="Razlaga" />
+  <Concept Language="sl" ConceptID="653" Rubric="Nova aktivnost" />
+  <Concept Language="sl" ConceptID="654" Rubric="Udeležba" />
+  <Concept Language="sl" ConceptID="655" Rubric="*Electrical Potential Time(en)" />
+  <Concept Language="sl" ConceptID="656" Rubric="Povezava samo znotraj EHR" />
+  <Concept Language="sl" ConceptID="657" Rubric="Regularni izraz na URI" />
+  <Concept Language="sl" ConceptID="658" Rubric="Funkcija udeleženca" />
+  <Concept Language="sl" ConceptID="659" Rubric="Povezava" />
+  <Concept Language="sl" ConceptID="660" Rubric="Ostali udeleženci" />
+  <Concept Language="sl" ConceptID="661" Rubric="Cilj" />
+  <Concept Language="sl" ConceptID="662" Rubric="Pomen" />
+  <Concept Language="sl" ConceptID="663" Rubric="Iskanje" />
+  <Concept Language="sl" ConceptID="664" Rubric="Mrežna napaka" />
+  <Concept Language="sl" ConceptID="665" Rubric="Vnesi iskani parameter" />
+  <Concept Language="sl" ConceptID="666" Rubric="izkaz" />
+  <Concept Language="sl" ConceptID="667" Rubric="Orodja" />
+  <Concept Language="sl" ConceptID="668" Rubric="Izberi eno enoto z leve in eno z desne strani:" />
+  <Concept Language="sl" ConceptID="669" Rubric="javno zdravstvo" />
+  <Concept Language="sl" ConceptID="670" Rubric="povračilo pomoči" />
+  <Concept Language="sl" ConceptID="671" Rubric="raziskava" />
+  <Concept Language="sl" ConceptID="672" Rubric="Ime tega nastavka" />
+  <Concept Language="sl" ConceptID="673" Rubric="Predmet" />
+  <Concept Language="sl" ConceptID="674" Rubric="Začetek nege" />
+  <Concept Language="sl" ConceptID="675" Rubric="Imenuj ta nastavek" />
+  <Concept Language="sl" ConceptID="676" Rubric="Prehod" />
+  <Concept Language="sl" ConceptID="677" Rubric="Dovoli prehod v" />
+  <Concept Language="sl" ConceptID="678" Rubric="Dovoli drugačno stanje za to dejanje" />
+  <Concept Language="sl" ConceptID="679" Rubric="Drugačno stanje" />
+  <Concept Language="sl" ConceptID="680" Rubric="Datoteka {0} že obstaja. Ali jo želiš nadomestiti?" />
+  <Concept Language="sl" ConceptID="681" Rubric="Izvoz" />
+  <Concept Language="sl" ConceptID="682" Rubric="*application/vnd.oasis.opendocument.text (en)" />
+  <Concept Language="sl" ConceptID="683" Rubric="*application/vnd.openxmlformats-officedocument.wordprocessingml.document (en)" />
+  <Concept Language="sl" ConceptID="684" Rubric="Razčlenjeno besedilo" />
+  <Concept Language="sl" ConceptID="685" Rubric="*Refractive power (en)" />
+  <Concept Language="sl" ConceptID="686" Rubric="Napačno ime arhetipne datoteke {0}. Shranim kot {1}? (en)" />
+  <Concept Language="sl" ConceptID="687" Rubric="Odpri akcijski arhetip" />
+  <Concept Language="sl" ConceptID="688" Rubric="stik" />
+  <Concept Language="sl" ConceptID="689" Rubric="izpostavljen vir" />
+  <Concept Language="sl" ConceptID="690" Rubric="Avtorske pravice" />
+  <Concept Language="sl" ConceptID="691" Rubric="Reference" />
+  <Concept Language="sl" ConceptID="692" Rubric="Preklopi na drugi jezik" />
+  <Concept Language="sl" ConceptID="693" Rubric="Najdi" />
+  <Concept Language="sl" ConceptID="694" Rubric="Najdi naslednjega" />
+  <Concept Language="sl" ConceptID="695" Rubric="Najdi predhodnega" />
+  <Concept Language="sl" ConceptID="696" Rubric="Ključ" />
+  <Concept Language="sl" ConceptID="697" Rubric="Vrednost" />
+  <Concept Language="sl" ConceptID="699" Rubric="Ali boš podrobneje razgradil(a)  arhetip: '{0}'? " />
+  <Concept Language="sl" ConceptID="700" Rubric="Da, preciziraj" />
+  <Concept Language="sl" ConceptID="701" Rubric="Da, a pri tem dodaj novo vozlišče" />
+  <Concept Language="sl" ConceptID="702" Rubric="Ne" />
+  <Concept Language="sl" ConceptID="703" Rubric="Spreminjanje v strukturo tipa {0} lahko povzroči izgubo nekaterih elementov. Ali želiš nadaljevati?" />
+  <Concept Language="sl" ConceptID="704" Rubric="Stik" />
+  <Concept Language="sl" ConceptID="705" Rubric="Trenutno odgovoren" />
+  <Concept Language="sl" ConceptID="706" Rubric="Vnesi ime koncepta, ki je del ID arhetipa." />
+  <Concept Language="sl" ConceptID="707" Rubric="Razgrajen" />
+  <Concept Language="sl" ConceptID="708" Rubric="Stopnja spremembe - Pressure (en)" />
+  <Concept Language="sl" ConceptID="709" Rubric="Delitev časa" />
+  <Concept Language="sl" ConceptID="710" Rubric="Uporabim tudi specializacijo?" />
+  <Concept Language="sl" ConceptID="711" Rubric="Trenutna aktivnost" />
+  <Concept Language="sl" ConceptID="712" Rubric="Nobeden od vpetih arhetipov ne ustreza {0} " />
+  <Concept Language="sl" ConceptID="713" Rubric="Izdajatelj" />
+  <Concept Language="sl" ConceptID="714" Rubric="Podpisnik" />
+  <Concept Language="sl" ConceptID="715" Rubric="URI " />
+  <Concept Language="sl" ConceptID="716" Rubric="Navedi svoje ime" />
+  <Concept Language="sl" ConceptID="717" Rubric="Navedi svojo elektronsko pošto" />
+  <Concept Language="sl" ConceptID="718" Rubric="Navedi svojo organizacijo" />
+  <Concept Language="sl" ConceptID="719" Rubric="Navedi svoje avtorske podrobnosti" />
+  <Concept Language="sl" ConceptID="720" Rubric="Navedi vse avtorske standarde" />
+  <Concept Language="sl" ConceptID="721" Rubric="Danes" />
+  <Concept Language="sl" ConceptID="722" Rubric="Uporabniške podrobnosti" />
+  <Concept Language="sl" ConceptID="723" Rubric="Lokacije datotek" />
+  <Concept Language="sl" ConceptID="724" Rubric="HTML " />
+  <Concept Language="sl" ConceptID="725" Rubric="Videz" />
+  <Concept Language="sl" ConceptID="726" Rubric="Osnovne nastavitve" />
+  <Concept Language="sl" ConceptID="727" Rubric="Ime:" />
+  <Concept Language="sl" ConceptID="728" Rubric="Email: " />
+  <Concept Language="sl" ConceptID="729" Rubric="Organizacija:" />
+  <Concept Language="sl" ConceptID="730" Rubric="Obnovi osnovno nastavitev" />
+  <Concept Language="sl" ConceptID="731" Rubric="Pot do repozitorija arhetipov" />
+  <Concept Language="sl" ConceptID="732" Rubric="Vedno samostojno shrani, ko shranjuješ XML datoteko" />
+  <Concept Language="sl" ConceptID="733" Rubric="Pot do repozitorija XML arhetipov" />
+  <Concept Language="sl" ConceptID="734" Rubric="Vedno samostojno shrani, ko shranjuješ ADL datoteko" />
+  <Concept Language="sl" ConceptID="735" Rubric="URL skupnega repozitorija:" />
+  <Concept Language="sl" ConceptID="736" Rubric="Omogoči iskanja na internetu" />
+  <Concept Language="sl" ConceptID="737" Rubric="URL terminoloških storitev:" />
+  <Concept Language="sl" ConceptID="738" Rubric="Omogoči vpogled v terminologijo" />
+  <Concept Language="sl" ConceptID="739" Rubric="Pot XSLT skripte:" />
+  <Concept Language="sl" ConceptID="740" Rubric="Uporabi  XSLT skripte za ustvarjanje HTML " />
+  <Concept Language="sl" ConceptID="741" Rubric="Uporabi vgrajen HTML generator, če nimaš na voljo  XTML skripta." />
+  <Concept Language="sl" ConceptID="742" Rubric="Prikaži terminologijo v HTML formatu" />
+  <Concept Language="sl" ConceptID="743" Rubric="Prikaži komentarje v HTML formatu" />
+  <Concept Language="sl" ConceptID="744" Rubric="Barve končnega avtomata" />
+  <Concept Language="sl" ConceptID="745" Rubric="Pripetljaji:" />
+  <Concept Language="sl" ConceptID="746" Rubric="številčen" />
+  <Concept Language="sl" ConceptID="747" Rubric="besednjaški" />
+  <Concept Language="sl" ConceptID="748" Rubric="Prikažem gumb za povezave?" />
+  <Concept Language="sl" ConceptID="749" Rubric="Osnovni referenčni model:" />
+  <Concept Language="sl" ConceptID="750" Rubric="Analizator" />
+  <Concept Language="sl" ConceptID="751" Rubric="ADL " />
+  <Concept Language="sl" ConceptID="752" Rubric="XML " />
+  <Concept Language="sl" ConceptID="753" Rubric="Interval (v minutah) avtomatskega shranjevanja: " />
+  <Concept Language="sl" ConceptID="754" Rubric="Stopnja (pogostost) spreminjanja" />
+  <Concept Language="sl" ConceptID="755" Rubric="Pristen arhetipni model" />
+  <Concept Language="sl" ConceptID="756" Rubric="Vnesi nov koncept (raba znaka '-' v imenu ni dovoljena)" />
+  <Concept Language="sl" ConceptID="757" Rubric="Prevajalec" />
+  <Concept Language="sl" ConceptID="758" Rubric="Pomen vozlišča v terminologijah" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />

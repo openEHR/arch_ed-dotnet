@@ -2315,7 +2315,8 @@ Public Class Designer
         MenuLanguageAvailable.Text = Filemanager.GetOpenEhrTerm(67, MenuLanguageAvailable.Text, language)
         MenuTerminologyAdd.Text = Filemanager.GetOpenEhrTerm(71, MenuTerminologyAdd.Text, language)
         MenuTerminologyAvailable.Text = Filemanager.GetOpenEhrTerm(70, MenuTerminologyAvailable.Text, language)
-        menuFileExport.Text = Filemanager.GetOpenEhrTerm(681, MenuTerminologyAvailable.Text, language)
+        menuFileExport.Text = Filemanager.GetOpenEhrTerm(681, menuFileExport.Text, language)
+        MenuFileExportCAM.Text = Filemanager.GetOpenEhrTerm(755, MenuFileExportCAM.Text, language)
 
         'Front panel of designer
         lblArchetypeName.Text = Filemanager.GetOpenEhrTerm(58, lblArchetypeName.Text, language)
@@ -3344,8 +3345,8 @@ Public Class Designer
         s = "-"
 
         While InStr(s, "-") > 0
-            Dim prompt As String = AE_Constants.Instance.SpecialisationQuestion(mFileManager.Archetype.Archetype_ID) & Environment.NewLine & Environment.NewLine & "Enter the new concept ('-' is not allowed)."
-            s = Main.Instance.GetInput(prompt, Me)
+            Dim prompt As String = AE_Constants.Instance.SpecialisationQuestion(mFileManager.Archetype.Archetype_ID) & Environment.NewLine & Environment.NewLine
+            s = Main.Instance.GetInput(prompt + Filemanager.GetOpenEhrTerm(756, "Enter the new concept ('-' is not allowed)."), Me)
         End While
 
         If s <> "" Then

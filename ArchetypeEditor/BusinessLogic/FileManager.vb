@@ -513,16 +513,11 @@ Public Class FileManagerLocal
     Public Sub ExportCanonicalArchetypeModel()
         mObjectToSave.PrepareToSave()
         Dim ext As String = "cam"
-        'Dim filter As String = ext & "|" & "*." & ext
-        Dim filter As String = String.Format("Canonical Archetype Model (*.{0})|*.{0}|All files (*.*)|*.*", ext)
-
-        'Dim filename As String = FileNameChosenByUser(ext, filter)
-
+        Dim filter As String = Filemanager.GetOpenEhrTerm(755, "Canonical Archetype Model") + " (*." + ext + ")|*." + ext + "|All files (*.*)|*.*"
         Dim dlg As New SaveFileDialog
         dlg.Filter = filter
         dlg.FileName = Archetype.Archetype_ID.ToString & "." & ext
         dlg.DefaultExt = ext
-        'dlg.AddExtension = True
         dlg.Title = AE_Constants.Instance.MessageBoxCaption
         dlg.ValidateNames = True
         dlg.OverwritePrompt = True
@@ -535,8 +530,8 @@ Public Class FileManagerLocal
             settings.OmitXmlDeclaration = True
             settings.Indent = False
 
-            Dim xmlWriter As System.Xml.XmlWriter
-            xmlWriter = System.Xml.XmlWriter.Create(dlg.FileName, settings)
+            Dim xmlWriter As System.Xml.XmlWriter = System.Xml.XmlWriter.Create(dlg.FileName, settings)
+
             Try
                 XMLParser.OpenEhr.V1.Its.Xml.AM.AmSerializer.Serialize(xmlWriter, canonicalArchetype)
             Finally

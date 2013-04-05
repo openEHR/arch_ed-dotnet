@@ -1099,6 +1099,7 @@ Public Class TabPageDescription
         gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, gbMisuse.Text)
         CopyrightLabel.Text = Filemanager.GetOpenEhrTerm(690, CopyrightLabel.Text)
         gbAuthor.Text = Filemanager.GetOpenEhrTerm(584, gbAuthor.Text)
+        gbTranslator.Text = Filemanager.GetOpenEhrTerm(757, gbTranslator.Text)
         gbContributors.Text = Filemanager.GetOpenEhrTerm(604, gbContributors.Text)
         gbCurrentResponsibility.Text = Filemanager.GetOpenEhrTerm(705, gbCurrentResponsibility.Text)
         lblCurrentContact.Text = Filemanager.GetOpenEhrTerm(704, lblCurrentContact.Text)

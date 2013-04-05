@@ -34,14 +34,15 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents gbAnnotations As System.Windows.Forms.GroupBox
     Friend WithEvents dgAnnotations As System.Windows.Forms.DataGridView
-    Friend WithEvents AnnotationKeyColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents AnnotationvalueColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents gbTerminology As System.Windows.Forms.GroupBox
     Friend WithEvents dgNodeBindings As System.Windows.Forms.DataGridView
+    Friend WithEvents specialiseButton As System.Windows.Forms.Button
     Friend WithEvents TerminologyColumn As System.Windows.Forms.DataGridViewButtonColumn
     Friend WithEvents CodeColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ReleaseColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents PathColumn As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents specialiseButton As System.Windows.Forms.Button
+    Friend WithEvents AnnotationKeyColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents AnnotationValueColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents mOccurrences As OccurrencesPanel
 
     Public Event Specialise(ByVal sender As Object, ByVal e As EventArgs)
@@ -56,7 +57,7 @@ Public Class ArchetypeNodeConstraintControl
         'Add any initialization after the InitializeComponent() call
     End Sub
 
-    Public Sub New(ByVal a_file_manager As FileManagerLocal)
+    Public Sub New(ByVal fileManager As FileManagerLocal)
         MyBase.New()
 
         'This call is required by the Windows Form Designer.
@@ -65,16 +66,14 @@ Public Class ArchetypeNodeConstraintControl
         'Add any initialization after the InitializeComponent() call
 
         mAnnotationsTable = New DataTable
-        Dim keyColumn As New DataColumn("Key", System.Type.GetType("System.String"))
+        Dim keyColumn As New DataColumn("Key", GetType(String))
         mAnnotationsTable.Columns.Add(keyColumn)
-        Dim valueColumn As New DataColumn("Value", System.Type.GetType("System.String"))
+        Dim valueColumn As New DataColumn("Value", GetType(String))
         mAnnotationsTable.Columns.Add(valueColumn)
-
-        dgAnnotations.DataSource = mAnnotationsTable
 
         mIsLoading = True
 
-        mFileManager = a_file_manager
+        mFileManager = fileManager
         mDataView = New DataView(mFileManager.OntologyManager.TermBindingsTable)
 
         mOccurrences = New OccurrencesPanel(mFileManager)
@@ -131,39 +130,40 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents labelAny As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ArchetypeNodeConstraintControl))
-        Me.PanelGenericConstraint = New System.Windows.Forms.Panel
-        Me.PanelDataConstraint = New System.Windows.Forms.Panel
-        Me.labelAny = New System.Windows.Forms.Label
-        Me.PanelAddressable = New System.Windows.Forms.Panel
-        Me.PanelName = New System.Windows.Forms.Panel
-        Me.butSetRuntimeName = New System.Windows.Forms.Button
-        Me.lblRunTimeName = New System.Windows.Forms.Label
-        Me.txtRuntimeName = New System.Windows.Forms.TextBox
-        Me.txtTermDescription = New System.Windows.Forms.TextBox
-        Me.lblDescription = New System.Windows.Forms.Label
-        Me.PanelLower = New System.Windows.Forms.Panel
-        Me.HelpProviderCommonConstraint = New System.Windows.Forms.HelpProvider
-        Me.tabConstraint = New System.Windows.Forms.TabControl
-        Me.tpConstraint = New System.Windows.Forms.TabPage
-        Me.tpConstraintDetails = New System.Windows.Forms.TabPage
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
-        Me.gbAnnotations = New System.Windows.Forms.GroupBox
-        Me.dgAnnotations = New System.Windows.Forms.DataGridView
-        Me.AnnotationKeyColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.AnnotationvalueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.gbTerminology = New System.Windows.Forms.GroupBox
-        Me.dgNodeBindings = New System.Windows.Forms.DataGridView
-        Me.Splitter2 = New System.Windows.Forms.Splitter
-        Me.gbComments = New System.Windows.Forms.GroupBox
-        Me.txtComments = New System.Windows.Forms.TextBox
-        Me.gbNullFlavours = New System.Windows.Forms.GroupBox
-        Me.chkListNull = New System.Windows.Forms.CheckedListBox
-        Me.gbValueSets = New System.Windows.Forms.GroupBox
-        Me.dgValueSets = New System.Windows.Forms.DataGridView
-        Me.TerminologyColumn = New System.Windows.Forms.DataGridViewButtonColumn
-        Me.CodeColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.PathColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.specialiseButton = New System.Windows.Forms.Button
+        Me.PanelGenericConstraint = New System.Windows.Forms.Panel()
+        Me.PanelDataConstraint = New System.Windows.Forms.Panel()
+        Me.labelAny = New System.Windows.Forms.Label()
+        Me.PanelAddressable = New System.Windows.Forms.Panel()
+        Me.PanelName = New System.Windows.Forms.Panel()
+        Me.butSetRuntimeName = New System.Windows.Forms.Button()
+        Me.lblRunTimeName = New System.Windows.Forms.Label()
+        Me.txtRuntimeName = New System.Windows.Forms.TextBox()
+        Me.txtTermDescription = New System.Windows.Forms.TextBox()
+        Me.lblDescription = New System.Windows.Forms.Label()
+        Me.PanelLower = New System.Windows.Forms.Panel()
+        Me.HelpProviderCommonConstraint = New System.Windows.Forms.HelpProvider()
+        Me.tabConstraint = New System.Windows.Forms.TabControl()
+        Me.tpConstraint = New System.Windows.Forms.TabPage()
+        Me.tpConstraintDetails = New System.Windows.Forms.TabPage()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.gbAnnotations = New System.Windows.Forms.GroupBox()
+        Me.dgAnnotations = New System.Windows.Forms.DataGridView()
+        Me.gbTerminology = New System.Windows.Forms.GroupBox()
+        Me.dgNodeBindings = New System.Windows.Forms.DataGridView()
+        Me.TerminologyColumn = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.CodeColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ReleaseColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.PathColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Splitter2 = New System.Windows.Forms.Splitter()
+        Me.gbComments = New System.Windows.Forms.GroupBox()
+        Me.txtComments = New System.Windows.Forms.TextBox()
+        Me.gbNullFlavours = New System.Windows.Forms.GroupBox()
+        Me.chkListNull = New System.Windows.Forms.CheckedListBox()
+        Me.gbValueSets = New System.Windows.Forms.GroupBox()
+        Me.dgValueSets = New System.Windows.Forms.DataGridView()
+        Me.specialiseButton = New System.Windows.Forms.Button()
+        Me.AnnotationKeyColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.AnnotationValueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.PanelDataConstraint.SuspendLayout()
         Me.PanelAddressable.SuspendLayout()
         Me.PanelName.SuspendLayout()
@@ -348,8 +348,8 @@ Public Class ArchetypeNodeConstraintControl
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.gbTerminology)
         Me.SplitContainer1.Panel2MinSize = 60
-        Me.SplitContainer1.Size = New System.Drawing.Size(420, 172)
-        Me.SplitContainer1.SplitterDistance = 103
+        Me.SplitContainer1.Size = New System.Drawing.Size(420, 227)
+        Me.SplitContainer1.SplitterDistance = 135
         Me.SplitContainer1.TabIndex = 1
         '
         'gbAnnotations
@@ -358,7 +358,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbAnnotations.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbAnnotations.Location = New System.Drawing.Point(0, 0)
         Me.gbAnnotations.Name = "gbAnnotations"
-        Me.gbAnnotations.Size = New System.Drawing.Size(420, 103)
+        Me.gbAnnotations.Size = New System.Drawing.Size(420, 135)
         Me.gbAnnotations.TabIndex = 2
         Me.gbAnnotations.TabStop = False
         Me.gbAnnotations.Text = "Annotations"
@@ -367,28 +367,12 @@ Public Class ArchetypeNodeConstraintControl
         'dgAnnotations
         '
         Me.dgAnnotations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgAnnotations.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.AnnotationKeyColumn, Me.AnnotationvalueColumn})
+        Me.dgAnnotations.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.AnnotationKeyColumn, Me.AnnotationValueColumn})
         Me.dgAnnotations.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgAnnotations.Location = New System.Drawing.Point(3, 16)
         Me.dgAnnotations.Name = "dgAnnotations"
-        Me.dgAnnotations.Size = New System.Drawing.Size(414, 84)
+        Me.dgAnnotations.Size = New System.Drawing.Size(414, 116)
         Me.dgAnnotations.TabIndex = 0
-        '
-        'key
-        '
-        Me.AnnotationKeyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.AnnotationKeyColumn.DataPropertyName = "Key"
-        Me.AnnotationKeyColumn.FillWeight = 25.0!
-        Me.AnnotationKeyColumn.HeaderText = "Key"
-        Me.AnnotationKeyColumn.Name = "key"
-        '
-        'valueColumn
-        '
-        Me.AnnotationvalueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.AnnotationvalueColumn.DataPropertyName = "Value"
-        Me.AnnotationvalueColumn.FillWeight = 75.0!
-        Me.AnnotationvalueColumn.HeaderText = "Value"
-        Me.AnnotationvalueColumn.Name = "valueColumn"
         '
         'gbTerminology
         '
@@ -396,7 +380,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbTerminology.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbTerminology.Location = New System.Drawing.Point(0, 0)
         Me.gbTerminology.Name = "gbTerminology"
-        Me.gbTerminology.Size = New System.Drawing.Size(420, 65)
+        Me.gbTerminology.Size = New System.Drawing.Size(420, 88)
         Me.gbTerminology.TabIndex = 3
         Me.gbTerminology.TabStop = False
         Me.gbTerminology.Text = "Node meaning in terminologies"
@@ -404,13 +388,47 @@ Public Class ArchetypeNodeConstraintControl
         'dgNodeBindings
         '
         Me.dgNodeBindings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgNodeBindings.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.TerminologyColumn, Me.CodeColumn, Me.PathColumn})
+        Me.dgNodeBindings.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.TerminologyColumn, Me.CodeColumn, Me.ReleaseColumn, Me.PathColumn})
         Me.dgNodeBindings.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgNodeBindings.Location = New System.Drawing.Point(3, 16)
         Me.dgNodeBindings.Name = "dgNodeBindings"
         Me.dgNodeBindings.RowTemplate.Height = 24
-        Me.dgNodeBindings.Size = New System.Drawing.Size(414, 46)
+        Me.dgNodeBindings.Size = New System.Drawing.Size(414, 69)
         Me.dgNodeBindings.TabIndex = 2
+        '
+        'TerminologyColumn
+        '
+        Me.TerminologyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader
+        Me.TerminologyColumn.FillWeight = 70.0!
+        Me.TerminologyColumn.HeaderText = "Terminology"
+        Me.TerminologyColumn.MinimumWidth = 150
+        Me.TerminologyColumn.Name = "TerminologyColumn"
+        Me.TerminologyColumn.ReadOnly = True
+        Me.TerminologyColumn.Text = ""
+        Me.TerminologyColumn.Width = 150
+        '
+        'CodeColumn
+        '
+        Me.CodeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells
+        Me.CodeColumn.FillWeight = 30.0!
+        Me.CodeColumn.HeaderText = "Code"
+        Me.CodeColumn.MinimumWidth = 20
+        Me.CodeColumn.Name = "CodeColumn"
+        Me.CodeColumn.Width = 57
+        '
+        'ReleaseColumn
+        '
+        Me.ReleaseColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells
+        Me.ReleaseColumn.FillWeight = 30.0!
+        Me.ReleaseColumn.HeaderText = "Release"
+        Me.ReleaseColumn.MinimumWidth = 20
+        Me.ReleaseColumn.Name = "ReleaseColumn"
+        '
+        'PathColumn
+        '
+        Me.PathColumn.HeaderText = "Path"
+        Me.PathColumn.Name = "PathColumn"
+        Me.PathColumn.Visible = False
         '
         'Splitter2
         '
@@ -460,7 +478,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.chkListNull.FormattingEnabled = True
         Me.chkListNull.Location = New System.Drawing.Point(3, 16)
         Me.chkListNull.Name = "chkListNull"
-        Me.chkListNull.Size = New System.Drawing.Size(414, 79)
+        Me.chkListNull.Size = New System.Drawing.Size(414, 91)
         Me.chkListNull.TabIndex = 0
         '
         'gbValueSets
@@ -485,43 +503,33 @@ Public Class ArchetypeNodeConstraintControl
         Me.dgValueSets.Size = New System.Drawing.Size(414, 34)
         Me.dgValueSets.TabIndex = 3
         '
-        'TerminologyColumn
-        '
-        Me.TerminologyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader
-        Me.TerminologyColumn.FillWeight = 70.0!
-        Me.TerminologyColumn.HeaderText = "Terminology"
-        Me.TerminologyColumn.MinimumWidth = 150
-        Me.TerminologyColumn.Name = "TerminologyColumn"
-        Me.TerminologyColumn.ReadOnly = True
-        Me.TerminologyColumn.Text = ""
-        Me.TerminologyColumn.Width = 150
-        '
-        'CodeColumn
-        '
-        Me.CodeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells
-        Me.CodeColumn.FillWeight = 30.0!
-        Me.CodeColumn.HeaderText = "Code"
-        Me.CodeColumn.MinimumWidth = 20
-        Me.CodeColumn.Name = "CodeColumn"
-        Me.CodeColumn.Width = 57
-        '
-        'PathColumn
-        '
-        Me.PathColumn.HeaderText = "Path"
-        Me.PathColumn.Name = "PathColumn"
-        Me.PathColumn.Visible = False
-        '
         'specialiseButton
         '
         Me.specialiseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.specialiseButton.Image = CType(resources.GetObject("specialiseButton.Image"), System.Drawing.Image)
-        Me.specialiseButton.ImageAlign = ContentAlignment.MiddleLeft
+        Me.specialiseButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.specialiseButton.Location = New System.Drawing.Point(284, 0)
         Me.specialiseButton.Name = "specialiseButton"
         Me.specialiseButton.Size = New System.Drawing.Size(140, 20)
         Me.specialiseButton.TabIndex = 0
         Me.specialiseButton.Text = "Specialise..."
         Me.specialiseButton.UseVisualStyleBackColor = True
+        '
+        'AnnotationKeyColumn
+        '
+        Me.AnnotationKeyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.AnnotationKeyColumn.DataPropertyName = "Key"
+        Me.AnnotationKeyColumn.FillWeight = 25.0!
+        Me.AnnotationKeyColumn.HeaderText = "Key"
+        Me.AnnotationKeyColumn.Name = "AnnotationKeyColumn"
+        '
+        'AnnotationValueColumn
+        '
+        Me.AnnotationValueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.AnnotationValueColumn.DataPropertyName = "Value"
+        Me.AnnotationValueColumn.FillWeight = 75.0!
+        Me.AnnotationValueColumn.HeaderText = "Value"
+        Me.AnnotationValueColumn.Name = "AnnotationValueColumn"
         '
         'ArchetypeNodeConstraintControl
         '
@@ -587,9 +595,13 @@ Public Class ArchetypeNodeConstraintControl
         tpConstraintDetails.Text = Filemanager.GetOpenEhrTerm(581, tpConstraintDetails.Text)
         TerminologyColumn.HeaderText = Filemanager.GetOpenEhrTerm(47, TerminologyColumn.HeaderText)
         CodeColumn.HeaderText = Filemanager.GetOpenEhrTerm(90, CodeColumn.HeaderText)
+        ReleaseColumn.HeaderText = Filemanager.GetOpenEhrTerm(97, ReleaseColumn.HeaderText)
         AnnotationKeyColumn.HeaderText = Filemanager.GetOpenEhrTerm(696, AnnotationKeyColumn.HeaderText)
-        AnnotationvalueColumn.HeaderText = Filemanager.GetOpenEhrTerm(697, AnnotationvalueColumn.HeaderText)
+        AnnotationValueColumn.HeaderText = Filemanager.GetOpenEhrTerm(697, AnnotationValueColumn.HeaderText)
+        gbComments.Text = Filemanager.GetOpenEhrTerm(652, gbComments.Text)
         gbAnnotations.Text = Filemanager.GetOpenEhrTerm(698, gbAnnotations.Text)
+        gbTerminology.Text = Filemanager.GetOpenEhrTerm(758, gbTerminology.Text)
+        gbNullFlavours.Text = Filemanager.GetOpenEhrTerm(759, gbNullFlavours.Text)
     End Sub
 
     Public Sub ShowConstraint(ByVal isSingle As Boolean, ByVal isState As Boolean, ByVal isMandatory As Boolean, ByVal node As ArchetypeNode, ByVal fileManager As FileManagerLocal)
@@ -888,8 +900,13 @@ Public Class ArchetypeNodeConstraintControl
     Private Sub ArchetypeNodeConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         TerminologyColumn.DataPropertyName = "Terminology"
         CodeColumn.DataPropertyName = "Code"
+        ReleaseColumn.DataPropertyName = "Release"
         PathColumn.DataPropertyName = "Path"
         dgNodeBindings.DataSource = mDataView
+
+        AnnotationKeyColumn.DataPropertyName = "Key"
+        AnnotationValueColumn.DataPropertyName = "Value"
+        dgAnnotations.DataSource = mAnnotationsTable
     End Sub
 
     Private Sub termLookUp_TermChanged(ByVal sender As System.Object, ByVal e As EventArgs) Handles termLookUp.TermChanged
