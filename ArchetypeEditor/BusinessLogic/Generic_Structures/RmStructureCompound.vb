@@ -139,9 +139,7 @@ Public Class RmStructureCompound
     End Sub
 
     Private Sub ProcessSimple(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        Dim i As Integer
-
-        For i = 1 To ObjNode.attributes.count
+        For i As Integer = 1 To ObjNode.attributes.count
             Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
             Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
@@ -165,18 +163,15 @@ Public Class RmStructureCompound
     End Sub
 
     Protected Sub ProcessTree(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-
         If ObjNode.has_attribute(Eiffel.String("items")) Then
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim i As Integer
-
-            an_attribute = ObjNode.c_attribute_at_path(Eiffel.String("items"))
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = ObjNode.c_attribute_at_path(Eiffel.String("items"))
 
             ArchetypeEditor.ADL_Classes.ADL_Tools.SetCardinality(an_attribute.cardinality, colChildren)
             ArchetypeEditor.ADL_Classes.ADL_Tools.SetExistence(an_attribute.existence, colChildren) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
-            For i = 1 To an_attribute.children.count
+            For i As Integer = 1 To an_attribute.children.count
                 Dim a_ComplexObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+
                 Select Case CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT).generating_type.to_cil.ToUpperInvariant()
                     Case "C_COMPLEX_OBJECT"
                         a_ComplexObject = CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -197,14 +192,12 @@ Public Class RmStructureCompound
                 End Select
             Next
         End If
-
     End Sub
 
     Private Sub ProcessData(ByVal data_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_filemanager As FileManagerLocal)
-        Dim i As Integer
         Dim structure_type As StructureType
 
-        For i = 1 To data_rel_node.children.count
+        For i As Integer = 1 To data_rel_node.children.count
             Dim ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT = CType(data_rel_node.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT)
             structure_type = ReferenceModel.StructureTypeFromString(ObjNode.rm_type_name.to_cil)
 
@@ -222,8 +215,7 @@ Public Class RmStructureCompound
                         Case StructureType.ISM_TRANSITION, StructureType.CarePathwayStep
                             'need to get the node_id from the workflow step to get the text displayed
                             'make sure there is a valid node_id for the careflow_step
-                            Dim eif_string As EiffelKernel.STRING_8
-                            eif_string = Eiffel.String("careflow_step")
+                            Dim eif_string As EiffelKernel.STRING_8 = Eiffel.String("careflow_step")
 
                             'EDT-584
                             If ObjNode.node_id.to_cil = "unknown" Then
@@ -236,10 +228,9 @@ Public Class RmStructureCompound
                                 Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(eif_string)
 
                                 If Not attribute Is Nothing AndAlso attribute.has_children Then
-                                    Dim node_id As String
                                     Dim codedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
                                     Dim t As Constraint_Text = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(codedText)
-                                    node_id = t.AllowableValues.FirstCode
+                                    Dim node_id As String = t.AllowableValues.FirstCode
 
                                     If RmTerm.IsValidTermCode(node_id) Then
                                         colChildren.Add(New RmPathwayStep(node_id, CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
@@ -414,11 +405,10 @@ Public Class RmStructureCompound
                                 End If
 
                                 For Each attribute As XMLParser.C_ATTRIBUTE In CType(ObjNode, XMLParser.C_COMPLEX_OBJECT).attributes
-                                    If attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "careflow_step" Then
-                                        Dim node_id As String
+                                    If attribute.rm_attribute_name.ToLowerInvariant = "careflow_step" Then
                                         Dim codedText As XMLParser.C_COMPLEX_OBJECT = CType(attribute.children(0), XMLParser.C_COMPLEX_OBJECT)
                                         Dim t As Constraint_Text = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(codedText)
-                                        node_id = t.AllowableValues.FirstCode
+                                        Dim node_id As String = t.AllowableValues.FirstCode
 
                                         If RmTerm.IsValidTermCode(node_id) Then
                                             colChildren.Add(New RmPathwayStep(node_id, CType(ObjNode, XMLParser.C_COMPLEX_OBJECT)))
@@ -438,7 +428,6 @@ Public Class RmStructureCompound
                     Case "xmlparser.archetype_slot"
                         colChildren.Add(New RmSlot(CType(ObjNode, XMLParser.ARCHETYPE_SLOT)))
                 End Select
-
             Next
         Catch ex As Exception
             Debug.Assert(True)

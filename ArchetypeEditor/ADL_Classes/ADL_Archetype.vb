@@ -1537,11 +1537,12 @@ Namespace ArchetypeEditor.ADL_Classes
             a_state = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("current_state"))
             code_phrase.TerminologyID = "openehr"
             code_phrase.Codes.Add((CInt(rm.StateType)).ToString)
+
             If rm.HasAlternativeState Then
                 code_phrase.Codes.Add(CInt(rm.AlternativeState).ToString)
             End If
-            BuildCodedTextInternal(a_state, code_phrase, "")
 
+            BuildCodedTextInternal(a_state, code_phrase, "")
             a_step = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("careflow_step"))
             code_phrase = New CodePhrase
             code_phrase.Codes.Add(rm.NodeId)  ' local is default terminology, node_id of rm is same as term code of name

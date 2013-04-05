@@ -749,8 +749,6 @@
   <PrimaryRubric Id="673" Language="en" />
   <PrimaryRubric Id="674" Language="en" />
   <PrimaryRubric Id="675" Language="en" />
-  <PrimaryRubric Id="676" Language="en" />
-  <PrimaryRubric Id="677" Language="en" />
   <PrimaryRubric Id="678" Language="en" />
   <PrimaryRubric Id="679" Language="en" />
   <PrimaryRubric Id="680" Language="en" />
@@ -1440,8 +1438,6 @@
   <Concept Language="en" ConceptID="673" Rubric="Item" />
   <Concept Language="en" ConceptID="674" Rubric="Care entry" />
   <Concept Language="en" ConceptID="675" Rubric="Name this Slot" />
-  <Concept Language="en" ConceptID="676" Rubric="Transition" />
-  <Concept Language="en" ConceptID="677" Rubric="Allow transition to" />
   <Concept Language="en" ConceptID="678" Rubric="Allow an alternative state for this action" />
   <Concept Language="en" ConceptID="679" Rubric="Alternative state" />
   <Concept Language="en" ConceptID="680" Rubric="File {0} already exists. Do you want to replace it?" />
@@ -2708,8 +2704,6 @@
   <Concept Language="de" ConceptID="673" Rubric="Item" />
   <Concept Language="de" ConceptID="674" Rubric="Versorgungseintrag (Care entry)" />
   <Concept Language="de" ConceptID="675" Rubric="Diesen Slot bennenen" />
-  <Concept Language="de" ConceptID="676" Rubric="Übergang" />
-  <Concept Language="de" ConceptID="677" Rubric="Erlaube Übergang nach " />
   <Concept Language="de" ConceptID="678" Rubric="Alternativen Status für diese Aktion erlauben" />
   <Concept Language="de" ConceptID="681" Rubric="Exportieren" />
   <Concept Language="de" ConceptID="691" Rubric="Referenzen" />
@@ -4370,8 +4364,6 @@
   <Concept Language="ja" ConceptID="673" Rubric="アイテム" />
   <Concept Language="ja" ConceptID="674" Rubric="ケアエントリ" />
   <Concept Language="ja" ConceptID="675" Rubric="このスロットに名前を付ける" />
-  <Concept Language="ja" ConceptID="676" Rubric="繊維" />
-  <Concept Language="ja" ConceptID="677" Rubric="遷移を認める" />
   <Concept Language="ja" ConceptID="678" Rubric="このアクションに対する代替状態を認める" />
   <Concept Language="ja" ConceptID="679" Rubric="代替状態" />
   <Concept Language="ja" ConceptID="680" Rubric="{0} ファイルはすでに存在します。上書きしますか？" />
@@ -6515,8 +6507,6 @@
   <Concept Language="ru" ConceptID="673" Rubric="Пункт" />
   <Concept Language="ru" ConceptID="674" Rubric="Уход за вступление" />
   <Concept Language="ru" ConceptID="675" Rubric="Назовите этот слот" />
-  <Concept Language="ru" ConceptID="676" Rubric="Переход" />
-  <Concept Language="ru" ConceptID="677" Rubric="Разрешить переход к" />
   <Concept Language="ru" ConceptID="678" Rubric="Разрешить альтернативные состояние для этого действия" />
   <Concept Language="ru" ConceptID="679" Rubric="Альтернативные состояния" />
   <Concept Language="ru" ConceptID="680" Rubric="Файл {0} уже существует. Хотите заменить его?" />
@@ -7156,8 +7146,6 @@
   <Concept Language="sl" ConceptID="673" Rubric="Predmet" />
   <Concept Language="sl" ConceptID="674" Rubric="Začetek nege" />
   <Concept Language="sl" ConceptID="675" Rubric="Imenuj ta nastavek" />
-  <Concept Language="sl" ConceptID="676" Rubric="Prehod" />
-  <Concept Language="sl" ConceptID="677" Rubric="Dovoli prehod v" />
   <Concept Language="sl" ConceptID="678" Rubric="Dovoli drugačno stanje za to dejanje" />
   <Concept Language="sl" ConceptID="679" Rubric="Drugačno stanje" />
   <Concept Language="sl" ConceptID="680" Rubric="Datoteka {0} že obstaja. Ali jo želiš nadomestiti?" />

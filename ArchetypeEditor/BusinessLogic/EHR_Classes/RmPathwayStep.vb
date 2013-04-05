@@ -13,8 +13,6 @@ Public Class RmPathwayStep
 
     Private mStateType As StateMachineType = StateMachineType.Not_Set
     Private mAlternativeState As StateMachineType
-    Private mAbortAllowed As Boolean
-    Private mSuspendAllowed As Boolean
 
     Property StateType() As StateMachineType
         Get
@@ -40,53 +38,16 @@ Public Class RmPathwayStep
         End Set
     End Property
 
-    Property AbortAllowed() As Boolean
-        Get
-            Return mAbortAllowed
-        End Get
-        Set(ByVal value As Boolean)
-            Debug.Assert(Not value Or mStateType = StateMachineType.Active Or mStateType = StateMachineType.Planned)
-            mAbortAllowed = value
-        End Set
-    End Property
-
-    Property SuspendAllowed() As Boolean
-        Get
-            Return mSuspendAllowed
-        End Get
-        Set(ByVal value As Boolean)
-            Debug.Assert(Not value Or mStateType = StateMachineType.Active Or mStateType = StateMachineType.Planned)
-            mSuspendAllowed = value
-        End Set
-    End Property
-
     Sub New(ByVal nodeID As String, ByVal stateType As StateMachineType)
         MyBase.New(nodeID, StructureType.CarePathwayStep)
         mStateType = stateType
     End Sub
 
-    Sub New(ByVal nodeID As String, ByVal EIF_PathwayStep As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Sub New(ByVal nodeID As String, ByVal pathwayStep As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         MyBase.New(nodeID, StructureType.CarePathwayStep)
-        ProcessPathwayStep(EIF_PathwayStep)
-    End Sub
 
-    Sub New(ByVal nodeID As String, ByVal XML_PathwayStep As XMLParser.C_COMPLEX_OBJECT)
-        MyBase.New(nodeID, StructureType.CarePathwayStep)
-        ProcessPathwayStep(XML_PathwayStep)
-    End Sub
-
-    Overrides Function Copy() As RmStructure
-        Dim result As New RmPathwayStep(NodeId, StateType)
-        result.AlternativeState = AlternativeState
-        result.AbortAllowed = AbortAllowed
-        result.SuspendAllowed = SuspendAllowed
-        result.Occurrences = Occurrences.Copy()
-        Return result
-    End Function
-
-    Sub ProcessPathwayStep(ByVal EIF_Step As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        For i As Integer = 1 To EIF_Step.attributes.count
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = EIF_Step.attributes.i_th(i)
+        For i As Integer = 1 To pathwayStep.attributes.count
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = pathwayStep.attributes.i_th(i)
 
             If attribute.has_children Then
                 Dim codedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -105,16 +66,18 @@ Public Class RmPathwayStep
                     Case "careflow_step"
                         'No action now as atcode is set for RmPathwayStep and reproduced here
                     Case Else
-                        Debug.Assert(False, EIF_Step.rm_type_name.to_cil & " not handled")
+                        Debug.Assert(False, pathwayStep.rm_type_name.to_cil & " not handled")
                 End Select
             End If
         Next
     End Sub
 
-    Private Sub ProcessPathwayStep(ByVal XML_Step As XMLParser.C_COMPLEX_OBJECT)
+    Sub New(ByVal nodeID As String, ByVal pathwayStep As XMLParser.C_COMPLEX_OBJECT)
+        MyBase.New(nodeID, StructureType.CarePathwayStep)
+
         Dim attribute As XMLParser.C_ATTRIBUTE
 
-        For Each attribute In XML_Step.attributes
+        For Each attribute In pathwayStep.attributes
             Dim codedText As XMLParser.C_COMPLEX_OBJECT = CType(attribute.children(0), XMLParser.C_COMPLEX_OBJECT)
 
             Select Case attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
@@ -131,10 +94,17 @@ Public Class RmPathwayStep
                 Case "careflow_step"
                     'No action now as atcode is set for RmPathwayStep and reproduced here
                 Case Else
-                    Debug.Assert(False, XML_Step.rm_type_name & " not handled")
+                    Debug.Assert(False, pathwayStep.rm_type_name & " not handled")
             End Select
         Next
     End Sub
+
+    Overrides Function Copy() As RmStructure
+        Dim result As New RmPathwayStep(NodeId, StateType)
+        result.AlternativeState = AlternativeState
+        result.Occurrences = Occurrences.Copy()
+        Return result
+    End Function
 
 End Class
 

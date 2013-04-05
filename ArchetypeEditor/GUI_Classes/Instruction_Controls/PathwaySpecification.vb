@@ -16,6 +16,9 @@ Public Class PathwaySpecification
     Private WithEvents mPathwayEvent As PathwayEvent
     Private mIsloading As Boolean
     Friend WithEvents specialiseButton As System.Windows.Forms.Button
+    Friend WithEvents AlternativeStateGroupBox As System.Windows.Forms.GroupBox
+    Friend WithEvents cbAlternativeState As System.Windows.Forms.CheckBox
+    Friend WithEvents lblAllowAltState As System.Windows.Forms.Label
     Private mFileManager As FileManagerLocal
     Public Event StructureChanged(ByVal sender As Object, ByVal a_structure As StructureType)
 
@@ -53,11 +56,7 @@ Public Class PathwaySpecification
     Friend WithEvents PanelRight As System.Windows.Forms.Panel
     Friend WithEvents gbCompleted As System.Windows.Forms.GroupBox
     Friend WithEvents PanelCompleted As System.Windows.Forms.Panel
-    Friend WithEvents PanelRightBottom As System.Windows.Forms.Panel
-    Friend WithEvents tabProperties As System.Windows.Forms.TabControl
-    Friend WithEvents cbAborted As System.Windows.Forms.CheckBox
-    Friend WithEvents cbSuspended As System.Windows.Forms.CheckBox
-    Friend WithEvents cbAlternativeState As System.Windows.Forms.CheckBox
+    Friend WithEvents AlternativeStatePanel As System.Windows.Forms.Panel
     Friend WithEvents PanelRightTop As System.Windows.Forms.Panel
     Friend WithEvents SplitterRight As System.Windows.Forms.Splitter
     Friend WithEvents gbSuspended As System.Windows.Forms.GroupBox
@@ -95,74 +94,62 @@ Public Class PathwaySpecification
     Friend WithEvents PanelCompletedSpacer As System.Windows.Forms.Panel
     Friend WithEvents PanelLeft As System.Windows.Forms.Panel
     Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
-    Friend WithEvents lblAllowTransition As System.Windows.Forms.Label
-    Friend WithEvents lblAllowAltState As System.Windows.Forms.Label
-    Friend WithEvents tpTransition As System.Windows.Forms.TabPage
-    Friend WithEvents tpState As System.Windows.Forms.TabPage
     Friend WithEvents gbScheduled As System.Windows.Forms.GroupBox
     Friend WithEvents PanelScheduled As System.Windows.Forms.Panel
     Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PathwaySpecification))
-        Me.PanelRight = New System.Windows.Forms.Panel
-        Me.gbCompleted = New System.Windows.Forms.GroupBox
-        Me.PanelCompleted = New System.Windows.Forms.Panel
-        Me.ContextMenuState = New System.Windows.Forms.ContextMenu
-        Me.MenuAdd = New System.Windows.Forms.MenuItem
-        Me.PanelRightBottom = New System.Windows.Forms.Panel
-        Me.tabProperties = New System.Windows.Forms.TabControl
-        Me.tpTransition = New System.Windows.Forms.TabPage
-        Me.lblAllowTransition = New System.Windows.Forms.Label
-        Me.cbAborted = New System.Windows.Forms.CheckBox
-        Me.cbSuspended = New System.Windows.Forms.CheckBox
-        Me.tpState = New System.Windows.Forms.TabPage
-        Me.lblAllowAltState = New System.Windows.Forms.Label
-        Me.cbAlternativeState = New System.Windows.Forms.CheckBox
-        Me.PanelRightTop = New System.Windows.Forms.Panel
-        Me.specialiseButton = New System.Windows.Forms.Button
-        Me.SplitterRight = New System.Windows.Forms.Splitter
-        Me.gbSuspended = New System.Windows.Forms.GroupBox
-        Me.gbSuspendedActive = New System.Windows.Forms.GroupBox
-        Me.PanelSuspendActive = New System.Windows.Forms.Panel
-        Me.gbTop = New System.Windows.Forms.GroupBox
-        Me.gbSuspendedInitial = New System.Windows.Forms.GroupBox
-        Me.PanelSuspendInitial = New System.Windows.Forms.Panel
-        Me.gbAborted = New System.Windows.Forms.GroupBox
-        Me.gbAbortedActive = New System.Windows.Forms.GroupBox
-        Me.PanelAbortActive = New System.Windows.Forms.Panel
-        Me.gbBottom = New System.Windows.Forms.GroupBox
-        Me.gbAbortedInitial = New System.Windows.Forms.GroupBox
-        Me.PanelAbortInitial = New System.Windows.Forms.Panel
-        Me.PanelMiddle = New System.Windows.Forms.Panel
-        Me.gbActive = New System.Windows.Forms.GroupBox
-        Me.PanelActive = New System.Windows.Forms.Panel
-        Me.Splitter2 = New System.Windows.Forms.Splitter
-        Me.gbScheduled = New System.Windows.Forms.GroupBox
-        Me.PanelScheduled = New System.Windows.Forms.Panel
-        Me.Splitter1 = New System.Windows.Forms.Splitter
-        Me.PanelLeft = New System.Windows.Forms.Panel
-        Me.gbPlanned = New System.Windows.Forms.GroupBox
-        Me.PanelPlanned = New System.Windows.Forms.Panel
-        Me.PanelSpacer = New System.Windows.Forms.Panel
-        Me.pbPlannedToActive = New System.Windows.Forms.PictureBox
-        Me.PanelCompletedSpacer = New System.Windows.Forms.Panel
-        Me.pbActiveToCompleted = New System.Windows.Forms.PictureBox
-        Me.panelBottomSpacer = New System.Windows.Forms.Panel
-        Me.pbPlannedBottomDown = New System.Windows.Forms.PictureBox
-        Me.pbActiveBottomDown = New System.Windows.Forms.PictureBox
-        Me.panelTopSpacer = New System.Windows.Forms.Panel
-        Me.pbPlannedTopDown = New System.Windows.Forms.PictureBox
-        Me.pbPlannedTopUp = New System.Windows.Forms.PictureBox
-        Me.pbActiveTopDown = New System.Windows.Forms.PictureBox
-        Me.pbActiveTopUp = New System.Windows.Forms.PictureBox
-        Me.SplitterTop = New System.Windows.Forms.Splitter
-        Me.SplitterBottom = New System.Windows.Forms.Splitter
+        Me.PanelRight = New System.Windows.Forms.Panel()
+        Me.gbCompleted = New System.Windows.Forms.GroupBox()
+        Me.PanelCompleted = New System.Windows.Forms.Panel()
+        Me.ContextMenuState = New System.Windows.Forms.ContextMenu()
+        Me.MenuAdd = New System.Windows.Forms.MenuItem()
+        Me.AlternativeStatePanel = New System.Windows.Forms.Panel()
+        Me.PanelRightTop = New System.Windows.Forms.Panel()
+        Me.specialiseButton = New System.Windows.Forms.Button()
+        Me.SplitterRight = New System.Windows.Forms.Splitter()
+        Me.gbSuspended = New System.Windows.Forms.GroupBox()
+        Me.gbSuspendedActive = New System.Windows.Forms.GroupBox()
+        Me.PanelSuspendActive = New System.Windows.Forms.Panel()
+        Me.gbTop = New System.Windows.Forms.GroupBox()
+        Me.gbSuspendedInitial = New System.Windows.Forms.GroupBox()
+        Me.PanelSuspendInitial = New System.Windows.Forms.Panel()
+        Me.gbAborted = New System.Windows.Forms.GroupBox()
+        Me.gbAbortedActive = New System.Windows.Forms.GroupBox()
+        Me.PanelAbortActive = New System.Windows.Forms.Panel()
+        Me.gbBottom = New System.Windows.Forms.GroupBox()
+        Me.gbAbortedInitial = New System.Windows.Forms.GroupBox()
+        Me.PanelAbortInitial = New System.Windows.Forms.Panel()
+        Me.PanelMiddle = New System.Windows.Forms.Panel()
+        Me.gbActive = New System.Windows.Forms.GroupBox()
+        Me.PanelActive = New System.Windows.Forms.Panel()
+        Me.Splitter2 = New System.Windows.Forms.Splitter()
+        Me.gbScheduled = New System.Windows.Forms.GroupBox()
+        Me.PanelScheduled = New System.Windows.Forms.Panel()
+        Me.Splitter1 = New System.Windows.Forms.Splitter()
+        Me.PanelLeft = New System.Windows.Forms.Panel()
+        Me.gbPlanned = New System.Windows.Forms.GroupBox()
+        Me.PanelPlanned = New System.Windows.Forms.Panel()
+        Me.PanelSpacer = New System.Windows.Forms.Panel()
+        Me.pbPlannedToActive = New System.Windows.Forms.PictureBox()
+        Me.PanelCompletedSpacer = New System.Windows.Forms.Panel()
+        Me.pbActiveToCompleted = New System.Windows.Forms.PictureBox()
+        Me.panelBottomSpacer = New System.Windows.Forms.Panel()
+        Me.pbPlannedBottomDown = New System.Windows.Forms.PictureBox()
+        Me.pbActiveBottomDown = New System.Windows.Forms.PictureBox()
+        Me.panelTopSpacer = New System.Windows.Forms.Panel()
+        Me.pbPlannedTopDown = New System.Windows.Forms.PictureBox()
+        Me.pbPlannedTopUp = New System.Windows.Forms.PictureBox()
+        Me.pbActiveTopDown = New System.Windows.Forms.PictureBox()
+        Me.pbActiveTopUp = New System.Windows.Forms.PictureBox()
+        Me.SplitterTop = New System.Windows.Forms.Splitter()
+        Me.SplitterBottom = New System.Windows.Forms.Splitter()
+        Me.AlternativeStateGroupBox = New System.Windows.Forms.GroupBox()
+        Me.lblAllowAltState = New System.Windows.Forms.Label()
+        Me.cbAlternativeState = New System.Windows.Forms.CheckBox()
         Me.PanelRight.SuspendLayout()
         Me.gbCompleted.SuspendLayout()
-        Me.PanelRightBottom.SuspendLayout()
-        Me.tabProperties.SuspendLayout()
-        Me.tpTransition.SuspendLayout()
-        Me.tpState.SuspendLayout()
+        Me.AlternativeStatePanel.SuspendLayout()
         Me.PanelRightTop.SuspendLayout()
         Me.gbSuspended.SuspendLayout()
         Me.gbSuspendedActive.SuspendLayout()
@@ -187,12 +174,13 @@ Public Class PathwaySpecification
         CType(Me.pbPlannedTopUp, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbActiveTopDown, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbActiveTopUp, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.AlternativeStateGroupBox.SuspendLayout()
         Me.SuspendLayout()
         '
         'PanelRight
         '
         Me.PanelRight.Controls.Add(Me.gbCompleted)
-        Me.PanelRight.Controls.Add(Me.PanelRightBottom)
+        Me.PanelRight.Controls.Add(Me.AlternativeStatePanel)
         Me.PanelRight.Controls.Add(Me.PanelRightTop)
         Me.PanelRight.Dock = System.Windows.Forms.DockStyle.Right
         Me.PanelRight.Location = New System.Drawing.Point(808, 0)
@@ -233,93 +221,14 @@ Public Class PathwaySpecification
         Me.MenuAdd.Index = 0
         Me.MenuAdd.Text = "Add Machine State"
         '
-        'PanelRightBottom
+        'AlternativeStatePanel
         '
-        Me.PanelRightBottom.Controls.Add(Me.tabProperties)
-        Me.PanelRightBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelRightBottom.Location = New System.Drawing.Point(0, 468)
-        Me.PanelRightBottom.Name = "PanelRightBottom"
-        Me.PanelRightBottom.Size = New System.Drawing.Size(160, 148)
-        Me.PanelRightBottom.TabIndex = 2
-        '
-        'tabProperties
-        '
-        Me.tabProperties.Controls.Add(Me.tpTransition)
-        Me.tabProperties.Controls.Add(Me.tpState)
-        Me.tabProperties.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tabProperties.Location = New System.Drawing.Point(0, 0)
-        Me.tabProperties.Multiline = True
-        Me.tabProperties.Name = "tabProperties"
-        Me.tabProperties.SelectedIndex = 0
-        Me.tabProperties.Size = New System.Drawing.Size(160, 148)
-        Me.tabProperties.TabIndex = 0
-        Me.tabProperties.Visible = False
-        '
-        'tpTransition
-        '
-        Me.tpTransition.Controls.Add(Me.lblAllowTransition)
-        Me.tpTransition.Controls.Add(Me.cbAborted)
-        Me.tpTransition.Controls.Add(Me.cbSuspended)
-        Me.tpTransition.Location = New System.Drawing.Point(4, 22)
-        Me.tpTransition.Name = "tpTransition"
-        Me.tpTransition.Size = New System.Drawing.Size(152, 122)
-        Me.tpTransition.TabIndex = 0
-        Me.tpTransition.Text = "Transition"
-        '
-        'lblAllowTransition
-        '
-        Me.lblAllowTransition.Dock = System.Windows.Forms.DockStyle.Top
-        Me.lblAllowTransition.Location = New System.Drawing.Point(0, 0)
-        Me.lblAllowTransition.Name = "lblAllowTransition"
-        Me.lblAllowTransition.Size = New System.Drawing.Size(152, 32)
-        Me.lblAllowTransition.TabIndex = 3
-        Me.lblAllowTransition.Text = "Allow transition to:"
-        '
-        'cbAborted
-        '
-        Me.cbAborted.Location = New System.Drawing.Point(24, 62)
-        Me.cbAborted.Name = "cbAborted"
-        Me.cbAborted.Size = New System.Drawing.Size(125, 24)
-        Me.cbAborted.TabIndex = 2
-        Me.cbAborted.Text = "Aborted"
-        Me.cbAborted.Visible = False
-        '
-        'cbSuspended
-        '
-        Me.cbSuspended.Location = New System.Drawing.Point(24, 30)
-        Me.cbSuspended.Name = "cbSuspended"
-        Me.cbSuspended.Size = New System.Drawing.Size(125, 32)
-        Me.cbSuspended.TabIndex = 1
-        Me.cbSuspended.Text = "Suspended"
-        Me.cbSuspended.Visible = False
-        '
-        'tpState
-        '
-        Me.tpState.Controls.Add(Me.lblAllowAltState)
-        Me.tpState.Controls.Add(Me.cbAlternativeState)
-        Me.tpState.Location = New System.Drawing.Point(4, 22)
-        Me.tpState.Name = "tpState"
-        Me.tpState.Size = New System.Drawing.Size(152, 122)
-        Me.tpState.TabIndex = 1
-        Me.tpState.Text = "State"
-        Me.tpState.Visible = False
-        '
-        'lblAllowAltState
-        '
-        Me.lblAllowAltState.Dock = System.Windows.Forms.DockStyle.Top
-        Me.lblAllowAltState.Location = New System.Drawing.Point(0, 0)
-        Me.lblAllowAltState.Name = "lblAllowAltState"
-        Me.lblAllowAltState.Size = New System.Drawing.Size(152, 32)
-        Me.lblAllowAltState.TabIndex = 2
-        Me.lblAllowAltState.Text = "Allow alternative state for this action."
-        '
-        'cbAlternativeState
-        '
-        Me.cbAlternativeState.Location = New System.Drawing.Point(24, 40)
-        Me.cbAlternativeState.Name = "cbAlternativeState"
-        Me.cbAlternativeState.Size = New System.Drawing.Size(192, 32)
-        Me.cbAlternativeState.TabIndex = 1
-        Me.cbAlternativeState.Text = "Alternative state"
+        Me.AlternativeStatePanel.Controls.Add(Me.AlternativeStateGroupBox)
+        Me.AlternativeStatePanel.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.AlternativeStatePanel.Location = New System.Drawing.Point(0, 468)
+        Me.AlternativeStatePanel.Name = "AlternativeStatePanel"
+        Me.AlternativeStatePanel.Size = New System.Drawing.Size(160, 148)
+        Me.AlternativeStatePanel.TabIndex = 2
         '
         'PanelRightTop
         '
@@ -333,7 +242,7 @@ Public Class PathwaySpecification
         'specialiseButton
         '
         Me.specialiseButton.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.specialiseButton.Image = CType(resources.GetObject("specialiseButton.Image"), System.Drawing.Image)
         Me.specialiseButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.specialiseButton.Location = New System.Drawing.Point(5, 5)
@@ -726,6 +635,38 @@ Public Class PathwaySpecification
         Me.SplitterBottom.TabIndex = 3
         Me.SplitterBottom.TabStop = False
         '
+        'AlternativeStateGroupBox
+        '
+        Me.AlternativeStateGroupBox.Controls.Add(Me.cbAlternativeState)
+        Me.AlternativeStateGroupBox.Controls.Add(Me.lblAllowAltState)
+        Me.AlternativeStateGroupBox.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AlternativeStateGroupBox.Location = New System.Drawing.Point(0, 0)
+        Me.AlternativeStateGroupBox.Name = "AlternativeStateGroupBox"
+        Me.AlternativeStateGroupBox.Size = New System.Drawing.Size(160, 148)
+        Me.AlternativeStateGroupBox.TabIndex = 4
+        Me.AlternativeStateGroupBox.TabStop = False
+        Me.AlternativeStateGroupBox.Visible = False
+        '
+        'lblAllowAltState
+        '
+        Me.lblAllowAltState.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblAllowAltState.Location = New System.Drawing.Point(6, 14)
+        Me.lblAllowAltState.Name = "lblAllowAltState"
+        Me.lblAllowAltState.Size = New System.Drawing.Size(148, 48)
+        Me.lblAllowAltState.TabIndex = 2
+        Me.lblAllowAltState.Text = "Allow alternative state for this action."
+        '
+        'cbAlternativeState
+        '
+        Me.cbAlternativeState.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cbAlternativeState.Location = New System.Drawing.Point(7, 62)
+        Me.cbAlternativeState.Name = "cbAlternativeState"
+        Me.cbAlternativeState.Size = New System.Drawing.Size(147, 32)
+        Me.cbAlternativeState.TabIndex = 4
+        Me.cbAlternativeState.Text = "Alternative state"
+        '
         'PathwaySpecification
         '
         Me.BackColor = System.Drawing.Color.LightYellow
@@ -742,10 +683,7 @@ Public Class PathwaySpecification
         Me.Size = New System.Drawing.Size(968, 616)
         Me.PanelRight.ResumeLayout(False)
         Me.gbCompleted.ResumeLayout(False)
-        Me.PanelRightBottom.ResumeLayout(False)
-        Me.tabProperties.ResumeLayout(False)
-        Me.tpTransition.ResumeLayout(False)
-        Me.tpState.ResumeLayout(False)
+        Me.AlternativeStatePanel.ResumeLayout(False)
         Me.PanelRightTop.ResumeLayout(False)
         Me.gbSuspended.ResumeLayout(False)
         Me.gbSuspendedActive.ResumeLayout(False)
@@ -770,6 +708,7 @@ Public Class PathwaySpecification
         CType(Me.pbPlannedTopUp, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbActiveTopDown, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbActiveTopUp, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.AlternativeStateGroupBox.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -889,50 +828,33 @@ Public Class PathwaySpecification
         End If
 
         mPathwayEvent = pv
-        tabProperties.Show()
         Dim state As StateMachineType = StateMachineType.Not_Set
 
         Select Case mPathwayEvent.DefaultStateMachineType
-            Case StateMachineType.ActiveAborted, StateMachineType.InitialAborted, StateMachineType.Completed, StateMachineType.Scheduled
-                tabProperties.Hide()
-
             Case StateMachineType.InitialSuspended
                 state = StateMachineType.ActiveSuspended
-                cbSuspended.Hide()
-                cbAborted.Visible = PanelAbortInitial.Controls.Count > 0
 
             Case StateMachineType.ActiveSuspended
                 state = StateMachineType.InitialSuspended
-                cbSuspended.Hide()
-                cbAborted.Visible = PanelAbortActive.Controls.Count > 0
 
             Case StateMachineType.Active
                 state = StateMachineType.Planned
-                cbAborted.Visible = PanelAbortActive.Controls.Count > 0
-                cbSuspended.Visible = PanelSuspendActive.Controls.Count > 0
 
             Case StateMachineType.Planned
                 state = StateMachineType.Active
-                cbAborted.Visible = PanelAbortInitial.Controls.Count > 0
-                cbSuspended.Visible = PanelSuspendInitial.Controls.Count > 0
         End Select
 
-        If state <> StateMachineType.Not_Set Then
+        mIsloading = True
+        AlternativeStateGroupBox.Visible = state <> StateMachineType.Not_Set
+
+        If AlternativeStateGroupBox.Visible Then
+            AlternativeStateGroupBox.Enabled = mPathwayEvent.IsSameSpecialisationDepth
             cbAlternativeState.Text = Filemanager.GetOpenEhrTerm(state, state.ToString)
             cbAlternativeState.Tag = state
-            cbAlternativeState.Show()
+            cbAlternativeState.Checked = mPathwayEvent.Item.HasAlternativeState
         End If
 
-        mIsloading = True
-
-        cbAlternativeState.Checked = mPathwayEvent.Item.HasAlternativeState
-        cbSuspended.Checked = mPathwayEvent.Item.SuspendAllowed
-        cbAborted.Checked = mPathwayEvent.Item.AbortAllowed
-
-        tpState.Enabled = mPathwayEvent.IsSameSpecialisationDepth
-        tpTransition.Enabled = mPathwayEvent.IsSameSpecialisationDepth
         specialiseButton.Visible = Not mPathwayEvent.IsSameSpecialisationDepth
-
         mIsloading = False
     End Sub
 
@@ -1011,20 +933,6 @@ Public Class PathwaySpecification
         End If
     End Sub
 
-    Private Sub cbSuspended_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbSuspended.CheckedChanged
-        If Not mIsloading AndAlso Not mPathwayEvent Is Nothing Then
-            mPathwayEvent.Item.SuspendAllowed = cbSuspended.Checked
-            mFileManager.FileEdited = True
-        End If
-    End Sub
-
-    Private Sub cbAborted_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbAborted.CheckedChanged
-        If Not mIsloading AndAlso Not mPathwayEvent Is Nothing Then
-            mPathwayEvent.Item.AbortAllowed = cbAborted.Checked
-            mFileManager.FileEdited = True
-        End If
-    End Sub
-
     Private Sub Splitter_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitterBottom.SplitterMoved, Splitter1.SplitterMoved, Splitter2.SplitterMoved
         PathwaySpecification_Resize(sender, e)
     End Sub
@@ -1057,13 +965,8 @@ Public Class PathwaySpecification
         gbSuspendedActive.Text = Filemanager.GetOpenEhrTerm(530, "Suspended")
         gbAbortedActive.Text = Filemanager.GetOpenEhrTerm(547, "Abort")
         gbCompleted.Text = Filemanager.GetOpenEhrTerm(532, "Completed")
-        lblAllowTransition.Text = Filemanager.GetOpenEhrTerm(677, "Allow transition to")
-        cbSuspended.Text = Filemanager.GetOpenEhrTerm(530, "Suspended")
-        cbAborted.Text = Filemanager.GetOpenEhrTerm(547, "Abort")
         lblAllowAltState.Text = Filemanager.GetOpenEhrTerm(678, "Allow alternative state")
         cbAlternativeState.Text = Filemanager.GetOpenEhrTerm(679, "Alternative state")
-        tpTransition.Text = Filemanager.GetOpenEhrTerm(676, "Transition")
-        tpState.Text = Filemanager.GetOpenEhrTerm(177, "State")
         specialiseButton.Text = AE_Constants.Instance.Specialise
     End Sub
 
