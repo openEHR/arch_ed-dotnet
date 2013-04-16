@@ -160,12 +160,6 @@ Public Class ElementOnly
         PictureBoxSimple.Image = Nothing
     End Sub
 
-    Public Overrides Sub Translate()
-        mElement.Translate()
-        'call base translate to raise event to refresh constraint display
-        MyBase.Translate()
-    End Sub
-
     Public Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
         Dim dlg As New SpecialisationQuestionDialog()
         dlg.ShowForArchetypeNode(Element.Text, Element.RM_Class, SpecialisationDepth)

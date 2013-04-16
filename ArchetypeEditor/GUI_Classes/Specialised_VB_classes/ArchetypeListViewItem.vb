@@ -24,7 +24,6 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
     End Property
 
     Public Sub Translate()
-        mArchetypeNode.Translate()
         Text = mArchetypeNode.Text
     End Sub
 

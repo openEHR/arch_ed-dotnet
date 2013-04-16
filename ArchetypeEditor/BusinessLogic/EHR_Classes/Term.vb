@@ -12,8 +12,8 @@
 
 Public Class Term
     Protected sCode As String
-    Protected sText As String 'New String("")
-    Protected sLanguageCode As String 'New String("")
+    Protected sText As String
+    Protected sLanguage As String
 
     ReadOnly Property Code() As String
         Get
@@ -23,10 +23,10 @@ Public Class Term
 
     Property Language() As String
         Get
-            Return sLanguageCode
+            Return sLanguage
         End Get
         Set(ByVal Value As String)
-            sLanguageCode = Value
+            sLanguage = Value
         End Set
     End Property
 
@@ -43,8 +43,8 @@ Public Class Term
         Return sText
     End Function
 
-    Sub New(ByVal Code As String)
-        sCode = Code
+    Sub New(ByVal code As String)
+        sCode = code
     End Sub
 End Class
 

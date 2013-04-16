@@ -154,20 +154,12 @@ Public Class ArchetypeSlot
 
     Sub New(ByVal anonymousSlot As ArchetypeNodeAnonymous, ByVal fileManager As FileManagerLocal)
         MyBase.New(anonymousSlot.RM_Class, fileManager)
-        Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(ReferenceModel.RM_StructureName(Slot.SlotConstraint.RM_ClassType))
-        mText = term.Text
-        Slot.NodeId = term.Code
-        mDescription = ""
+        Slot.NodeId = fileManager.OntologyManager.AddTerm(ReferenceModel.RM_StructureName(Slot.SlotConstraint.RM_ClassType)).Code
     End Sub
 
     Sub New(ByVal text As String, ByVal slotClass As StructureType, ByVal fileManager As FileManagerLocal)
-        MyBase.New(text)
-        mFileManager = fileManager
-        Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(text)
-        mDescription = term.Description
-        mComment = term.Comment
-        Slot = New RmSlot(slotClass)
-        Slot.NodeId = term.Code
+        MyBase.New(New RmSlot(slotClass), fileManager)
+        Slot.NodeId = fileManager.OntologyManager.AddTerm(text).Code
     End Sub
 
 End Class

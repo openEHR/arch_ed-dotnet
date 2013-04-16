@@ -647,8 +647,8 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             End If
         End If
 
-        result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""{2}"" width=""32"" height=""32"" align=""middle""><b>{3}</b></td></table></td>", Environment.NewLine, (level * 20).ToString, html_dt.ImageSource, mText)
-        result.AppendFormat("{0}<td>{1}{2}</td>", Environment.NewLine, mDescription, html_dt.TerminologyCode)
+        result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""{2}"" width=""32"" height=""32"" align=""middle""><b>{3}</b></td></table></td>", Environment.NewLine, (level * 20).ToString, html_dt.ImageSource, Text)
+        result.AppendFormat("{0}<td>{1}{2}</td>", Environment.NewLine, Description, html_dt.TerminologyCode)
         result.AppendFormat("{0}<td><b><i>{1}</i></b><br>", Environment.NewLine, class_names)
         result.AppendFormat("{0}{1}</td>", Environment.NewLine, mItem.Occurrences.ToString)
         result.AppendFormat("{0}<td>{1}", Environment.NewLine, html_dt.HTML)
@@ -667,14 +667,8 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Return result.ToString
     End Function
 
-    Overrides Function ToString() As String
-        Return mText
-    End Function
-
     Public Sub New(ByVal text As String, ByVal fileManager As FileManagerLocal)
-        MyBase.New(text)
-        mFileManager = fileManager
-        Element = New RmElement(mFileManager.OntologyManager.AddTerm(text).Code)
+        MyBase.New(New RmElement(fileManager.OntologyManager.AddTerm(text).Code), fileManager)
     End Sub
 
     Public Sub New(ByVal element As RmElement, ByVal fileManager As FileManagerLocal)

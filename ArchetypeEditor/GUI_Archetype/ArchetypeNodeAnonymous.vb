@@ -43,10 +43,35 @@ Public Class ArchetypeNodeAnonymous
 
     Public Overrides Property Text() As String
         Get
-            Return mText
+            Dim result As String = ""
+
+            Select Case SlotConstraint.RM_ClassType
+                Case StructureType.ENTRY
+                    result = Filemanager.Master.OntologyManager.GetOpenEHRTerm(559, "ENTRY")
+                Case StructureType.OBSERVATION
+                    result = Filemanager.Master.OntologyManager.GetOpenEHRTerm(554, "OBSERVATION")
+                Case StructureType.EVALUATION
+                    result = Filemanager.Master.OntologyManager.GetOpenEHRTerm(555, "EVALUATION")
+                Case StructureType.INSTRUCTION
+                    result = Filemanager.Master.OntologyManager.GetOpenEHRTerm(557, "INSTRUCTION")
+                Case StructureType.ACTION
+                    result = Filemanager.Master.OntologyManager.GetOpenEHRTerm(556, "ACTION")
+                Case StructureType.ADMIN_ENTRY
+                    result = Filemanager.Master.OntologyManager.GetOpenEHRTerm(560, "Administration ENTRY")
+                Case StructureType.SECTION
+                    result = Filemanager.Master.OntologyManager.GetOpenEHRTerm(314, "SECTION")
+                Case StructureType.Item
+                    result = Filemanager.Master.OntologyManager.GetOpenEHRTerm(673, "Item")
+                Case StructureType.Cluster
+                    result = Filemanager.Master.OntologyManager.GetOpenEHRTerm(313, "Cluster")
+                Case StructureType.Element
+                    result = Filemanager.Master.OntologyManager.GetOpenEHRTerm(567, "Element")
+            End Select
+
+            Return result
         End Get
         Set(ByVal Value As String)
-            'noop - required as overriden in specialised classes
+            'noop - required as overridden in specialised classes
             Debug.Assert(False)
         End Set
     End Property
@@ -62,36 +87,6 @@ Public Class ArchetypeNodeAnonymous
             Return True
         End Get
     End Property
-
-    Public Overrides Sub Translate()
-        Select Case Item.Type
-            Case StructureType.Slot
-                Select Case SlotConstraint.RM_ClassType
-                    Case StructureType.ENTRY
-                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(559, "ENTRY")
-                    Case StructureType.OBSERVATION
-                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(554, "OBSERVATION")
-                    Case StructureType.EVALUATION
-                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(555, "EVALUATION")
-                    Case StructureType.INSTRUCTION
-                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(557, "INSTRUCTION")
-                    Case StructureType.ACTION
-                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(556, "ACTION")
-                    Case StructureType.ADMIN_ENTRY
-                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(560, "Administration ENTRY")
-                    Case StructureType.SECTION
-                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(314, "SECTION")
-                    Case StructureType.Item
-                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(673, "Item")
-                    Case StructureType.Cluster
-                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(313, "Cluster")
-                    Case StructureType.Element
-                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(567, "Element")
-                End Select
-            Case Else
-                Debug.Assert(False)
-        End Select
-    End Sub
 
     Public Overrides Function ToRichText(ByVal level As Integer) As String
         Dim s, statement As String
@@ -199,7 +194,6 @@ Public Class ArchetypeNodeAnonymous
 
     Sub New()
         Item = New RmSlot
-        Translate()
     End Sub
 
     Sub New(ByVal type As StructureType)
@@ -212,13 +206,10 @@ Public Class ArchetypeNodeAnonymous
             Occurrences.MinCount = 0
             Occurrences.MaxCount = 1
         End If
-
-        Translate()
     End Sub
 
     Sub New(ByVal slot As RmSlot)
         Item = slot
-        Translate()
     End Sub
 
 End Class

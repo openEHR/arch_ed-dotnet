@@ -71,7 +71,6 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     End Property
 
     Public Sub Translate()
-        mArchetypeNode.Translate()
         Text = mArchetypeNode.Text
     End Sub
 

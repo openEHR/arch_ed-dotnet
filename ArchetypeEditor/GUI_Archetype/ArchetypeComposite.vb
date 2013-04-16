@@ -83,18 +83,18 @@ Public Class ArchetypeComposite
 
         Select Case mItem.Type
             Case StructureType.Cluster
-                result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""Images/compound.gif"" width=""32"" height=""32"" align=""middle""><b><i>{2}</i></b></td></table></td>", Environment.NewLine, (level * 20).ToString, mText)
+                result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""Images/compound.gif"" width=""32"" height=""32"" align=""middle""><b><i>{2}</i></b></td></table></td>", Environment.NewLine, (level * 20).ToString, Text)
                 s = Filemanager.GetOpenEhrTerm(313, "Cluster")
 
             Case StructureType.SECTION
-                result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""Images/section.gif"" width=""32"" height=""32"" align=""middle""><b><i>{2}</i></b></td></table></td>", Environment.NewLine, (level * 20).ToString, mText)
+                result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""Images/section.gif"" width=""32"" height=""32"" align=""middle""><b><i>{2}</i></b></td></table></td>", Environment.NewLine, (level * 20).ToString, Text)
                 s = Filemanager.GetOpenEhrTerm(314, "Section")
             Case Else
                 Debug.Assert(False)
                 Return ""
         End Select
 
-        result.AppendFormat("{0}<td>{1}</td>", Environment.NewLine, mDescription)
+        result.AppendFormat("{0}<td>{1}</td>", Environment.NewLine, Description)
         result.AppendFormat("{0}<td><b><i>{1}</b></i><br>", Environment.NewLine, s)
         result.AppendFormat("{0}{1}", Environment.NewLine, mItem.Occurrences.ToString)
 
@@ -121,10 +121,7 @@ Public Class ArchetypeComposite
     End Function
 
     Public Sub New(ByVal text As String, ByVal type As StructureType, ByVal fileManager As FileManagerLocal)
-        MyBase.New(text)
-        mFileManager = fileManager
-        Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(text)
-        Item = New RmStructure(term.Code, type)
+        MyBase.New(New RmStructure(fileManager.OntologyManager.AddTerm(text).Code, type), fileManager)
         Item.Occurrences.MaxCount = 1
     End Sub
 

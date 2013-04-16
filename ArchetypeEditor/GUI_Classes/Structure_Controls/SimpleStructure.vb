@@ -195,7 +195,6 @@ Public Class SimpleStructure
         If mCurrentItem Is Nothing Then
             txtSimple.Text = ""
         Else
-            mCurrentItem.Translate()
             txtSimple.Text = mCurrentItem.Text
         End If
 

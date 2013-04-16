@@ -15,7 +15,6 @@ Option Strict On
 Public MustInherit Class ArchetypeNode
     Public MustOverride Property Text() As String
     Public MustOverride Property Constraint() As Constraint
-    Public MustOverride Sub Translate()
     Public MustOverride Function ToRichText(ByVal level As Integer) As String
     Public MustOverride Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
     Public MustOverride Function Copy() As ArchetypeNode

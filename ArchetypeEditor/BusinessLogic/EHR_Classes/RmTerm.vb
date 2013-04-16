@@ -55,8 +55,8 @@ Public Class RmTerm
         Return Not termCode Is Nothing AndAlso regex.IsMatch(termCode)
     End Function
 
-    Sub New(ByVal Code As String)
-        MyBase.New(Code)
+    Sub New(ByVal code As String)
+        MyBase.New(code)
     End Sub
 End Class
 

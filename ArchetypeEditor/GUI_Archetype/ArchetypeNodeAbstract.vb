@@ -16,17 +16,12 @@ Public MustInherit Class ArchetypeNodeAbstract
     Inherits ArchetypeNode
 
     Protected mFileManager As FileManagerLocal
-    Protected mText As String
-    Protected mDescription As String
-    Protected mComment As String
-    Protected mAnnotations As New System.Collections.SortedList
 
     Public Overrides Property Text() As String
         Get
-            Return mText
+            Return mFileManager.OntologyManager.GetTerm(NodeId).Text
         End Get
         Set(ByVal Value As String)
-            mText = Value
             mFileManager.OntologyManager.SetText(Value, NodeId)
             mFileManager.FileEdited = True
         End Set
@@ -34,10 +29,9 @@ Public MustInherit Class ArchetypeNodeAbstract
 
     Public Property Description() As String
         Get
-            Return mDescription
+            Return mFileManager.OntologyManager.GetTerm(NodeId).Description
         End Get
         Set(ByVal Value As String)
-            mDescription = Value
             mFileManager.OntologyManager.SetDescription(Value, NodeId)
             mFileManager.FileEdited = True
         End Set
@@ -45,10 +39,9 @@ Public MustInherit Class ArchetypeNodeAbstract
 
     Public Property Comment() As String
         Get
-            Return mComment
+            Return mFileManager.OntologyManager.GetTerm(NodeId).Comment
         End Get
         Set(ByVal Value As String)
-            mComment = Value
             mFileManager.OntologyManager.SetComment(Value, NodeId)
             mFileManager.FileEdited = True
         End Set
@@ -56,7 +49,7 @@ Public MustInherit Class ArchetypeNodeAbstract
 
     Public ReadOnly Property Annotations() As System.Collections.SortedList
         Get
-            Return mAnnotations
+            Return mFileManager.OntologyManager.GetTerm(NodeId).OtherAnnotations
         End Get
     End Property
 
@@ -84,17 +77,9 @@ Public MustInherit Class ArchetypeNodeAbstract
         End Get
     End Property
 
-    Public Overrides Sub Translate()
-        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(NodeId)
-        mText = term.Text
-        mDescription = term.Description
-        mComment = term.Comment
-    End Sub
-
     Public Overridable Sub Specialise()
         Item = Item.Copy
-        mText = "! - " & mText
-        mItem.NodeId = mFileManager.OntologyManager.SpecialiseTerm(mText, mDescription, NodeId).Code
+        mItem.NodeId = mFileManager.OntologyManager.SpecialiseTerm("! - " & Text, Description, NodeId).Code
 
         If mItem.HasNameConstraint AndAlso mItem.NameConstraint.TypeOfTextConstraint = TextConstraintType.Terminology Then
             mItem.NameConstraint.ConstraintCode = mFileManager.OntologyManager.SpecialiseNameConstraint(mItem.NameConstraint.ConstraintCode).Code
@@ -104,7 +89,7 @@ Public MustInherit Class ArchetypeNodeAbstract
     End Sub
 
     Public Overrides Function ToString() As String
-        Return mText
+        Return Text
     End Function
 
     Public Overrides ReadOnly Property CanRemove() As Boolean
@@ -119,31 +104,14 @@ Public MustInherit Class ArchetypeNodeAbstract
         End Get
     End Property
 
-    Protected Sub New(ByVal text As String)
-        mText = text
-        mDescription = "*"
-    End Sub
-
     Sub New(ByVal item As RmStructure, ByVal fileManager As FileManagerLocal)
         mItem = item
         mFileManager = fileManager
-
-        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(item.NodeId)
-        mText = term.Text
-        mDescription = term.Description
-        mComment = term.Comment
-        mAnnotations = term.OtherAnnotations
     End Sub
 
     Sub New(ByVal node As ArchetypeNodeAbstract)
         mItem = node.Item.Copy
         mFileManager = node.mFileManager
-
-        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(node.NodeId)
-        mText = term.Text
-        mDescription = term.Description
-        mComment = term.Comment
-        mAnnotations = term.OtherAnnotations
     End Sub
 
 End Class

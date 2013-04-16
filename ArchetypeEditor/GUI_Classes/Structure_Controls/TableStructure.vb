@@ -364,18 +364,15 @@ Public Class TableStructure
 
         If mIsRotated Then
             For i = 0 To mArchetypeTable.Rows.Count - 1
-                Dim an_element As ArchetypeNode
-                an_element = CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode)
-                an_element.Translate()
-                mArchetypeTable.Rows(i).Item(1) = an_element.Text
+                Dim element As ArchetypeNode = CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode)
+                mArchetypeTable.Rows(i).Item(1) = element.Text
             Next
 
             i = 2 ' columns start at 2 if rotated
 
-            For Each row_heading As ArchetypeElement In mKeyColumns
-                row_heading.Translate()
-                TableArchetypeStyle.GridColumnStyles(i).HeaderText = row_heading.Text
-                TableArchetypeStyle.GridColumnStyles(i).NullText = "(" & row_heading.Text & ")"
+            For Each rowHeading As ArchetypeElement In mKeyColumns
+                TableArchetypeStyle.GridColumnStyles(i).HeaderText = rowHeading.Text
+                TableArchetypeStyle.GridColumnStyles(i).NullText = "(" & rowHeading.Text & ")"
                 i += 1
             Next
         Else
