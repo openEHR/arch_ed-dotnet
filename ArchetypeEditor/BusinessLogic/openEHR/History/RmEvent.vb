@@ -254,7 +254,7 @@ Class RmEvent
 
         If Not ADL_Data Is Nothing AndAlso ADL_Data.has_children Then
             Dim cadlStruct As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim generatingType As String = ADL_Data.children.first.Generating_Type.to_cil
+            Dim generatingType As String = ADL_Data.children.first.generator.to_cil
 
             Select Case generatingType
                 Case "ARCHETYPE_INTERNAL_REF"
@@ -275,7 +275,7 @@ Class RmEvent
         End If
 
         If Not ADL_State Is Nothing AndAlso ADL_State.has_children Then
-            Dim generatingType As String = ADL_State.children.first.Generating_Type.to_cil
+            Dim generatingType As String = ADL_State.children.first.generator.to_cil
 
             Select Case generatingType
                 Case "ARCHETYPE_INTERNAL_REF"

@@ -66,7 +66,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             Try
                                 Dim obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT = attribute.children.i_th(j)
 
-                                If obj.generating_type.to_cil = "ARCHETYPE_SLOT" Then
+                                If obj.generator.to_cil = "ARCHETYPE_SLOT" Then
                                     section.Children.Add(New RmSlot(CType(attribute.children.i_th(j), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
                                 Else
                                     MessageBox.Show("Editor does not support compositions with fixed sections. Create slots and separate suitable section archetype", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)

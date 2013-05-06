@@ -27,7 +27,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Private Sub ProcessElement(ByVal complexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal fileManager As FileManagerLocal)
             Try
-                Dim v As EiffelKernel.STRING_8 = Eiffel.String("value")
+                Dim v As EiffelKernel.string.STRING_8 = Eiffel.String("value")
                 cConstraint = New Constraint
 
                 If Not complexObj.any_allowed Then
@@ -406,7 +406,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             Case "formalism"
                                 Try
                                     For ii As Integer = 1 To cadlC.strings.count
-                                        result.AllowableFormalisms.Add(CType(cadlC.strings.i_th(ii), EiffelKernel.STRING_8).to_cil)
+                                        result.AllowableFormalisms.Add(CType(cadlC.strings.i_th(ii), EiffelKernel.string.STRING_8).to_cil)
                                     Next
                                 Catch ex As Exception
                                     Debug.Assert(False)
@@ -855,7 +855,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             If attribute.has_children Then
                                 Dim Obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
 
-                                Select Case Obj.generating_type.to_cil.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
+                                Select Case Obj.generator.to_cil.ToUpperInvariant
                                     Case "CONSTRAINT_REF"
                                         result.TypeOfTextConstraint = TextConstraintType.Terminology
                                         result.ConstraintCode = CType(Obj, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).target.to_cil
@@ -889,7 +889,7 @@ Namespace ArchetypeEditor.ADL_Classes
                                 cString = CType(constraint.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
 
                                 For ii = 1 To cString.strings.count
-                                    result.AllowableValues.Codes.Add(CType(cString.strings.i_th(ii), EiffelKernel.STRING_8).to_cil)
+                                    result.AllowableValues.Codes.Add(CType(cString.strings.i_th(ii), EiffelKernel.string.STRING_8).to_cil)
                                 Next
                             End If
 
@@ -901,7 +901,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             If attribute.has_children Then
                                 constraint = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
                                 cString = CType(constraint.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
-                                result.AssumedValue = CType(cString.strings.first, EiffelKernel.STRING_8).to_cil
+                                result.AssumedValue = CType(cString.strings.first, EiffelKernel.string.STRING_8).to_cil
                             End If
 
                         Case "mapping"

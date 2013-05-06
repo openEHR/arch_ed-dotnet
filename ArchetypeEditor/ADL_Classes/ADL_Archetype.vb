@@ -166,8 +166,9 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim s(list.upper - 1) As String
 
                 For i = list.lower() To list.upper()
-                    s(i - 1) = CType(list.i_th(i), EiffelKernel.STRING_8).to_cil()
+                    s(i - 1) = CType(list.i_th(i), EiffelKernel.string.STRING_8).to_cil()
                 Next
+
                 Return s
             End Get
         End Property
@@ -530,7 +531,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 If Not a_history.Data Is Nothing Then
                     a = mAomFactory.create_c_attribute_single(cadlEvent, Eiffel.String("data"))
-                    Dim typeName As EiffelKernel.STRING_8 = Eiffel.String(ReferenceModel.RM_StructureName(a_history.Data.Type))
+                    Dim typeName As EiffelKernel.string.STRING_8 = Eiffel.String(ReferenceModel.RM_StructureName(a_history.Data.Type))
 
                     If dataPath Is Nothing Then
                         BuildStructure(a_history.Data, mAomFactory.create_c_complex_object_identified(a, typeName, Eiffel.String(a_history.Data.NodeId)))
@@ -816,9 +817,9 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Sub BuildDuration(ByVal attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Duration)
-            Dim pattern As EiffelKernel.STRING_8 = Nothing
-            Dim lower As EiffelKernel.STRING_8 = Nothing
-            Dim upper As EiffelKernel.STRING_8 = Nothing
+            Dim pattern As EiffelKernel.string.STRING_8 = Nothing
+            Dim lower As EiffelKernel.string.STRING_8 = Nothing
+            Dim upper As EiffelKernel.string.STRING_8 = Nothing
 
             If c.AllowableUnits <> "" And c.AllowableUnits <> "PYMWDTHMS" Then
                 pattern = Eiffel.String(c.AllowableUnits)

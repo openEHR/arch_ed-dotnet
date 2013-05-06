@@ -88,19 +88,19 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             If description.original_author.has(Eiffel.String("name")) Then
-                mOriginalAuthor = description.original_author.item(Eiffel.String("name")).to_cil
+                mOriginalAuthor = description.original_author.at(Eiffel.String("name")).to_cil
             End If
 
             If description.original_author.has(Eiffel.String("email")) Then
-                mOriginalAuthorEmail = description.original_author.item(Eiffel.String("email")).to_cil
+                mOriginalAuthorEmail = description.original_author.at(Eiffel.String("email")).to_cil
             End If
 
             If description.original_author.has(Eiffel.String("organisation")) Then
-                mOriginalAuthorOrganisation = description.original_author.item(Eiffel.String("organisation")).to_cil
+                mOriginalAuthorOrganisation = description.original_author.at(Eiffel.String("organisation")).to_cil
             End If
 
             If description.original_author.has(Eiffel.String("date")) Then
-                mOriginalAuthorDate = description.original_author.item(Eiffel.String("date")).to_cil
+                mOriginalAuthorDate = description.original_author.at(Eiffel.String("date")).to_cil
             End If
 
             If Not description.other_contributors Is Nothing Then
@@ -111,11 +111,11 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If Not description.other_details Is Nothing Then
                 If description.other_details.has(Eiffel.String("references")) Then
-                    mReferences = description.other_details.item(Eiffel.String("references")).to_cil
+                    mReferences = description.other_details.at(Eiffel.String("references")).to_cil
                 End If
 
                 If description.other_details.has(Eiffel.String(CurrentContactKey)) Then
-                    mCurrentContact = description.other_details.item(Eiffel.String(CurrentContactKey)).to_cil
+                    mCurrentContact = description.other_details.at(Eiffel.String(CurrentContactKey)).to_cil
                 End If
             End If
 

@@ -29,9 +29,9 @@ Namespace ArchetypeEditor.ADL_Classes
                 If an_attribute.has_children Then
                     constraint_object = an_attribute.children.first
 
-                    If constraint_object.generating_type.to_cil = "CONSTRAINT_REF" Then
+                    If constraint_object.generator.to_cil = "CONSTRAINT_REF" Then
                         result = CType(constraint_object, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).as_string.to_cil
-                    ElseIf constraint_object.generating_type.to_cil = "C_CODE_PHRASE" Then
+                    ElseIf constraint_object.generator.to_cil = "C_CODE_PHRASE" Then
                         result = CType(constraint_object, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).as_string.to_cil()
                     End If
                 End If
@@ -53,7 +53,7 @@ Namespace ArchetypeEditor.ADL_Classes
             'a_rm_section is passed as object so that definition can be passed at the first level
             Dim i, j As Integer
 
-            Select Case obj.generating_type.to_cil
+            Select Case obj.generator.to_cil
                 Case "C_COMPLEX_OBJECT"
                     Dim o As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = CType(obj, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
                     Dim subSection As New RmSection(o, fileManager)

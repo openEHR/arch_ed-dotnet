@@ -38,7 +38,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Property
 
         Private Function GetItem(ByVal key As String) As String
-            Dim s As EiffelKernel.STRING_8 = Eiffel.String(key)
+            Dim s As EiffelKernel.string.STRING_8 = Eiffel.String(key)
 
             If EIF_a_Term.has_key(s) Then
                 Return EIF_a_Term.item(s).to_cil
@@ -60,7 +60,7 @@ Namespace ArchetypeEditor.ADL_Classes
             EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(Eiffel.String(ID))
         End Sub
 
-        Sub New(ByVal EIF_ID As EiffelKernel.STRING_8)
+        Sub New(ByVal EIF_ID As EiffelKernel.string.STRING_8)
             MyBase.New(EIF_ID.to_cil)
             EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(EIF_ID)
         End Sub
@@ -87,7 +87,7 @@ Namespace ArchetypeEditor.ADL_Classes
             EIF_a_Term = an_adlTerm
 
             For i As Integer = 1 To an_adlTerm.keys.count
-                Dim s As String = CType(an_adlTerm.keys.i_th(i), EiffelKernel.STRING_8).to_cil
+                Dim s As String = CType(an_adlTerm.keys.i_th(i), EiffelKernel.string.STRING_8).to_cil
 
                 Select Case s.ToLowerInvariant()
                     Case "text"

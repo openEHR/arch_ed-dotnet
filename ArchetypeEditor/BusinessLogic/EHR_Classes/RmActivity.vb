@@ -57,7 +57,7 @@ Public Class RmActivity
                     If item.regexp IsNot Nothing Then
                         ArchetypeId = item.regexp.to_cil.Replace(classPrefix, "").Replace("\.", ".")
                     ElseIf item.strings IsNot Nothing Then
-                        ArchetypeId = CType(item.strings.i_th(1), EiffelKernel.STRING_8).to_cil.Replace(classPrefix, "").Replace("\.", ".")
+                        ArchetypeId = CType(item.strings.i_th(1), EiffelKernel.string.STRING_8).to_cil.Replace(classPrefix, "").Replace("\.", ".")
                     Else
                         ArchetypeId = "."
                     End If
@@ -73,7 +73,7 @@ Public Class RmActivity
                 ' could be a C_COMPLEX_OBJECT or an ARCHETYPE_SLOT
                 Dim obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
 
-                Select Case obj.generating_type.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+                Select Case obj.generator.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                     Case "archetype_slot"
                         Children.Add(New RmSlot(CType(obj, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
                     Case "c_complex_object"

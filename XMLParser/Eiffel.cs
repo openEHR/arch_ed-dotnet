@@ -7,9 +7,9 @@ namespace XMLParser
     public class Eiffel
     {
         [DebuggerStepThrough()]
-        public static EiffelKernel.STRING_8 String(string s)
+        public static EiffelKernel.@string.STRING_8 String(string s)
         {
-            return EiffelKernel.Create.STRING_8.make_from_cil(s);
+            return EiffelKernel.@string.Create.STRING_8.make_from_cil(s);
         }
     }
 }

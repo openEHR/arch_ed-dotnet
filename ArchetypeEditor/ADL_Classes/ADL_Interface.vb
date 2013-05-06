@@ -40,7 +40,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim s As String
 
                 For i As Integer = 1 To EIF_adlInterface.archetype_serialiser_formats.count
-                    s = CType(EIF_adlInterface.archetype_serialiser_formats.i_th(i), EiffelKernel.STRING_8).to_cil
+                    s = CType(EIF_adlInterface.archetype_serialiser_formats.i_th(i), EiffelKernel.string.STRING_8).to_cil
                     ' sml is not valid
                     formats.Add(s)
                 Next
@@ -165,7 +165,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim codePhrase As openehr.openehr.rm.data_types.text.CODE_PHRASE
 
             For Each dRow As DataRow In table.Rows
-                Dim path As EiffelKernel.STRING_8 = Eiffel.String(CType(dRow(1), String))
+                Dim path As EiffelKernel.string.STRING_8 = Eiffel.String(CType(dRow(1), String))
                 Dim terminologyId As String = CType(dRow(0), String)
 
                 If Not dRow.IsNull(3) Then
@@ -183,8 +183,8 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Sub AddConstraintBindingsFromTable(ByVal table As DataTable)
             For Each dRow As DataRow In table.Rows
-                Dim terminology As EiffelKernel.STRING_8 = Eiffel.String(CType(dRow(0), String))
-                Dim acCode As EiffelKernel.STRING_8 = Eiffel.String(CType(dRow(1), String))
+                Dim terminology As EiffelKernel.string.STRING_8 = Eiffel.String(CType(dRow(0), String))
+                Dim acCode As EiffelKernel.string.STRING_8 = Eiffel.String(CType(dRow(1), String))
                 Dim path As openehr.common_libs.basic.URI = openehr.common_libs.basic.Create.URI.make_from_string(Eiffel.String(CType(dRow(4), String)))
                 EIF_adlInterface.ontology.add_constraint_binding(path, terminology, acCode)
             Next

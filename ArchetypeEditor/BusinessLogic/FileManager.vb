@@ -247,10 +247,11 @@ Public Class FileManagerLocal
             Catch e As Exception
                 FileName = mPriorFileName
                 mPriorFileName = Nothing
-                errorMessage = mArchetypeEngine.Status
+                errorMessage = e.Message
+                Dim status As String = mArchetypeEngine.Status
 
-                If Not errorMessage Is Nothing Then
-                    errorMessage += Environment.NewLine + e.Message
+                If Not String.IsNullOrEmpty(status) Then
+                    errorMessage += Environment.NewLine + status
                 End If
             End Try
         End If

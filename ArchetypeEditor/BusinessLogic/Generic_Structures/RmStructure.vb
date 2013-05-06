@@ -216,7 +216,7 @@ Public Class RmStructure
         cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(EIF_Structure.occurrences)
         mStructureType = ReferenceModel.StructureTypeFromString(EIF_Structure.rm_type_name.to_cil)
 
-        If EIF_Structure.generating_type.to_cil = "C_COMPLEX_OBJECT" Then
+        If EIF_Structure.generator.to_cil = "C_COMPLEX_OBJECT" Then
             Dim s As String
 
             ' need to cope with runtime_label

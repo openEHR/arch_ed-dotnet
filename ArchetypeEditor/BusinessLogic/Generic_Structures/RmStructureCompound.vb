@@ -122,7 +122,7 @@ Public Class RmStructureCompound
                     For ii = 1 To attribute.children.count
                         Dim a_ComplexObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                        Select Case CType(attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_OBJECT).generating_type.to_cil
+                        Select Case CType(attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_OBJECT).generator.to_cil
                             Case "C_COMPLEX_OBJECT"
                                 a_ComplexObject = CType(attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
                                 colChildren.Add(New ArchetypeEditor.ADL_Classes.ADL_RmElement(a_ComplexObject, a_filemanager))
@@ -151,7 +151,7 @@ Public Class RmStructureCompound
                     colChildren.Existence.SetFromOpenEHRExistence(attribute.existence)
 
                     If attribute.has_children Then
-                        Select Case CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT).generating_type.to_cil.ToUpperInvariant()
+                        Select Case CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT).generator.to_cil.ToUpperInvariant()
                             Case "C_COMPLEX_OBJECT"
                                 colChildren.Add(New ArchetypeEditor.ADL_Classes.ADL_RmElement(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
                             Case "ARCHETYPE_SLOT"
@@ -172,7 +172,7 @@ Public Class RmStructureCompound
             For i As Integer = 1 To an_attribute.children.count
                 Dim a_ComplexObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                Select Case CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT).generating_type.to_cil.ToUpperInvariant()
+                Select Case CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT).generator.to_cil.ToUpperInvariant()
                     Case "C_COMPLEX_OBJECT"
                         a_ComplexObject = CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
                         Dim structure_type As StructureType
@@ -201,7 +201,7 @@ Public Class RmStructureCompound
             Dim ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT = CType(data_rel_node.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT)
             structure_type = ReferenceModel.StructureTypeFromString(ObjNode.rm_type_name.to_cil)
 
-            Select Case ObjNode.generating_type.to_cil
+            Select Case ObjNode.generator.to_cil
                 ' may be a slot or a complex type
                 Case "C_COMPLEX_OBJECT"
                     Select Case structure_type
@@ -215,7 +215,7 @@ Public Class RmStructureCompound
                         Case StructureType.ISM_TRANSITION, StructureType.CarePathwayStep
                             'need to get the node_id from the workflow step to get the text displayed
                             'make sure there is a valid node_id for the careflow_step
-                            Dim eif_string As EiffelKernel.STRING_8 = Eiffel.String("careflow_step")
+                            Dim eif_string As EiffelKernel.string.STRING_8 = Eiffel.String("careflow_step")
 
                             'EDT-584
                             If ObjNode.node_id.to_cil = "unknown" Then

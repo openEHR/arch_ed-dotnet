@@ -27,31 +27,31 @@ Public Class ADL_TranslationDetails
             End If
 
             'get author details
-            Dim s As EiffelKernel.STRING_8
+            Dim s As EiffelKernel.string.STRING_8
             s = Eiffel.String("name")
 
             If value.author.has(s) Then
-                AuthorName = CType(value.author.item(s), EiffelKernel.STRING_8).to_cil
+                AuthorName = CType(value.author.at(s), EiffelKernel.string.STRING_8).to_cil
             End If
 
             s = Eiffel.String("email")
 
             If value.author.has(s) Then
-                AuthorEmail = CType(value.author.item(s), EiffelKernel.STRING_8).to_cil
+                AuthorEmail = CType(value.author.at(s), EiffelKernel.string.STRING_8).to_cil
             End If
 
             s = Eiffel.String("organisation")
 
             If value.author.has(s) Then
-                AuthorOrganisation = CType(value.author.item(s), EiffelKernel.STRING_8).to_cil
+                AuthorOrganisation = CType(value.author.at(s), EiffelKernel.string.STRING_8).to_cil
             End If
         End Set
     End Property
 
     Private Sub SetAuthorValue(ByVal a_key As String, ByVal a_value As String)
         If a_key <> "" Then
-            Dim adlKey As EiffelKernel.STRING_8
-            Dim adlValue As EiffelKernel.STRING_8
+            Dim adlKey As EiffelKernel.string.STRING_8
+            Dim adlValue As EiffelKernel.string.STRING_8
 
             adlKey = Eiffel.String(a_key)
             adlValue = Eiffel.String(a_value)

@@ -72,7 +72,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             For i As Integer = 1 To Constraint.code_count
                 'SRH: 31 May 2008 - Check for repeats
-                Dim s As String = CType(Constraint.code_list.i_th(i), EiffelKernel.STRING_8).to_cil
+                Dim s As String = CType(Constraint.code_list.i_th(i), EiffelKernel.string.STRING_8).to_cil
                 If Not cp.Codes.Contains(s) Then
                     cp.Codes.Add(s)
                 End If
@@ -83,7 +83,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Public Shared Function GetConstraintFromAssertion(ByVal assert As openehr.openehr.am.archetype.assertion.ASSERTION) As String
-            Select Case assert.expression.generating_type.to_cil
+            Select Case assert.expression.generator.to_cil
                 Case "EXPR_BINARY_OPERATOR"
                     Dim expr As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR = assert.expression
 

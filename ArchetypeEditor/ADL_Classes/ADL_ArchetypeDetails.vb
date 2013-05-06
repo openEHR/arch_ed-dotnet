@@ -7,7 +7,7 @@ Public Class ADL_ArchetypeDetails
     Private mAdlDescription As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
 
     Public Overrides Sub AddOrReplace(ByVal language As String, ByVal detail As ArchetypeDescriptionItem)
-        Dim eiffelLanguageString As EiffelKernel.STRING_8 = Eiffel.String(language)
+        Dim eiffelLanguageString As EiffelKernel.string.STRING_8 = Eiffel.String(language)
 
         If HasDetailInLanguage(language) Then
             mAdlDescription.remove_detail(eiffelLanguageString)

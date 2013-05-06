@@ -1036,7 +1036,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                 result.other_contributors = new string[o.other_contributors().count()];
 
                 for (int i = 1; i < result.other_contributors.Length; i++)
-                    result.other_contributors[i - 1] = ((EiffelKernel.STRING_8)o.other_contributors().i_th(i)).to_cil();
+                    result.other_contributors[i - 1] = ((EiffelKernel.@string.STRING_8)o.other_contributors().i_th(i)).to_cil();
             }
 
             result.lifecycle_state = o.lifecycle_state().to_cil();
