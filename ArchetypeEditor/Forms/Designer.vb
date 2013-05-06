@@ -3448,7 +3448,7 @@ Public Class Designer
 
 #Region "Language related functions - Add, Change, List_selectedIndex, Menu Change"
 
-    Dim previousLanguageCode, previousLanguageText As String
+    Dim previousLanguageCode As String
 
     Private Sub AddLanguage(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAdd.Click, MenuLanguageAdd.Click
         If ChooseLanguage() Then
@@ -3468,7 +3468,6 @@ Public Class Designer
     Private Sub ChangeLanguage(ByVal langCode As String)
         If mFileManager.OntologyManager.HasLanguage(langCode) AndAlso mFileManager.OntologyManager.LanguageCode <> langCode Then
             previousLanguageCode = mFileManager.OntologyManager.LanguageCode
-            previousLanguageText = mFileManager.OntologyManager.LanguageText
             Translate(langCode)
         End If
     End Sub
@@ -3492,7 +3491,7 @@ Public Class Designer
     End Sub
 
     Private Sub MenuLanguageToggle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuLanguageToggle.Click
-        ChangeLanguageText(previousLanguageText)
+        ChangeLanguage(previousLanguageCode)
     End Sub
 
 #End Region
