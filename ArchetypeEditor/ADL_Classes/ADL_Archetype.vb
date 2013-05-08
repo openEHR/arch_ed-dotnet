@@ -107,16 +107,6 @@ Namespace ArchetypeEditor.ADL_Classes
             End Set
         End Property
 
-        Public Overrides ReadOnly Property SourceCode() As String
-            Get
-                If Not adlEngine.source Is Nothing Then
-                    Return adlEngine.source.to_cil
-                Else
-                    Return Nothing
-                End If
-            End Get
-        End Property
-
         Public Overrides ReadOnly Property SerialisedArchetype() As String
             Get
                 MakeParseTree()

@@ -455,7 +455,7 @@ Public Class FileManagerLocal
 
         Select Case format.ToLowerInvariant
             Case "xml"
-                Return CreateXMLParser().Serialise()
+                Return CreateXMLParser().SerialisedArchetype()
             Case "adl"
                 Return CreateAdlParser().Archetype.SerialisedArchetype()
             Case Else

@@ -161,12 +161,13 @@ namespace XMLParser
             //nothing needed as yet
         }
 
-        public string Serialise()
+        public string SerialisedArchetype()
         {
             string result = "";
 
-            if(this.ArchetypeAvailable)
+            if (ArchetypeAvailable)
             {
+                _ontology.RemoveUnusedCodes();
                 SetArchetypeDigest();
 
                 System.IO.MemoryStream ms = new System.IO.MemoryStream();
@@ -414,7 +415,6 @@ namespace XMLParser
             try
             {
                 _ontology.RemoveUnusedCodes();
-
                 SetArchetypeDigest();
 
                 XmlWriterSettings settings = new XmlWriterSettings();

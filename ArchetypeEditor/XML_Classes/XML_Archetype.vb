@@ -108,16 +108,10 @@ Namespace ArchetypeEditor.XML_Classes
             End Set
         End Property
 
-        Public Overrides ReadOnly Property SourceCode() As String
-            Get
-                Return mArchetypeParser.Serialise
-            End Get
-        End Property
-
         Public Overrides ReadOnly Property SerialisedArchetype() As String
             Get
                 MakeParseTree()
-                Return mArchetypeParser.Serialise
+                Return mArchetypeParser.SerialisedArchetype
             End Get
         End Property
 
@@ -146,10 +140,6 @@ Namespace ArchetypeEditor.XML_Classes
             ' Update the GUI tables with the new term
             ontology.UpdateTerm(New XML_Term(mArchetypeParser.Ontology.TermDefinition(ontology.LanguageCode, mXmlArchetype.concept)))
             mArchetypeID.Concept &= "-" & shortConceptName
-        End Sub
-
-        Public Sub RemoveUnusedCodes()
-            mArchetypeParser.Ontology.RemoveUnusedCodes()
         End Sub
 
         Public Shared Function HasAttributeName(ByVal complexObject As XMLParser.C_COMPLEX_OBJECT, ByVal attributeName As String) As Boolean
