@@ -29,11 +29,13 @@ Namespace ArchetypeEditor.ADL_Classes
                 Return mFileName
             End Get
         End Property
+
         Public ReadOnly Property ADL_Parser() As openehr.adl_parser.interface.ADL_INTERFACE
             Get
                 Return EIF_adlInterface
             End Get
         End Property
+
         Public ReadOnly Property AvailableFormats() As ArrayList Implements Parser.AvailableFormats
             Get
                 Dim formats As New ArrayList
@@ -48,31 +50,37 @@ Namespace ArchetypeEditor.ADL_Classes
                 Return formats
             End Get
         End Property
+
         Public ReadOnly Property TypeName() As String Implements Parser.TypeName
             Get
                 Return "adl"
             End Get
         End Property
+
         Public ReadOnly Property Status() As String Implements Parser.Status
             Get
                 Return EIF_adlInterface.status.to_cil
             End Get
         End Property
+
         Public ReadOnly Property ArchetypeAvailable() As Boolean Implements Parser.ArchetypeAvailable
             Get
                 Return Not adlArchetype Is Nothing
             End Get
         End Property
+
         Public ReadOnly Property Archetype() As Archetype Implements Parser.Archetype
             Get
                 Return adlArchetype
             End Get
         End Property
+
         Public ReadOnly Property OpenFileError() As Boolean Implements Parser.OpenFileError
             Get
                 Return mOpenFileError
             End Get
         End Property
+
         Public ReadOnly Property WriteFileError() As Boolean Implements Parser.WriteFileError
             Get
                 Return mWriteFileError
@@ -81,18 +89,6 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Sub ResetAll() Implements Parser.ResetAll
             EIF_adlInterface.reset()
-        End Sub
-
-        Public Sub Serialise(ByVal a_format As String) Implements Parser.Serialise
-            If AvailableFormats.Contains(a_format) Then
-                Try
-                    adlArchetype.MakeParseTree()
-                    EIF_adlInterface.serialise_archetype(Eiffel.String(a_format))
-                Catch e As Exception
-                    Debug.Assert(False, e.Message)
-                    MessageBox.Show(AE_Constants.Instance.ErrorSaving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            End If
         End Sub
 
         Public Sub OpenFile(ByVal aFileName As String, ByVal filemanager As FileManagerLocal) Implements Parser.OpenFile
@@ -195,63 +191,28 @@ Namespace ArchetypeEditor.ADL_Classes
             Return adlArchetype.GetCanonicalArchetype()
         End Function
 
-        Public Sub WriteFile(ByVal FileName As String, ByVal output_format As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile
-            'Change from intermediate format to ADL
-            ' then make it again
+        Public Sub WriteFile(ByVal fileName As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile
+            'Change from intermediate format to ADL then make it again
 
-            mWriteFileError = True ' default is that an error occurred
+            mWriteFileError = True
+
             Try
                 If Not parserSynchronised Then
                     adlArchetype.MakeParseTree()
                 End If
+
                 If EIF_adlInterface.archetype_available Then
                     adlArchetype.RemoveUnusedCodes()
-
-                    ' HKF: 8 Dec 2008
                     adlArchetype.SetArchetypeDigest()
+                    EIF_adlInterface.save_archetype(Eiffel.String(fileName), Eiffel.String(TypeName))
 
-                    If EIF_adlInterface.has_archetype_serialiser_format(Eiffel.String(output_format)) Then
-                        EIF_adlInterface.save_archetype(Eiffel.String(FileName), Eiffel.String(output_format))
-                        If EIF_adlInterface.exception_encountered Then
-                            MessageBox.Show(EIF_adlInterface.status.to_cil)
-                            EIF_adlInterface.reset()
-                        ElseIf Not EIF_adlInterface.save_succeeded Then
-                            MessageBox.Show(EIF_adlInterface.status.to_cil)
-                        Else
-                            mWriteFileError = False
-                        End If
+                    If EIF_adlInterface.exception_encountered Then
+                        MessageBox.Show(EIF_adlInterface.status.to_cil)
+                        EIF_adlInterface.reset()
+                    ElseIf Not EIF_adlInterface.save_succeeded Then
+                        MessageBox.Show(EIF_adlInterface.status.to_cil)
                     Else
-                        MessageBox.Show("Archetype format - " & output_format & " -  no longer available")
-                    End If
-                Else
-                    MessageBox.Show("Archetype not available - error on making parse tree")
-                End If
-            Catch ex As Exception
-                MessageBox.Show(AE_Constants.Instance.ErrorSaving & " " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-        End Sub
-
-
-        Public Sub WriteAdlDirect(ByVal FileName As String)
-            Try
-                If EIF_adlInterface.archetype_available Then
-                    adlArchetype.RemoveUnusedCodes()
-
-                    ' HKF: 8 Dec 2008
-                    adlArchetype.SetArchetypeDigest()
-
-                    If EIF_adlInterface.has_archetype_serialiser_format(Eiffel.String("adl")) Then
-                        EIF_adlInterface.save_archetype(Eiffel.String(FileName), Eiffel.String("adl"))
-                        If EIF_adlInterface.exception_encountered Then
-                            MessageBox.Show(EIF_adlInterface.status.to_cil)
-                            EIF_adlInterface.reset()
-                        ElseIf Not EIF_adlInterface.save_succeeded Then
-                            MessageBox.Show(EIF_adlInterface.status.to_cil)
-                        Else
-                            mWriteFileError = False
-                        End If
-                    Else
-                        MessageBox.Show("Archetype format - ADL -  no longer available")
+                        mWriteFileError = False
                     End If
                 Else
                     MessageBox.Show("Archetype not available - error on making parse tree")
@@ -285,7 +246,6 @@ Namespace ArchetypeEditor.ADL_Classes
             MyBase.Finalize()
         End Sub
 #End Region
-
 
         Sub New()
             EIF_adlInterface = openehr.adl_parser.interface.Create.ADL_INTERFACE.make

@@ -117,13 +117,14 @@ Namespace ArchetypeEditor.ADL_Classes
             End Get
         End Property
 
-        Public Overrides ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
+        Public Overrides ReadOnly Property SerialisedArchetype() As String
             Get
                 MakeParseTree()
 
                 Try
+                    RemoveUnusedCodes()
                     SetArchetypeDigest()
-                    adlEngine.serialise(Eiffel.String(a_format))
+                    adlEngine.serialise(Eiffel.String("adl"))
                     Return adlEngine.serialised_archetype.to_cil
                 Catch e As System.Reflection.TargetInvocationException
                     If Not e.InnerException Is Nothing Then
@@ -181,7 +182,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Sub RemoveUnusedCodes()
-            adlArchetype.ontology_remove_unused_codes()
+            adlArchetype.remove_ontology_unused_codes()
         End Sub
 
         Protected Sub SetArchetypeId(ByVal an_archetype_id As ArchetypeID)

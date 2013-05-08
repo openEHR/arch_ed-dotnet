@@ -4531,16 +4531,16 @@ Public Class Designer
 
     Sub RefreshRichText()
         ' refreshes the output of the rich text box
-        Dim s As String = ""
+        Dim format As String = ""
 
         For Each tbb As System.Windows.Forms.ToolBarButton In DisplayToolBar.Buttons
             If tbb.Pushed Then
-                s = CType(tbb.Tag, String).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                format = CType(tbb.Tag, String).ToLowerInvariant
                 Exit For
             End If
         Next
 
-        Select Case s
+        Select Case format
             Case "rtf"
                 WriteRichText()
             Case "adl", "xml", "owl"
@@ -4549,10 +4549,10 @@ Public Class Designer
                 Try
                     Cursor = Cursors.WaitCursor
 
-                    If s = mFileManager.ParserType.ToLowerInvariant() Then
-                        mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
+                    If format = mFileManager.ParserType.ToLowerInvariant() Then
+                        mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype()
                     Else
-                        mRichTextArchetype.Text = mFileManager.ExportSerialised(s)
+                        mRichTextArchetype.Text = mFileManager.SerialisedArchetype(format)
                     End If
                 Catch ex As Exception
                     ShowException("Error serialising archetype", ex)
@@ -4594,7 +4594,7 @@ Public Class Designer
                             args.AddParam("copyright-text", "", mTabPageDescription.CopyrightTextBox.Text)
                         End If
 
-                        Dim reader As Xml.XmlReader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
+                        Dim reader As Xml.XmlReader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.SerialisedArchetype("xml")))
                         Dim stream As New IO.FileStream(html, FileMode.Create)
                         transform.Transform(reader, args, stream)
                         stream.Close()

@@ -31,7 +31,7 @@ Public MustInherit Class Archetype
     MustOverride ReadOnly Property Paths(ByVal languageCode As String, ByVal parserIsSynchronised As Boolean, Optional ByVal Logical As Boolean = False) As String()
 
     MustOverride ReadOnly Property SourceCode() As String
-    MustOverride ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
+    MustOverride ReadOnly Property SerialisedArchetype() As String
     MustOverride Sub Specialise(ByVal NewConceptShortName As String, ByRef The_Ontology As OntologyManager)
     MustOverride Sub UpdateArchetypeId()
 
@@ -80,7 +80,7 @@ Public MustInherit Class Archetype
         End Set
     End Property
 
-    Public ReadOnly Property hasData() As Boolean
+    Public ReadOnly Property HasData() As Boolean
         Get
             Return Not cDefinition Is Nothing
         End Get

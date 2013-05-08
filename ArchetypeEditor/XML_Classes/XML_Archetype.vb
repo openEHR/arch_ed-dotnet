@@ -114,15 +114,10 @@ Namespace ArchetypeEditor.XML_Classes
             End Get
         End Property
 
-        Public Overrides ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
+        Public Overrides ReadOnly Property SerialisedArchetype() As String
             Get
-                If a_format.ToLowerInvariant() = "xml" Then
-                    MakeParseTree()
-                    Return mArchetypeParser.Serialise
-                Else
-                    Debug.Assert(False, "Cannot return format '" + a_format + " from XML parser!")
-                    Return "Error - " + a_format + " is not available for XML parser"
-                End If
+                MakeParseTree()
+                Return mArchetypeParser.Serialise
             End Get
         End Property
 

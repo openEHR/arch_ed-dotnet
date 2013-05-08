@@ -25,41 +25,49 @@ Namespace ArchetypeEditor.XML_Classes
                 Return mFileName
             End Get
         End Property
+
         Public ReadOnly Property Xml_Parser() As XMLParser.XmlArchetypeParser
             Get
                 Return mXmlParser
             End Get
         End Property
+
         Public ReadOnly Property AvailableFormats() As ArrayList Implements Parser.AvailableFormats
             Get
                 Return mXmlParser.AvailableFormats
             End Get
         End Property
+
         Public ReadOnly Property TypeName() As String Implements Parser.TypeName
             Get
                 Return "xml"
             End Get
         End Property
+
         Public ReadOnly Property Status() As String Implements Parser.Status
             Get
                 Return mXmlParser.Status
             End Get
         End Property
+
         Public ReadOnly Property ArchetypeAvailable() As Boolean Implements Parser.ArchetypeAvailable
             Get
                 Return mXmlParser.ArchetypeAvailable
             End Get
         End Property
+
         Public ReadOnly Property Archetype() As Archetype Implements Parser.Archetype
             Get
                 Return mArchetype
             End Get
         End Property
+
         Public ReadOnly Property OpenFileError() As Boolean Implements Parser.OpenFileError
             Get
                 Return mOpenFileError
             End Get
         End Property
+
         Public ReadOnly Property WriteFileError() As Boolean Implements Parser.WriteFileError
             Get
                 Return mWriteFileError
@@ -68,17 +76,6 @@ Namespace ArchetypeEditor.XML_Classes
 
         Public Sub ResetAll() Implements Parser.ResetAll
             mXmlParser.ResetAll()
-        End Sub
-
-        Public Sub Serialise(ByVal a_format As String) Implements Parser.Serialise
-            If AvailableFormats.Contains(a_format) Then
-                Try
-                    mArchetype.MakeParseTree()
-                Catch e As Exception
-                    Debug.Assert(False, e.Message)
-                    MessageBox.Show(AE_Constants.Instance.ErrorSaving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            End If
         End Sub
 
         Public Sub OpenFile(ByVal aFileName As String, ByVal filemanager As FileManagerLocal) Implements Parser.OpenFile
@@ -116,20 +113,19 @@ Namespace ArchetypeEditor.XML_Classes
             Return mXmlParser.GetCanonicalArchetype()
         End Function
 
-        Public Sub WriteFile(ByVal a_file_name As String, ByVal output_format As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile
-            'Change from intermediate format to XML
-            ' then make it again
+        Public Sub WriteFile(ByVal fileName As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile
+            'Change from intermediate format to XML then make it again
 
-            Debug.Assert(output_format = "xml")
+            mWriteFileError = True
 
-            mWriteFileError = True ' default is that an error occurred
             Try
                 If Not parserSynchronised Then
                     mArchetype.MakeParseTree()
                 End If
+
                 If mXmlParser.ArchetypeAvailable Then
-                    'mArchetype.RemoveUnusedCodes()
-                    mXmlParser.WriteFile(a_file_name)
+                    mXmlParser.WriteFile(fileName)
+
                     If mXmlParser.WriteFileError Then
                         MessageBox.Show(mXmlParser.Status)
                         mXmlParser.ResetAll()
@@ -151,6 +147,7 @@ Namespace ArchetypeEditor.XML_Classes
         Public Sub New(ByVal a_parser As XMLParser.XmlArchetypeParser)
             mXmlParser = a_parser
             mFileName = a_parser.FileName
+
             If a_parser.ArchetypeAvailable Then
                 mArchetype = New XML_Archetype(a_parser)
             End If

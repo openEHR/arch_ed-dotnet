@@ -17,7 +17,7 @@ Public Class FileManagerLocal
     Private mIsFileDirty As Boolean
     Private mIsFileLoading As Boolean
     Private mParserSynchronised As Boolean = True
-    Private mHasOpenFileError, mHasWriteFileError As Boolean
+    Private mHasOpenFileError As Boolean
     Private mArchetypeEngine As Parser
     Private mFileName, mPriorFileName As String
     Private mWorkingDirectory As String
@@ -84,12 +84,6 @@ Public Class FileManagerLocal
     Public ReadOnly Property HasOpenFileError() As Boolean
         Get
             Return mHasOpenFileError
-        End Get
-    End Property
-
-    Public ReadOnly Property HasWriteFileError() As Boolean
-        Get
-            Return mHasWriteFileError
         End Get
     End Property
 
@@ -307,14 +301,6 @@ Public Class FileManagerLocal
         End If
     End Sub
 
-    Public Function FormatIsAvailable(ByVal a_format As String) As Boolean
-        Return mArchetypeEngine.AvailableFormats.Contains(a_format)
-    End Function
-
-    Public Sub SerialiseArchetype(ByVal a_format As String)
-        mArchetypeEngine.Serialise(a_format)
-    End Sub
-
     Public Function CreateXMLParser() As XMLParser.XmlArchetypeParser
         'Create a new parser
         Dim result As New XMLParser.XmlArchetypeParser()
@@ -464,14 +450,14 @@ Public Class FileManagerLocal
         Return result
     End Function
 
-    Public Function ExportSerialised(ByVal format As String) As String
+    Public Function SerialisedArchetype(ByVal format As String) As String
         mObjectToSave.PrepareToSave()
 
-        Select Case format.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+        Select Case format.ToLowerInvariant
             Case "xml"
                 Return CreateXMLParser().Serialise()
             Case "adl"
-                Return CreateAdlParser().Archetype.SerialisedArchetype(format)
+                Return CreateAdlParser().Archetype.SerialisedArchetype()
             Case Else
                 Debug.Assert(False, "Format not handled")
                 Return "Format not available"
@@ -482,8 +468,8 @@ Public Class FileManagerLocal
         'Use another parser to save file
 
         mObjectToSave.PrepareToSave()
-        Dim ext As String = format.ToLower(Globalization.CultureInfo.InvariantCulture)
-        Dim filter As String = format.ToUpper(Globalization.CultureInfo.InvariantCulture) & "|" & "*." & ext
+        Dim ext As String = format.ToLowerInvariant
+        Dim filter As String = format.ToUpperInvariant & "|" & "*." & ext
 
         Select Case ext
             Case "xml"
@@ -503,7 +489,7 @@ Public Class FileManagerLocal
                 Dim s As String = FileNameChosenByUser(ext, filter)
 
                 If s <> "" Then
-                    parser.WriteAdlDirect(s)
+                    parser.WriteFile(s, True)
                 End If
 
             Case Else
@@ -652,9 +638,9 @@ Public Class FileManagerLocal
                 End If
 
                 Try
-                    WriteArchetype(name)
+                    mArchetypeEngine.WriteFile(name, ParserSynchronised)
 
-                    If Not mHasWriteFileError Then
+                    If Not mArchetypeEngine.WriteFileError Then
                         FileEdited = False
                     End If
                 Catch ex As Exception
@@ -702,23 +688,7 @@ Public Class FileManagerLocal
 
     Private Sub AutoWrite(ByVal fileName As String)
         Dim appata As String = Main.Instance.Options.ApplicationDataDirectory
-        mArchetypeEngine.WriteFile(IO.Path.Combine(appata, fileName & "." & ParserType), ParserType, ParserSynchronised)
-    End Sub
-
-    Protected Sub WriteArchetype(ByVal fileName As String)
-        'Check that the file name is an available format
-        Dim s As String = fileName.Substring(fileName.LastIndexOf(".") + 1).ToLowerInvariant()
-
-        If FormatIsAvailable(s) Then
-            mHasWriteFileError = False
-            mArchetypeEngine.WriteFile(fileName, s, ParserSynchronised)
-
-            If mArchetypeEngine.WriteFileError Then
-                mHasWriteFileError = True
-            End If
-        Else
-            MessageBox.Show(AE_Constants.Instance.Incorrect_format & "File: '" & fileName & ", Format: '" & s & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
+        mArchetypeEngine.WriteFile(IO.Path.Combine(appata, fileName & "." & ParserType), ParserSynchronised)
     End Sub
 
     'Public Sub ConvertToADL(ByVal anOntologyManager As OntologyManager)

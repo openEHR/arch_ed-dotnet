@@ -143,7 +143,7 @@ Public Class Main
             frm.OpenArchetype(filename)
 
             For Each format As String In formats
-                Dim bytes As Byte() = System.Text.Encoding.UTF8.GetBytes(Filemanager.Master.ExportSerialised(format))
+                Dim bytes As Byte() = System.Text.Encoding.UTF8.GetBytes(Filemanager.Master.SerialisedArchetype(format))
                 Dim stream As New IO.FileStream(IO.Path.ChangeExtension(exportFilename, format), IO.FileMode.Create)
 
                 Try
