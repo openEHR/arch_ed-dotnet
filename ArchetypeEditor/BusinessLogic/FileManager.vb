@@ -214,18 +214,23 @@ Public Class FileManagerLocal
             Try
                 mArchetypeEngine.OpenFile(aFileName, Me)
 
-                ' if this archtype comes from the web, aFileName will be the URL.
-                ' In this case we have to download the file temporarily on the users system so that it can be opened in the Editor.
-                ' It will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
-                ' User has to save the file manually if a local copy of it is wanted.
-                ' This avoids data and file overflow.
+                ' If the archetype came from the web, it was downloaded to the user's temporary system folder so that it could be opened.
+                ' If the archetype was loaded from a recovery file, 
+                ' Delete it immediately after opening it, to avoid accumulating junk.
+                ' The user has to save the file manually if a local copy of it is wanted.
 
-                If aFileName.StartsWith(System.IO.Path.GetTempPath) Then
+                Dim baseFileName As String = IO.Path.GetFileName(aFileName)
+
+                If aFileName.StartsWith(IO.Path.GetTempPath) Or baseFileName.StartsWith("Recovery-") Then
                     IO.File.SetAttributes(aFileName, IO.FileAttributes.Normal)
                     IO.File.Delete(aFileName)
 
-                    'Set the file name to the current directory and not the temp folder
-                    FileName = IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), IO.Path.GetFileName(aFileName))
+                    ' Set the file name to the current directory and not the temporary folder.
+                    If baseFileName.StartsWith("Recovery-") Then
+                        baseFileName = baseFileName.Substring(9)
+                    End If
+
+                    FileName = IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), baseFileName)
                 End If
 
                 If mArchetypeEngine.OpenFileError Then
