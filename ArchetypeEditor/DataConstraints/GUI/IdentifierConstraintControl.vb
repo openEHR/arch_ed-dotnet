@@ -50,7 +50,7 @@ Public Class IdentifierConstraintControl : Inherits ConstraintControl
     Friend WithEvents txtType As System.Windows.Forms.TextBox
     Friend WithEvents lblType As System.Windows.Forms.Label
     Friend WithEvents txtId As System.Windows.Forms.TextBox
-    Friend WithEvents lblAssigner As System.Windows.Forms.Label
+    Friend WithEvents lblId As System.Windows.Forms.Label
     Friend WithEvents LabelTop As System.Windows.Forms.Label
 
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
@@ -61,7 +61,7 @@ Public Class IdentifierConstraintControl : Inherits ConstraintControl
         Me.txtType = New System.Windows.Forms.TextBox
         Me.lblType = New System.Windows.Forms.Label
         Me.txtId = New System.Windows.Forms.TextBox
-        Me.lblAssigner = New System.Windows.Forms.Label
+        Me.lblId = New System.Windows.Forms.Label
         Me.ClusterPanelTop.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -122,19 +122,19 @@ Public Class IdentifierConstraintControl : Inherits ConstraintControl
         Me.txtId.Size = New System.Drawing.Size(303, 22)
         Me.txtId.TabIndex = 6
         '
-        'lblAssigner
+        'lblId
         '
-        Me.lblAssigner.AutoSize = True
-        Me.lblAssigner.Location = New System.Drawing.Point(35, 134)
-        Me.lblAssigner.Name = "lblAssigner"
-        Me.lblAssigner.Size = New System.Drawing.Size(21, 17)
-        Me.lblAssigner.TabIndex = 7
-        Me.lblAssigner.Text = "ID"
+        Me.lblId.AutoSize = True
+        Me.lblId.Location = New System.Drawing.Point(35, 134)
+        Me.lblId.Name = "lblId"
+        Me.lblId.Size = New System.Drawing.Size(21, 17)
+        Me.lblId.TabIndex = 7
+        Me.lblId.Text = "ID"
         '
         'IdentifierConstraintControl
         '
         Me.Controls.Add(Me.txtId)
-        Me.Controls.Add(Me.lblAssigner)
+        Me.Controls.Add(Me.lblId)
         Me.Controls.Add(Me.txtType)
         Me.Controls.Add(Me.lblType)
         Me.Controls.Add(Me.txtIssuer)
@@ -160,7 +160,7 @@ Public Class IdentifierConstraintControl : Inherits ConstraintControl
         LabelTop.Text = Filemanager.GetOpenEhrTerm(663, LabelTop.Text)
         lblIssuer.Text = Filemanager.GetOpenEhrTerm(713, lblIssuer.Text)
         lblType.Text = Filemanager.GetOpenEhrTerm(443, lblType.Text)
-        lblAssigner.Text = Filemanager.GetOpenEhrTerm(714, lblAssigner.Text)
+        lblId.Text = Filemanager.GetOpenEhrTerm(760, lblId.Text)
     End Sub
 
     Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
