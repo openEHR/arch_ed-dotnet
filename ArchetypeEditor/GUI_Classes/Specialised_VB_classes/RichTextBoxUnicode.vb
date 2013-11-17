@@ -20,19 +20,21 @@ Public Class RichTextBoxUnicode
     Public Shared Function EscapedRtfString(ByVal s As String) As String
         Dim result As New System.Text.StringBuilder()
 
-        For Each c As Char In s
-            If c = "\"c Or c = "{"c Or c = "}"c Then
-                result.Append("\" + c)
-            Else
-                Dim i As UInt32 = Convert.ToUInt32(c)
-
-                If &H20 <= i And i < &H7F Then
-                    result.Append(c)
+        If Not s Is Nothing Then
+            For Each c As Char In s
+                If c = "\"c Or c = "{"c Or c = "}"c Then
+                    result.Append("\" + c)
                 Else
-                    result.Append("\u" + i.ToString + "?")
+                    Dim i As UInt32 = Convert.ToUInt32(c)
+
+                    If &H20 <= i And i < &H7F Then
+                        result.Append(c)
+                    Else
+                        result.Append("\u" + i.ToString + "?")
+                    End If
                 End If
-            End If
-        Next
+            Next
+        End If
 
         Return result.ToString()
     End Function
