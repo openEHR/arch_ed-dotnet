@@ -16,6 +16,7 @@ Public Class OtherDefinitionDetails
     Function hasOtherDetail(ByVal key As String) As Boolean
         Return mOtherDetails.ContainsKey(key)
     End Function
+    
     ReadOnly Property OtherDetails() As String(,)
         Get
             Dim i As Integer = 0
@@ -28,5 +29,11 @@ Public Class OtherDefinitionDetails
             Next
             Return s
         End Get
+    End Property
+    
+    ReadOnly Property HashDetails As Hashtable
+    	Get
+    		Return mOtherDetails
+    	End Get
     End Property
 End Class

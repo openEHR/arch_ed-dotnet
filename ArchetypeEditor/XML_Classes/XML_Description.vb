@@ -30,6 +30,7 @@ Namespace ArchetypeEditor.XML_Classes
 
         Function XML_Description() As XMLParser.RESOURCE_DESCRIPTION
             Dim authorDetails As New ArrayList
+            Dim otherDetails As New ArrayList
             Dim di As New XMLParser.StringDictionaryItem
             di.id = "name"
 
@@ -43,7 +44,7 @@ Namespace ArchetypeEditor.XML_Classes
                 di = New XMLParser.StringDictionaryItem
                 di.id = "email"
                 di.Value = mOriginalAuthorEmail
-                authorDetails.Add(di)
+                authorDetails.Add(di)   
             End If
 
             If mOriginalAuthorDate <> "" Then
@@ -61,30 +62,34 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             mXML_Description.original_author = authorDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
-            Dim otherDetails As New ArrayList
+            
 
-            If References <> "" Then
-                di = New XMLParser.StringDictionaryItem
-                di.id = "references"
-                di.Value = mReferences
+       		Dim ctr As Integer
+       		For ctr = 0 To mOtherDetails.OtherDetails.GetLength(0)-1
+               di = New XMLParser.StringDictionaryItem
+               di.id = mOtherDetails.OtherDetails(ctr,0)
+               di.Value = mOtherDetails.OtherDetails(ctr,1)
                 otherDetails.Add(di)
-            End If
+            Next
+            
+           
+          	UpdateOtherDetails(REFERENCES_KEY, mReferences, otherdetails)
+            UpdateOtherDetails(CURRENT_CONTACT_KEY, mCurrentContact, otherdetails)
+            UpdateOtherDetails(ORIGINAL_PUBLISHER_KEY,mOriginalPublisher , otherdetails)
+			UpdateOtherDetails(ORIGINAL_NAMESPACE_KEY,mOriginalNamespace , otherdetails)
+			UpdateOtherDetails(CUSTODIAN_ORGANISATION_KEY,mCustodianOrganisation , otherdetails)
+			UpdateOtherDetails(CUSTODIAN_NAMESPACE_KEY, mCustodianNamespace, otherdetails)
+			UpdateOtherDetails(LICENCE_KEY, mLicence,otherdetails)
+			UpdateOtherDetails(REVIEW_DATE_KEY,mReviewDate , otherdetails)
+			UpdateOtherDetails(REVISION_KEY, mRevision , otherdetails)
+  
 
-            If CurrentContact <> "" Then
-                di = New XMLParser.StringDictionaryItem
-                di.id = CurrentContactKey
-                di.Value = mCurrentContact
-                otherDetails.Add(di)
-            End If
-
-            If Not ArchetypeDigest Is Nothing Then
-                di = New XMLParser.StringDictionaryItem
-                di.id = AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID
-                di.Value = ArchetypeDigest
-                otherDetails.Add(di)
-            End If
-
+			If Not ArchetypeDigest Is Nothing Then
+				UpdateOtherDetails(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID,ArchetypeDigest, otherdetails)    
+             End If 
+            
             mXML_Description.other_details = otherDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
+            
             mXML_Description.lifecycle_state = LifeCycleStateAsString
 
             If Not String.IsNullOrEmpty(mArchetypePackageURI) Then
@@ -114,7 +119,34 @@ Namespace ArchetypeEditor.XML_Classes
 
             Return mXML_Description
         End Function
-
+        
+        Private Sub UpdateOtherDetails(byval currentKey As String, currentvalue As String, otherdetails As System.Collections.ArrayList)
+        	
+        	Dim di As XMLParser.StringDictionaryItem
+        	Dim currdi As XMLParser.StringDictionaryItem
+        	
+        	If currentvalue <> "" Then 
+        		di = New XMLParser.StringDictionaryItem
+        	
+                di.id = CurrentKey
+                di.Value = CurrentValue
+                
+                Dim indxItem As Integer
+                Dim indxFound As Integer = -1
+                For indxItem = 0 To otherdetails.Count -1
+                	currdi = TryCast(otherdetails.Item(indxItem),XMLParser.StringDictionaryItem)
+                	If currdi.id = di.id Then
+                		indxFound = indxItem
+                	End If
+                Next
+                If indxFound = -1 Then
+                  otherDetails.Add(di)
+                Else
+                	otherDetails.Item(indxFound) = di
+                End If
+                End If
+        End Sub
+        
         Sub New(ByVal description As XMLParser.RESOURCE_DESCRIPTION, ByVal language As String)
             mXML_Description = description
             mADL_Version = "2.0" ' this is actually the archetype model rather than ADL
@@ -143,11 +175,28 @@ Namespace ArchetypeEditor.XML_Classes
 
             If Not description.other_details Is Nothing Then
                 For Each di As XMLParser.StringDictionaryItem In description.other_details
-                    Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                        Case "references"
+                	
+                	mOtherDetails.AddOtherDetail(di.id,di.Value)
+                	
+                	Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                        Case REFERENCES_KEY
                             mReferences = di.Value
-                        Case CurrentContactKey
-                            mCurrentContact = di.Value
+                        Case CURRENT_CONTACT_KEY
+                        	mCurrentContact = di.Value
+                        Case ORIGINAL_PUBLISHER_KEY
+                        	mOriginalPublisher = di.Value
+                        Case ORIGINAL_NAMESPACE_KEY
+                        	mOriginalNamespace = di.Value
+                        Case CUSTODIAN_ORGANISATION_KEY
+                        	mCustodianOrganisation = di.Value
+                        Case CUSTODIAN_NAMESPACE_KEY
+                        	mCustodianNamespace = di.Value
+                        Case LICENCE_KEY
+                        	mLicence = di.Value
+                        Case REVIEW_DATE_KEY
+                        	mReviewDate = di.Value
+                        Case REVISION_KEY
+                        	mRevision = di.Value
                     End Select
                 Next
             End If
@@ -173,8 +222,16 @@ Namespace ArchetypeEditor.XML_Classes
             OriginalAuthorOrganisation = description.OriginalAuthorOrganisation
             OtherContributors = description.OtherContributors
             References = description.References
+            mOtherDetails = description.OtherDetails
             CurrentContact = description.CurrentContact
             LifeCycleState = description.LifeCycleState
+            OriginalPublisher = description.OriginalPublisher
+            OriginalNamespace = description.OriginalNamespace
+            CustodianOrganisation = description.CustodianOrganisation
+            CustodianNamespace = description.CustodianNamespace
+            Licence = description.Licence
+            Revision = description.Revision
+            ReviewDate = description.ReviewDate
         End Sub
 
     End Class

@@ -12,6 +12,7 @@
 
 Option Explicit On 
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports EiffelStructures = EiffelSoftware.Library.Base.structures
 Imports AM = XMLParser.OpenEhr.V1.Its.Xml.AM
 Imports XMLParser
 
@@ -19,7 +20,7 @@ Namespace ArchetypeEditor.ADL_Classes
     Public Class ADL_Description
         Inherits ArchetypeDescription
 
-        Private mADL_Description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
+        Private mADL_Description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION '//Eiffel tree
 
         Public Overrides Property Details() As ArchetypeDetails
             Get
@@ -30,7 +31,8 @@ Namespace ArchetypeEditor.ADL_Classes
             End Set
         End Property
 
-        Function ADL_Description() As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
+		'// Write AE Description data to Eifell Parse tree
+		Function ADL_Description() As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
             mADL_Description.original_author.clear_all()
 
             If OriginalAuthor IsNot Nothing Then
@@ -55,21 +57,33 @@ Namespace ArchetypeEditor.ADL_Classes
                 mADL_Description.set_resource_package_uri(Eiffel.String(mArchetypePackageURI))
             End If
 
-            If Not mADL_Description.other_details Is Nothing Then
-                mADL_Description.other_details.clear_all()
+            If Not mOtherDetails Is Nothing Then
+            	If Not mADL_Description.other_details Is Nothing Then 
+            		mADL_Description.other_details.clear_all()
+           	  	End If
+           	  
+           	  '// Add all other Details keyed items from AE to Eifell Parse tree
+           	  Dim rows As Integer
+           	  For rows = 0 to mOtherDetails.OtherDetails.GetLength(0) -1
+           	  	Dim itemKey As String = mOtherDetails.OtherDetails(rows,0)
+           	  	Dim itemValue As String = mOtherDetails.OtherDetails(rows,1)
+           	  	AddOtherDetailItem(itemValue, itemKey)
+
+            	Next
             End If
 
-            If mReferences <> "" Then
-                mADL_Description.add_other_detail(Eiffel.String("references"), Eiffel.String(mReferences))
-            End If
 
-            If mCurrentContact <> "" Then
-                mADL_Description.add_other_detail(Eiffel.String(CurrentContactKey), Eiffel.String(mCurrentContact))
-            End If
-
-            If ArchetypeDigest <> "" Then
-                mADL_Description.add_other_detail(Eiffel.String(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), Eiffel.String(ArchetypeDigest))
-            End If
+			'// Add specific Keyed items to Eiffel parse tree
+			AddOtherDetailItem(mReferences, REFERENCES_KEY)
+			AddOtherDetailItem(mCurrentContact, CURRENT_CONTACT_KEY)
+			AddOtherDetailItem(mOriginalPublisher, ORIGINAL_PUBLISHER_KEY)
+			AddOtherDetailItem(mOriginalNamespace, ORIGINAL_NAMESPACE_KEY)
+			AddOtherDetailItem(mCustodianOrganisation, CUSTODIAN_ORGANISATION_KEY)
+			AddOtherDetailItem(mCustodianNamespace, CUSTODIAN_NAMESPACE_KEY)
+			AddOtherDetailItem(mLicence, LICENCE_KEY)
+			AddOtherDetailItem(mReviewDate, REVIEW_DATE_KEY)
+			AddOtherDetailItem(mRevision, REVISION_KEY)
+			AddOtherDetailItem( ArchetypeDigest,AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID)
 
             mADL_Description.clear_other_contributors()
 
@@ -80,7 +94,8 @@ Namespace ArchetypeEditor.ADL_Classes
             Return mADL_Description
         End Function
 
-        Sub New(ByVal description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION)
+		'// Create new AE description from Eifell parse tree
+		Sub New(ByVal description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION)
             mADL_Description = description
 
             If Not description.resource_package_uri Is Nothing Then
@@ -110,13 +125,31 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             If Not description.other_details Is Nothing Then
-                If description.other_details.has(Eiffel.String("references")) Then
-                    mReferences = description.other_details.at(Eiffel.String("references")).to_cil
-                End If
-
-                If description.other_details.has(Eiffel.String(CurrentContactKey)) Then
-                    mCurrentContact = description.other_details.at(Eiffel.String(CurrentContactKey)).to_cil
-                End If
+            	              
+                '//Retrieve specific other_details keys from Eiffel parse tree
+                mReferences = ReturnOtherDetailItem(REFERENCES_KEY,description)
+                mCurrentContact = ReturnOtherDetailItem(CURRENT_CONTACT_KEY,description)
+                mOriginalPublisher = ReturnOtherDetailItem(ORIGINAL_PUBLISHER_KEY,description)
+                mOriginalNamespace = ReturnOtherDetailItem(ORIGINAL_NAMESPACE_KEY,description)
+                mCustodianOrganisation = ReturnOtherDetailItem(CUSTODIAN_ORGANISATION_KEY,description)
+                mCustodianNamespace = ReturnOtherDetailItem(CUSTODIAN_NAMESPACE_KEY,description)
+                mLicence = ReturnOtherDetailItem(LICENCE_KEY,description)
+                mReviewDate = ReturnOtherDetailItem(REVIEW_DATE_KEY,description)
+                mRevision = ReturnOtherDetailItem(REVISION_KEY,description)
+                
+    
+         '//Retrieve specific other_details keys from Eiffel parse tree
+    			Dim itemkey,itemvalue As EiffelKernel.string.STRING_8
+               	description.other_details.start()            
+            	Do While Not description.other_details.off
+            		
+                    itemValue = description.other_details.item_for_iteration
+                    itemKey = description.other_details.key_for_iteration
+        
+                    mOtherDetails.AddOtherDetail(itemKey.to_cil,itemvalue.to_cil)
+            
+                    description.other_details.forth()
+                 Loop
             End If
 
             MyBase.LifeCycleStateAsString = description.lifecycle_state.to_cil
@@ -135,13 +168,38 @@ Namespace ArchetypeEditor.ADL_Classes
             mOriginalAuthorDate = description.OriginalAuthorDate
             mOtherContributors = description.OtherContributors
             mReferences = description.References
-            mCurrentContact = description.CurrentContact
+            mOtherDetails = description.OtherDetails
+            mCurrentContact = description.CurrentContact     
             LifeCycleState = description.LifeCycleState
+            OriginalPublisher = description.OriginalPublisher
+            OriginalNamespace = description.OriginalNamespace
+            CustodianOrganisation = description.CustodianOrganisation
+            CustodianNamespace = description.CustodianNamespace
+            Licence = description.Licence
+            Revision = description.Revision
+            ReviewDate = description.ReviewDate
         End Sub
 
         Sub New(ByVal language As String)
             mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(Eiffel.String(Main.Instance.Options.UserName), Eiffel.String(language))
         End Sub
+        
+        '//Add other_detail item to the Eiffel parse tree
+        Sub AddOtherDetailItem(item As String,key As String)
+        	 If item <> "" Then
+                mADL_Description.add_other_detail(Eiffel.String(key), Eiffel.String(item))
+            End If
+        End Sub
+        
+        '//Retrieve other_detail item to the Eiffel parse tree
+        function ReturnOtherDetailItem(itemKey As String,description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION) As string
+        	If description.other_details.has(Eiffel.String(itemKey)) Then
+              Return description.other_details.at(Eiffel.String(itemKey)).to_cil
+        	Else
+        	  Return ""
+        	End If
+        End Function
+        
 
     End Class
 End Namespace

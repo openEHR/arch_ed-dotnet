@@ -1,4 +1,4 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <Terminology xmlns="http://openehr.org/Terminology.xsd">
   <Language code="af" Description="Afrikaans" />
   <Language code="sq" Description="Albanian" />
@@ -1522,6 +1522,20 @@
   <Concept Language="en" ConceptID="758" Rubric="Node meaning in terminologies" />
   <Concept Language="en" ConceptID="759" Rubric="Reasons why null" />
   <Concept Language="en" ConceptID="760" Rubric="ID" />
+	
+  <Concept Language="en" ConceptID="761" Rubric="Licence" />
+  <Concept Language="en" ConceptID="762" Rubric="Revision" />
+  <Concept Language="en" ConceptID="763" Rubric="Original Publisher" />
+  <Concept Language="en" ConceptID="764" Rubric="Original Namespace" />
+  <Concept Language="en" ConceptID="765" Rubric="Custodian Organisation" />
+  <Concept Language="en" ConceptID="766" Rubric="Custodian Namespace" />
+  <Concept Language="en" ConceptID="767" Rubric="Review Date" />
+  <Concept Language="en" ConceptID="768" Rubric="Currently Responsible" />
+  <Concept Language="en" ConceptID="769" Rubric="Original Author/Publisher" />
+  <Concept Language="en" ConceptID="770" Rubric="References/Other Details" />
+  <Concept Language="en" ConceptID="771" Rubric="Other Details (read-only)" />		
+	
+	
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />

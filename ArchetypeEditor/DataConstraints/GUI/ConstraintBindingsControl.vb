@@ -1,3 +1,4 @@
+
 Public Class ConstraintBindingsControl
 
     Private view As DataView

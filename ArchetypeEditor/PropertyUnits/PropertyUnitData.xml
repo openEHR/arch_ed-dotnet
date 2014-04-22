@@ -1,4 +1,4 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <PropertyUnits xmlns="http://tempuri.org/PropertyUnits.xsd">
   <Property id="0" Text="Length" openEHR="122" />
   <Property id="1" Text="Mass" openEHR="124" />
@@ -82,7 +82,7 @@
   <Property id="84" Text="Rate of Change - Frequency" openEHR="754" />
   <Unit property_id="0" Text="m" name="meter" conversion="1" primary="true" />
   <Unit property_id="0" Text="cm" name="centimeter" conversion="0.01" primary="false" />
-  <Unit property_id="0" Text="µm" name="micrometer" conversion="1" coefficient="-6" primary="false" />
+  <Unit property_id="0" Text="um" name="micrometer" conversion="1" coefficient="-6" primary="false" />
   <Unit property_id="0" Text="ft" name="foot" conversion="0.3048" primary="false" />
   <Unit property_id="0" Text="Å" name="amstrong" conversion="1" coefficient="-10" primary="false" />
   <Unit property_id="0" Text="in" name="inch" conversion="0.0254" primary="false" />
@@ -108,7 +108,7 @@
   <Unit property_id="4" Text="statampere" conversion="3.3356" coefficient="-10" primary="false" />
   <Unit property_id="5" Text="m2" name="Sq. meter" conversion="1" primary="true" />
   <Unit property_id="5" Text="cm2" conversion="1" coefficient="-4" primary="false" />
-  <Unit property_id="5" Text="µm2" conversion="1" coefficient="-12" primary="false" />
+  <Unit property_id="5" Text="um2" conversion="1" coefficient="-12" primary="false" />
   <Unit property_id="5" Text="ft2" conversion="0.0929" primary="false" />
   <Unit property_id="5" Text="in2" conversion="6.452" coefficient="-4" primary="false" />
   <Unit property_id="5" Text="yd2" conversion="0.8361" primary="false" />
@@ -117,7 +117,7 @@
   <Unit property_id="6" Text="m3" name="cubic meter" conversion="1" primary="true" />
   <Unit property_id="6" Text="ml" name="millilitre" conversion="1" coefficient="-6" primary="false" />
   <Unit property_id="6" Text="l" name="litre" conversion="1" coefficient="-3" primary="false" UCUM="L" />
-  <Unit property_id="6" Text="µm3" name="micro cubic meter" conversion="1" coefficient="-18" primary="false" />
+  <Unit property_id="6" Text="um3" name="micro cubic meter" conversion="1" coefficient="-18" primary="false" />
   <Unit property_id="6" Text="ft3" name="cubic foot" conversion="0.02832" primary="false" />
   <Unit property_id="6" Text="in3" name="cubic inch" conversion="1.639" coefficient="-5" primary="false" />
   <Unit property_id="6" Text="gal (U.S.)" name="Imperial gallon" conversion="3.785" coefficient="-3" primary="false" />
@@ -132,11 +132,11 @@
   <Unit property_id="7" Text="gph" conversion="1.051" coefficient="-6" primary="false" />
   <Unit property_id="8" Text="m3/kg" conversion="1" primary="true" />
   <Unit property_id="8" Text="cm3/g" conversion="1" coefficient="-3" primary="false" />
-  <Unit property_id="8" Text="µm3/g" conversion="1" coefficient="-15" primary="false" />
+  <Unit property_id="8" Text="um3/g" conversion="1" coefficient="-15" primary="false" />
   <Unit property_id="8" Text="ft3/lbm" conversion="0.0624" primary="false" />
   <Unit property_id="9" Text="m2/kg" conversion="1" primary="true" />
   <Unit property_id="9" Text="cm2/g" conversion="0.1" primary="false" />
-  <Unit property_id="9" Text="µm2/lbm" conversion="2.205" coefficient="-12" primary="false" />
+  <Unit property_id="9" Text="um2/lbm" conversion="2.205" coefficient="-12" primary="false" />
   <Unit property_id="9" Text="ft2/lbm" conversion="0.2048" primary="false" />
   <Unit property_id="10" Text="m/s" conversion="1" primary="true" />
   <Unit property_id="10" Text="cm/s" conversion="0.01" primary="false" />
@@ -414,7 +414,7 @@
   <Unit property_id="2" Text="microsec" name="microsecond" conversion="1" coefficient="-6" primary="false" />
   <Unit property_id="2" Text="wk" name="week" conversion="604800" primary="false" UCUM="WK" />
   <Unit property_id="5" Text="mm2" conversion="1" coefficient="-6" primary="false" />
-  <Unit property_id="56" Text="" conversion="1" primary="true" />
+  <Unit property_id="56" Text="1" conversion="1" primary="true" />
   <Unit property_id="56" Text="10*3" conversion="1" coefficient="3" primary="false" />
   <Unit property_id="56" Text="10*6" conversion="1" coefficient="6" primary="false" />
   <Unit property_id="56" Text="10*9" conversion="1" coefficient="9" primary="false" />
@@ -440,6 +440,7 @@
   <Unit property_id="1" Text="t" name="tonne" conversion="1" coefficient="3" primary="false" UCUM="t" />
   <Unit property_id="31" Text="{358/124}" name="{FORCE/MASS}" conversion="0" primary="false" />
   <Unit property_id="59" Text="{384/129}" name="{AMOUNT (mole)/VOLUME}" conversion="0" primary="false" />
+  <Unit property_id="59" Text="{384/384}" name="{AMOUNT (mole)/AMOUNT (mole)}" conversion="0" primary="false" />
   <Unit property_id="59" Text="{124/129}" name="{MASS/VOLUME}" conversion="0" primary="false" />
   <Unit property_id="59" Text="{385/129}" name="{MASS (IU)/VOLUME}" conversion="0" primary="false" />
   <Unit property_id="59" Text="{380/129}" name="{QUALIFIED REAL/VOLUME}" conversion="0" primary="false" />
@@ -476,7 +477,7 @@
   <Unit property_id="6" Text="LPF" name="Low power field" conversion="0" primary="false" />
   <Unit property_id="6" Text="mm3" name="cubic milimeter" conversion="1" coefficient="-6" primary="false" UCUM="mm3" />
   <Unit property_id="1" Text="mg" name="milligram" conversion="1" coefficient="-6" primary="false" />
-  <Unit property_id="1" Text="µg" name="microgram" conversion="1" coefficient="-9" primary="false" />
+  <Unit property_id="1" Text="ug" name="microgram" conversion="1" coefficient="-9" primary="false" />
   <Unit property_id="1" Text="nanogm" name="nanogram" conversion="1" coefficient="-12" primary="false" />
   <Unit property_id="1" Text="pg" name="picogram" conversion="1" coefficient="-15" primary="false" />
   <Unit property_id="63" Text="{121/128}" name="{ENERGY/TIME}" primary="false" />
@@ -487,7 +488,7 @@
   <Unit property_id="65" Text="U" conversion="1" coefficient="0" primary="true" UCUM="U" />
   <Unit property_id="65" Text="mU" conversion="1" coefficient="-3" primary="false" UCUM="MU" />
   <Unit property_id="59" Text="{445/129}" name="{Mass (Units)/VOLUME}" conversion="0" primary="false" />
-  <Unit property_id="58" Text="µmol" name="micromol" conversion="1" coefficient="-6" primary="false" />
+  <Unit property_id="58" Text="umol" name="micromol" conversion="1" coefficient="-6" primary="false" />
   <Unit property_id="66" Text="C" name="Coulomb" conversion="1" primary="true" UCUM="C" />
   <Unit property_id="66" Text="A-s" conversion="1" primary="false" />
   <Unit property_id="67" Text="cd" name="candela" conversion="1" primary="true" UCUM="CD" />
@@ -540,7 +541,7 @@
   <Unit property_id="19" Text="microgm/h" conversion="2.78" coefficient="-13" primary="false" />
   <Unit property_id="19" Text="microgm/min" conversion="1.6" coefficient="-11" primary="false" />
   <Unit property_id="19" Text="microgm/24h" conversion="1.158" coefficient="-14" primary="false" />
-  <Unit property_id="6" Text="µL" name="micro litre" conversion="1" coefficient="-6" primary="false" UCUM="uL" />
+  <Unit property_id="6" Text="uL" name="micro litre" conversion="1" coefficient="-6" primary="false" UCUM="uL" />
   <Unit property_id="1" Text="dram" name="Dram" primary="false" UCUM="[dr_av]" />
   <Unit property_id="1" Text="oz(troy)" name="Troy ounce" primary="false" UCUM="[oz_tr]" />
   <Unit property_id="1" Text="fg" name="femtogram" conversion="1" coefficient="-18" primary="false" UCUM="fg" />

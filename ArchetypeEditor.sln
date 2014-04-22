@@ -1,5 +1,7 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
+# SharpDevelop 4.4
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ArchetypeEditor", "ArchetypeEditor\ArchetypeEditor.vbproj", "{179B4A54-F044-430D-9DB6-E950F80EC87F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLParser", "XMLParser\XMLParser.csproj", "{927EB444-A45E-4703-946F-78EB37FAD96E}"
