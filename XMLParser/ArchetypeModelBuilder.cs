@@ -55,7 +55,9 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                 throw new ArgumentNullException("visitor must not be null");
 
             ARCHETYPE result = visitor.CloneArchetype(archetype);
+#if XMLParser
             AmSerializer.ValidateArchetype(result);
+#endif
             return result;            
         }
 
@@ -66,25 +68,27 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
 
         public static string ArchetypeDigest(ARCHETYPE archetype)
         {
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Encoding = Encoding.UTF8;
-            settings.OmitXmlDeclaration = true;
-            settings.Indent = false;
-
-            MemoryStream stream = AmSerializer.Serialize(settings, archetype);
-            AmSerializer.ValidateArchetype(stream);
+            var settings = new XmlWriterSettings
+            {
+                Encoding = Encoding.UTF8,
+                OmitXmlDeclaration = true,
+                Indent = false
+            };
 
 //#if DEBUG
-//            archetypeStream.Position = 0;
-//            StreamReader reader = new System.IO.StreamReader(archetypeStream);
-//            using (System.IO.StreamWriter writer = new System.IO.StreamWriter("CanonicalArchetype.xml", false, Encoding.UTF8))
-//            {
-//                writer.Write(reader.ReadToEnd());
-//                writer.Close();
-//                reader.Close();
-//            }
+//            using (var writer = XmlWriter.Create(@".\CanonicalArchetype2.xml", new XmlWriterSettings { Indent = true }))
+//                AmSerializer.Serialize(writer, archetype);
 //#endif
-            byte[] data = stream.ToArray();
+
+            byte[] data;
+
+            using (MemoryStream stream = AmSerializer.Serialize(settings, archetype))
+            {
+#if XMLParser
+                AmSerializer.ValidateArchetype(stream);
+#endif
+                data = stream.ToArray();
+            }
 
             // Remove UTF-8 BOM 
             int offset = 0;
