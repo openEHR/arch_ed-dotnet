@@ -21,29 +21,37 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
 
         public static ARCHETYPE BuildFromAdlFile(string adlFilePath, CloneConstraintVisitor visitor)
         {
-            //Check.Assert(System.IO.File.Exists(adlFilePath), "File '" + adlFilePath + "' does not exist.");
-
-            ARCHETYPE result = null;
-            openehr.adl_parser.@interface.ADL_INTERFACE adlParser;
-            adlParser = openehr.adl_parser.@interface.Create.ADL_INTERFACE.make();
+            openehr.adl_parser.@interface.ADL_INTERFACE adlParser = openehr.adl_parser.@interface.Create.ADL_INTERFACE.make();
             adlParser.open_adl_file(Eiffel.String(adlFilePath));
 
             // check file opened successfully by checking status
             if (!adlParser.archetype_source_loaded())
-                throw new ApplicationException(String.Format("{0}\n{1}", adlFilePath, adlParser.status().to_cil()));
-            else
-            {
-                adlParser.parse_archetype();
+                throw new ApplicationException(adlFilePath + "\n" + adlParser.status().to_cil());
 
-                if (!adlParser.parse_succeeded())
-                    throw new ApplicationException(String.Format("{0}\n{1}", Path.GetFileName(adlFilePath), adlParser.status().to_cil()));
-                else if (!adlParser.archetype_available())
-                    throw new ApplicationException(String.Format("{0}\n{1}", adlFilePath, adlParser.status().to_cil()));
-                else
-                    result = Build(adlParser.adl_engine().archetype(), visitor);
-            }
-            
-            return result;
+            return BuildFromAdlParser(adlParser, visitor);
+        }
+
+        public static ARCHETYPE BuildFromAdl(string adl, CloneConstraintVisitor visitor)
+        {
+            openehr.adl_parser.@interface.ADL_INTERFACE adlParser = openehr.adl_parser.@interface.Create.ADL_INTERFACE.make();
+            adlParser.adl_engine().set_source(Eiffel.String(adl));
+            return BuildFromAdlParser(adlParser, visitor);
+        }
+
+        public static ARCHETYPE BuildFromAdlParser(openehr.adl_parser.@interface.ADL_INTERFACE adlParser, CloneConstraintVisitor visitor)
+        {
+            if (adlParser == null)
+                throw new ArgumentNullException("adlParser must not be null");
+
+            adlParser.parse_archetype();
+
+            if (!adlParser.parse_succeeded())
+                throw new ApplicationException("ADL parsing failed\n" + adlParser.status().to_cil());
+
+            if (!adlParser.archetype_available())
+                throw new ApplicationException("ADL archetype unavailable after parsing\n" + adlParser.status().to_cil());
+
+            return Build(adlParser.adl_engine().archetype(), visitor);
         }
 
         public static ARCHETYPE Build(openehr.openehr.am.archetype.ARCHETYPE archetype, CloneConstraintVisitor visitor)
@@ -58,7 +66,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
 #if XMLParser
             AmSerializer.ValidateArchetype(result);
 #endif
-            return result;            
+            return result;
         }
 
         public static ARCHETYPE CanonicalArchetype(ARCHETYPE archetype)
@@ -75,10 +83,10 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                 Indent = false
             };
 
-//#if DEBUG
-//            using (var writer = XmlWriter.Create(@".\CanonicalArchetype2.xml", new XmlWriterSettings { Indent = true }))
-//                AmSerializer.Serialize(writer, archetype);
-//#endif
+            //#if DEBUG
+            //            using (var writer = XmlWriter.Create(@".\CanonicalArchetype2.xml", new XmlWriterSettings { Indent = true }))
+            //                AmSerializer.Serialize(writer, archetype);
+            //#endif
 
             byte[] data;
 
@@ -108,7 +116,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                 throw new ApplicationException("Unexpected start character of canonical archetype model");
 
             MD5 md5 = new MD5CryptoServiceProvider();
-            SoapHexBinary hexEncoder = new SoapHexBinary(md5.ComputeHash(data, offset, data.Length-offset));
+            SoapHexBinary hexEncoder = new SoapHexBinary(md5.ComputeHash(data, offset, data.Length - offset));
             return hexEncoder.ToString();
         }
     }
