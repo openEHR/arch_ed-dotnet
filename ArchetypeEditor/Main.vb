@@ -55,6 +55,10 @@ Public Class Main
             ElseIf exportFormats.Count > 0 And exportDirectory = "" Then
                 exportDirectory = IO.Path.GetFullPath(arg)
             ElseIf arg.Length >= 2 Then
+                If arg.StartsWith("/l:") Then
+                    arg = arg.Substring(3)
+                End If
+
                 mDefaultLanguageCode = arg.Substring(0, 2)
                 mSpecificLanguageCode = arg
             Else
