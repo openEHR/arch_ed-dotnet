@@ -34,7 +34,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         mFileManager = a_file_manager
         mAllowedValuesDataView = New DataView(mFileManager.OntologyManager.TermDefinitionTable)
-    ''    ConstraintBindingsGrid.BindTables(mFileManager.OntologyManager)
+        ConstraintBindingsGrid.BindTables(mFileManager.OntologyManager)
 
         If Main.Instance.DefaultLanguageCode <> "en" Then
             radioText.Text = Filemanager.GetOpenEhrTerm(444, radioText.Text)
@@ -46,7 +46,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             ToolTip1.SetToolTip(RemoveTermButton, Filemanager.GetOpenEhrTerm(152, "Remove term"))
             TermConstraintLabel.Text = Filemanager.GetOpenEhrTerm(87, TermConstraintLabel.Text)
             TermConstraintDescriptionLabel.Text = Filemanager.GetOpenEhrTerm(113, TermConstraintDescriptionLabel.Text)
-      ''      ConstraintBindingsGrid.TranslateGui()
+            ConstraintBindingsGrid.TranslateGui()
         End If
     End Sub
 
