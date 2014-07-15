@@ -121,8 +121,7 @@ namespace XMLParser
         public void ReplaceTermDefinition(string languageCode, ARCHETYPE_TERM term, bool replaceTranslations)
         {
             string code = term.code.ToLowerInvariant();
-
-            System.Diagnostics.Debug.Assert(HasTermCode(term.code), "Does not have code " + code);
+            System.Diagnostics.Debug.Assert(HasTermCode(code), "Does not have code " + code);
             CodeDefinitionSet[] definitions;
 
             if (code.StartsWith("at"))
@@ -132,54 +131,42 @@ namespace XMLParser
 
             if (definitions != null)
             {
+                ARCHETYPE_TERM termForTranslations = null;
+
+                if (replaceTranslations && languageCode == PrimaryLanguageCode)
+                {
+                    termForTranslations = new ARCHETYPE_TERM
+                    {
+                        code = code,
+                        items = new StringDictionaryItem[term.items.Length]
+                    };
+
+                    for (int i = 0; i < term.items.Length; i++)
+                    {
+                        termForTranslations.items[i] = new StringDictionaryItem
+                        {
+                            id = term.items[i].id,
+                            Value = "*" + term.items[i].Value + "(" + languageCode + ")"
+                        };
+                    }
+                }
+
                 foreach (CodeDefinitionSet ls in definitions)
                 {
-                    if (ls.language == languageCode)
-                    {
-                        ReplaceTerm(ls, term);
-                    }
-                    else if (replaceTranslations && languageCode == PrimaryLanguageCode)
-                    {           
-                        foreach (StringDictionaryItem di in term.items)
-                        {                            
-                            di.Value = string.Format("*{0}({1})", di.Value, languageCode);
-                        }
+                    ARCHETYPE_TERM replacement = ls.language == languageCode ? term : termForTranslations;
 
-                        ReplaceTerm(ls, term);
+                    if (replacement != null)
+                    {
+                        ARCHETYPE_TERM[] terms = ls.items;
+
+                        for (int i = 0; i < terms.Length; i++)
+                        {
+                            if (terms[i].code.ToLowerInvariant() == code)
+                                terms[i] = replacement;
+                        }
                     }
                 }
             }
-        }
-               
-        private void ReplaceTerm(CodeDefinitionSet languageSet, ARCHETYPE_TERM term)
-        {
-            languageSet.items [GetIndexOfTerm(languageSet, term)] = term;
-        }
-        
-        private int GetIndexOfTerm(CodeDefinitionSet languageSet, ARCHETYPE_TERM term)
-        {
-            int i;
-
-            for (i = 0; i < languageSet.items.Length; i++)
-            {
-                if (languageSet.items[i].code == term.code)
-                    return i;
-            }
-
-            return -1;
-        }
-
-        private ARCHETYPE_TERM FindTermForCode(string code, ARCHETYPE_TERM[] terms)
-        {
-            code = code.ToLowerInvariant();
-
-            foreach (ARCHETYPE_TERM at in terms)
-            {
-                if (at.code.ToLowerInvariant() == code)
-                    return at;
-            }
-
-            return null;
         }
 
         public void AddLanguage(string language)
