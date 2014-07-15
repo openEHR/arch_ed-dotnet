@@ -980,8 +980,7 @@ Public Class Designer
     	Me.TabMain.TabIndex = 1
     	Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpDisplay, Me.tpInterface, Me.tpDescription})
     	Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
-    	AddHandler Me.TabMain.SelectionChanged, AddressOf Me.TabMainSelectionChanged
-    	'
+        '
     	'tpHeader
     	'
     	Me.tpHeader.BackColor = System.Drawing.Color.Transparent
@@ -4808,10 +4807,6 @@ Public Class Designer
         End If
     End Sub
 
-    
-    Sub TabMainSelectionChanged(sender As Object, e As EventArgs)
-    	
-    End Sub
 End Class
 
 

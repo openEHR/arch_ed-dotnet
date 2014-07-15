@@ -342,8 +342,7 @@ Public Class TabPageDescription
     	Me.lblLicence.TabIndex = 37
     	Me.lblLicence.Text = "Licence:"
     	Me.lblLicence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-    	AddHandler Me.lblLicence.Click, AddressOf Me.LicenseLabelClick
-    	'
+        '
     	'ButAddKeyWord
     	'
     	Me.ButAddKeyWord.BackColor = System.Drawing.Color.Transparent
@@ -410,8 +409,7 @@ Public Class TabPageDescription
     	Me.TabDescription.Size = New System.Drawing.Size(950, 631)
     	Me.TabDescription.TabIndex = 15
     	Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation, Me.tpReferences})
-    	AddHandler Me.TabDescription.SelectionChanged, AddressOf Me.TabDescriptionSelectionChanged
-    	'
+        '
     	'tpAuthor
     	'
     	Me.tpAuthor.Controls.Add(Me.gbCurrentResponsibility)
@@ -458,8 +456,7 @@ Public Class TabPageDescription
     	Me.lblReviewDate.TabIndex = 51
     	Me.lblReviewDate.Text = "Review Date:"
     	Me.lblReviewDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-    	AddHandler Me.lblReviewDate.Click, AddressOf Me.LblReviewDateClick
-    	'
+        '
     	'btnCustodianDefaults
     	'
     	Me.btnCustodianDefaults.Location = New System.Drawing.Point(543, 44)
@@ -520,8 +517,7 @@ Public Class TabPageDescription
     	Me.lblCurrentContact.TabIndex = 0
     	Me.lblCurrentContact.Text = "Contact"
     	Me.lblCurrentContact.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	AddHandler Me.lblCurrentContact.Click, AddressOf Me.LblCurrentContactClick
-    	'
+        '
     	'txtCurrentContact
     	'
     	Me.txtCurrentContact.Location = New System.Drawing.Point(113, 144)
@@ -546,8 +542,7 @@ Public Class TabPageDescription
     	Me.gbContributors.TabIndex = 40
     	Me.gbContributors.TabStop = false
     	Me.gbContributors.Text = "Contributors"
-    	AddHandler Me.gbContributors.Enter, AddressOf Me.GbContributorsEnter
-    	'
+        '
     	'butEditContributor
     	'
     	Me.butEditContributor.BackColor = System.Drawing.Color.Transparent
@@ -1356,7 +1351,6 @@ Public Class TabPageDescription
         txtTranslatorOrganisation.Text = ""
         mTranslationAltered = False
         gbTranslator.Visible = False
-        
     End Sub
 
     Public Sub Translate()
@@ -1389,15 +1383,15 @@ Public Class TabPageDescription
         tpAuthor.Title = Filemanager.GetOpenEhrTerm(580, tpAuthor.Title)
         tpDescDetails.Title = Filemanager.GetOpenEhrTerm(581, tpDescDetails.Title)
         tpTranslation.Title = Filemanager.GetOpenEhrTerm(650, tpTranslation.Title)
-        tpReferences.Title = Filemanager.GetOpenEhrTerm(770, tpReferences.Title)
+        tpReferences.Title = Filemanager.GetOpenEhrTerm(768, tpReferences.Title)
         gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, gbPurpose.Text)
         gbUse.Text = Filemanager.GetOpenEhrTerm(582, gbUse.Text)
         gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, gbMisuse.Text)
         CopyrightLabel.Text = Filemanager.GetOpenEhrTerm(690, CopyrightLabel.Text)
-        gbAuthor.Text = Filemanager.GetOpenEhrTerm(769, gbAuthor.Text)
+        gbAuthor.Text = Filemanager.GetOpenEhrTerm(584, gbAuthor.Text)
         gbTranslator.Text = Filemanager.GetOpenEhrTerm(757, gbTranslator.Text)
         gbContributors.Text = Filemanager.GetOpenEhrTerm(604, gbContributors.Text)
-        gbCurrentResponsibility.Text = Filemanager.GetOpenEhrTerm(768, gbCurrentResponsibility.Text)
+        gbCurrentResponsibility.Text = Filemanager.GetOpenEhrTerm(705, gbCurrentResponsibility.Text)
         lblCurrentContact.Text = Filemanager.GetOpenEhrTerm(704, lblCurrentContact.Text)
         UseYourNameButton.Text = Filemanager.GetOpenEhrTerm(716, UseYourNameButton.Text)
         UseYourEmailButton.Text = Filemanager.GetOpenEhrTerm(717, UseYourEmailButton.Text)
@@ -1405,8 +1399,6 @@ Public Class TabPageDescription
         CurrentContactButton.Text = Filemanager.GetOpenEhrTerm(719, CurrentContactButton.Text)
         UseAllAuthorDefaultsButton.Text = Filemanager.GetOpenEhrTerm(720, UseAllAuthorDefaultsButton.Text)
         TodayButton.Text = Filemanager.GetOpenEhrTerm(721, TodayButton.Text)
-        
-        
         lblLicence.Text = Filemanager.GetOpenEhrTerm(761, lblLicence.Text)
         lblRevision.Text = Filemanager.GetOpenEhrTerm(762, lblRevision.Text)
         lblOriginalPublisher.Text = Filemanager.GetOpenEhrTerm(763, lblOriginalPublisher.Text)
@@ -1414,9 +1406,7 @@ Public Class TabPageDescription
         lblCustodianOrganisation.Text = Filemanager.GetOpenEhrTerm(765, lblCustodianOrganisation.Text)
         lblCustodianNamespace.Text = Filemanager.GetOpenEhrTerm(766, lblCustodianNamespace.Text)
         lblReviewDate.Text = Filemanager.GetOpenEhrTerm(767, lblReviewDate.Text)
-        
-        gbOtherDetails.Text = Filemanager.GetOpenEhrTerm(771, gbOtherDetails.Text)
-        
+        gbOtherDetails.Text = Filemanager.GetOpenEhrTerm(769, gbOtherDetails.Text)
     End Sub
 
     Private Function MakeLifeCycleTable() As DataTable
@@ -1473,72 +1463,19 @@ Public Class TabPageDescription
     End Sub
     
     Private Function MakeOtherDetailsTable As DataTable
-    	
-    	mOtherDetailsTable = New DataTable
-        Dim keyColumn As New DataColumn("Key", GetType(String))
-        mOtherDetailsTable.Columns.Add(keyColumn)
-        Dim valueColumn As New DataColumn("Value", GetType(String))
-        mOtherDetailsTable.Columns.Add(valueColumn)
+        mOtherDetailsTable = New DataTable
+        mOtherDetailsTable.Columns.Add(New DataColumn("Key", GetType(String)))
+        mOtherDetailsTable.Columns.Add(New DataColumn("Value", GetType(String)))
 
-    	
-    	OtherDetailsKeyColumn.DataPropertyName = "Key"
+        OtherDetailsKeyColumn.DataPropertyName = "Key"
         OtherDetailsValueColumn.DataPropertyName = "Value"
         dgOtherDetails.DataSource = mOtherDetailsTable
         
         mOtherDetailsTable.Clear()
         mArchetypeDescription.FillTable(mOtherDetailsTable)
-        
-            
-            
-            Return mOtherDetailsTable
+        Return mOtherDetailsTable
     End Function
-    
-    
-    
-    Private Sub mOtherDetails_ColumnChanged(ByVal sender As Object, ByVal e As System.Data.DataColumnChangeEventArgs) Handles mOtherDetailsTable.ColumnChanging
-''        If e.Column.Ordinal = 0 Then
-''            Dim newKey As String = TryCast(e.ProposedValue, String)
 
-''            If newKey Is Nothing OrElse System.Text.RegularExpressions.Regex.IsMatch(newKey, "^[a-zA-Z][a-zA-Z0-9_]*$") Then
-''                e.Row.ClearErrors()
-''            Else
-''                e.Row.SetColumnError(0, OtherDetailsKeyColumn.HeaderText + " must start with a letter, optionally followed by letters or numbers.")
-''            End If
-''        End If
-
-'        If Not mIsLoading And Not e.Row.RowState = DataRowState.Detached Then
-'            If e.Column.Ordinal = 0 Then
-'                Dim oldKey As String = TryCast(e.Row(0), String)
-'
-'                If Not String.IsNullOrEmpty(oldKey) Then
-'                    mFileManager.OntologyManager.DeleteOtherAnnotation(oldKey, mArchetypeNode.RM_Class.NodeId)
-'                End If
-'            End If
-'
-'            mFileManager.FileEdited = True
-'        End If
-    End Sub
-
-    Private Sub mOtherDetails_RowChanged(ByVal sender As Object, ByVal e As System.Data.DataRowChangeEventArgs) Handles mOtherDetailsTable.RowChanging, mOtherDetailsTable.RowDeleting
-'        If Not (mIsLoading Or mFileManager.FileLoading) Then
-'            If Not e.Row.HasErrors Then
-'                Dim key As String = TryCast(e.Row(0), String)
-                Dim value As String = TryCast(e.Row(1), String)
-'
-'                If Not String.IsNullOrEmpty(key) And Not String.IsNullOrEmpty(value) Then
-'                    Select Case e.Action
-'                        Case DataRowAction.Add, DataRowAction.Commit, DataRowAction.Change
-'                            mFileManager.OntologyManager.SetOtherAnnotation(key, value, mArchetypeNode.RM_Class.NodeId)
-'                        Case DataRowAction.Delete
-'                            mFileManager.OntologyManager.DeleteOtherAnnotation(key, mArchetypeNode.RM_Class.NodeId)
-'                    End Select
-'
-'                    mFileManager.FileEdited = True
-'                End If
-   ''        End If
-     ''   End If
-    End Sub
-    
     Private Sub TabPageDescription_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         Dim wasLoading As Boolean = Filemanager.Master.FileLoading
@@ -1551,12 +1488,12 @@ Public Class TabPageDescription
         Filemanager.Master.FileLoading = wasLoading
     End Sub
 
-Private Sub TextUpdated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtOrganisation.TextChanged, _
-	txtOrganisation.TextChanged, txtTranslationAccreditation.TextChanged, _
-	txtTranslatorEmail.TextChanged, txtTranslatorOrganisation.TextChanged, _
-	txtDate.TextChanged, txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, _
-	comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged, txtMisuse.TextChanged, CopyrightTextBox.TextChanged, _
-	txtReferences.TextChanged
+    Private Sub TextUpdated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtOrganisation.TextChanged, _
+            txtOrganisation.TextChanged, txtTranslationAccreditation.TextChanged, _
+            txtTranslatorEmail.TextChanged, txtTranslatorOrganisation.TextChanged, _
+            txtDate.TextChanged, txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, _
+            comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged, txtMisuse.TextChanged, CopyrightTextBox.TextChanged, _
+            txtReferences.TextChanged
         If Not Filemanager.Master.FileLoading Then
             Filemanager.Master.FileEdited = True
         End If
@@ -1642,40 +1579,16 @@ Private Sub txtTranslatorName_TextChanged(ByVal sender As System.Object, ByVal e
         End If
     End Sub
 
+    Private Sub listContributors_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listContributors.DoubleClick
+        butEditContributor_Click(sender, e)
+    End Sub
+
     Private Sub CurrentContactButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CurrentContactButton.Click
         txtCurrentContact.Text = Main.Instance.Options.UserName & ", " & Main.Instance.Options.UserOrganisation & "<" & Main.Instance.Options.UserEmail & ">"
     End Sub
     
-    
     Sub BtnPublisherDefaults_Click(sender As Object, e As EventArgs)
-    	' TODO: Implement BtnPublisherDefaults_Click
+        ' TODO: Implement BtnPublisherDefaults_Click
     End Sub
-    
-    Sub LicenceImage_Click(sender As Object, e As EventArgs)
-    	' TODO: Implement LicenceImage_Click
-    End Sub
-    
-    Sub Label1_Click(sender As Object, e As EventArgs)
-    	' TODO: Implement Label1_Click
-    End Sub
-    
-    Sub TabDescriptionSelectionChanged(sender As Object, e As EventArgs)
-    	
-    End Sub
-    
-    Sub LblCurrentContactClick(sender As Object, e As EventArgs)
-    	
-    End Sub
-    
-    Sub LicenseLabelClick(sender As Object, e As EventArgs)
-    	
-    End Sub
-    
-    Sub LblReviewDateClick(sender As Object, e As EventArgs)
-    	
-    End Sub
-    
-    Sub GbContributorsEnter(sender As Object, e As EventArgs)
-    	
-    End Sub
+
 End Class

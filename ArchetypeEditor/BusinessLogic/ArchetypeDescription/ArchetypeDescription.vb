@@ -35,19 +35,17 @@ Public MustInherit Class ArchetypeDescription
     Protected mCustodianNamespace As String
     Protected mRevision As String
     Protected mReviewDate As String
-
     Private mArchetypeDigest As String
 
-    Public Const CURRENT_CONTACT_KEY As String = "current_contact"
-    Public Const ORIGINAL_PUBLISHER_KEY As String = "original_publisher"
-    Public Const ORIGINAL_NAMESPACE_KEY As String = "original_namespace"
-    Public Const CUSTODIAN_ORGANISATION_KEY As String = "custodian_organisation"
-    Public Const CUSTODIAN_NAMESPACE_KEY As String = "custodian_namespace"
-    Public Const REVIEW_DATE_KEY As String = "review_date"
-    Public Const LICENCE_KEY As String = "licence"
-    Public Const REVISION_KEY As String = "revision_string"
-    Public Const REFERENCES_KEY As String = "references"
-    
+    Public Const CurrentContactKey As String = "current_contact"
+    Public Const OriginalPublisherKey As String = "original_publisher"
+    Public Const OriginalNamespaceKey As String = "original_namespace"
+    Public Const CustodianorganisationKey As String = "custodian_organisation"
+    Public Const CustodianNamespaceKey As String = "custodian_namespace"
+    Public Const ReviewDateKey As String = "review_date"
+    Public Const LicenceKey As String = "licence"
+    Public Const RevisionKey As String = "revision_string"
+    Public Const ReferencesKey As String = "references"
 
     Property OriginalAuthor() As String
         Get
@@ -183,8 +181,7 @@ Public MustInherit Class ArchetypeDescription
 			mReviewDate = value
 		End Set
 	End Property
-	
-    
+
     Property OtherDetails As OtherDefinitionDetails
         Get
             Return mOtherDetails
@@ -242,36 +239,27 @@ Public MustInherit Class ArchetypeDescription
         End Set
     End Property
     
-    Sub FillTable(tbl As DataTable)
-            	           	
-            	           	
-            	Dim detailkey As String 
-            	Dim detailItem As String 
-            	Dim K As DictionaryEntry
-     
-            	For Each K In mOtherDetails.HashDetails
-                
-                detailkey = K.Key
-                detailItem =K.Value
-                
-                If (detailkey <> CURRENT_CONTACT_KEY) And _
-                    	(detailkey <> ORIGINAL_PUBLISHER_KEY) And _
-                    	(detailkey <> ORIGINAL_NAMESPACE_KEY) And _
-                    	(detailkey <> CUSTODIAN_ORGANISATION_KEY) And _
-                    	(detailkey <> CUSTODIAN_NAMESPACE_KEY) And _
-                    	(detailkey <> LICENCE_KEY) And _
-                    	(detailkey <> REFERENCES_KEY) And _
-                    	(detailkey <> REVIEW_DATE_KEY) And _
-                    	(detailkey <> REVISION_KEY) And _
-                    	(detailkey <> AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID) Then 
-                    	
-                    		Dim row As DataRow = tbl.NewRow
-                        	row(0) = detailkey
-                   	 		row(1) = detailitem
-                   	 		tbl.Rows.Add(row)
-                End If
-                   
-                Next
+    Sub FillTable(table As DataTable)
+        For Each entry As DictionaryEntry In mOtherDetails.HashDetails
+            Dim detailkey As String = entry.Key
+            Dim detailItem As String = entry.Value
+
+            If (detailkey <> CurrentContactKey) And _
+                (detailkey <> OriginalPublisherKey) And _
+                (detailkey <> OriginalNamespaceKey) And _
+                (detailkey <> CustodianorganisationKey) And _
+                (detailkey <> CustodianNamespaceKey) And _
+                (detailkey <> LicenceKey) And _
+                (detailkey <> ReferencesKey) And _
+                (detailkey <> ReviewDateKey) And _
+                (detailkey <> RevisionKey) And _
+                (detailkey <> AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID) Then
+                Dim row As DataRow = table.NewRow
+                row(0) = detailkey
+                row(1) = detailItem
+                table.Rows.Add(row)
+            End If
+        Next
     End Sub
 
 End Class

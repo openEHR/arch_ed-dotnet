@@ -832,6 +832,15 @@
   <PrimaryRubric Id="758" Language="en" />
   <PrimaryRubric Id="759" Language="en" />
   <PrimaryRubric Id="760" Language="en" />
+  <PrimaryRubric Id="761" Language="en" />
+  <PrimaryRubric Id="762" Language="en" />
+  <PrimaryRubric Id="763" Language="en" />
+  <PrimaryRubric Id="764" Language="en" />
+  <PrimaryRubric Id="765" Language="en" />
+  <PrimaryRubric Id="766" Language="en" />
+  <PrimaryRubric Id="767" Language="en" />
+  <PrimaryRubric Id="768" Language="en" />
+  <PrimaryRubric Id="769" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1347,7 +1356,7 @@
   <Concept Language="en" ConceptID="581" Rubric="Details" />
   <Concept Language="en" ConceptID="582" Rubric="Use" />
   <Concept Language="en" ConceptID="583" Rubric="Misuse" />
-  <Concept Language="en" ConceptID="584" Rubric="Original author" />
+  <Concept Language="en" ConceptID="584" Rubric="Original Author/Publisher" />
   <Concept Language="en" ConceptID="585" Rubric="Purpose" />
   <Concept Language="en" ConceptID="586" Rubric="Activity" />
   <Concept Language="en" ConceptID="587" Rubric="Activities" />
@@ -1466,7 +1475,7 @@
   <Concept Language="en" ConceptID="702" Rubric="No" />
   <Concept Language="en" ConceptID="703" Rubric="Changing to structure type {0} may lose some elements. Do you want to continue?" />
   <Concept Language="en" ConceptID="704" Rubric="Contact" />
-  <Concept Language="en" ConceptID="705" Rubric="Currently responsible" />
+  <Concept Language="en" ConceptID="705" Rubric="Currently Responsible" />
   <Concept Language="en" ConceptID="706" Rubric="Please enter the Concept part of the Archetype ID." />
   <Concept Language="en" ConceptID="707" Rubric="Specialised" />
   <Concept Language="en" ConceptID="708" Rubric="Rate of Change - Pressure" />
@@ -1522,7 +1531,6 @@
   <Concept Language="en" ConceptID="758" Rubric="Node meaning in terminologies" />
   <Concept Language="en" ConceptID="759" Rubric="Reasons why null" />
   <Concept Language="en" ConceptID="760" Rubric="ID" />
-	
   <Concept Language="en" ConceptID="761" Rubric="Licence" />
   <Concept Language="en" ConceptID="762" Rubric="Revision" />
   <Concept Language="en" ConceptID="763" Rubric="Original Publisher" />
@@ -1530,12 +1538,8 @@
   <Concept Language="en" ConceptID="765" Rubric="Custodian Organisation" />
   <Concept Language="en" ConceptID="766" Rubric="Custodian Namespace" />
   <Concept Language="en" ConceptID="767" Rubric="Review Date" />
-  <Concept Language="en" ConceptID="768" Rubric="Currently Responsible" />
-  <Concept Language="en" ConceptID="769" Rubric="Original Author/Publisher" />
-  <Concept Language="en" ConceptID="770" Rubric="References/Other Details" />
-  <Concept Language="en" ConceptID="771" Rubric="Other Details (read-only)" />		
-	
-	
+  <Concept Language="en" ConceptID="768" Rubric="References/Other Details" />		
+  <Concept Language="en" ConceptID="769" Rubric="Other Details (read-only)" />		
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />

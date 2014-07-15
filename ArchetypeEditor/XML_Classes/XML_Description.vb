@@ -62,34 +62,31 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             mXML_Description.original_author = authorDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
-            
 
        		Dim ctr As Integer
-       		For ctr = 0 To mOtherDetails.OtherDetails.GetLength(0)-1
-               di = New XMLParser.StringDictionaryItem
-               di.id = mOtherDetails.OtherDetails(ctr,0)
-               di.Value = mOtherDetails.OtherDetails(ctr,1)
+
+            For ctr = 0 To mOtherDetails.OtherDetails.GetLength(0) - 1
+                di = New XMLParser.StringDictionaryItem
+                di.id = mOtherDetails.OtherDetails(ctr, 0)
+                di.Value = mOtherDetails.OtherDetails(ctr, 1)
                 otherDetails.Add(di)
             Next
-            
-           
-          	UpdateOtherDetails(REFERENCES_KEY, mReferences, otherdetails)
-            UpdateOtherDetails(CURRENT_CONTACT_KEY, mCurrentContact, otherdetails)
-            UpdateOtherDetails(ORIGINAL_PUBLISHER_KEY,mOriginalPublisher , otherdetails)
-			UpdateOtherDetails(ORIGINAL_NAMESPACE_KEY,mOriginalNamespace , otherdetails)
-			UpdateOtherDetails(CUSTODIAN_ORGANISATION_KEY,mCustodianOrganisation , otherdetails)
-			UpdateOtherDetails(CUSTODIAN_NAMESPACE_KEY, mCustodianNamespace, otherdetails)
-			UpdateOtherDetails(LICENCE_KEY, mLicence,otherdetails)
-			UpdateOtherDetails(REVIEW_DATE_KEY,mReviewDate , otherdetails)
-			UpdateOtherDetails(REVISION_KEY, mRevision , otherdetails)
-  
 
-			If Not ArchetypeDigest Is Nothing Then
-				UpdateOtherDetails(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID,ArchetypeDigest, otherdetails)    
-             End If 
-            
+            UpdateOtherDetails(ReferencesKey, mReferences, otherdetails)
+            UpdateOtherDetails(CurrentContactKey, mCurrentContact, otherDetails)
+            UpdateOtherDetails(OriginalPublisherKey, mOriginalPublisher, otherdetails)
+            UpdateOtherDetails(OriginalNamespaceKey, mOriginalNamespace, otherdetails)
+            UpdateOtherDetails(CustodianorganisationKey, mCustodianOrganisation, otherdetails)
+            UpdateOtherDetails(CustodianNamespaceKey, mCustodianNamespace, otherDetails)
+            UpdateOtherDetails(LicenceKey, mLicence, otherDetails)
+            UpdateOtherDetails(ReviewDateKey, mReviewDate, otherDetails)
+            UpdateOtherDetails(RevisionKey, mRevision, otherdetails)
+
+            If Not ArchetypeDigest Is Nothing Then
+                UpdateOtherDetails(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID, ArchetypeDigest, otherdetails)
+            End If
+
             mXML_Description.other_details = otherDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
-            
             mXML_Description.lifecycle_state = LifeCycleStateAsString
 
             If Not String.IsNullOrEmpty(mArchetypePackageURI) Then
@@ -119,34 +116,34 @@ Namespace ArchetypeEditor.XML_Classes
 
             Return mXML_Description
         End Function
-        
-        Private Sub UpdateOtherDetails(byval currentKey As String, currentvalue As String, otherdetails As System.Collections.ArrayList)
-        	
-        	Dim di As XMLParser.StringDictionaryItem
-        	Dim currdi As XMLParser.StringDictionaryItem
-        	
-        	If currentvalue <> "" Then 
-        		di = New XMLParser.StringDictionaryItem
-        	
-                di.id = CurrentKey
+
+        Private Sub UpdateOtherDetails(ByVal currentKey As String, currentvalue As String, otherdetails As System.Collections.ArrayList)
+            Dim di As XMLParser.StringDictionaryItem
+            Dim currdi As XMLParser.StringDictionaryItem
+
+            If currentvalue <> "" Then
+                di = New XMLParser.StringDictionaryItem
+                di.id = currentKey
                 di.Value = CurrentValue
-                
-                Dim indxItem As Integer
-                Dim indxFound As Integer = -1
-                For indxItem = 0 To otherdetails.Count -1
-                	currdi = TryCast(otherdetails.Item(indxItem),XMLParser.StringDictionaryItem)
-                	If currdi.id = di.id Then
-                		indxFound = indxItem
-                	End If
+
+                Dim index As Integer = -1
+
+                For i As Integer = 0 To otherdetails.Count - 1
+                    currdi = TryCast(otherdetails.Item(i), XMLParser.StringDictionaryItem)
+
+                    If currdi.id = di.id Then
+                        index = i
+                    End If
                 Next
-                If indxFound = -1 Then
-                  otherDetails.Add(di)
+
+                If index = -1 Then
+                    otherdetails.Add(di)
                 Else
-                	otherDetails.Item(indxFound) = di
+                    otherdetails.Item(index) = di
                 End If
-                End If
+            End If
         End Sub
-        
+
         Sub New(ByVal description As XMLParser.RESOURCE_DESCRIPTION, ByVal language As String)
             mXML_Description = description
             mADL_Version = "2.0" ' this is actually the archetype model rather than ADL
@@ -175,28 +172,27 @@ Namespace ArchetypeEditor.XML_Classes
 
             If Not description.other_details Is Nothing Then
                 For Each di As XMLParser.StringDictionaryItem In description.other_details
-                	
-                	mOtherDetails.AddOtherDetail(di.id,di.Value)
-                	
-                	Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                        Case REFERENCES_KEY
+                    mOtherDetails.AddOtherDetail(di.id, di.Value)
+
+                    Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                        Case ReferencesKey
                             mReferences = di.Value
-                        Case CURRENT_CONTACT_KEY
-                        	mCurrentContact = di.Value
-                        Case ORIGINAL_PUBLISHER_KEY
-                        	mOriginalPublisher = di.Value
-                        Case ORIGINAL_NAMESPACE_KEY
-                        	mOriginalNamespace = di.Value
-                        Case CUSTODIAN_ORGANISATION_KEY
-                        	mCustodianOrganisation = di.Value
-                        Case CUSTODIAN_NAMESPACE_KEY
-                        	mCustodianNamespace = di.Value
-                        Case LICENCE_KEY
-                        	mLicence = di.Value
-                        Case REVIEW_DATE_KEY
-                        	mReviewDate = di.Value
-                        Case REVISION_KEY
-                        	mRevision = di.Value
+                        Case CurrentContactKey
+                            mCurrentContact = di.Value
+                        Case OriginalPublisherKey
+                            mOriginalPublisher = di.Value
+                        Case OriginalNamespaceKey
+                            mOriginalNamespace = di.Value
+                        Case CustodianorganisationKey
+                            mCustodianOrganisation = di.Value
+                        Case CustodianNamespaceKey
+                            mCustodianNamespace = di.Value
+                        Case LicenceKey
+                            mLicence = di.Value
+                        Case ReviewDate
+                            mReviewDate = di.Value
+                        Case RevisionKey
+                            mRevision = di.Value
                     End Select
                 Next
             End If
