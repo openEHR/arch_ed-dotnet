@@ -83,6 +83,8 @@ Namespace ArchetypeEditor.ADL_Classes
             AddOtherDetailItem(mLicence, LicenceKey)
             AddOtherDetailItem(mReviewDate, ReviewDateKey)
             AddOtherDetailItem(mRevision, RevisionKey)
+            AddOtherDetailItem(mInstanceId, InstanceIdKey)
+            AddOtherDetailItem(mProvenanceId, ProvenanceIdKey)
             AddOtherDetailItem(ArchetypeDigest, AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID)
 
             mADL_Description.clear_other_contributors()
@@ -135,8 +137,11 @@ Namespace ArchetypeEditor.ADL_Classes
                 mLicence = ReturnOtherDetailItem(LicenceKey, description)
                 mReviewDate = ReturnOtherDetailItem(ReviewDateKey, description)
                 mRevision = ReturnOtherDetailItem(RevisionKey, description)
-
-                ' Retrieve specific other_details keys from Eiffel parse tree
+                mProvenanceId = ReturnOtherDetailItem(ProvenanceIdKey, description)        
+                mInstanceId = ReturnOtherDetailItem(InstanceIdKey, description)
+                ArchetypeDigest = ReturnOtherDetailItem(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID, description)
+                
+                ' Retrieve generic other_details keys from Eiffel parse tree
                 Dim itemkey, itemvalue As EiffelKernel.string.STRING_8
                 description.other_details.start()
 
@@ -174,6 +179,8 @@ Namespace ArchetypeEditor.ADL_Classes
             Licence = description.Licence
             Revision = description.Revision
             ReviewDate = description.ReviewDate
+            InstanceId = description.InstanceId
+            ProvenanceId = description.ProvenanceId
         End Sub
 
         Sub New(ByVal language As String)

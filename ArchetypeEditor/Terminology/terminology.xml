@@ -1539,7 +1539,15 @@
   <Concept Language="en" ConceptID="766" Rubric="Custodian Namespace" />
   <Concept Language="en" ConceptID="767" Rubric="Review Date" />
   <Concept Language="en" ConceptID="768" Rubric="References/Other Details" />		
-  <Concept Language="en" ConceptID="769" Rubric="Other Details (read-only)" />		
+  <Concept Language="en" ConceptID="769" Rubric="Other Details (read-only)" />
+  <Concept Language="en" ConceptID="770" Rubric="Deprecated" />
+  <Concept Language="en" ConceptID="771" Rubric="Development" />
+  <Concept Language="en" ConceptID="772" Rubric="Instance Id" />
+  <Concept Language="en" ConceptID="773" Rubric="Provenance Id" />
+  <Concept Language="en" ConceptID="774" Rubric="Canonical MD5 Hash" />
+  <Concept Language="en" ConceptID="775" Rubric="Technical Identifiers (read-only)" />
+
+	
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />
@@ -7718,7 +7726,8 @@
   <GroupedConcept GrouperID="23" ChildID="574" />
   <GroupedConcept GrouperID="23" ChildID="575" />
   <GroupedConcept GrouperID="23" ChildID="576" />
-  <GroupedConcept GrouperID="23" ChildID="577" />
+  <GroupedConcept GrouperID="23" ChildID="770" />
+  <GroupedConcept GrouperID="23" ChildID="771" />
   <GroupedConcept GrouperID="3" ChildID="592" />
   <GroupedConcept GrouperID="24" ChildID="611" />
   <GroupedConcept GrouperID="24" ChildID="612" />
