@@ -3467,6 +3467,8 @@ Public Class Designer
 
     Private Sub ChangeLanguage(ByVal langCode As String)
         If mFileManager.OntologyManager.HasLanguage(langCode) AndAlso mFileManager.OntologyManager.LanguageCode <> langCode Then
+            ' AEPR - 22 - Force Focus change to trigger AfterLabelEdit	
+            LogoPictureBox.Focus()
             previousLanguageCode = mFileManager.OntologyManager.LanguageCode
             Translate(langCode)
         End If
@@ -3487,11 +3489,12 @@ Public Class Designer
     End Sub
 
     Private Sub MenuChangeLanguage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        ChangeLanguageText(sender.Text)
+    	ChangeLanguageText(sender.Text)
     End Sub
 
     Private Sub MenuLanguageToggle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuLanguageToggle.Click
-        ChangeLanguage(previousLanguageCode)
+    	
+    	ChangeLanguage(previousLanguageCode)
     End Sub
 
 #End Region
