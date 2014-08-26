@@ -841,6 +841,13 @@
   <PrimaryRubric Id="767" Language="en" />
   <PrimaryRubric Id="768" Language="en" />
   <PrimaryRubric Id="769" Language="en" />
+  <PrimaryRubric Id="769" Language="en" />
+  <PrimaryRubric Id="770" Language="en" />
+  <PrimaryRubric Id="771" Language="en" />
+  <PrimaryRubric Id="772" Language="en" />
+  <PrimaryRubric Id="773" Language="en" />
+  <PrimaryRubric Id="774" Language="en" />
+  <PrimaryRubric Id="775" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
