@@ -17,6 +17,7 @@ Public Class AE_Constants
     Private mSpecialisationQuestion As String = "Specialise '{0}'?"
     Private mSpecialiseYes As String = "Yes, specialise it"
     Private mSpecialiseAndClone As String = "Yes, but add a new node"
+ 
     Private mSpecialiseNo As String = "No"
     Private mSpecialisationsToo As String = "Use specialisations too?"
     Private mMustAddCriteria As String = "Must add criteria"
@@ -295,6 +296,7 @@ Public Class AE_Constants
             Return mSpecialiseAndClone
         End Get
     End Property
+ 
 
     Friend ReadOnly Property SpecialiseNo() As String
         Get

@@ -88,6 +88,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         RefreshIcons()
     End Sub
 
+       
     Public Function SpecialisedClone(ByVal fileManager As FileManagerLocal) As ArchetypeTreeNode
         Dim result As ArchetypeTreeNode
         Dim composite As ArchetypeComposite = TryCast(mArchetypeNode, ArchetypeComposite)
@@ -99,13 +100,16 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
 
             For Each child As ArchetypeTreeNode In Nodes
                 Dim clone As ArchetypeTreeNode
-                Dim el As RmElement = TryCast(child.Item.RM_Class, RmElement)
-
+                
+               	Dim el As RmElement = TryCast(child.Item.RM_Class, RmElement)
+             
                 If el Is Nothing OrElse Not child.Item.CanSpecialise() Then
                     clone = child.SpecialisedClone(fileManager)
                 Else
-                    Dim ref As RmReference = New RmReference(el)
-                    clone = New ArchetypeTreeNode(ref, fileManager)
+                
+                	' Corrected old clonig method which required Internal references
+                	' 	 Dim ref As RmReference = New RmReference(el)
+                	clone = New ArchetypeTreeNode(el, fileManager)
                     clone.RefreshIcons()
                 End If
 

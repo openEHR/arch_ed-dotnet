@@ -4,7 +4,7 @@ Public Class SpecialisationQuestionDialog
 
     Protected Enum SpecialisationOption
         Yes = 0
-        YesAnClone = 1
+        YesAndClone = 1
         No = 2
     End Enum
 
@@ -12,13 +12,17 @@ Public Class SpecialisationQuestionDialog
 
     Public Sub ShowForArchetypeNode(ByVal itemText As String, ByVal struct As RmStructure, ByVal archetypeSpecialisationDepth As Integer)
         Text = AE_Constants.Instance.MessageBoxCaption
+        
         YesButton.Text = AE_Constants.Instance.SpecialiseYes
         YesButton.Enabled = struct.SpecialisationDepth < archetypeSpecialisationDepth
-        YesAndCloneButton.Text = AE_Constants.Instance.SpecialiseAndClone
-        YesAndCloneButton.Enabled = struct.Occurrences.IsMultiple
+        YesAndCloneByCopyButton.Text = AE_Constants.Instance.SpecialiseAndClone
+        YesAndCloneByCopyButton.Enabled = struct.Occurrences.IsMultiple
         NoButton.Text = AE_Constants.Instance.SpecialiseNo
         QuestionLabel.Text = AE_Constants.Instance.SpecialisationQuestion(itemText)
+        
         ShowDialog()
+        
+       
     End Sub
 
     Public ReadOnly Property IsSpecialisationRequested() As Boolean
@@ -27,9 +31,11 @@ Public Class SpecialisationQuestionDialog
         End Get
     End Property
 
-    Public ReadOnly Property IsCloningRequested() As Boolean
+  
+    
+     Public ReadOnly Property IsCloningRequested() As Boolean
         Get
-            Return selection = SpecialisationOption.YesAnClone
+            Return selection = SpecialisationOption.YesAndClone 
         End Get
     End Property
 
@@ -38,14 +44,17 @@ Public Class SpecialisationQuestionDialog
         Close()
     End Sub
 
-    Private Sub YesAndCloneButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles YesAndCloneButton.Click
-        Selection = SpecialisationOption.YesAnClone
-        Close()
-    End Sub
-
+    
     Private Sub NoButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NoButton.Click
         Selection = SpecialisationOption.No
         Close()
     End Sub
-
+    
+   
+   
+     Sub YesandCloneByCopyButtonClick(sender As Object, e As EventArgs)
+    	 Selection = SpecialisationOption.YesAndClone
+        Close()
+    End Sub	
+   
 End Class

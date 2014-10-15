@@ -848,6 +848,7 @@
   <PrimaryRubric Id="773" Language="en" />
   <PrimaryRubric Id="774" Language="en" />
   <PrimaryRubric Id="775" Language="en" />
+
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1553,8 +1554,7 @@
   <Concept Language="en" ConceptID="773" Rubric="Provenance Id" />
   <Concept Language="en" ConceptID="774" Rubric="Canonical MD5 Hash" />
   <Concept Language="en" ConceptID="775" Rubric="Technical Identifiers (read-only)" />
-
-	
+ 
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />
