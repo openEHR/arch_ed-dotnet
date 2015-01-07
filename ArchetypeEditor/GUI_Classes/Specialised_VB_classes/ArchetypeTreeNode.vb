@@ -88,7 +88,6 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         RefreshIcons()
     End Sub
 
-       
     Public Function SpecialisedClone(ByVal fileManager As FileManagerLocal) As ArchetypeTreeNode
         Dim result As ArchetypeTreeNode
         Dim composite As ArchetypeComposite = TryCast(mArchetypeNode, ArchetypeComposite)
