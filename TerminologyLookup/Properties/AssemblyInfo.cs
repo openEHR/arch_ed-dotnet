@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The openEHR Foundation")]
 [assembly: AssemblyProduct("TerminologyLookup")]
-[assembly: AssemblyCopyright("Copyright © 2014 openEHR Foundation")]
+[assembly: AssemblyCopyright("Copyright © 2015 openEHR Foundation")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
