@@ -5,7 +5,7 @@
 '	description: "$DESCRIPTION"
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
-'	support:     http://www.openehr.org/issues/browse/AEPR
+'	support:     https://openehr.atlassian.net/browse/AEPR
 '	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
@@ -1945,7 +1945,7 @@ Public Class Designer
                 gbSpecialisation.Show()
             End If
 
-            If mFileManager.Archetype.hasData Then
+            If mFileManager.Archetype.HasData Then
                 Select Case mFileManager.Archetype.RmEntity
 
                     Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
@@ -2367,7 +2367,7 @@ Public Class Designer
         DataGridTextBoxColumn13.HeaderText = Filemanager.GetOpenEhrTerm(622, DataGridTextBoxColumn13.HeaderText, language) 'Criteria
 
         'Constraint data grid
-        ConstraintBindingGrid.TranslateGui()
+        constraintBindingGrid.TranslateGui()
 
         'TabControl headings
         tpHeader.Title = Filemanager.GetOpenEhrTerm(76, tpHeader.Title, language)
@@ -2486,7 +2486,7 @@ Public Class Designer
 
         'bind the terminology combobox
         DataGridTerminologies.DataSource = mFileManager.OntologyManager.TerminologiesTable
-        ConstraintBindingGrid.BindTables(mFileManager.OntologyManager)
+        constraintBindingGrid.BindTables(mFileManager.OntologyManager)
     End Sub
 
     Public Sub WriteRichText()
@@ -3412,7 +3412,7 @@ Public Class Designer
     End Sub
 
     Private Sub MenuHelpReport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpReport.Click
-        Process.Start("http://www.openehr.org/issues/browse/AEPR")
+        Process.Start("https://openehr.atlassian.net/browse/AEPR")
     End Sub
 
     Private Sub MenuHelpStart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpStart.Click
@@ -3489,12 +3489,11 @@ Public Class Designer
     End Sub
 
     Private Sub MenuChangeLanguage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-    	ChangeLanguageText(sender.Text)
+        ChangeLanguageText(sender.Text)
     End Sub
 
     Private Sub MenuLanguageToggle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuLanguageToggle.Click
-    	
-    	ChangeLanguage(previousLanguageCode)
+        ChangeLanguage(previousLanguageCode)
     End Sub
 
 #End Region
@@ -4388,7 +4387,7 @@ Public Class Designer
             acCode = TryCast(ConstraintDefinitionsDataGrid.Item(ConstraintDefinitionsDataGrid.CurrentRowIndex, 0), String)
         End If
 
-       ConstraintBindingGrid.SelectConstraintCode(acCode)
+        constraintBindingGrid.SelectConstraintCode(acCode)
     End Sub
 
     Private Sub BuildInterfaceTabPage()

@@ -4,7 +4,7 @@
 '	description: "$DESCRIPTION"
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Peter Gummer"
-'	support:     http://www.openehr.org/issues/browse/AEPR
+'	support:     https://openehr.atlassian.net/browse/AEPR
 '	copyright:   "Copyright (c) 2012 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
