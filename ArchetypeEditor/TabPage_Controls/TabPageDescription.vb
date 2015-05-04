@@ -99,7 +99,7 @@ Public Class TabPageDescription
     Friend WithEvents gbContributors As System.Windows.Forms.GroupBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageDescription))
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.gbPurpose = New System.Windows.Forms.GroupBox()
         Me.gbMisuse = New System.Windows.Forms.GroupBox()
@@ -124,8 +124,8 @@ Public Class TabPageDescription
         Me.gbTechnicalIdentifiers = New System.Windows.Forms.GroupBox()
         Me.lblCanonicalHash = New System.Windows.Forms.Label()
         Me.txtCanonicalHash = New System.Windows.Forms.TextBox()
-        Me.txtBuildId = New System.Windows.Forms.TextBox()
-        Me.lbBuildId = New System.Windows.Forms.Label()
+        Me.txtBuildUid = New System.Windows.Forms.TextBox()
+        Me.lbBuildUid = New System.Windows.Forms.Label()
         Me.gbOtherDetails = New System.Windows.Forms.GroupBox()
         Me.dgOtherDetails = New System.Windows.Forms.DataGridView()
         Me.OtherDetailsKeyColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -434,8 +434,8 @@ Public Class TabPageDescription
         Me.gbTechnicalIdentifiers.AutoSize = True
         Me.gbTechnicalIdentifiers.Controls.Add(Me.lblCanonicalHash)
         Me.gbTechnicalIdentifiers.Controls.Add(Me.txtCanonicalHash)
-        Me.gbTechnicalIdentifiers.Controls.Add(Me.txtBuildId)
-        Me.gbTechnicalIdentifiers.Controls.Add(Me.lbBuildId)
+        Me.gbTechnicalIdentifiers.Controls.Add(Me.txtBuildUid)
+        Me.gbTechnicalIdentifiers.Controls.Add(Me.lbBuildUid)
         Me.gbTechnicalIdentifiers.Location = New System.Drawing.Point(465, 324)
         Me.gbTechnicalIdentifiers.Name = "gbTechnicalIdentifiers"
         Me.gbTechnicalIdentifiers.Size = New System.Drawing.Size(482, 279)
@@ -460,24 +460,26 @@ Public Class TabPageDescription
         Me.txtCanonicalHash.ReadOnly = True
         Me.txtCanonicalHash.Size = New System.Drawing.Size(267, 23)
         Me.txtCanonicalHash.TabIndex = 68
+        Me.txtCanonicalHash.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'txtBuildId
+        'txtBuildUid
         '
-        Me.txtBuildId.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.txtBuildId.Location = New System.Drawing.Point(177, 37)
-        Me.txtBuildId.Name = "txtBuildId"
-        Me.txtBuildId.ReadOnly = True
-        Me.txtBuildId.Size = New System.Drawing.Size(267, 23)
-        Me.txtBuildId.TabIndex = 67
+        Me.txtBuildUid.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtBuildUid.Location = New System.Drawing.Point(177, 37)
+        Me.txtBuildUid.Name = "txtBuildUid"
+        Me.txtBuildUid.ReadOnly = True
+        Me.txtBuildUid.Size = New System.Drawing.Size(267, 23)
+        Me.txtBuildUid.TabIndex = 67
+        Me.txtBuildUid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'lbBuildId
+        'lbBuildUid
         '
-        Me.lbBuildId.Location = New System.Drawing.Point(93, 39)
-        Me.lbBuildId.Name = "lbBuildId"
-        Me.lbBuildId.Size = New System.Drawing.Size(68, 16)
-        Me.lbBuildId.TabIndex = 66
-        Me.lbBuildId.Text = "Build ID"
-        Me.lbBuildId.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbBuildUid.Location = New System.Drawing.Point(93, 39)
+        Me.lbBuildUid.Name = "lbBuildUid"
+        Me.lbBuildUid.Size = New System.Drawing.Size(68, 16)
+        Me.lbBuildUid.TabIndex = 66
+        Me.lbBuildUid.Text = "Build Uid"
+        Me.lbBuildUid.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'gbOtherDetails
         '
@@ -498,14 +500,14 @@ Public Class TabPageDescription
         Me.dgOtherDetails.AllowUserToResizeRows = False
         Me.dgOtherDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgOtherDetails.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.OtherDetailsKeyColumn, Me.OtherDetailsValueColumn})
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.InactiveBorder
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgOtherDetails.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.InactiveBorder
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgOtherDetails.DefaultCellStyle = DataGridViewCellStyle1
         Me.dgOtherDetails.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgOtherDetails.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2
         Me.dgOtherDetails.Location = New System.Drawing.Point(3, 19)
@@ -1079,8 +1081,8 @@ Public Class TabPageDescription
     Friend txtCanonicalHash As System.Windows.Forms.TextBox
     Public lblCanonicalHash As System.Windows.Forms.Label
     Private gbTechnicalIdentifiers As System.Windows.Forms.GroupBox
-    Public lbBuildId As System.Windows.Forms.Label
-    Friend txtBuildId As System.Windows.Forms.TextBox
+    Public lbBuildUid As System.Windows.Forms.Label
+    Friend txtBuildUid As System.Windows.Forms.TextBox
     Friend AnnotationValueColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend AnnotationKeyColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend OtherDetailsValueColumn As System.Windows.Forms.DataGridViewTextBoxColumn
@@ -1135,7 +1137,7 @@ Public Class TabPageDescription
             txtReviewDate.Text = value.ReviewDate
             txtRevision.Text = value.Revision
 
-            txtBuildId.Text = value.BuildId
+            txtBuildUid.Text = value.BuildUid
             txtCanonicalHash.Text = value.ArchetypeDigest
 
             txtReferences.Text = NewlinesNormalised(Value.References)
@@ -1408,7 +1410,7 @@ Public Class TabPageDescription
         txtReviewDate.Text = ""
         txtCurrentContact.Text = ""
 
-        txtBuildId.Text = ""
+        txtBuildUid.Text = ""
         txtCanonicalHash.Text = ""
 
         listKeyword.Items.Clear()
@@ -1477,7 +1479,7 @@ Public Class TabPageDescription
         lblReviewDate.Text = Filemanager.GetOpenEhrTerm(767, lblReviewDate.Text)
         gbOtherDetails.Text = Filemanager.GetOpenEhrTerm(769, gbOtherDetails.Text)
 
-        lbBuildId.Text = Filemanager.GetOpenEhrTerm(772, lbBuildId.Text)
+        lbBuildUid.Text = Filemanager.GetOpenEhrTerm(772, lbBuildUid.Text)
         lblCanonicalHash.Text = Filemanager.GetOpenEhrTerm(774, lblCanonicalHash.Text)
         gbTechnicalIdentifiers.Text = Filemanager.GetOpenEhrTerm(775, gbTechnicalIdentifiers.Text)
 

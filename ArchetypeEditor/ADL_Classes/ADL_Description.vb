@@ -83,7 +83,7 @@ Namespace ArchetypeEditor.ADL_Classes
             AddOtherDetailItem(mLicence, LicenceKey)
             AddOtherDetailItem(mReviewDate, ReviewDateKey)
             AddOtherDetailItem(mRevision, RevisionKey)
-            AddOtherDetailItem(mBuildId, BuildIdKey)
+            AddOtherDetailItem(mBuildUid, BuildUidKey)
            
             AddOtherDetailItem(ArchetypeDigest, AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID)
 
@@ -138,7 +138,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 mReviewDate = ReturnOtherDetailItem(ReviewDateKey, description)
                 mRevision = ReturnOtherDetailItem(RevisionKey, description)
                       
-                mBuildId = ReturnOtherDetailItem(BuildIdKey, description)
+                mBuildUid = ReturnOtherDetailItem(BuildUidKey, description)
                 ArchetypeDigest = ReturnOtherDetailItem(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID, description)
                 
                 ' Retrieve generic other_details keys from Eiffel parse tree
@@ -179,7 +179,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Licence = description.Licence
             Revision = description.Revision
             ReviewDate = description.ReviewDate
-            BuildId = description.BuildId
+            BuildUid = description.BuildUid
             
         End Sub
 

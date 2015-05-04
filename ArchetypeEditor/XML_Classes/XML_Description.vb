@@ -81,7 +81,7 @@ Namespace ArchetypeEditor.XML_Classes
             UpdateOtherDetails(LicenceKey, mLicence, otherDetails)
             UpdateOtherDetails(ReviewDateKey, mReviewDate, otherDetails)
             UpdateOtherDetails(RevisionKey, mRevision, otherdetails)
- 			UpdateOtherDetails(BuildIdKey, mBuildId, otherdetails)
+ 			UpdateOtherDetails(BuildUidKey, mBuildUid, otherdetails)
  		
 
             If Not ArchetypeDigest Is Nothing Then
@@ -195,8 +195,8 @@ Namespace ArchetypeEditor.XML_Classes
                             mReviewDate = di.Value
                         Case RevisionKey
                         	mRevision = di.Value
-                        Case BuildIdKey
-                        	mBuildId = di.Value
+                        Case BuildUidKey
+                        	mBuildUid = di.Value
                     End Select
                 Next
             End If
@@ -232,7 +232,7 @@ Namespace ArchetypeEditor.XML_Classes
             Licence = description.Licence
             Revision = description.Revision
             ReviewDate = description.ReviewDate
-            BuildId = description.BuildId
+            BuildUid = description.BuildUid
         End Sub
 
     End Class

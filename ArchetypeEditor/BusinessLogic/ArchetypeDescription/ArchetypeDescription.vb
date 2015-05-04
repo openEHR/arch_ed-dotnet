@@ -37,7 +37,7 @@ Public MustInherit Class ArchetypeDescription
     Protected mCustodianNamespace As String
     Protected mRevision As String
     Protected mReviewDate As String
-    Protected mBuildId As String
+    Protected mBuildUid As String
     Private mArchetypeDigest As String
 
     Public Const CurrentContactKey As String = "current_contact"
@@ -49,7 +49,7 @@ Public MustInherit Class ArchetypeDescription
     Public Const LicenceKey As String = "licence"
     Public Const RevisionKey As String = "revision"
     Public Const ReferencesKey As String = "references"
-    Public Const BuildIdKey As String = "build_id"
+    Public Const BuildUidKey As String = "build_uid"
  
 
     Property OriginalAuthor() As String
@@ -189,12 +189,12 @@ Public MustInherit Class ArchetypeDescription
 	
 	
 	
-	Public Property BuildId As String
+	Public Property BuildUid As String
 		Get
-			Return mBuildId
+			Return mBuildUid
 		End Get
 		Set
-			mBuildId = value
+			mBuildUid = value
 		End Set
 	End Property
 	
@@ -268,7 +268,7 @@ Public MustInherit Class ArchetypeDescription
                 (detailkey <> LicenceKey) And _
                 (detailkey <> ReferencesKey) And _
                 (detailkey <> ReviewDateKey) And _
-                (detailkey <> BuildIdKey) And _
+                (detailkey <> BuildUidKey) And _
                 (detailkey <> RevisionKey) And _
                 (detailkey <> AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID) Then
                 Dim row As DataRow = table.NewRow

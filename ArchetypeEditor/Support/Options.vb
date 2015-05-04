@@ -615,11 +615,14 @@ Public Class Options
         Get
             Dim result As String
             Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly
-            result = System.IO.Path.GetDirectoryName(assembly.CodeBase)
 
-            If result.StartsWith("file:\") Then
-                result = result.Substring(6)
-            End If
+            '// AEPR-35 IMCN 4 May 2015 
+            '//    result = System.IO.Path.GetDirectoryName(assembly.CodeBase)                                         
+            '//    If result.StartsWith("file:\") Then
+            '//       result = result.Substring(6)
+            ' //   End If
+
+            result = System.IO.Path.GetDirectoryName(assembly.Location)
 
             Return result
         End Get
