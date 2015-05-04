@@ -3,7 +3,7 @@
 '	description: "Constraint on intervals of counts (integers)"
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
-'	support:     http://www.openehr.org/issues/browse/AEPR
+'	support:     https://openehr.atlassian.net/browse/AEPR
 '	copyright:   "Copyright (c) 2005 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '

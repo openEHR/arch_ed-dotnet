@@ -3,7 +3,7 @@
 '	description: "This Reference model structure models the idea of a clinical state based on a reference model state"
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
-'	support:     http://www.openehr.org/issues/browse/AEPR
+'	support:     https://openehr.atlassian.net/browse/AEPR
 '	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
