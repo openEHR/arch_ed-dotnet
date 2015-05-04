@@ -99,7 +99,7 @@ Public Class TabPageDescription
     Friend WithEvents gbContributors As System.Windows.Forms.GroupBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageDescription))
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.gbPurpose = New System.Windows.Forms.GroupBox()
         Me.gbMisuse = New System.Windows.Forms.GroupBox()
@@ -409,8 +409,8 @@ Public Class TabPageDescription
         Me.TabDescription.Location = New System.Drawing.Point(2, 2)
         Me.TabDescription.Name = "TabDescription"
         Me.TabDescription.PositionTop = True
-        Me.TabDescription.SelectedIndex = 3
-        Me.TabDescription.SelectedTab = Me.tpReferences
+        Me.TabDescription.SelectedIndex = 0
+        Me.TabDescription.SelectedTab = Me.tpDescDetails
         Me.TabDescription.Size = New System.Drawing.Size(950, 631)
         Me.TabDescription.TabIndex = 15
         Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation, Me.tpReferences})
@@ -500,14 +500,14 @@ Public Class TabPageDescription
         Me.dgOtherDetails.AllowUserToResizeRows = False
         Me.dgOtherDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgOtherDetails.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.OtherDetailsKeyColumn, Me.OtherDetailsValueColumn})
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.InactiveBorder
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgOtherDetails.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.InactiveBorder
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgOtherDetails.DefaultCellStyle = DataGridViewCellStyle3
         Me.dgOtherDetails.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgOtherDetails.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2
         Me.dgOtherDetails.Location = New System.Drawing.Point(3, 19)
@@ -565,7 +565,6 @@ Public Class TabPageDescription
         Me.tpDescDetails.Controls.Add(Me.Splitter1)
         Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
         Me.tpDescDetails.Name = "tpDescDetails"
-        Me.tpDescDetails.Selected = False
         Me.tpDescDetails.Size = New System.Drawing.Size(950, 606)
         Me.tpDescDetails.TabIndex = 0
         Me.tpDescDetails.Title = "Details"

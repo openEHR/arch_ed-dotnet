@@ -1547,8 +1547,8 @@
   <Concept Language="en" ConceptID="768" Rubric="References/Other Details" />		
   <Concept Language="en" ConceptID="769" Rubric="Other Details (read-only)" />
   <Concept Language="en" ConceptID="770" Rubric="Deprecated" />
-  <Concept Language="en" ConceptID="771" Rubric="Development" />
-  <Concept Language="en" ConceptID="772" Rubric="Instance Id" />
+  <Concept Language="en" ConceptID="771" Rubric="In Development" />
+  <Concept Language="en" ConceptID="772" Rubric="Build Uid" />
   <Concept Language="en" ConceptID="773" Rubric="Provenance Id" />
   <Concept Language="en" ConceptID="774" Rubric="Canonical MD5 Hash" />
   <Concept Language="en" ConceptID="775" Rubric="Technical Identifiers (read-only)" />

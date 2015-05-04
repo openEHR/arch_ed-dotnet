@@ -12,9 +12,9 @@ Public Enum LifeCycleStates
     ApprovedCandidate = 574
     published = 575
     rejected = 576
-    obsolete = 577
+    '   obsolete = 577
     deprecated = 770
-    development = 771
+    in_development = 771
 End Enum
 
 Public MustInherit Class ArchetypeDescription
