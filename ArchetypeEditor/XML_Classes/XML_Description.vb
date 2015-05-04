@@ -81,8 +81,8 @@ Namespace ArchetypeEditor.XML_Classes
             UpdateOtherDetails(LicenceKey, mLicence, otherDetails)
             UpdateOtherDetails(ReviewDateKey, mReviewDate, otherDetails)
             UpdateOtherDetails(RevisionKey, mRevision, otherdetails)
- 			UpdateOtherDetails(InstanceIdKey, mInstanceId, otherdetails)
- 			UpdateOtherDetails(ProvenanceIdKey, mProvenanceId, otherdetails)
+ 			UpdateOtherDetails(BuildIdKey, mBuildId, otherdetails)
+ 		
 
             If Not ArchetypeDigest Is Nothing Then
                 UpdateOtherDetails(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID, ArchetypeDigest, otherdetails)
@@ -195,10 +195,8 @@ Namespace ArchetypeEditor.XML_Classes
                             mReviewDate = di.Value
                         Case RevisionKey
                         	mRevision = di.Value
-                        Case InstanceIdKey
-                        	mInstanceId = di.Value 
-                        Case ProvenanceIdKey
-                            mProvenanceId = di.Value
+                        Case BuildIdKey
+                        	mBuildId = di.Value
                     End Select
                 Next
             End If
@@ -234,6 +232,7 @@ Namespace ArchetypeEditor.XML_Classes
             Licence = description.Licence
             Revision = description.Revision
             ReviewDate = description.ReviewDate
+            BuildId = description.BuildId
         End Sub
 
     End Class

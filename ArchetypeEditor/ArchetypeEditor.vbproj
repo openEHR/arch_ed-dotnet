@@ -523,7 +523,9 @@
     <Compile Include="DataConstraints\GUI\ConstraintBindingsControl.Designer.vb">
       <DependentUpon>ConstraintBindingsControl.vb</DependentUpon>
     </Compile>
-    <Compile Include="DataConstraints\GUI\ConstraintBindingsControl.vb" />
+    <Compile Include="DataConstraints\GUI\ConstraintBindingsControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="DataConstraints\GUI\ParsableConstraintControl.vb">
       <SubType>UserControl</SubType>
     </Compile>

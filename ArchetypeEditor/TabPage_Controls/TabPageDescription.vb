@@ -34,7 +34,7 @@ Public Class TabPageDescription
     Friend WithEvents txtCurrentContact As System.Windows.Forms.TextBox
 
     Private mIsLoading As Boolean = False
-	Private withEvents mOtherDetailsTable As DataTable 
+    Private WithEvents mOtherDetailsTable As DataTable
 
 #Region " Windows Form Designer generated code "
 
@@ -98,1023 +98,989 @@ Public Class TabPageDescription
     Friend WithEvents butAddContributor As System.Windows.Forms.Button
     Friend WithEvents gbContributors As System.Windows.Forms.GroupBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-    	Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageDescription))
-    	Dim dataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-    	Me.lblStatus = New System.Windows.Forms.Label()
-    	Me.gbPurpose = New System.Windows.Forms.GroupBox()
-    	Me.gbMisuse = New System.Windows.Forms.GroupBox()
-    	Me.txtMisuse = New System.Windows.Forms.TextBox()
-    	Me.gbUse = New System.Windows.Forms.GroupBox()
-    	Me.txtUse = New System.Windows.Forms.TextBox()
-    	Me.txtPurpose = New System.Windows.Forms.TextBox()
-    	Me.panelDescription = New System.Windows.Forms.Panel()
-    	Me.CopyrightTextBox = New System.Windows.Forms.TextBox()
-    	Me.CopyrightLabel = New System.Windows.Forms.Label()
-    	Me.txtRevision = New System.Windows.Forms.TextBox()
-    	Me.lblRevision = New System.Windows.Forms.Label()
-    	Me.txtLicense = New System.Windows.Forms.TextBox()
-    	Me.lblLicence = New System.Windows.Forms.Label()
-    	Me.ButAddKeyWord = New System.Windows.Forms.Button()
-    	Me.butRemoveKeyWord = New System.Windows.Forms.Button()
-    	Me.comboLifeCycle = New System.Windows.Forms.ComboBox()
-    	Me.lblKeyword = New System.Windows.Forms.Label()
-    	Me.listKeyword = New System.Windows.Forms.ListBox()
-    	Me.TabDescription = New Crownwood.Magic.Controls.TabControl()
-    	Me.tpReferences = New Crownwood.Magic.Controls.TabPage()
-    	Me.gbTechnicalIdentifiers = New System.Windows.Forms.GroupBox()
-    	Me.lblCanonicalHash = New System.Windows.Forms.Label()
-    	Me.txtCanonicalHash = New System.Windows.Forms.TextBox()
-    	Me.txtInstanceId = New System.Windows.Forms.TextBox()
-    	Me.lblInstanceId = New System.Windows.Forms.Label()
-    	Me.lblProvenanceId = New System.Windows.Forms.Label()
-    	Me.txtProvenanceId = New System.Windows.Forms.TextBox()
-    	Me.gbOtherDetails = New System.Windows.Forms.GroupBox()
-    	Me.dgOtherDetails = New System.Windows.Forms.DataGridView()
-    	Me.OtherDetailsKeyColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-    	Me.OtherDetailsValueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-    	Me.groupBox2 = New System.Windows.Forms.GroupBox()
-    	Me.txtReferences = New System.Windows.Forms.TextBox()
-    	Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage()
-    	Me.Splitter3 = New System.Windows.Forms.Splitter()
-    	Me.Splitter2 = New System.Windows.Forms.Splitter()
-    	Me.Splitter1 = New System.Windows.Forms.Splitter()
-    	Me.tpAuthor = New Crownwood.Magic.Controls.TabPage()
-    	Me.gbCurrentResponsibility = New System.Windows.Forms.GroupBox()
-    	Me.txtReviewDate = New System.Windows.Forms.TextBox()
-    	Me.lblReviewDate = New System.Windows.Forms.Label()
-    	Me.btnCustodianDefaults = New System.Windows.Forms.Button()
-    	Me.txtCustodianNamespace = New System.Windows.Forms.TextBox()
-    	Me.lblCustodianNamespace = New System.Windows.Forms.Label()
-    	Me.txtCustodianOrganisation = New System.Windows.Forms.TextBox()
-    	Me.lblCustodianOrganisation = New System.Windows.Forms.Label()
-    	Me.CurrentContactButton = New System.Windows.Forms.Button()
-    	Me.lblCurrentContact = New System.Windows.Forms.Label()
-    	Me.txtCurrentContact = New System.Windows.Forms.TextBox()
-    	Me.gbContributors = New System.Windows.Forms.GroupBox()
-    	Me.butEditContributor = New System.Windows.Forms.Button()
-    	Me.listContributors = New System.Windows.Forms.ListBox()
-    	Me.butAddContributor = New System.Windows.Forms.Button()
-    	Me.butRemoveContributor = New System.Windows.Forms.Button()
-    	Me.gbAuthor = New System.Windows.Forms.GroupBox()
-    	Me.btnPublisherDefaults = New System.Windows.Forms.Button()
-    	Me.txtOriginalNamespace = New System.Windows.Forms.TextBox()
-    	Me.lblOriginalNamespace = New System.Windows.Forms.Label()
-    	Me.txtOriginalPublisher = New System.Windows.Forms.TextBox()
-    	Me.lblOriginalPublisher = New System.Windows.Forms.Label()
-    	Me.UseAllAuthorDefaultsButton = New System.Windows.Forms.Button()
-    	Me.TodayButton = New System.Windows.Forms.Button()
-    	Me.UseYourOrganisationButton = New System.Windows.Forms.Button()
-    	Me.UseYourEmailButton = New System.Windows.Forms.Button()
-    	Me.UseYourNameButton = New System.Windows.Forms.Button()
-    	Me.lblDate = New System.Windows.Forms.Label()
-    	Me.txtDate = New System.Windows.Forms.TextBox()
-    	Me.lblOrganisation = New System.Windows.Forms.Label()
-    	Me.txtOrganisation = New System.Windows.Forms.TextBox()
-    	Me.lblName = New System.Windows.Forms.Label()
-    	Me.txtOriginalAuthor = New System.Windows.Forms.TextBox()
-    	Me.lblEmail = New System.Windows.Forms.Label()
-    	Me.txtOriginalEmail = New System.Windows.Forms.TextBox()
-    	Me.tpTranslation = New Crownwood.Magic.Controls.TabPage()
-    	Me.gbTranslator = New System.Windows.Forms.GroupBox()
-    	Me.lblAccreditation = New System.Windows.Forms.Label()
-    	Me.txtTranslationAccreditation = New System.Windows.Forms.TextBox()
-    	Me.lblTranslatorOrganisation = New System.Windows.Forms.Label()
-    	Me.txtTranslatorOrganisation = New System.Windows.Forms.TextBox()
-    	Me.lblTranslatorName = New System.Windows.Forms.Label()
-    	Me.txtTranslatorName = New System.Windows.Forms.TextBox()
-    	Me.lblTranslatorEmail = New System.Windows.Forms.Label()
-    	Me.txtTranslatorEmail = New System.Windows.Forms.TextBox()
-    	Me.gbPurpose.SuspendLayout
-    	Me.gbMisuse.SuspendLayout
-    	Me.gbUse.SuspendLayout
-    	Me.panelDescription.SuspendLayout
-    	Me.tpReferences.SuspendLayout
-    	Me.gbTechnicalIdentifiers.SuspendLayout
-    	Me.gbOtherDetails.SuspendLayout
-    	CType(Me.dgOtherDetails,System.ComponentModel.ISupportInitialize).BeginInit
-    	Me.groupBox2.SuspendLayout
-    	Me.tpDescDetails.SuspendLayout
-    	Me.tpAuthor.SuspendLayout
-    	Me.gbCurrentResponsibility.SuspendLayout
-    	Me.gbContributors.SuspendLayout
-    	Me.gbAuthor.SuspendLayout
-    	Me.tpTranslation.SuspendLayout
-    	Me.gbTranslator.SuspendLayout
-    	Me.SuspendLayout
-    	'
-    	'lblStatus
-    	'
-    	Me.lblStatus.Location = New System.Drawing.Point(16, 0)
-    	Me.lblStatus.Name = "lblStatus"
-    	Me.lblStatus.Size = New System.Drawing.Size(200, 32)
-    	Me.lblStatus.TabIndex = 0
-    	Me.lblStatus.Text = "Authorship lifecycle:"
-    	Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-    	'
-    	'gbPurpose
-    	'
-    	Me.gbPurpose.Controls.Add(Me.gbMisuse)
-    	Me.gbPurpose.Controls.Add(Me.gbUse)
-    	Me.gbPurpose.Controls.Add(Me.txtPurpose)
-    	Me.gbPurpose.Dock = System.Windows.Forms.DockStyle.Fill
-    	Me.gbPurpose.Location = New System.Drawing.Point(0, 0)
-    	Me.gbPurpose.Name = "gbPurpose"
-    	Me.gbPurpose.Size = New System.Drawing.Size(620, 600)
-    	Me.gbPurpose.TabIndex = 0
-    	Me.gbPurpose.TabStop = false
-    	Me.gbPurpose.Text = "Purpose"
-    	'
-    	'gbMisuse
-    	'
-    	Me.gbMisuse.Controls.Add(Me.txtMisuse)
-    	Me.gbMisuse.Dock = System.Windows.Forms.DockStyle.Bottom
-    	Me.gbMisuse.Location = New System.Drawing.Point(3, 461)
-    	Me.gbMisuse.Name = "gbMisuse"
-    	Me.gbMisuse.Size = New System.Drawing.Size(614, 136)
-    	Me.gbMisuse.TabIndex = 11
-    	Me.gbMisuse.TabStop = false
-    	Me.gbMisuse.Text = "Misuse"
-    	'
-    	'txtMisuse
-    	'
-    	Me.txtMisuse.AcceptsReturn = true
-    	Me.txtMisuse.Dock = System.Windows.Forms.DockStyle.Fill
-    	Me.txtMisuse.Location = New System.Drawing.Point(3, 19)
-    	Me.txtMisuse.Multiline = true
-    	Me.txtMisuse.Name = "txtMisuse"
-    	Me.txtMisuse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-    	Me.txtMisuse.Size = New System.Drawing.Size(608, 114)
-    	Me.txtMisuse.TabIndex = 6
-    	'
-    	'gbUse
-    	'
-    	Me.gbUse.Controls.Add(Me.txtUse)
-    	Me.gbUse.Dock = System.Windows.Forms.DockStyle.Fill
-    	Me.gbUse.Location = New System.Drawing.Point(3, 132)
-    	Me.gbUse.Name = "gbUse"
-    	Me.gbUse.Size = New System.Drawing.Size(614, 465)
-    	Me.gbUse.TabIndex = 10
-    	Me.gbUse.TabStop = false
-    	Me.gbUse.Text = "Use"
-    	'
-    	'txtUse
-    	'
-    	Me.txtUse.AcceptsReturn = true
-    	Me.txtUse.Dock = System.Windows.Forms.DockStyle.Fill
-    	Me.txtUse.Location = New System.Drawing.Point(3, 19)
-    	Me.txtUse.Multiline = true
-    	Me.txtUse.Name = "txtUse"
-    	Me.txtUse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-    	Me.txtUse.Size = New System.Drawing.Size(608, 443)
-    	Me.txtUse.TabIndex = 4
-    	'
-    	'txtPurpose
-    	'
-    	Me.txtPurpose.AcceptsReturn = true
-    	Me.txtPurpose.Dock = System.Windows.Forms.DockStyle.Top
-    	Me.txtPurpose.Location = New System.Drawing.Point(3, 19)
-    	Me.txtPurpose.Multiline = true
-    	Me.txtPurpose.Name = "txtPurpose"
-    	Me.txtPurpose.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-    	Me.txtPurpose.Size = New System.Drawing.Size(614, 113)
-    	Me.txtPurpose.TabIndex = 0
-    	AddHandler Me.txtPurpose.TextChanged, AddressOf Me.TextUpdated
-    	'
-    	'panelDescription
-    	'
-    	Me.panelDescription.Controls.Add(Me.CopyrightTextBox)
-    	Me.panelDescription.Controls.Add(Me.CopyrightLabel)
-    	Me.panelDescription.Controls.Add(Me.txtRevision)
-    	Me.panelDescription.Controls.Add(Me.lblRevision)
-    	Me.panelDescription.Controls.Add(Me.txtLicense)
-    	Me.panelDescription.Controls.Add(Me.lblLicence)
-    	Me.panelDescription.Controls.Add(Me.ButAddKeyWord)
-    	Me.panelDescription.Controls.Add(Me.butRemoveKeyWord)
-    	Me.panelDescription.Controls.Add(Me.comboLifeCycle)
-    	Me.panelDescription.Controls.Add(Me.lblKeyword)
-    	Me.panelDescription.Controls.Add(Me.listKeyword)
-    	Me.panelDescription.Controls.Add(Me.lblStatus)
-    	Me.panelDescription.Dock = System.Windows.Forms.DockStyle.Right
-    	Me.panelDescription.Location = New System.Drawing.Point(623, 0)
-    	Me.panelDescription.Name = "panelDescription"
-    	Me.panelDescription.Size = New System.Drawing.Size(327, 600)
-    	Me.panelDescription.TabIndex = 1
-    	'
-    	'CopyrightTextBox
-    	'
-    	Me.CopyrightTextBox.Location = New System.Drawing.Point(17, 125)
-    	Me.CopyrightTextBox.Name = "CopyrightTextBox"
-    	Me.CopyrightTextBox.Size = New System.Drawing.Size(281, 23)
-    	Me.CopyrightTextBox.TabIndex = 49
-    	'
-    	'CopyrightLabel
-    	'
-    	Me.CopyrightLabel.Location = New System.Drawing.Point(14, 99)
-    	Me.CopyrightLabel.Name = "CopyrightLabel"
-    	Me.CopyrightLabel.Size = New System.Drawing.Size(74, 23)
-    	Me.CopyrightLabel.TabIndex = 48
-    	Me.CopyrightLabel.Text = "Copyright:"
-    	Me.CopyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-    	'
-    	'txtRevision
-    	'
-    	Me.txtRevision.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-    	Me.txtRevision.Location = New System.Drawing.Point(16, 73)
-    	Me.txtRevision.Name = "txtRevision"
-    	Me.txtRevision.ReadOnly = true
-    	Me.txtRevision.Size = New System.Drawing.Size(281, 23)
-    	Me.txtRevision.TabIndex = 40
-    	AddHandler Me.txtRevision.TextChanged, AddressOf Me.TextUpdated
-    	'
-    	'lblRevision
-    	'
-    	Me.lblRevision.Location = New System.Drawing.Point(16, 55)
-    	Me.lblRevision.Name = "lblRevision"
-    	Me.lblRevision.Size = New System.Drawing.Size(200, 17)
-    	Me.lblRevision.TabIndex = 39
-    	Me.lblRevision.Text = "Revision"
-    	Me.lblRevision.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-    	'
-    	'txtLicense
-    	'
-    	Me.txtLicense.Location = New System.Drawing.Point(17, 178)
-    	Me.txtLicense.Multiline = true
-    	Me.txtLicense.Name = "txtLicense"
-    	Me.txtLicense.Size = New System.Drawing.Size(281, 60)
-    	Me.txtLicense.TabIndex = 38
-    	AddHandler Me.txtLicense.TextChanged, AddressOf Me.TextUpdated
-    	'
-    	'lblLicence
-    	'
-    	Me.lblLicence.Location = New System.Drawing.Point(16, 145)
-    	Me.lblLicence.Name = "lblLicence"
-    	Me.lblLicence.Size = New System.Drawing.Size(127, 32)
-    	Me.lblLicence.TabIndex = 37
-    	Me.lblLicence.Text = "Licence:"
-    	Me.lblLicence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-    	'
-    	'ButAddKeyWord
-    	'
-    	Me.ButAddKeyWord.BackColor = System.Drawing.Color.Transparent
-    	Me.ButAddKeyWord.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-    	Me.ButAddKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
-    	Me.ButAddKeyWord.Image = CType(resources.GetObject("ButAddKeyWord.Image"),System.Drawing.Image)
-    	Me.ButAddKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
-    	Me.ButAddKeyWord.Location = New System.Drawing.Point(299, 269)
-    	Me.ButAddKeyWord.Name = "ButAddKeyWord"
-    	Me.ButAddKeyWord.Size = New System.Drawing.Size(24, 25)
-    	Me.ButAddKeyWord.TabIndex = 34
-    	Me.ButAddKeyWord.UseVisualStyleBackColor = false
-    	'
-    	'butRemoveKeyWord
-    	'
-    	Me.butRemoveKeyWord.BackColor = System.Drawing.Color.Transparent
-    	Me.butRemoveKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
-    	Me.butRemoveKeyWord.Image = CType(resources.GetObject("butRemoveKeyWord.Image"),System.Drawing.Image)
-    	Me.butRemoveKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
-    	Me.butRemoveKeyWord.Location = New System.Drawing.Point(300, 300)
-    	Me.butRemoveKeyWord.Name = "butRemoveKeyWord"
-    	Me.butRemoveKeyWord.Size = New System.Drawing.Size(24, 25)
-    	Me.butRemoveKeyWord.TabIndex = 35
-    	Me.butRemoveKeyWord.UseVisualStyleBackColor = false
-    	'
-    	'comboLifeCycle
-    	'
-    	Me.comboLifeCycle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-    	Me.comboLifeCycle.Location = New System.Drawing.Point(16, 26)
-    	Me.comboLifeCycle.Name = "comboLifeCycle"
-    	Me.comboLifeCycle.Size = New System.Drawing.Size(284, 23)
-    	Me.comboLifeCycle.TabIndex = 1
-    	'
-    	'lblKeyword
-    	'
-    	Me.lblKeyword.Location = New System.Drawing.Point(16, 242)
-    	Me.lblKeyword.Name = "lblKeyword"
-    	Me.lblKeyword.Size = New System.Drawing.Size(112, 24)
-    	Me.lblKeyword.TabIndex = 4
-    	Me.lblKeyword.Text = "Keywords:"
-    	Me.lblKeyword.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-    	'
-    	'listKeyword
-    	'
-    	Me.listKeyword.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-    	    	    	Or System.Windows.Forms.AnchorStyles.Left)  _
-    	    	    	Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-    	Me.listKeyword.ItemHeight = 15
-    	Me.listKeyword.Location = New System.Drawing.Point(17, 269)
-    	Me.listKeyword.Name = "listKeyword"
-    	Me.listKeyword.Size = New System.Drawing.Size(276, 304)
-    	Me.listKeyword.TabIndex = 36
-    	'
-    	'TabDescription
-    	'
-    	Me.TabDescription.BackColor = System.Drawing.Color.LightSteelBlue
-    	Me.TabDescription.Dock = System.Windows.Forms.DockStyle.Fill
-    	Me.TabDescription.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-    	Me.TabDescription.Location = New System.Drawing.Point(2, 2)
-    	Me.TabDescription.Name = "TabDescription"
-    	Me.TabDescription.PositionTop = true
-    	Me.TabDescription.SelectedIndex = 0
-    	Me.TabDescription.SelectedTab = Me.tpDescDetails
-    	Me.TabDescription.Size = New System.Drawing.Size(950, 631)
-    	Me.TabDescription.TabIndex = 15
-    	Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation, Me.tpReferences})
-    	'
-    	'tpReferences
-    	'
-    	Me.tpReferences.Controls.Add(Me.gbTechnicalIdentifiers)
-    	Me.tpReferences.Controls.Add(Me.gbOtherDetails)
-    	Me.tpReferences.Controls.Add(Me.groupBox2)
-    	Me.tpReferences.Location = New System.Drawing.Point(0, 0)
-    	Me.tpReferences.Name = "tpReferences"
-    	Me.tpReferences.Selected = false
-    	Me.tpReferences.Size = New System.Drawing.Size(950, 606)
-    	Me.tpReferences.TabIndex = 3
-    	Me.tpReferences.Title = "References / Other Details"
-    	'
-    	'gbTechnicalIdentifiers
-    	'
-    	Me.gbTechnicalIdentifiers.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-    	    	    	Or System.Windows.Forms.AnchorStyles.Left)  _
-    	    	    	Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-    	Me.gbTechnicalIdentifiers.AutoSize = true
-    	Me.gbTechnicalIdentifiers.Controls.Add(Me.lblCanonicalHash)
-    	Me.gbTechnicalIdentifiers.Controls.Add(Me.txtCanonicalHash)
-    	Me.gbTechnicalIdentifiers.Controls.Add(Me.txtInstanceId)
-    	Me.gbTechnicalIdentifiers.Controls.Add(Me.lblInstanceId)
-    	Me.gbTechnicalIdentifiers.Controls.Add(Me.lblProvenanceId)
-    	Me.gbTechnicalIdentifiers.Controls.Add(Me.txtProvenanceId)
-    	Me.gbTechnicalIdentifiers.Location = New System.Drawing.Point(465, 324)
-    	Me.gbTechnicalIdentifiers.Name = "gbTechnicalIdentifiers"
-    	Me.gbTechnicalIdentifiers.Size = New System.Drawing.Size(482, 279)
-    	Me.gbTechnicalIdentifiers.TabIndex = 58
-    	Me.gbTechnicalIdentifiers.TabStop = false
-    	Me.gbTechnicalIdentifiers.Text = "Technical identifiers (read-only)"
-    	'
-    	'lblCanonicalHash
-    	'
-    	Me.lblCanonicalHash.Location = New System.Drawing.Point(40, 117)
-    	Me.lblCanonicalHash.Name = "lblCanonicalHash"
-    	Me.lblCanonicalHash.Size = New System.Drawing.Size(121, 23)
-    	Me.lblCanonicalHash.TabIndex = 69
-    	Me.lblCanonicalHash.Text = "Canonical MD5 hash"
-    	Me.lblCanonicalHash.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtCanonicalHash
-    	'
-    	Me.txtCanonicalHash.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-    	Me.txtCanonicalHash.Location = New System.Drawing.Point(177, 118)
-    	Me.txtCanonicalHash.Name = "txtCanonicalHash"
-    	Me.txtCanonicalHash.ReadOnly = true
-    	Me.txtCanonicalHash.Size = New System.Drawing.Size(267, 23)
-    	Me.txtCanonicalHash.TabIndex = 68
-    	'
-    	'txtInstanceId
-    	'
-    	Me.txtInstanceId.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-    	Me.txtInstanceId.Location = New System.Drawing.Point(177, 37)
-    	Me.txtInstanceId.Name = "txtInstanceId"
-    	Me.txtInstanceId.ReadOnly = true
-    	Me.txtInstanceId.Size = New System.Drawing.Size(267, 23)
-    	Me.txtInstanceId.TabIndex = 67
-    	'
-    	'lblInstanceId
-    	'
-    	Me.lblInstanceId.Location = New System.Drawing.Point(93, 39)
-    	Me.lblInstanceId.Name = "lblInstanceId"
-    	Me.lblInstanceId.Size = New System.Drawing.Size(68, 16)
-    	Me.lblInstanceId.TabIndex = 66
-    	Me.lblInstanceId.Text = "Instance ID"
-    	Me.lblInstanceId.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'lblProvenanceId
-    	'
-    	Me.lblProvenanceId.Location = New System.Drawing.Point(77, 76)
-    	Me.lblProvenanceId.Name = "lblProvenanceId"
-    	Me.lblProvenanceId.Size = New System.Drawing.Size(84, 23)
-    	Me.lblProvenanceId.TabIndex = 64
-    	Me.lblProvenanceId.Text = "Provenance ID"
-    	Me.lblProvenanceId.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtProvenanceId
-    	'
-    	Me.txtProvenanceId.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-    	Me.txtProvenanceId.Location = New System.Drawing.Point(177, 77)
-    	Me.txtProvenanceId.Name = "txtProvenanceId"
-    	Me.txtProvenanceId.ReadOnly = true
-    	Me.txtProvenanceId.Size = New System.Drawing.Size(267, 23)
-    	Me.txtProvenanceId.TabIndex = 63
-    	'
-    	'gbOtherDetails
-    	'
-    	Me.gbOtherDetails.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-    	Me.gbOtherDetails.Controls.Add(Me.dgOtherDetails)
-    	Me.gbOtherDetails.Location = New System.Drawing.Point(3, 324)
-    	Me.gbOtherDetails.Name = "gbOtherDetails"
-    	Me.gbOtherDetails.Size = New System.Drawing.Size(459, 279)
-    	Me.gbOtherDetails.TabIndex = 43
-    	Me.gbOtherDetails.TabStop = false
-    	Me.gbOtherDetails.Text = "Other details (Read-only)"
-    	'
-    	'dgOtherDetails
-    	'
-    	Me.dgOtherDetails.AllowUserToAddRows = false
-    	Me.dgOtherDetails.AllowUserToDeleteRows = false
-    	Me.dgOtherDetails.AllowUserToResizeColumns = false
-    	Me.dgOtherDetails.AllowUserToResizeRows = false
-    	Me.dgOtherDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-    	Me.dgOtherDetails.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.OtherDetailsKeyColumn, Me.OtherDetailsValueColumn})
-    	dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-    	dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.InactiveBorder
-    	dataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
-    	dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-    	dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-    	dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-    	dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-    	Me.dgOtherDetails.DefaultCellStyle = dataGridViewCellStyle1
-    	Me.dgOtherDetails.Dock = System.Windows.Forms.DockStyle.Fill
-    	Me.dgOtherDetails.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2
-    	Me.dgOtherDetails.Location = New System.Drawing.Point(3, 19)
-    	Me.dgOtherDetails.Name = "dgOtherDetails"
-    	Me.dgOtherDetails.ReadOnly = true
-    	Me.dgOtherDetails.Size = New System.Drawing.Size(453, 257)
-    	Me.dgOtherDetails.TabIndex = 0
-    	'
-    	'OtherDetailsKeyColumn
-    	'
-    	Me.OtherDetailsKeyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-    	Me.OtherDetailsKeyColumn.DataPropertyName = "Key"
-    	Me.OtherDetailsKeyColumn.FillWeight = 25!
-    	Me.OtherDetailsKeyColumn.HeaderText = "Key"
-    	Me.OtherDetailsKeyColumn.Name = "OtherDetailsKeyColumn"
-    	Me.OtherDetailsKeyColumn.ReadOnly = true
-    	'
-    	'OtherDetailsValueColumn
-    	'
-    	Me.OtherDetailsValueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-    	Me.OtherDetailsValueColumn.DataPropertyName = "Value"
-    	Me.OtherDetailsValueColumn.FillWeight = 75!
-    	Me.OtherDetailsValueColumn.HeaderText = "Value"
-    	Me.OtherDetailsValueColumn.Name = "OtherDetailsValueColumn"
-    	Me.OtherDetailsValueColumn.ReadOnly = true
-    	'
-    	'groupBox2
-    	'
-    	Me.groupBox2.Controls.Add(Me.txtReferences)
-    	Me.groupBox2.Dock = System.Windows.Forms.DockStyle.Top
-    	Me.groupBox2.Location = New System.Drawing.Point(0, 0)
-    	Me.groupBox2.Name = "groupBox2"
-    	Me.groupBox2.Size = New System.Drawing.Size(950, 321)
-    	Me.groupBox2.TabIndex = 42
-    	Me.groupBox2.TabStop = false
-    	Me.groupBox2.Text = "References"
-    	'
-    	'txtReferences
-    	'
-    	Me.txtReferences.AcceptsReturn = true
-    	Me.txtReferences.Dock = System.Windows.Forms.DockStyle.Fill
-    	Me.txtReferences.Location = New System.Drawing.Point(3, 19)
-    	Me.txtReferences.Multiline = true
-    	Me.txtReferences.Name = "txtReferences"
-    	Me.txtReferences.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-    	Me.txtReferences.Size = New System.Drawing.Size(944, 299)
-    	Me.txtReferences.TabIndex = 1
-    	'
-    	'tpDescDetails
-    	'
-    	Me.tpDescDetails.Controls.Add(Me.gbPurpose)
-    	Me.tpDescDetails.Controls.Add(Me.Splitter3)
-    	Me.tpDescDetails.Controls.Add(Me.panelDescription)
-    	Me.tpDescDetails.Controls.Add(Me.Splitter2)
-    	Me.tpDescDetails.Controls.Add(Me.Splitter1)
-    	Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
-    	Me.tpDescDetails.Name = "tpDescDetails"
-    	Me.tpDescDetails.Size = New System.Drawing.Size(950, 606)
-    	Me.tpDescDetails.TabIndex = 0
-    	Me.tpDescDetails.Title = "Details"
-    	'
-    	'Splitter3
-    	'
-    	Me.Splitter3.Dock = System.Windows.Forms.DockStyle.Right
-    	Me.Splitter3.Location = New System.Drawing.Point(620, 0)
-    	Me.Splitter3.Name = "Splitter3"
-    	Me.Splitter3.Size = New System.Drawing.Size(3, 600)
-    	Me.Splitter3.TabIndex = 17
-    	Me.Splitter3.TabStop = false
-    	'
-    	'Splitter2
-    	'
-    	Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Bottom
-    	Me.Splitter2.Location = New System.Drawing.Point(0, 600)
-    	Me.Splitter2.Name = "Splitter2"
-    	Me.Splitter2.Size = New System.Drawing.Size(950, 3)
-    	Me.Splitter2.TabIndex = 16
-    	Me.Splitter2.TabStop = false
-    	'
-    	'Splitter1
-    	'
-    	Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Bottom
-    	Me.Splitter1.Location = New System.Drawing.Point(0, 603)
-    	Me.Splitter1.Name = "Splitter1"
-    	Me.Splitter1.Size = New System.Drawing.Size(950, 3)
-    	Me.Splitter1.TabIndex = 15
-    	Me.Splitter1.TabStop = false
-    	'
-    	'tpAuthor
-    	'
-    	Me.tpAuthor.Controls.Add(Me.gbCurrentResponsibility)
-    	Me.tpAuthor.Controls.Add(Me.gbContributors)
-    	Me.tpAuthor.Controls.Add(Me.gbAuthor)
-    	Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
-    	Me.tpAuthor.Name = "tpAuthor"
-    	Me.tpAuthor.Selected = false
-    	Me.tpAuthor.Size = New System.Drawing.Size(950, 606)
-    	Me.tpAuthor.TabIndex = 1
-    	Me.tpAuthor.Title = "Authorship"
-    	'
-    	'gbCurrentResponsibility
-    	'
-    	Me.gbCurrentResponsibility.Controls.Add(Me.txtReviewDate)
-    	Me.gbCurrentResponsibility.Controls.Add(Me.lblReviewDate)
-    	Me.gbCurrentResponsibility.Controls.Add(Me.btnCustodianDefaults)
-    	Me.gbCurrentResponsibility.Controls.Add(Me.txtCustodianNamespace)
-    	Me.gbCurrentResponsibility.Controls.Add(Me.lblCustodianNamespace)
-    	Me.gbCurrentResponsibility.Controls.Add(Me.txtCustodianOrganisation)
-    	Me.gbCurrentResponsibility.Controls.Add(Me.lblCustodianOrganisation)
-    	Me.gbCurrentResponsibility.Controls.Add(Me.CurrentContactButton)
-    	Me.gbCurrentResponsibility.Controls.Add(Me.lblCurrentContact)
-    	Me.gbCurrentResponsibility.Controls.Add(Me.txtCurrentContact)
-    	Me.gbCurrentResponsibility.Dock = System.Windows.Forms.DockStyle.Top
-    	Me.gbCurrentResponsibility.Location = New System.Drawing.Point(0, 256)
-    	Me.gbCurrentResponsibility.Name = "gbCurrentResponsibility"
-    	Me.gbCurrentResponsibility.Size = New System.Drawing.Size(950, 167)
-    	Me.gbCurrentResponsibility.TabIndex = 44
-    	Me.gbCurrentResponsibility.TabStop = false
-    	Me.gbCurrentResponsibility.Text = "Currently responsible"
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageDescription))
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Me.lblStatus = New System.Windows.Forms.Label()
+        Me.gbPurpose = New System.Windows.Forms.GroupBox()
+        Me.gbMisuse = New System.Windows.Forms.GroupBox()
+        Me.txtMisuse = New System.Windows.Forms.TextBox()
+        Me.gbUse = New System.Windows.Forms.GroupBox()
+        Me.txtUse = New System.Windows.Forms.TextBox()
+        Me.txtPurpose = New System.Windows.Forms.TextBox()
+        Me.panelDescription = New System.Windows.Forms.Panel()
+        Me.CopyrightTextBox = New System.Windows.Forms.TextBox()
+        Me.CopyrightLabel = New System.Windows.Forms.Label()
+        Me.txtRevision = New System.Windows.Forms.TextBox()
+        Me.lblRevision = New System.Windows.Forms.Label()
+        Me.txtLicense = New System.Windows.Forms.TextBox()
+        Me.lblLicence = New System.Windows.Forms.Label()
+        Me.ButAddKeyWord = New System.Windows.Forms.Button()
+        Me.butRemoveKeyWord = New System.Windows.Forms.Button()
+        Me.comboLifeCycle = New System.Windows.Forms.ComboBox()
+        Me.lblKeyword = New System.Windows.Forms.Label()
+        Me.listKeyword = New System.Windows.Forms.ListBox()
+        Me.TabDescription = New Crownwood.Magic.Controls.TabControl()
+        Me.tpReferences = New Crownwood.Magic.Controls.TabPage()
+        Me.gbTechnicalIdentifiers = New System.Windows.Forms.GroupBox()
+        Me.lblCanonicalHash = New System.Windows.Forms.Label()
+        Me.txtCanonicalHash = New System.Windows.Forms.TextBox()
+        Me.txtBuildId = New System.Windows.Forms.TextBox()
+        Me.lbBuildId = New System.Windows.Forms.Label()
+        Me.gbOtherDetails = New System.Windows.Forms.GroupBox()
+        Me.dgOtherDetails = New System.Windows.Forms.DataGridView()
+        Me.OtherDetailsKeyColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.OtherDetailsValueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.groupBox2 = New System.Windows.Forms.GroupBox()
+        Me.txtReferences = New System.Windows.Forms.TextBox()
+        Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage()
+        Me.Splitter3 = New System.Windows.Forms.Splitter()
+        Me.Splitter2 = New System.Windows.Forms.Splitter()
+        Me.Splitter1 = New System.Windows.Forms.Splitter()
+        Me.tpAuthor = New Crownwood.Magic.Controls.TabPage()
+        Me.gbCurrentResponsibility = New System.Windows.Forms.GroupBox()
+        Me.txtReviewDate = New System.Windows.Forms.TextBox()
+        Me.lblReviewDate = New System.Windows.Forms.Label()
+        Me.btnCustodianDefaults = New System.Windows.Forms.Button()
+        Me.txtCustodianNamespace = New System.Windows.Forms.TextBox()
+        Me.lblCustodianNamespace = New System.Windows.Forms.Label()
+        Me.txtCustodianOrganisation = New System.Windows.Forms.TextBox()
+        Me.lblCustodianOrganisation = New System.Windows.Forms.Label()
+        Me.CurrentContactButton = New System.Windows.Forms.Button()
+        Me.lblCurrentContact = New System.Windows.Forms.Label()
+        Me.txtCurrentContact = New System.Windows.Forms.TextBox()
+        Me.gbContributors = New System.Windows.Forms.GroupBox()
+        Me.butEditContributor = New System.Windows.Forms.Button()
+        Me.listContributors = New System.Windows.Forms.ListBox()
+        Me.butAddContributor = New System.Windows.Forms.Button()
+        Me.butRemoveContributor = New System.Windows.Forms.Button()
+        Me.gbAuthor = New System.Windows.Forms.GroupBox()
+        Me.btnPublisherDefaults = New System.Windows.Forms.Button()
+        Me.txtOriginalNamespace = New System.Windows.Forms.TextBox()
+        Me.lblOriginalNamespace = New System.Windows.Forms.Label()
+        Me.txtOriginalPublisher = New System.Windows.Forms.TextBox()
+        Me.lblOriginalPublisher = New System.Windows.Forms.Label()
+        Me.UseAllAuthorDefaultsButton = New System.Windows.Forms.Button()
+        Me.TodayButton = New System.Windows.Forms.Button()
+        Me.UseYourOrganisationButton = New System.Windows.Forms.Button()
+        Me.UseYourEmailButton = New System.Windows.Forms.Button()
+        Me.UseYourNameButton = New System.Windows.Forms.Button()
+        Me.lblDate = New System.Windows.Forms.Label()
+        Me.txtDate = New System.Windows.Forms.TextBox()
+        Me.lblOrganisation = New System.Windows.Forms.Label()
+        Me.txtOrganisation = New System.Windows.Forms.TextBox()
+        Me.lblName = New System.Windows.Forms.Label()
+        Me.txtOriginalAuthor = New System.Windows.Forms.TextBox()
+        Me.lblEmail = New System.Windows.Forms.Label()
+        Me.txtOriginalEmail = New System.Windows.Forms.TextBox()
+        Me.tpTranslation = New Crownwood.Magic.Controls.TabPage()
+        Me.gbTranslator = New System.Windows.Forms.GroupBox()
+        Me.lblAccreditation = New System.Windows.Forms.Label()
+        Me.txtTranslationAccreditation = New System.Windows.Forms.TextBox()
+        Me.lblTranslatorOrganisation = New System.Windows.Forms.Label()
+        Me.txtTranslatorOrganisation = New System.Windows.Forms.TextBox()
+        Me.lblTranslatorName = New System.Windows.Forms.Label()
+        Me.txtTranslatorName = New System.Windows.Forms.TextBox()
+        Me.lblTranslatorEmail = New System.Windows.Forms.Label()
+        Me.txtTranslatorEmail = New System.Windows.Forms.TextBox()
+        Me.gbPurpose.SuspendLayout()
+        Me.gbMisuse.SuspendLayout()
+        Me.gbUse.SuspendLayout()
+        Me.panelDescription.SuspendLayout()
+        Me.tpReferences.SuspendLayout()
+        Me.gbTechnicalIdentifiers.SuspendLayout()
+        Me.gbOtherDetails.SuspendLayout()
+        CType(Me.dgOtherDetails, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.groupBox2.SuspendLayout()
+        Me.tpDescDetails.SuspendLayout()
+        Me.tpAuthor.SuspendLayout()
+        Me.gbCurrentResponsibility.SuspendLayout()
+        Me.gbContributors.SuspendLayout()
+        Me.gbAuthor.SuspendLayout()
+        Me.tpTranslation.SuspendLayout()
+        Me.gbTranslator.SuspendLayout()
+        Me.SuspendLayout()
+        '
+        'lblStatus
+        '
+        Me.lblStatus.Location = New System.Drawing.Point(16, 0)
+        Me.lblStatus.Name = "lblStatus"
+        Me.lblStatus.Size = New System.Drawing.Size(200, 32)
+        Me.lblStatus.TabIndex = 0
+        Me.lblStatus.Text = "Authorship lifecycle:"
+        Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'gbPurpose
+        '
+        Me.gbPurpose.Controls.Add(Me.gbMisuse)
+        Me.gbPurpose.Controls.Add(Me.gbUse)
+        Me.gbPurpose.Controls.Add(Me.txtPurpose)
+        Me.gbPurpose.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gbPurpose.Location = New System.Drawing.Point(0, 0)
+        Me.gbPurpose.Name = "gbPurpose"
+        Me.gbPurpose.Size = New System.Drawing.Size(620, 600)
+        Me.gbPurpose.TabIndex = 0
+        Me.gbPurpose.TabStop = False
+        Me.gbPurpose.Text = "Purpose"
+        '
+        'gbMisuse
+        '
+        Me.gbMisuse.Controls.Add(Me.txtMisuse)
+        Me.gbMisuse.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.gbMisuse.Location = New System.Drawing.Point(3, 461)
+        Me.gbMisuse.Name = "gbMisuse"
+        Me.gbMisuse.Size = New System.Drawing.Size(614, 136)
+        Me.gbMisuse.TabIndex = 11
+        Me.gbMisuse.TabStop = False
+        Me.gbMisuse.Text = "Misuse"
+        '
+        'txtMisuse
+        '
+        Me.txtMisuse.AcceptsReturn = True
+        Me.txtMisuse.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtMisuse.Location = New System.Drawing.Point(3, 19)
+        Me.txtMisuse.Multiline = True
+        Me.txtMisuse.Name = "txtMisuse"
+        Me.txtMisuse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtMisuse.Size = New System.Drawing.Size(608, 114)
+        Me.txtMisuse.TabIndex = 6
+        '
+        'gbUse
+        '
+        Me.gbUse.Controls.Add(Me.txtUse)
+        Me.gbUse.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gbUse.Location = New System.Drawing.Point(3, 132)
+        Me.gbUse.Name = "gbUse"
+        Me.gbUse.Size = New System.Drawing.Size(614, 465)
+        Me.gbUse.TabIndex = 10
+        Me.gbUse.TabStop = False
+        Me.gbUse.Text = "Use"
+        '
+        'txtUse
+        '
+        Me.txtUse.AcceptsReturn = True
+        Me.txtUse.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtUse.Location = New System.Drawing.Point(3, 19)
+        Me.txtUse.Multiline = True
+        Me.txtUse.Name = "txtUse"
+        Me.txtUse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtUse.Size = New System.Drawing.Size(608, 443)
+        Me.txtUse.TabIndex = 4
+        '
+        'txtPurpose
+        '
+        Me.txtPurpose.AcceptsReturn = True
+        Me.txtPurpose.Dock = System.Windows.Forms.DockStyle.Top
+        Me.txtPurpose.Location = New System.Drawing.Point(3, 19)
+        Me.txtPurpose.Multiline = True
+        Me.txtPurpose.Name = "txtPurpose"
+        Me.txtPurpose.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtPurpose.Size = New System.Drawing.Size(614, 113)
+        Me.txtPurpose.TabIndex = 0
+        '
+        'panelDescription
+        '
+        Me.panelDescription.Controls.Add(Me.CopyrightTextBox)
+        Me.panelDescription.Controls.Add(Me.CopyrightLabel)
+        Me.panelDescription.Controls.Add(Me.txtRevision)
+        Me.panelDescription.Controls.Add(Me.lblRevision)
+        Me.panelDescription.Controls.Add(Me.txtLicense)
+        Me.panelDescription.Controls.Add(Me.lblLicence)
+        Me.panelDescription.Controls.Add(Me.ButAddKeyWord)
+        Me.panelDescription.Controls.Add(Me.butRemoveKeyWord)
+        Me.panelDescription.Controls.Add(Me.comboLifeCycle)
+        Me.panelDescription.Controls.Add(Me.lblKeyword)
+        Me.panelDescription.Controls.Add(Me.listKeyword)
+        Me.panelDescription.Controls.Add(Me.lblStatus)
+        Me.panelDescription.Dock = System.Windows.Forms.DockStyle.Right
+        Me.panelDescription.Location = New System.Drawing.Point(623, 0)
+        Me.panelDescription.Name = "panelDescription"
+        Me.panelDescription.Size = New System.Drawing.Size(327, 600)
+        Me.panelDescription.TabIndex = 1
+        '
+        'CopyrightTextBox
+        '
+        Me.CopyrightTextBox.Location = New System.Drawing.Point(17, 125)
+        Me.CopyrightTextBox.Name = "CopyrightTextBox"
+        Me.CopyrightTextBox.Size = New System.Drawing.Size(281, 23)
+        Me.CopyrightTextBox.TabIndex = 49
+        '
+        'CopyrightLabel
+        '
+        Me.CopyrightLabel.Location = New System.Drawing.Point(14, 99)
+        Me.CopyrightLabel.Name = "CopyrightLabel"
+        Me.CopyrightLabel.Size = New System.Drawing.Size(74, 23)
+        Me.CopyrightLabel.TabIndex = 48
+        Me.CopyrightLabel.Text = "Copyright:"
+        Me.CopyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txtRevision
+        '
+        Me.txtRevision.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtRevision.Location = New System.Drawing.Point(16, 73)
+        Me.txtRevision.Name = "txtRevision"
+        Me.txtRevision.ReadOnly = True
+        Me.txtRevision.Size = New System.Drawing.Size(281, 23)
+        Me.txtRevision.TabIndex = 40
+        '
+        'lblRevision
+        '
+        Me.lblRevision.Location = New System.Drawing.Point(16, 55)
+        Me.lblRevision.Name = "lblRevision"
+        Me.lblRevision.Size = New System.Drawing.Size(200, 17)
+        Me.lblRevision.TabIndex = 39
+        Me.lblRevision.Text = "Revision"
+        Me.lblRevision.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txtLicense
+        '
+        Me.txtLicense.Location = New System.Drawing.Point(17, 178)
+        Me.txtLicense.Multiline = True
+        Me.txtLicense.Name = "txtLicense"
+        Me.txtLicense.Size = New System.Drawing.Size(281, 60)
+        Me.txtLicense.TabIndex = 38
+        '
+        'lblLicence
+        '
+        Me.lblLicence.Location = New System.Drawing.Point(16, 145)
+        Me.lblLicence.Name = "lblLicence"
+        Me.lblLicence.Size = New System.Drawing.Size(127, 32)
+        Me.lblLicence.TabIndex = 37
+        Me.lblLicence.Text = "Licence:"
+        Me.lblLicence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ButAddKeyWord
+        '
+        Me.ButAddKeyWord.BackColor = System.Drawing.Color.Transparent
+        Me.ButAddKeyWord.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButAddKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.ButAddKeyWord.Image = CType(resources.GetObject("ButAddKeyWord.Image"), System.Drawing.Image)
+        Me.ButAddKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.ButAddKeyWord.Location = New System.Drawing.Point(299, 269)
+        Me.ButAddKeyWord.Name = "ButAddKeyWord"
+        Me.ButAddKeyWord.Size = New System.Drawing.Size(24, 25)
+        Me.ButAddKeyWord.TabIndex = 34
+        Me.ButAddKeyWord.UseVisualStyleBackColor = False
+        '
+        'butRemoveKeyWord
+        '
+        Me.butRemoveKeyWord.BackColor = System.Drawing.Color.Transparent
+        Me.butRemoveKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butRemoveKeyWord.Image = CType(resources.GetObject("butRemoveKeyWord.Image"), System.Drawing.Image)
+        Me.butRemoveKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butRemoveKeyWord.Location = New System.Drawing.Point(300, 300)
+        Me.butRemoveKeyWord.Name = "butRemoveKeyWord"
+        Me.butRemoveKeyWord.Size = New System.Drawing.Size(24, 25)
+        Me.butRemoveKeyWord.TabIndex = 35
+        Me.butRemoveKeyWord.UseVisualStyleBackColor = False
+        '
+        'comboLifeCycle
+        '
+        Me.comboLifeCycle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.comboLifeCycle.Location = New System.Drawing.Point(16, 26)
+        Me.comboLifeCycle.Name = "comboLifeCycle"
+        Me.comboLifeCycle.Size = New System.Drawing.Size(284, 23)
+        Me.comboLifeCycle.TabIndex = 1
+        '
+        'lblKeyword
+        '
+        Me.lblKeyword.Location = New System.Drawing.Point(16, 242)
+        Me.lblKeyword.Name = "lblKeyword"
+        Me.lblKeyword.Size = New System.Drawing.Size(112, 24)
+        Me.lblKeyword.TabIndex = 4
+        Me.lblKeyword.Text = "Keywords:"
+        Me.lblKeyword.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'listKeyword
+        '
+        Me.listKeyword.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.listKeyword.ItemHeight = 15
+        Me.listKeyword.Location = New System.Drawing.Point(17, 269)
+        Me.listKeyword.Name = "listKeyword"
+        Me.listKeyword.Size = New System.Drawing.Size(276, 304)
+        Me.listKeyword.TabIndex = 36
+        '
+        'TabDescription
+        '
+        Me.TabDescription.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.TabDescription.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabDescription.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabDescription.Location = New System.Drawing.Point(2, 2)
+        Me.TabDescription.Name = "TabDescription"
+        Me.TabDescription.PositionTop = True
+        Me.TabDescription.SelectedIndex = 3
+        Me.TabDescription.SelectedTab = Me.tpReferences
+        Me.TabDescription.Size = New System.Drawing.Size(950, 631)
+        Me.TabDescription.TabIndex = 15
+        Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation, Me.tpReferences})
+        '
+        'tpReferences
+        '
+        Me.tpReferences.Controls.Add(Me.gbTechnicalIdentifiers)
+        Me.tpReferences.Controls.Add(Me.gbOtherDetails)
+        Me.tpReferences.Controls.Add(Me.groupBox2)
+        Me.tpReferences.Location = New System.Drawing.Point(0, 0)
+        Me.tpReferences.Name = "tpReferences"
+        Me.tpReferences.Size = New System.Drawing.Size(950, 606)
+        Me.tpReferences.TabIndex = 3
+        Me.tpReferences.Title = "References / Other Details"
+        '
+        'gbTechnicalIdentifiers
+        '
+        Me.gbTechnicalIdentifiers.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.gbTechnicalIdentifiers.AutoSize = True
+        Me.gbTechnicalIdentifiers.Controls.Add(Me.lblCanonicalHash)
+        Me.gbTechnicalIdentifiers.Controls.Add(Me.txtCanonicalHash)
+        Me.gbTechnicalIdentifiers.Controls.Add(Me.txtBuildId)
+        Me.gbTechnicalIdentifiers.Controls.Add(Me.lbBuildId)
+        Me.gbTechnicalIdentifiers.Location = New System.Drawing.Point(465, 324)
+        Me.gbTechnicalIdentifiers.Name = "gbTechnicalIdentifiers"
+        Me.gbTechnicalIdentifiers.Size = New System.Drawing.Size(482, 279)
+        Me.gbTechnicalIdentifiers.TabIndex = 58
+        Me.gbTechnicalIdentifiers.TabStop = False
+        Me.gbTechnicalIdentifiers.Text = "Technical identifiers (read-only)"
+        '
+        'lblCanonicalHash
+        '
+        Me.lblCanonicalHash.Location = New System.Drawing.Point(40, 82)
+        Me.lblCanonicalHash.Name = "lblCanonicalHash"
+        Me.lblCanonicalHash.Size = New System.Drawing.Size(121, 23)
+        Me.lblCanonicalHash.TabIndex = 69
+        Me.lblCanonicalHash.Text = "Canonical MD5 hash"
+        Me.lblCanonicalHash.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtCanonicalHash
+        '
+        Me.txtCanonicalHash.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtCanonicalHash.Location = New System.Drawing.Point(177, 83)
+        Me.txtCanonicalHash.Name = "txtCanonicalHash"
+        Me.txtCanonicalHash.ReadOnly = True
+        Me.txtCanonicalHash.Size = New System.Drawing.Size(267, 23)
+        Me.txtCanonicalHash.TabIndex = 68
+        '
+        'txtBuildId
+        '
+        Me.txtBuildId.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtBuildId.Location = New System.Drawing.Point(177, 37)
+        Me.txtBuildId.Name = "txtBuildId"
+        Me.txtBuildId.ReadOnly = True
+        Me.txtBuildId.Size = New System.Drawing.Size(267, 23)
+        Me.txtBuildId.TabIndex = 67
+        '
+        'lbBuildId
+        '
+        Me.lbBuildId.Location = New System.Drawing.Point(93, 39)
+        Me.lbBuildId.Name = "lbBuildId"
+        Me.lbBuildId.Size = New System.Drawing.Size(68, 16)
+        Me.lbBuildId.TabIndex = 66
+        Me.lbBuildId.Text = "Build ID"
+        Me.lbBuildId.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'gbOtherDetails
+        '
+        Me.gbOtherDetails.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.gbOtherDetails.Controls.Add(Me.dgOtherDetails)
+        Me.gbOtherDetails.Location = New System.Drawing.Point(3, 324)
+        Me.gbOtherDetails.Name = "gbOtherDetails"
+        Me.gbOtherDetails.Size = New System.Drawing.Size(459, 279)
+        Me.gbOtherDetails.TabIndex = 43
+        Me.gbOtherDetails.TabStop = False
+        Me.gbOtherDetails.Text = "Other details (Read-only)"
+        '
+        'dgOtherDetails
+        '
+        Me.dgOtherDetails.AllowUserToAddRows = False
+        Me.dgOtherDetails.AllowUserToDeleteRows = False
+        Me.dgOtherDetails.AllowUserToResizeColumns = False
+        Me.dgOtherDetails.AllowUserToResizeRows = False
+        Me.dgOtherDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgOtherDetails.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.OtherDetailsKeyColumn, Me.OtherDetailsValueColumn})
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.InactiveBorder
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgOtherDetails.DefaultCellStyle = DataGridViewCellStyle2
+        Me.dgOtherDetails.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dgOtherDetails.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2
+        Me.dgOtherDetails.Location = New System.Drawing.Point(3, 19)
+        Me.dgOtherDetails.Name = "dgOtherDetails"
+        Me.dgOtherDetails.ReadOnly = True
+        Me.dgOtherDetails.Size = New System.Drawing.Size(453, 257)
+        Me.dgOtherDetails.TabIndex = 0
+        '
+        'OtherDetailsKeyColumn
+        '
+        Me.OtherDetailsKeyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.OtherDetailsKeyColumn.DataPropertyName = "Key"
+        Me.OtherDetailsKeyColumn.FillWeight = 25.0!
+        Me.OtherDetailsKeyColumn.HeaderText = "Key"
+        Me.OtherDetailsKeyColumn.Name = "OtherDetailsKeyColumn"
+        Me.OtherDetailsKeyColumn.ReadOnly = True
+        '
+        'OtherDetailsValueColumn
+        '
+        Me.OtherDetailsValueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.OtherDetailsValueColumn.DataPropertyName = "Value"
+        Me.OtherDetailsValueColumn.FillWeight = 75.0!
+        Me.OtherDetailsValueColumn.HeaderText = "Value"
+        Me.OtherDetailsValueColumn.Name = "OtherDetailsValueColumn"
+        Me.OtherDetailsValueColumn.ReadOnly = True
+        '
+        'groupBox2
+        '
+        Me.groupBox2.Controls.Add(Me.txtReferences)
+        Me.groupBox2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.groupBox2.Location = New System.Drawing.Point(0, 0)
+        Me.groupBox2.Name = "groupBox2"
+        Me.groupBox2.Size = New System.Drawing.Size(950, 321)
+        Me.groupBox2.TabIndex = 42
+        Me.groupBox2.TabStop = False
+        Me.groupBox2.Text = "References"
+        '
+        'txtReferences
+        '
+        Me.txtReferences.AcceptsReturn = True
+        Me.txtReferences.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtReferences.Location = New System.Drawing.Point(3, 19)
+        Me.txtReferences.Multiline = True
+        Me.txtReferences.Name = "txtReferences"
+        Me.txtReferences.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtReferences.Size = New System.Drawing.Size(944, 299)
+        Me.txtReferences.TabIndex = 1
+        '
+        'tpDescDetails
+        '
+        Me.tpDescDetails.Controls.Add(Me.gbPurpose)
+        Me.tpDescDetails.Controls.Add(Me.Splitter3)
+        Me.tpDescDetails.Controls.Add(Me.panelDescription)
+        Me.tpDescDetails.Controls.Add(Me.Splitter2)
+        Me.tpDescDetails.Controls.Add(Me.Splitter1)
+        Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
+        Me.tpDescDetails.Name = "tpDescDetails"
+        Me.tpDescDetails.Selected = False
+        Me.tpDescDetails.Size = New System.Drawing.Size(950, 606)
+        Me.tpDescDetails.TabIndex = 0
+        Me.tpDescDetails.Title = "Details"
+        '
+        'Splitter3
+        '
+        Me.Splitter3.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Splitter3.Location = New System.Drawing.Point(620, 0)
+        Me.Splitter3.Name = "Splitter3"
+        Me.Splitter3.Size = New System.Drawing.Size(3, 600)
+        Me.Splitter3.TabIndex = 17
+        Me.Splitter3.TabStop = False
+        '
+        'Splitter2
+        '
+        Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Splitter2.Location = New System.Drawing.Point(0, 600)
+        Me.Splitter2.Name = "Splitter2"
+        Me.Splitter2.Size = New System.Drawing.Size(950, 3)
+        Me.Splitter2.TabIndex = 16
+        Me.Splitter2.TabStop = False
+        '
+        'Splitter1
+        '
+        Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Splitter1.Location = New System.Drawing.Point(0, 603)
+        Me.Splitter1.Name = "Splitter1"
+        Me.Splitter1.Size = New System.Drawing.Size(950, 3)
+        Me.Splitter1.TabIndex = 15
+        Me.Splitter1.TabStop = False
+        '
+        'tpAuthor
+        '
+        Me.tpAuthor.Controls.Add(Me.gbCurrentResponsibility)
+        Me.tpAuthor.Controls.Add(Me.gbContributors)
+        Me.tpAuthor.Controls.Add(Me.gbAuthor)
+        Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
+        Me.tpAuthor.Name = "tpAuthor"
+        Me.tpAuthor.Selected = False
+        Me.tpAuthor.Size = New System.Drawing.Size(950, 606)
+        Me.tpAuthor.TabIndex = 1
+        Me.tpAuthor.Title = "Authorship"
+        '
+        'gbCurrentResponsibility
+        '
+        Me.gbCurrentResponsibility.Controls.Add(Me.txtReviewDate)
+        Me.gbCurrentResponsibility.Controls.Add(Me.lblReviewDate)
+        Me.gbCurrentResponsibility.Controls.Add(Me.btnCustodianDefaults)
+        Me.gbCurrentResponsibility.Controls.Add(Me.txtCustodianNamespace)
+        Me.gbCurrentResponsibility.Controls.Add(Me.lblCustodianNamespace)
+        Me.gbCurrentResponsibility.Controls.Add(Me.txtCustodianOrganisation)
+        Me.gbCurrentResponsibility.Controls.Add(Me.lblCustodianOrganisation)
+        Me.gbCurrentResponsibility.Controls.Add(Me.CurrentContactButton)
+        Me.gbCurrentResponsibility.Controls.Add(Me.lblCurrentContact)
+        Me.gbCurrentResponsibility.Controls.Add(Me.txtCurrentContact)
+        Me.gbCurrentResponsibility.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbCurrentResponsibility.Location = New System.Drawing.Point(0, 256)
+        Me.gbCurrentResponsibility.Name = "gbCurrentResponsibility"
+        Me.gbCurrentResponsibility.Size = New System.Drawing.Size(950, 167)
+        Me.gbCurrentResponsibility.TabIndex = 44
+        Me.gbCurrentResponsibility.TabStop = False
+        Me.gbCurrentResponsibility.Text = "Currently responsible"
+        '
+        'txtReviewDate
+        '
+        Me.txtReviewDate.Location = New System.Drawing.Point(591, 76)
+        Me.txtReviewDate.Name = "txtReviewDate"
+        Me.txtReviewDate.Size = New System.Drawing.Size(188, 23)
+        Me.txtReviewDate.TabIndex = 52
+        '
+        'lblReviewDate
+        '
+        Me.lblReviewDate.Location = New System.Drawing.Point(543, 61)
+        Me.lblReviewDate.Name = "lblReviewDate"
+        Me.lblReviewDate.Size = New System.Drawing.Size(60, 51)
+        Me.lblReviewDate.TabIndex = 51
+        Me.lblReviewDate.Text = "Review Date:"
+        Me.lblReviewDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'btnCustodianDefaults
+        '
+        Me.btnCustodianDefaults.Location = New System.Drawing.Point(542, 30)
+        Me.btnCustodianDefaults.Name = "btnCustodianDefaults"
+        Me.btnCustodianDefaults.Size = New System.Drawing.Size(237, 23)
+        Me.btnCustodianDefaults.TabIndex = 50
+        Me.btnCustodianDefaults.Text = "Use your Publisher defaults"
+        Me.btnCustodianDefaults.UseVisualStyleBackColor = True
+        '
+        'txtCustodianNamespace
+        '
+        Me.txtCustodianNamespace.Location = New System.Drawing.Point(112, 75)
+        Me.txtCustodianNamespace.Name = "txtCustodianNamespace"
+        Me.txtCustodianNamespace.Size = New System.Drawing.Size(410, 23)
+        Me.txtCustodianNamespace.TabIndex = 49
+        '
+        'lblCustodianNamespace
+        '
+        Me.lblCustodianNamespace.Location = New System.Drawing.Point(25, 70)
+        Me.lblCustodianNamespace.Name = "lblCustodianNamespace"
+        Me.lblCustodianNamespace.Size = New System.Drawing.Size(77, 32)
+        Me.lblCustodianNamespace.TabIndex = 48
+        Me.lblCustodianNamespace.Text = "Custodian Namespace"
+        Me.lblCustodianNamespace.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtCustodianOrganisation
+        '
+        Me.txtCustodianOrganisation.Location = New System.Drawing.Point(112, 31)
+        Me.txtCustodianOrganisation.Name = "txtCustodianOrganisation"
+        Me.txtCustodianOrganisation.Size = New System.Drawing.Size(410, 23)
+        Me.txtCustodianOrganisation.TabIndex = 47
+        '
+        'lblCustodianOrganisation
+        '
+        Me.lblCustodianOrganisation.Location = New System.Drawing.Point(25, 27)
+        Me.lblCustodianOrganisation.Name = "lblCustodianOrganisation"
+        Me.lblCustodianOrganisation.Size = New System.Drawing.Size(77, 32)
+        Me.lblCustodianOrganisation.TabIndex = 46
+        Me.lblCustodianOrganisation.Text = "Custodian Organisation:"
+        Me.lblCustodianOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'CurrentContactButton
+        '
+        Me.CurrentContactButton.Location = New System.Drawing.Point(542, 122)
+        Me.CurrentContactButton.Name = "CurrentContactButton"
+        Me.CurrentContactButton.Size = New System.Drawing.Size(237, 23)
+        Me.CurrentContactButton.TabIndex = 9
+        Me.CurrentContactButton.Text = "Use your Author details"
+        Me.CurrentContactButton.UseVisualStyleBackColor = True
+        '
+        'lblCurrentContact
+        '
+        Me.lblCurrentContact.Location = New System.Drawing.Point(7, 104)
+        Me.lblCurrentContact.Name = "lblCurrentContact"
+        Me.lblCurrentContact.Size = New System.Drawing.Size(95, 59)
+        Me.lblCurrentContact.TabIndex = 0
+        Me.lblCurrentContact.Text = "Contact"
+        Me.lblCurrentContact.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtCurrentContact
+        '
+        Me.txtCurrentContact.Location = New System.Drawing.Point(112, 122)
+        Me.txtCurrentContact.Name = "txtCurrentContact"
+        Me.txtCurrentContact.Size = New System.Drawing.Size(410, 23)
+        Me.txtCurrentContact.TabIndex = 1
+        '
+        'gbContributors
+        '
+        Me.gbContributors.Controls.Add(Me.butEditContributor)
+        Me.gbContributors.Controls.Add(Me.listContributors)
+        Me.gbContributors.Controls.Add(Me.butAddContributor)
+        Me.gbContributors.Controls.Add(Me.butRemoveContributor)
+        Me.gbContributors.Location = New System.Drawing.Point(0, 426)
+        Me.gbContributors.Name = "gbContributors"
+        Me.gbContributors.Size = New System.Drawing.Size(950, 177)
+        Me.gbContributors.TabIndex = 40
+        Me.gbContributors.TabStop = False
+        Me.gbContributors.Text = "Contributors"
+        '
+        'butEditContributor
+        '
+        Me.butEditContributor.BackColor = System.Drawing.Color.Transparent
+        Me.butEditContributor.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butEditContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butEditContributor.Location = New System.Drawing.Point(79, 84)
+        Me.butEditContributor.Name = "butEditContributor"
+        Me.butEditContributor.Size = New System.Drawing.Size(24, 25)
+        Me.butEditContributor.TabIndex = 40
+        Me.butEditContributor.Text = "..."
+        Me.butEditContributor.UseVisualStyleBackColor = False
+        '
+        'listContributors
+        '
+        Me.listContributors.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.listContributors.ItemHeight = 15
+        Me.listContributors.Location = New System.Drawing.Point(109, 22)
+        Me.listContributors.Name = "listContributors"
+        Me.listContributors.Size = New System.Drawing.Size(684, 124)
+        Me.listContributors.TabIndex = 36
+        '
+        'butAddContributor
+        '
+        Me.butAddContributor.BackColor = System.Drawing.Color.Transparent
+        Me.butAddContributor.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.butAddContributor.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butAddContributor.Image = CType(resources.GetObject("butAddContributor.Image"), System.Drawing.Image)
+        Me.butAddContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butAddContributor.Location = New System.Drawing.Point(79, 22)
+        Me.butAddContributor.Name = "butAddContributor"
+        Me.butAddContributor.Size = New System.Drawing.Size(24, 25)
+        Me.butAddContributor.TabIndex = 38
+        Me.butAddContributor.UseVisualStyleBackColor = False
+        '
+        'butRemoveContributor
+        '
+        Me.butRemoveContributor.BackColor = System.Drawing.Color.Transparent
+        Me.butRemoveContributor.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butRemoveContributor.Image = CType(resources.GetObject("butRemoveContributor.Image"), System.Drawing.Image)
+        Me.butRemoveContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butRemoveContributor.Location = New System.Drawing.Point(79, 53)
+        Me.butRemoveContributor.Name = "butRemoveContributor"
+        Me.butRemoveContributor.Size = New System.Drawing.Size(24, 25)
+        Me.butRemoveContributor.TabIndex = 39
+        Me.butRemoveContributor.UseVisualStyleBackColor = False
+        '
+        'gbAuthor
+        '
+        Me.gbAuthor.Controls.Add(Me.btnPublisherDefaults)
+        Me.gbAuthor.Controls.Add(Me.txtOriginalNamespace)
+        Me.gbAuthor.Controls.Add(Me.lblOriginalNamespace)
+        Me.gbAuthor.Controls.Add(Me.txtOriginalPublisher)
+        Me.gbAuthor.Controls.Add(Me.lblOriginalPublisher)
+        Me.gbAuthor.Controls.Add(Me.UseAllAuthorDefaultsButton)
+        Me.gbAuthor.Controls.Add(Me.TodayButton)
+        Me.gbAuthor.Controls.Add(Me.UseYourOrganisationButton)
+        Me.gbAuthor.Controls.Add(Me.UseYourEmailButton)
+        Me.gbAuthor.Controls.Add(Me.UseYourNameButton)
+        Me.gbAuthor.Controls.Add(Me.lblDate)
+        Me.gbAuthor.Controls.Add(Me.txtDate)
+        Me.gbAuthor.Controls.Add(Me.lblOrganisation)
+        Me.gbAuthor.Controls.Add(Me.txtOrganisation)
+        Me.gbAuthor.Controls.Add(Me.lblName)
+        Me.gbAuthor.Controls.Add(Me.txtOriginalAuthor)
+        Me.gbAuthor.Controls.Add(Me.lblEmail)
+        Me.gbAuthor.Controls.Add(Me.txtOriginalEmail)
+        Me.gbAuthor.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbAuthor.Location = New System.Drawing.Point(0, 0)
+        Me.gbAuthor.Name = "gbAuthor"
+        Me.gbAuthor.Size = New System.Drawing.Size(950, 256)
+        Me.gbAuthor.TabIndex = 4
+        Me.gbAuthor.TabStop = False
+        Me.gbAuthor.Text = "Original author and publisher"
+        '
+        'btnPublisherDefaults
+        '
+        Me.btnPublisherDefaults.Location = New System.Drawing.Point(551, 173)
+        Me.btnPublisherDefaults.Name = "btnPublisherDefaults"
+        Me.btnPublisherDefaults.Size = New System.Drawing.Size(229, 23)
+        Me.btnPublisherDefaults.TabIndex = 45
+        Me.btnPublisherDefaults.Text = "Use your Publisher defaults"
+        Me.btnPublisherDefaults.UseVisualStyleBackColor = True
+        '
+        'txtOriginalNamespace
+        '
+        Me.txtOriginalNamespace.Location = New System.Drawing.Point(111, 213)
+        Me.txtOriginalNamespace.Name = "txtOriginalNamespace"
+        Me.txtOriginalNamespace.Size = New System.Drawing.Size(424, 23)
+        Me.txtOriginalNamespace.TabIndex = 44
+        '
+        'lblOriginalNamespace
+        '
+        Me.lblOriginalNamespace.Location = New System.Drawing.Point(1, 207)
+        Me.lblOriginalNamespace.Name = "lblOriginalNamespace"
+        Me.lblOriginalNamespace.Size = New System.Drawing.Size(102, 32)
+        Me.lblOriginalNamespace.TabIndex = 43
+        Me.lblOriginalNamespace.Text = "Original Namespace:"
+        Me.lblOriginalNamespace.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtOriginalPublisher
+        '
+        Me.txtOriginalPublisher.Location = New System.Drawing.Point(111, 173)
+        Me.txtOriginalPublisher.Name = "txtOriginalPublisher"
+        Me.txtOriginalPublisher.Size = New System.Drawing.Size(424, 23)
+        Me.txtOriginalPublisher.TabIndex = 40
+        '
+        'lblOriginalPublisher
+        '
+        Me.lblOriginalPublisher.Location = New System.Drawing.Point(1, 167)
+        Me.lblOriginalPublisher.Name = "lblOriginalPublisher"
+        Me.lblOriginalPublisher.Size = New System.Drawing.Size(102, 32)
+        Me.lblOriginalPublisher.TabIndex = 39
+        Me.lblOriginalPublisher.Text = "Original Publisher:"
+        Me.lblOriginalPublisher.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'UseAllAuthorDefaultsButton
+        '
+        Me.UseAllAuthorDefaultsButton.Location = New System.Drawing.Point(551, 127)
+        Me.UseAllAuthorDefaultsButton.Name = "UseAllAuthorDefaultsButton"
+        Me.UseAllAuthorDefaultsButton.Size = New System.Drawing.Size(229, 23)
+        Me.UseAllAuthorDefaultsButton.TabIndex = 12
+        Me.UseAllAuthorDefaultsButton.Text = "Use all Author defaults"
+        Me.UseAllAuthorDefaultsButton.UseVisualStyleBackColor = True
+        '
+        'TodayButton
+        '
+        Me.TodayButton.Location = New System.Drawing.Point(277, 126)
+        Me.TodayButton.Name = "TodayButton"
+        Me.TodayButton.Size = New System.Drawing.Size(158, 23)
+        Me.TodayButton.TabIndex = 11
+        Me.TodayButton.Text = "Today"
+        Me.TodayButton.UseVisualStyleBackColor = True
+        '
+        'UseYourOrganisationButton
+        '
+        Me.UseYourOrganisationButton.Location = New System.Drawing.Point(551, 93)
+        Me.UseYourOrganisationButton.Name = "UseYourOrganisationButton"
+        Me.UseYourOrganisationButton.Size = New System.Drawing.Size(229, 23)
+        Me.UseYourOrganisationButton.TabIndex = 8
+        Me.UseYourOrganisationButton.Text = "Use your Organisation"
+        Me.UseYourOrganisationButton.UseVisualStyleBackColor = True
+        '
+        'UseYourEmailButton
+        '
+        Me.UseYourEmailButton.Location = New System.Drawing.Point(551, 61)
+        Me.UseYourEmailButton.Name = "UseYourEmailButton"
+        Me.UseYourEmailButton.Size = New System.Drawing.Size(229, 23)
+        Me.UseYourEmailButton.TabIndex = 5
+        Me.UseYourEmailButton.Text = "Use your Email"
+        Me.UseYourEmailButton.UseVisualStyleBackColor = True
+        '
+        'UseYourNameButton
+        '
+        Me.UseYourNameButton.Location = New System.Drawing.Point(551, 32)
+        Me.UseYourNameButton.Name = "UseYourNameButton"
+        Me.UseYourNameButton.Size = New System.Drawing.Size(229, 23)
+        Me.UseYourNameButton.TabIndex = 2
+        Me.UseYourNameButton.Text = "Use your Name"
+        Me.UseYourNameButton.UseVisualStyleBackColor = True
+        '
+        'lblDate
+        '
+        Me.lblDate.Location = New System.Drawing.Point(8, 126)
+        Me.lblDate.Name = "lblDate"
+        Me.lblDate.Size = New System.Drawing.Size(95, 24)
+        Me.lblDate.TabIndex = 9
+        Me.lblDate.Text = "Date:"
+        Me.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtDate
+        '
+        Me.txtDate.Location = New System.Drawing.Point(111, 126)
+        Me.txtDate.Name = "txtDate"
+        Me.txtDate.Size = New System.Drawing.Size(160, 23)
+        Me.txtDate.TabIndex = 10
+        '
+        'lblOrganisation
+        '
+        Me.lblOrganisation.Location = New System.Drawing.Point(8, 94)
+        Me.lblOrganisation.Name = "lblOrganisation"
+        Me.lblOrganisation.Size = New System.Drawing.Size(95, 24)
+        Me.lblOrganisation.TabIndex = 6
+        Me.lblOrganisation.Text = "Organisation:"
+        Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtOrganisation
+        '
+        Me.txtOrganisation.Location = New System.Drawing.Point(111, 94)
+        Me.txtOrganisation.Name = "txtOrganisation"
+        Me.txtOrganisation.Size = New System.Drawing.Size(424, 23)
+        Me.txtOrganisation.TabIndex = 7
+        '
+        'lblName
+        '
+        Me.lblName.Location = New System.Drawing.Point(8, 30)
+        Me.lblName.Name = "lblName"
+        Me.lblName.Size = New System.Drawing.Size(95, 24)
+        Me.lblName.TabIndex = 0
+        Me.lblName.Text = "Name:"
+        Me.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtOriginalAuthor
+        '
+        Me.txtOriginalAuthor.Location = New System.Drawing.Point(111, 30)
+        Me.txtOriginalAuthor.Name = "txtOriginalAuthor"
+        Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 23)
+        Me.txtOriginalAuthor.TabIndex = 1
+        '
+        'lblEmail
+        '
+        Me.lblEmail.Location = New System.Drawing.Point(8, 62)
+        Me.lblEmail.Name = "lblEmail"
+        Me.lblEmail.Size = New System.Drawing.Size(95, 24)
+        Me.lblEmail.TabIndex = 3
+        Me.lblEmail.Text = "Email:"
+        Me.lblEmail.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtOriginalEmail
+        '
+        Me.txtOriginalEmail.Location = New System.Drawing.Point(111, 62)
+        Me.txtOriginalEmail.Name = "txtOriginalEmail"
+        Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 23)
+        Me.txtOriginalEmail.TabIndex = 4
+        '
+        'tpTranslation
+        '
+        Me.tpTranslation.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.tpTranslation.Controls.Add(Me.gbTranslator)
+        Me.tpTranslation.Location = New System.Drawing.Point(0, 0)
+        Me.tpTranslation.Name = "tpTranslation"
+        Me.tpTranslation.Selected = False
+        Me.tpTranslation.Size = New System.Drawing.Size(950, 606)
+        Me.tpTranslation.TabIndex = 2
+        Me.tpTranslation.Title = "Translation"
+        '
+        'gbTranslator
+        '
+        Me.gbTranslator.Controls.Add(Me.lblAccreditation)
+        Me.gbTranslator.Controls.Add(Me.txtTranslationAccreditation)
+        Me.gbTranslator.Controls.Add(Me.lblTranslatorOrganisation)
+        Me.gbTranslator.Controls.Add(Me.txtTranslatorOrganisation)
+        Me.gbTranslator.Controls.Add(Me.lblTranslatorName)
+        Me.gbTranslator.Controls.Add(Me.txtTranslatorName)
+        Me.gbTranslator.Controls.Add(Me.lblTranslatorEmail)
+        Me.gbTranslator.Controls.Add(Me.txtTranslatorEmail)
+        Me.gbTranslator.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbTranslator.Location = New System.Drawing.Point(0, 0)
+        Me.gbTranslator.Name = "gbTranslator"
+        Me.gbTranslator.Size = New System.Drawing.Size(950, 157)
+        Me.gbTranslator.TabIndex = 5
+        Me.gbTranslator.TabStop = False
+        Me.gbTranslator.Text = "Translator"
+        '
+        'lblAccreditation
+        '
+        Me.lblAccreditation.Location = New System.Drawing.Point(16, 120)
+        Me.lblAccreditation.Name = "lblAccreditation"
+        Me.lblAccreditation.Size = New System.Drawing.Size(128, 24)
+        Me.lblAccreditation.TabIndex = 7
+        Me.lblAccreditation.Text = "Accreditation"
+        Me.lblAccreditation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtTranslationAccreditation
+        '
+        Me.txtTranslationAccreditation.Location = New System.Drawing.Point(152, 120)
+        Me.txtTranslationAccreditation.Name = "txtTranslationAccreditation"
+        Me.txtTranslationAccreditation.Size = New System.Drawing.Size(160, 23)
+        Me.txtTranslationAccreditation.TabIndex = 6
+        '
+        'lblTranslatorOrganisation
+        '
+        Me.lblTranslatorOrganisation.Location = New System.Drawing.Point(16, 88)
+        Me.lblTranslatorOrganisation.Name = "lblTranslatorOrganisation"
+        Me.lblTranslatorOrganisation.Size = New System.Drawing.Size(128, 24)
+        Me.lblTranslatorOrganisation.TabIndex = 5
+        Me.lblTranslatorOrganisation.Text = "Organisation"
+        Me.lblTranslatorOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtTranslatorOrganisation
+        '
+        Me.txtTranslatorOrganisation.Location = New System.Drawing.Point(152, 88)
+        Me.txtTranslatorOrganisation.Name = "txtTranslatorOrganisation"
+        Me.txtTranslatorOrganisation.Size = New System.Drawing.Size(424, 23)
+        Me.txtTranslatorOrganisation.TabIndex = 4
+        '
+        'lblTranslatorName
+        '
+        Me.lblTranslatorName.Location = New System.Drawing.Point(16, 24)
+        Me.lblTranslatorName.Name = "lblTranslatorName"
+        Me.lblTranslatorName.Size = New System.Drawing.Size(128, 24)
+        Me.lblTranslatorName.TabIndex = 2
+        Me.lblTranslatorName.Text = "Name"
+        Me.lblTranslatorName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtTranslatorName
+        '
+        Me.txtTranslatorName.Location = New System.Drawing.Point(152, 24)
+        Me.txtTranslatorName.Name = "txtTranslatorName"
+        Me.txtTranslatorName.Size = New System.Drawing.Size(424, 23)
+        Me.txtTranslatorName.TabIndex = 0
+        '
+        'lblTranslatorEmail
+        '
+        Me.lblTranslatorEmail.Location = New System.Drawing.Point(16, 56)
+        Me.lblTranslatorEmail.Name = "lblTranslatorEmail"
+        Me.lblTranslatorEmail.Size = New System.Drawing.Size(128, 24)
+        Me.lblTranslatorEmail.TabIndex = 3
+        Me.lblTranslatorEmail.Text = "Email"
+        Me.lblTranslatorEmail.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtTranslatorEmail
+        '
+        Me.txtTranslatorEmail.Location = New System.Drawing.Point(152, 56)
+        Me.txtTranslatorEmail.Name = "txtTranslatorEmail"
+        Me.txtTranslatorEmail.Size = New System.Drawing.Size(424, 23)
+        Me.txtTranslatorEmail.TabIndex = 1
+        '
+        'TabPageDescription
+        '
+        Me.BackColor = System.Drawing.SystemColors.Control
+        Me.Controls.Add(Me.TabDescription)
+        Me.Name = "TabPageDescription"
+        Me.Padding = New System.Windows.Forms.Padding(2)
+        Me.Size = New System.Drawing.Size(954, 635)
+        Me.gbPurpose.ResumeLayout(False)
+        Me.gbPurpose.PerformLayout()
+        Me.gbMisuse.ResumeLayout(False)
+        Me.gbMisuse.PerformLayout()
+        Me.gbUse.ResumeLayout(False)
+        Me.gbUse.PerformLayout()
+        Me.panelDescription.ResumeLayout(False)
+        Me.panelDescription.PerformLayout()
+        Me.tpReferences.ResumeLayout(False)
+        Me.tpReferences.PerformLayout()
+        Me.gbTechnicalIdentifiers.ResumeLayout(False)
+        Me.gbTechnicalIdentifiers.PerformLayout()
+        Me.gbOtherDetails.ResumeLayout(False)
+        CType(Me.dgOtherDetails, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.groupBox2.ResumeLayout(False)
+        Me.groupBox2.PerformLayout()
+        Me.tpDescDetails.ResumeLayout(False)
+        Me.tpAuthor.ResumeLayout(False)
+        Me.gbCurrentResponsibility.ResumeLayout(False)
+        Me.gbCurrentResponsibility.PerformLayout()
+        Me.gbContributors.ResumeLayout(False)
+        Me.gbAuthor.ResumeLayout(False)
+        Me.gbAuthor.PerformLayout()
+        Me.tpTranslation.ResumeLayout(False)
+        Me.gbTranslator.ResumeLayout(False)
+        Me.gbTranslator.PerformLayout()
+        Me.ResumeLayout(False)
 
-    	'
-    	'txtReviewDate
-    	'
-    	Me.txtReviewDate.Location = New System.Drawing.Point(591, 76)
-    	Me.txtReviewDate.Name = "txtReviewDate"
-    	Me.txtReviewDate.Size = New System.Drawing.Size(188, 23)
-    	Me.txtReviewDate.TabIndex = 52
-    	'
-    	'lblReviewDate
-    	'
-    	Me.lblReviewDate.Location = New System.Drawing.Point(543, 61)
-    	Me.lblReviewDate.Name = "lblReviewDate"
-    	Me.lblReviewDate.Size = New System.Drawing.Size(60, 51)
-    	Me.lblReviewDate.TabIndex = 51
-    	Me.lblReviewDate.Text = "Review Date:"
-    	Me.lblReviewDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-    	'
-    	'btnCustodianDefaults
-    	'
-    	Me.btnCustodianDefaults.Location = New System.Drawing.Point(542, 30)
-    	Me.btnCustodianDefaults.Name = "btnCustodianDefaults"
-    	Me.btnCustodianDefaults.Size = New System.Drawing.Size(237, 23)
-    	Me.btnCustodianDefaults.TabIndex = 50
-    	Me.btnCustodianDefaults.Text = "Use your Publisher defaults"
-    	Me.btnCustodianDefaults.UseVisualStyleBackColor = true
-
-    	'
-    	'txtCustodianNamespace
-    	'
-    	Me.txtCustodianNamespace.Location = New System.Drawing.Point(112, 75)
-    	Me.txtCustodianNamespace.Name = "txtCustodianNamespace"
-    	Me.txtCustodianNamespace.Size = New System.Drawing.Size(410, 23)
-    	Me.txtCustodianNamespace.TabIndex = 49
-    	AddHandler Me.txtCustodianNamespace.TextChanged, AddressOf Me.TextUpdated
-    	'
-    	'lblCustodianNamespace
-    	'
-    	Me.lblCustodianNamespace.Location = New System.Drawing.Point(25, 70)
-    	Me.lblCustodianNamespace.Name = "lblCustodianNamespace"
-    	Me.lblCustodianNamespace.Size = New System.Drawing.Size(77, 32)
-    	Me.lblCustodianNamespace.TabIndex = 48
-    	Me.lblCustodianNamespace.Text = "Custodian Namespace"
-    	Me.lblCustodianNamespace.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtCustodianOrganisation
-    	'
-    	Me.txtCustodianOrganisation.Location = New System.Drawing.Point(112, 31)
-    	Me.txtCustodianOrganisation.Name = "txtCustodianOrganisation"
-    	Me.txtCustodianOrganisation.Size = New System.Drawing.Size(410, 23)
-    	Me.txtCustodianOrganisation.TabIndex = 47
-    	AddHandler Me.txtCustodianOrganisation.TextChanged, AddressOf Me.TextUpdated
-    	'
-    	'lblCustodianOrganisation
-    	'
-    	Me.lblCustodianOrganisation.Location = New System.Drawing.Point(25, 27)
-    	Me.lblCustodianOrganisation.Name = "lblCustodianOrganisation"
-    	Me.lblCustodianOrganisation.Size = New System.Drawing.Size(77, 32)
-    	Me.lblCustodianOrganisation.TabIndex = 46
-    	Me.lblCustodianOrganisation.Text = "Custodian Organisation:"
-    	Me.lblCustodianOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'CurrentContactButton
-    	'
-    	Me.CurrentContactButton.Location = New System.Drawing.Point(542, 122)
-    	Me.CurrentContactButton.Name = "CurrentContactButton"
-    	Me.CurrentContactButton.Size = New System.Drawing.Size(237, 23)
-    	Me.CurrentContactButton.TabIndex = 9
-    	Me.CurrentContactButton.Text = "Use your Author details"
-    	Me.CurrentContactButton.UseVisualStyleBackColor = true
-    	'
-    	'lblCurrentContact
-    	'
-    	Me.lblCurrentContact.Location = New System.Drawing.Point(7, 104)
-    	Me.lblCurrentContact.Name = "lblCurrentContact"
-    	Me.lblCurrentContact.Size = New System.Drawing.Size(95, 59)
-    	Me.lblCurrentContact.TabIndex = 0
-    	Me.lblCurrentContact.Text = "Contact"
-    	Me.lblCurrentContact.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtCurrentContact
-    	'
-    	Me.txtCurrentContact.Location = New System.Drawing.Point(112, 122)
-    	Me.txtCurrentContact.Name = "txtCurrentContact"
-    	Me.txtCurrentContact.Size = New System.Drawing.Size(410, 23)
-    	Me.txtCurrentContact.TabIndex = 1
-    	AddHandler Me.txtCurrentContact.TextChanged, AddressOf Me.TextUpdated
-    	'
-    	'gbContributors
-    	'
-    	Me.gbContributors.Controls.Add(Me.butEditContributor)
-    	Me.gbContributors.Controls.Add(Me.listContributors)
-    	Me.gbContributors.Controls.Add(Me.butAddContributor)
-    	Me.gbContributors.Controls.Add(Me.butRemoveContributor)
-    	Me.gbContributors.Location = New System.Drawing.Point(0, 426)
-    	Me.gbContributors.Name = "gbContributors"
-    	Me.gbContributors.Size = New System.Drawing.Size(950, 177)
-    	Me.gbContributors.TabIndex = 40
-    	Me.gbContributors.TabStop = false
-    	Me.gbContributors.Text = "Contributors"
-    	'
-    	'butEditContributor
-    	'
-    	Me.butEditContributor.BackColor = System.Drawing.Color.Transparent
-    	Me.butEditContributor.ForeColor = System.Drawing.SystemColors.ControlText
-    	Me.butEditContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
-    	Me.butEditContributor.Location = New System.Drawing.Point(79, 84)
-    	Me.butEditContributor.Name = "butEditContributor"
-    	Me.butEditContributor.Size = New System.Drawing.Size(24, 25)
-    	Me.butEditContributor.TabIndex = 40
-    	Me.butEditContributor.Text = "..."
-    	Me.butEditContributor.UseVisualStyleBackColor = false
-    	'
-    	'listContributors
-    	'
-    	Me.listContributors.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-    	    	    	Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-    	Me.listContributors.ItemHeight = 15
-    	Me.listContributors.Location = New System.Drawing.Point(109, 22)
-    	Me.listContributors.Name = "listContributors"
-    	Me.listContributors.Size = New System.Drawing.Size(684, 124)
-    	Me.listContributors.TabIndex = 36
-    	'
-    	'butAddContributor
-    	'
-    	Me.butAddContributor.BackColor = System.Drawing.Color.Transparent
-    	Me.butAddContributor.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-    	Me.butAddContributor.ForeColor = System.Drawing.SystemColors.ControlText
-    	Me.butAddContributor.Image = CType(resources.GetObject("butAddContributor.Image"),System.Drawing.Image)
-    	Me.butAddContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
-    	Me.butAddContributor.Location = New System.Drawing.Point(79, 22)
-    	Me.butAddContributor.Name = "butAddContributor"
-    	Me.butAddContributor.Size = New System.Drawing.Size(24, 25)
-    	Me.butAddContributor.TabIndex = 38
-    	Me.butAddContributor.UseVisualStyleBackColor = false
-    	'
-    	'butRemoveContributor
-    	'
-    	Me.butRemoveContributor.BackColor = System.Drawing.Color.Transparent
-    	Me.butRemoveContributor.ForeColor = System.Drawing.SystemColors.ControlText
-    	Me.butRemoveContributor.Image = CType(resources.GetObject("butRemoveContributor.Image"),System.Drawing.Image)
-    	Me.butRemoveContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
-    	Me.butRemoveContributor.Location = New System.Drawing.Point(79, 53)
-    	Me.butRemoveContributor.Name = "butRemoveContributor"
-    	Me.butRemoveContributor.Size = New System.Drawing.Size(24, 25)
-    	Me.butRemoveContributor.TabIndex = 39
-    	Me.butRemoveContributor.UseVisualStyleBackColor = false
-    	'
-    	'gbAuthor
-    	'
-    	Me.gbAuthor.Controls.Add(Me.btnPublisherDefaults)
-    	Me.gbAuthor.Controls.Add(Me.txtOriginalNamespace)
-    	Me.gbAuthor.Controls.Add(Me.lblOriginalNamespace)
-    	Me.gbAuthor.Controls.Add(Me.txtOriginalPublisher)
-    	Me.gbAuthor.Controls.Add(Me.lblOriginalPublisher)
-    	Me.gbAuthor.Controls.Add(Me.UseAllAuthorDefaultsButton)
-    	Me.gbAuthor.Controls.Add(Me.TodayButton)
-    	Me.gbAuthor.Controls.Add(Me.UseYourOrganisationButton)
-    	Me.gbAuthor.Controls.Add(Me.UseYourEmailButton)
-    	Me.gbAuthor.Controls.Add(Me.UseYourNameButton)
-    	Me.gbAuthor.Controls.Add(Me.lblDate)
-    	Me.gbAuthor.Controls.Add(Me.txtDate)
-    	Me.gbAuthor.Controls.Add(Me.lblOrganisation)
-    	Me.gbAuthor.Controls.Add(Me.txtOrganisation)
-    	Me.gbAuthor.Controls.Add(Me.lblName)
-    	Me.gbAuthor.Controls.Add(Me.txtOriginalAuthor)
-    	Me.gbAuthor.Controls.Add(Me.lblEmail)
-    	Me.gbAuthor.Controls.Add(Me.txtOriginalEmail)
-    	Me.gbAuthor.Dock = System.Windows.Forms.DockStyle.Top
-    	Me.gbAuthor.Location = New System.Drawing.Point(0, 0)
-    	Me.gbAuthor.Name = "gbAuthor"
-    	Me.gbAuthor.Size = New System.Drawing.Size(950, 256)
-    	Me.gbAuthor.TabIndex = 4
-    	Me.gbAuthor.TabStop = false
-    	Me.gbAuthor.Text = "Original author and publisher"
-    	'
-    	'btnPublisherDefaults
-    	'
-    	Me.btnPublisherDefaults.Location = New System.Drawing.Point(551, 173)
-    	Me.btnPublisherDefaults.Name = "btnPublisherDefaults"
-    	Me.btnPublisherDefaults.Size = New System.Drawing.Size(229, 23)
-    	Me.btnPublisherDefaults.TabIndex = 45
-    	Me.btnPublisherDefaults.Text = "Use your Publisher defaults"
-    	Me.btnPublisherDefaults.UseVisualStyleBackColor = true
-
-    	'
-    	'txtOriginalNamespace
-    	'
-    	Me.txtOriginalNamespace.Location = New System.Drawing.Point(111, 213)
-    	Me.txtOriginalNamespace.Name = "txtOriginalNamespace"
-    	Me.txtOriginalNamespace.Size = New System.Drawing.Size(424, 23)
-    	Me.txtOriginalNamespace.TabIndex = 44
-    	AddHandler Me.txtOriginalNamespace.TextChanged, AddressOf Me.TextUpdated
-    	'
-    	'lblOriginalNamespace
-    	'
-    	Me.lblOriginalNamespace.Location = New System.Drawing.Point(1, 207)
-    	Me.lblOriginalNamespace.Name = "lblOriginalNamespace"
-    	Me.lblOriginalNamespace.Size = New System.Drawing.Size(102, 32)
-    	Me.lblOriginalNamespace.TabIndex = 43
-    	Me.lblOriginalNamespace.Text = "Original Namespace:"
-    	Me.lblOriginalNamespace.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtOriginalPublisher
-    	'
-    	Me.txtOriginalPublisher.Location = New System.Drawing.Point(111, 173)
-    	Me.txtOriginalPublisher.Name = "txtOriginalPublisher"
-    	Me.txtOriginalPublisher.Size = New System.Drawing.Size(424, 23)
-    	Me.txtOriginalPublisher.TabIndex = 40
-    	AddHandler Me.txtOriginalPublisher.TextChanged, AddressOf Me.TextUpdated
-    	'
-    	'lblOriginalPublisher
-    	'
-    	Me.lblOriginalPublisher.Location = New System.Drawing.Point(1, 167)
-    	Me.lblOriginalPublisher.Name = "lblOriginalPublisher"
-    	Me.lblOriginalPublisher.Size = New System.Drawing.Size(102, 32)
-    	Me.lblOriginalPublisher.TabIndex = 39
-    	Me.lblOriginalPublisher.Text = "Original Publisher:"
-    	Me.lblOriginalPublisher.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'UseAllAuthorDefaultsButton
-    	'
-    	Me.UseAllAuthorDefaultsButton.Location = New System.Drawing.Point(551, 127)
-    	Me.UseAllAuthorDefaultsButton.Name = "UseAllAuthorDefaultsButton"
-    	Me.UseAllAuthorDefaultsButton.Size = New System.Drawing.Size(229, 23)
-    	Me.UseAllAuthorDefaultsButton.TabIndex = 12
-    	Me.UseAllAuthorDefaultsButton.Text = "Use all Author defaults"
-    	Me.UseAllAuthorDefaultsButton.UseVisualStyleBackColor = true
-    	'
-    	'TodayButton
-    	'
-    	Me.TodayButton.Location = New System.Drawing.Point(277, 126)
-    	Me.TodayButton.Name = "TodayButton"
-    	Me.TodayButton.Size = New System.Drawing.Size(158, 23)
-    	Me.TodayButton.TabIndex = 11
-    	Me.TodayButton.Text = "Today"
-    	Me.TodayButton.UseVisualStyleBackColor = true
-    	'
-    	'UseYourOrganisationButton
-    	'
-    	Me.UseYourOrganisationButton.Location = New System.Drawing.Point(551, 93)
-    	Me.UseYourOrganisationButton.Name = "UseYourOrganisationButton"
-    	Me.UseYourOrganisationButton.Size = New System.Drawing.Size(229, 23)
-    	Me.UseYourOrganisationButton.TabIndex = 8
-    	Me.UseYourOrganisationButton.Text = "Use your Organisation"
-    	Me.UseYourOrganisationButton.UseVisualStyleBackColor = true
-    	'
-    	'UseYourEmailButton
-    	'
-    	Me.UseYourEmailButton.Location = New System.Drawing.Point(551, 61)
-    	Me.UseYourEmailButton.Name = "UseYourEmailButton"
-    	Me.UseYourEmailButton.Size = New System.Drawing.Size(229, 23)
-    	Me.UseYourEmailButton.TabIndex = 5
-    	Me.UseYourEmailButton.Text = "Use your Email"
-    	Me.UseYourEmailButton.UseVisualStyleBackColor = true
-    	'
-    	'UseYourNameButton
-    	'
-    	Me.UseYourNameButton.Location = New System.Drawing.Point(551, 32)
-    	Me.UseYourNameButton.Name = "UseYourNameButton"
-    	Me.UseYourNameButton.Size = New System.Drawing.Size(229, 23)
-    	Me.UseYourNameButton.TabIndex = 2
-    	Me.UseYourNameButton.Text = "Use your Name"
-    	Me.UseYourNameButton.UseVisualStyleBackColor = true
-    	'
-    	'lblDate
-    	'
-    	Me.lblDate.Location = New System.Drawing.Point(8, 126)
-    	Me.lblDate.Name = "lblDate"
-    	Me.lblDate.Size = New System.Drawing.Size(95, 24)
-    	Me.lblDate.TabIndex = 9
-    	Me.lblDate.Text = "Date:"
-    	Me.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtDate
-    	'
-    	Me.txtDate.Location = New System.Drawing.Point(111, 126)
-    	Me.txtDate.Name = "txtDate"
-    	Me.txtDate.Size = New System.Drawing.Size(160, 23)
-    	Me.txtDate.TabIndex = 10
-    	'
-    	'lblOrganisation
-    	'
-    	Me.lblOrganisation.Location = New System.Drawing.Point(8, 94)
-    	Me.lblOrganisation.Name = "lblOrganisation"
-    	Me.lblOrganisation.Size = New System.Drawing.Size(95, 24)
-    	Me.lblOrganisation.TabIndex = 6
-    	Me.lblOrganisation.Text = "Organisation:"
-    	Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtOrganisation
-    	'
-    	Me.txtOrganisation.Location = New System.Drawing.Point(111, 94)
-    	Me.txtOrganisation.Name = "txtOrganisation"
-    	Me.txtOrganisation.Size = New System.Drawing.Size(424, 23)
-    	Me.txtOrganisation.TabIndex = 7
-    	'
-    	'lblName
-    	'
-    	Me.lblName.Location = New System.Drawing.Point(8, 30)
-    	Me.lblName.Name = "lblName"
-    	Me.lblName.Size = New System.Drawing.Size(95, 24)
-    	Me.lblName.TabIndex = 0
-    	Me.lblName.Text = "Name:"
-    	Me.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtOriginalAuthor
-    	'
-    	Me.txtOriginalAuthor.Location = New System.Drawing.Point(111, 30)
-    	Me.txtOriginalAuthor.Name = "txtOriginalAuthor"
-    	Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 23)
-    	Me.txtOriginalAuthor.TabIndex = 1
-    	'
-    	'lblEmail
-    	'
-    	Me.lblEmail.Location = New System.Drawing.Point(8, 62)
-    	Me.lblEmail.Name = "lblEmail"
-    	Me.lblEmail.Size = New System.Drawing.Size(95, 24)
-    	Me.lblEmail.TabIndex = 3
-    	Me.lblEmail.Text = "Email:"
-    	Me.lblEmail.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtOriginalEmail
-    	'
-    	Me.txtOriginalEmail.Location = New System.Drawing.Point(111, 62)
-    	Me.txtOriginalEmail.Name = "txtOriginalEmail"
-    	Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 23)
-    	Me.txtOriginalEmail.TabIndex = 4
-    	'
-    	'tpTranslation
-    	'
-    	Me.tpTranslation.BackColor = System.Drawing.Color.LightSteelBlue
-    	Me.tpTranslation.Controls.Add(Me.gbTranslator)
-    	Me.tpTranslation.Location = New System.Drawing.Point(0, 0)
-    	Me.tpTranslation.Name = "tpTranslation"
-    	Me.tpTranslation.Selected = false
-    	Me.tpTranslation.Size = New System.Drawing.Size(950, 606)
-    	Me.tpTranslation.TabIndex = 2
-    	Me.tpTranslation.Title = "Translation"
-    	'
-    	'gbTranslator
-    	'
-    	Me.gbTranslator.Controls.Add(Me.lblAccreditation)
-    	Me.gbTranslator.Controls.Add(Me.txtTranslationAccreditation)
-    	Me.gbTranslator.Controls.Add(Me.lblTranslatorOrganisation)
-    	Me.gbTranslator.Controls.Add(Me.txtTranslatorOrganisation)
-    	Me.gbTranslator.Controls.Add(Me.lblTranslatorName)
-    	Me.gbTranslator.Controls.Add(Me.txtTranslatorName)
-    	Me.gbTranslator.Controls.Add(Me.lblTranslatorEmail)
-    	Me.gbTranslator.Controls.Add(Me.txtTranslatorEmail)
-    	Me.gbTranslator.Dock = System.Windows.Forms.DockStyle.Top
-    	Me.gbTranslator.Location = New System.Drawing.Point(0, 0)
-    	Me.gbTranslator.Name = "gbTranslator"
-    	Me.gbTranslator.Size = New System.Drawing.Size(950, 157)
-    	Me.gbTranslator.TabIndex = 5
-    	Me.gbTranslator.TabStop = false
-    	Me.gbTranslator.Text = "Translator"
-    	'
-    	'lblAccreditation
-    	'
-    	Me.lblAccreditation.Location = New System.Drawing.Point(16, 120)
-    	Me.lblAccreditation.Name = "lblAccreditation"
-    	Me.lblAccreditation.Size = New System.Drawing.Size(128, 24)
-    	Me.lblAccreditation.TabIndex = 7
-    	Me.lblAccreditation.Text = "Accreditation"
-    	Me.lblAccreditation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtTranslationAccreditation
-    	'
-    	Me.txtTranslationAccreditation.Location = New System.Drawing.Point(152, 120)
-    	Me.txtTranslationAccreditation.Name = "txtTranslationAccreditation"
-    	Me.txtTranslationAccreditation.Size = New System.Drawing.Size(160, 23)
-    	Me.txtTranslationAccreditation.TabIndex = 6
-    	'
-    	'lblTranslatorOrganisation
-    	'
-    	Me.lblTranslatorOrganisation.Location = New System.Drawing.Point(16, 88)
-    	Me.lblTranslatorOrganisation.Name = "lblTranslatorOrganisation"
-    	Me.lblTranslatorOrganisation.Size = New System.Drawing.Size(128, 24)
-    	Me.lblTranslatorOrganisation.TabIndex = 5
-    	Me.lblTranslatorOrganisation.Text = "Organisation"
-    	Me.lblTranslatorOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtTranslatorOrganisation
-    	'
-    	Me.txtTranslatorOrganisation.Location = New System.Drawing.Point(152, 88)
-    	Me.txtTranslatorOrganisation.Name = "txtTranslatorOrganisation"
-    	Me.txtTranslatorOrganisation.Size = New System.Drawing.Size(424, 23)
-    	Me.txtTranslatorOrganisation.TabIndex = 4
-    	'
-    	'lblTranslatorName
-    	'
-    	Me.lblTranslatorName.Location = New System.Drawing.Point(16, 24)
-    	Me.lblTranslatorName.Name = "lblTranslatorName"
-    	Me.lblTranslatorName.Size = New System.Drawing.Size(128, 24)
-    	Me.lblTranslatorName.TabIndex = 2
-    	Me.lblTranslatorName.Text = "Name"
-    	Me.lblTranslatorName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtTranslatorName
-    	'
-    	Me.txtTranslatorName.Location = New System.Drawing.Point(152, 24)
-    	Me.txtTranslatorName.Name = "txtTranslatorName"
-    	Me.txtTranslatorName.Size = New System.Drawing.Size(424, 23)
-    	Me.txtTranslatorName.TabIndex = 0
-    	'
-    	'lblTranslatorEmail
-    	'
-    	Me.lblTranslatorEmail.Location = New System.Drawing.Point(16, 56)
-    	Me.lblTranslatorEmail.Name = "lblTranslatorEmail"
-    	Me.lblTranslatorEmail.Size = New System.Drawing.Size(128, 24)
-    	Me.lblTranslatorEmail.TabIndex = 3
-    	Me.lblTranslatorEmail.Text = "Email"
-    	Me.lblTranslatorEmail.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    	'
-    	'txtTranslatorEmail
-    	'
-    	Me.txtTranslatorEmail.Location = New System.Drawing.Point(152, 56)
-    	Me.txtTranslatorEmail.Name = "txtTranslatorEmail"
-    	Me.txtTranslatorEmail.Size = New System.Drawing.Size(424, 23)
-    	Me.txtTranslatorEmail.TabIndex = 1
-    	'
-    	'TabPageDescription
-    	'
-    	Me.BackColor = System.Drawing.SystemColors.Control
-    	Me.Controls.Add(Me.TabDescription)
-    	Me.Name = "TabPageDescription"
-    	Me.Padding = New System.Windows.Forms.Padding(2)
-    	Me.Size = New System.Drawing.Size(954, 635)
-    	Me.gbPurpose.ResumeLayout(false)
-    	Me.gbPurpose.PerformLayout
-    	Me.gbMisuse.ResumeLayout(false)
-    	Me.gbMisuse.PerformLayout
-    	Me.gbUse.ResumeLayout(false)
-    	Me.gbUse.PerformLayout
-    	Me.panelDescription.ResumeLayout(false)
-    	Me.panelDescription.PerformLayout
-    	Me.tpReferences.ResumeLayout(false)
-    	Me.tpReferences.PerformLayout
-    	Me.gbTechnicalIdentifiers.ResumeLayout(false)
-    	Me.gbTechnicalIdentifiers.PerformLayout
-    	Me.gbOtherDetails.ResumeLayout(false)
-    	CType(Me.dgOtherDetails,System.ComponentModel.ISupportInitialize).EndInit
-    	Me.groupBox2.ResumeLayout(false)
-    	Me.groupBox2.PerformLayout
-    	Me.tpDescDetails.ResumeLayout(false)
-    	Me.tpAuthor.ResumeLayout(false)
-    	Me.gbCurrentResponsibility.ResumeLayout(false)
-    	Me.gbCurrentResponsibility.PerformLayout
-    	Me.gbContributors.ResumeLayout(false)
-    	Me.gbAuthor.ResumeLayout(false)
-    	Me.gbAuthor.PerformLayout
-    	Me.tpTranslation.ResumeLayout(false)
-    	Me.gbTranslator.ResumeLayout(false)
-    	Me.gbTranslator.PerformLayout
-    	Me.ResumeLayout(false)
     End Sub
     Friend txtCanonicalHash As System.Windows.Forms.TextBox
     Public lblCanonicalHash As System.Windows.Forms.Label
     Private gbTechnicalIdentifiers As System.Windows.Forms.GroupBox
-    Friend txtProvenanceId As System.Windows.Forms.TextBox
-    Public lblProvenanceId As System.Windows.Forms.Label
-    Public lblInstanceId As System.Windows.Forms.Label
-    Friend txtInstanceId As System.Windows.Forms.TextBox
+    Public lbBuildId As System.Windows.Forms.Label
+    Friend txtBuildId As System.Windows.Forms.TextBox
     Friend AnnotationValueColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend AnnotationKeyColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend OtherDetailsValueColumn As System.Windows.Forms.DataGridViewTextBoxColumn
@@ -1160,23 +1126,23 @@ Public Class TabPageDescription
                 listContributors.Items.Add(s)
             Next
 
-			txtCurrentContact.Text = Value.CurrentContact
-			txtCustodianNamespace.Text = value.CustodianNamespace
-			txtCustodianOrganisation.Text = value.CustodianOrganisation
-			txtOriginalPublisher.Text = value.OriginalPublisher
-			txtOriginalNamespace.Text = value.OriginalNamespace
-			txtLicense.Text = value.Licence
-			txtReviewDate.Text = value.ReviewDate
-			txtRevision.Text = value.Revision
-			txtProvenanceId.Text = value.ProvenanceId 
-			txtInstanceId.Text = value.InstanceId
-			txtCanonicalHash.Text = value.ArchetypeDigest
-			
+            txtCurrentContact.Text = Value.CurrentContact
+            txtCustodianNamespace.Text = value.CustodianNamespace
+            txtCustodianOrganisation.Text = value.CustodianOrganisation
+            txtOriginalPublisher.Text = value.OriginalPublisher
+            txtOriginalNamespace.Text = value.OriginalNamespace
+            txtLicense.Text = value.Licence
+            txtReviewDate.Text = value.ReviewDate
+            txtRevision.Text = value.Revision
+
+            txtBuildId.Text = value.BuildId
+            txtCanonicalHash.Text = value.ArchetypeDigest
+
             txtReferences.Text = NewlinesNormalised(Value.References)
             mArchetypeDescription = Value
             mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
             SetDescriptionDetailValues(False)
-            
+
             MakeOtherDetailsTable()
         End Set
     End Property
@@ -1254,10 +1220,10 @@ Public Class TabPageDescription
         mArchetypeDescription.Licence = txtLicense.Text
         mArchetypeDescription.Revision = txtRevision.Text
         mArchetypeDescription.ReviewDate = txtReviewDate.Text
-       
-       
-        
-        	
+
+
+
+
         mArchetypeDescription.OtherContributors.Clear()
 
         For Each s As String In listContributors.Items
@@ -1441,19 +1407,17 @@ Public Class TabPageDescription
         txtCustodianNamespace.Text = ""
         txtReviewDate.Text = ""
         txtCurrentContact.Text = ""
-    
-        txtProvenanceId.Text = ""
-        txtInstanceId.Text =""
+
+        txtBuildId.Text = ""
         txtCanonicalHash.Text = ""
-        
-        
+
         listKeyword.Items.Clear()
         listContributors.Items.Clear()
         txtTranslationAccreditation.Text = ""
         txtTranslatorEmail.Text = ""
         txtTranslatorName.Text = ""
         txtTranslatorOrganisation.Text = ""
-       
+
         mTranslationAltered = False
         gbTranslator.Visible = False
     End Sub
@@ -1461,12 +1425,12 @@ Public Class TabPageDescription
     Public Sub Translate()
         Dim wasLoading As Boolean = Filemanager.Master.FileLoading
         Filemanager.Master.FileLoading = True
-        
+
         If Not wasLoading Then
-        	SaveDescription() ' in the previous language = mCurrentLanguage
-        	SaveTranslation()
-		End If
-        
+            SaveDescription() ' in the previous language = mCurrentLanguage
+            SaveTranslation()
+        End If
+
         ' Now mark the texts as needing translation in case this is a new language
         mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         SetDescriptionDetailValues(True)
@@ -1512,12 +1476,11 @@ Public Class TabPageDescription
         lblCustodianNamespace.Text = Filemanager.GetOpenEhrTerm(766, lblCustodianNamespace.Text)
         lblReviewDate.Text = Filemanager.GetOpenEhrTerm(767, lblReviewDate.Text)
         gbOtherDetails.Text = Filemanager.GetOpenEhrTerm(769, gbOtherDetails.Text)
-        
-        lblProvenanceId.Text = Filemanager.GetOpenEhrTerm(773, lblProvenanceId.Text)
-        lblInstanceId.Text = Filemanager.GetOpenEhrTerm(772, lblInstanceId.Text)
+
+        lbBuildId.Text = Filemanager.GetOpenEhrTerm(772, lbBuildId.Text)
         lblCanonicalHash.Text = Filemanager.GetOpenEhrTerm(774, lblCanonicalHash.Text)
         gbTechnicalIdentifiers.Text = Filemanager.GetOpenEhrTerm(775, gbTechnicalIdentifiers.Text)
-        
+
     End Sub
 
     Private Function MakeLifeCycleTable() As DataTable
@@ -1572,8 +1535,8 @@ Public Class TabPageDescription
         comboLifeCycle.ValueMember = "code"
         comboLifeCycle.SelectedIndex = i
     End Sub
-    
-    Private Function MakeOtherDetailsTable As DataTable
+
+    Private Function MakeOtherDetailsTable() As DataTable
         mOtherDetailsTable = New DataTable
         mOtherDetailsTable.Columns.Add(New DataColumn("Key", GetType(String)))
         mOtherDetailsTable.Columns.Add(New DataColumn("Value", GetType(String)))
@@ -1581,7 +1544,7 @@ Public Class TabPageDescription
         OtherDetailsKeyColumn.DataPropertyName = "Key"
         OtherDetailsValueColumn.DataPropertyName = "Value"
         dgOtherDetails.DataSource = mOtherDetailsTable
-        
+
         mOtherDetailsTable.Clear()
         mArchetypeDescription.FillTable(mOtherDetailsTable)
         Return mOtherDetailsTable
@@ -1604,7 +1567,7 @@ Public Class TabPageDescription
             txtTranslatorEmail.TextChanged, txtTranslatorOrganisation.TextChanged, _
             txtDate.TextChanged, txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, _
             comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged, txtMisuse.TextChanged, CopyrightTextBox.TextChanged, _
-            txtReferences.TextChanged
+            txtReferences.TextChanged, txtCurrentContact.TextChanged
         If Not Filemanager.Master.FileLoading Then
             Filemanager.Master.FileEdited = True
         End If
@@ -1670,8 +1633,8 @@ Public Class TabPageDescription
         Main.Reflect(Me)
     End Sub
 
-Private Sub txtTranslatorName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTranslatorName.TextChanged,txtTranslationAccreditation.TextChanged, txtTranslatorEmail.TextChanged, txtTranslatorOrganisation.TextChanged
-	If Not mIsLoading Then
+    Private Sub txtTranslatorName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTranslatorName.TextChanged, txtTranslationAccreditation.TextChanged, txtTranslatorEmail.TextChanged, txtTranslatorOrganisation.TextChanged
+        If Not mIsLoading Then
             mTranslationAltered = True
             Filemanager.Master.FileEdited = True
         End If
@@ -1697,10 +1660,10 @@ Private Sub txtTranslatorName_TextChanged(ByVal sender As System.Object, ByVal e
     Private Sub CurrentContactButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CurrentContactButton.Click
         txtCurrentContact.Text = Main.Instance.Options.UserName & ", " & Main.Instance.Options.UserOrganisation & "<" & Main.Instance.Options.UserEmail & ">"
     End Sub
-    
- 
+
+
 End Class
 
-    
-    
+
+
 
