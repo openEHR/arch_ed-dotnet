@@ -34,6 +34,7 @@ Public Class TabPageDescription
     Friend WithEvents txtCurrentContact As System.Windows.Forms.TextBox
 
     Private mIsLoading As Boolean = False
+    Friend WithEvents txtReviewDate As System.Windows.Forms.DateTimePicker
     Private WithEvents mOtherDetailsTable As DataTable
 
 #Region " Windows Form Designer generated code "
@@ -99,7 +100,7 @@ Public Class TabPageDescription
     Friend WithEvents gbContributors As System.Windows.Forms.GroupBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageDescription))
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.gbPurpose = New System.Windows.Forms.GroupBox()
         Me.gbMisuse = New System.Windows.Forms.GroupBox()
@@ -120,25 +121,9 @@ Public Class TabPageDescription
         Me.lblKeyword = New System.Windows.Forms.Label()
         Me.listKeyword = New System.Windows.Forms.ListBox()
         Me.TabDescription = New Crownwood.Magic.Controls.TabControl()
-        Me.tpReferences = New Crownwood.Magic.Controls.TabPage()
-        Me.gbTechnicalIdentifiers = New System.Windows.Forms.GroupBox()
-        Me.lblCanonicalHash = New System.Windows.Forms.Label()
-        Me.txtCanonicalHash = New System.Windows.Forms.TextBox()
-        Me.txtBuildUid = New System.Windows.Forms.TextBox()
-        Me.lbBuildUid = New System.Windows.Forms.Label()
-        Me.gbOtherDetails = New System.Windows.Forms.GroupBox()
-        Me.dgOtherDetails = New System.Windows.Forms.DataGridView()
-        Me.OtherDetailsKeyColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.OtherDetailsValueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.groupBox2 = New System.Windows.Forms.GroupBox()
-        Me.txtReferences = New System.Windows.Forms.TextBox()
-        Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage()
-        Me.Splitter3 = New System.Windows.Forms.Splitter()
-        Me.Splitter2 = New System.Windows.Forms.Splitter()
-        Me.Splitter1 = New System.Windows.Forms.Splitter()
         Me.tpAuthor = New Crownwood.Magic.Controls.TabPage()
         Me.gbCurrentResponsibility = New System.Windows.Forms.GroupBox()
-        Me.txtReviewDate = New System.Windows.Forms.TextBox()
+        Me.txtReviewDate = New System.Windows.Forms.DateTimePicker()
         Me.lblReviewDate = New System.Windows.Forms.Label()
         Me.btnCustodianDefaults = New System.Windows.Forms.Button()
         Me.txtCustodianNamespace = New System.Windows.Forms.TextBox()
@@ -172,6 +157,10 @@ Public Class TabPageDescription
         Me.txtOriginalAuthor = New System.Windows.Forms.TextBox()
         Me.lblEmail = New System.Windows.Forms.Label()
         Me.txtOriginalEmail = New System.Windows.Forms.TextBox()
+        Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage()
+        Me.Splitter3 = New System.Windows.Forms.Splitter()
+        Me.Splitter2 = New System.Windows.Forms.Splitter()
+        Me.Splitter1 = New System.Windows.Forms.Splitter()
         Me.tpTranslation = New Crownwood.Magic.Controls.TabPage()
         Me.gbTranslator = New System.Windows.Forms.GroupBox()
         Me.lblAccreditation = New System.Windows.Forms.Label()
@@ -182,22 +171,34 @@ Public Class TabPageDescription
         Me.txtTranslatorName = New System.Windows.Forms.TextBox()
         Me.lblTranslatorEmail = New System.Windows.Forms.Label()
         Me.txtTranslatorEmail = New System.Windows.Forms.TextBox()
+        Me.tpReferences = New Crownwood.Magic.Controls.TabPage()
+        Me.gbTechnicalIdentifiers = New System.Windows.Forms.GroupBox()
+        Me.lblCanonicalHash = New System.Windows.Forms.Label()
+        Me.txtCanonicalHash = New System.Windows.Forms.TextBox()
+        Me.txtBuildUid = New System.Windows.Forms.TextBox()
+        Me.lbBuildUid = New System.Windows.Forms.Label()
+        Me.gbOtherDetails = New System.Windows.Forms.GroupBox()
+        Me.dgOtherDetails = New System.Windows.Forms.DataGridView()
+        Me.OtherDetailsKeyColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.OtherDetailsValueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.groupBox2 = New System.Windows.Forms.GroupBox()
+        Me.txtReferences = New System.Windows.Forms.TextBox()
         Me.gbPurpose.SuspendLayout()
         Me.gbMisuse.SuspendLayout()
         Me.gbUse.SuspendLayout()
         Me.panelDescription.SuspendLayout()
+        Me.tpAuthor.SuspendLayout()
+        Me.gbCurrentResponsibility.SuspendLayout()
+        Me.gbContributors.SuspendLayout()
+        Me.gbAuthor.SuspendLayout()
+        Me.tpDescDetails.SuspendLayout()
+        Me.tpTranslation.SuspendLayout()
+        Me.gbTranslator.SuspendLayout()
         Me.tpReferences.SuspendLayout()
         Me.gbTechnicalIdentifiers.SuspendLayout()
         Me.gbOtherDetails.SuspendLayout()
         CType(Me.dgOtherDetails, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.groupBox2.SuspendLayout()
-        Me.tpDescDetails.SuspendLayout()
-        Me.tpAuthor.SuspendLayout()
-        Me.gbCurrentResponsibility.SuspendLayout()
-        Me.gbContributors.SuspendLayout()
-        Me.gbAuthor.SuspendLayout()
-        Me.tpTranslation.SuspendLayout()
-        Me.gbTranslator.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblStatus
@@ -315,12 +316,13 @@ Public Class TabPageDescription
         '
         'txtRevision
         '
-        Me.txtRevision.BackColor = System.Drawing.SystemColors.GradientActiveCaption
+        Me.txtRevision.BackColor = System.Drawing.SystemColors.InactiveBorder
         Me.txtRevision.Location = New System.Drawing.Point(16, 73)
         Me.txtRevision.Name = "txtRevision"
         Me.txtRevision.ReadOnly = True
         Me.txtRevision.Size = New System.Drawing.Size(281, 23)
         Me.txtRevision.TabIndex = 40
+        Me.txtRevision.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lblRevision
         '
@@ -409,192 +411,11 @@ Public Class TabPageDescription
         Me.TabDescription.Location = New System.Drawing.Point(2, 2)
         Me.TabDescription.Name = "TabDescription"
         Me.TabDescription.PositionTop = True
-        Me.TabDescription.SelectedIndex = 0
-        Me.TabDescription.SelectedTab = Me.tpDescDetails
+        Me.TabDescription.SelectedIndex = 1
+        Me.TabDescription.SelectedTab = Me.tpAuthor
         Me.TabDescription.Size = New System.Drawing.Size(950, 631)
         Me.TabDescription.TabIndex = 15
         Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation, Me.tpReferences})
-        '
-        'tpReferences
-        '
-        Me.tpReferences.Controls.Add(Me.gbTechnicalIdentifiers)
-        Me.tpReferences.Controls.Add(Me.gbOtherDetails)
-        Me.tpReferences.Controls.Add(Me.groupBox2)
-        Me.tpReferences.Location = New System.Drawing.Point(0, 0)
-        Me.tpReferences.Name = "tpReferences"
-        Me.tpReferences.Size = New System.Drawing.Size(950, 606)
-        Me.tpReferences.TabIndex = 3
-        Me.tpReferences.Title = "References / Other Details"
-        '
-        'gbTechnicalIdentifiers
-        '
-        Me.gbTechnicalIdentifiers.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.gbTechnicalIdentifiers.AutoSize = True
-        Me.gbTechnicalIdentifiers.Controls.Add(Me.lblCanonicalHash)
-        Me.gbTechnicalIdentifiers.Controls.Add(Me.txtCanonicalHash)
-        Me.gbTechnicalIdentifiers.Controls.Add(Me.txtBuildUid)
-        Me.gbTechnicalIdentifiers.Controls.Add(Me.lbBuildUid)
-        Me.gbTechnicalIdentifiers.Location = New System.Drawing.Point(465, 324)
-        Me.gbTechnicalIdentifiers.Name = "gbTechnicalIdentifiers"
-        Me.gbTechnicalIdentifiers.Size = New System.Drawing.Size(482, 279)
-        Me.gbTechnicalIdentifiers.TabIndex = 58
-        Me.gbTechnicalIdentifiers.TabStop = False
-        Me.gbTechnicalIdentifiers.Text = "Technical identifiers (read-only)"
-        '
-        'lblCanonicalHash
-        '
-        Me.lblCanonicalHash.Location = New System.Drawing.Point(40, 82)
-        Me.lblCanonicalHash.Name = "lblCanonicalHash"
-        Me.lblCanonicalHash.Size = New System.Drawing.Size(121, 23)
-        Me.lblCanonicalHash.TabIndex = 69
-        Me.lblCanonicalHash.Text = "Canonical MD5 hash"
-        Me.lblCanonicalHash.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txtCanonicalHash
-        '
-        Me.txtCanonicalHash.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.txtCanonicalHash.Location = New System.Drawing.Point(177, 83)
-        Me.txtCanonicalHash.Name = "txtCanonicalHash"
-        Me.txtCanonicalHash.ReadOnly = True
-        Me.txtCanonicalHash.Size = New System.Drawing.Size(267, 23)
-        Me.txtCanonicalHash.TabIndex = 68
-        Me.txtCanonicalHash.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'txtBuildUid
-        '
-        Me.txtBuildUid.BackColor = System.Drawing.SystemColors.GradientActiveCaption
-        Me.txtBuildUid.Location = New System.Drawing.Point(177, 37)
-        Me.txtBuildUid.Name = "txtBuildUid"
-        Me.txtBuildUid.ReadOnly = True
-        Me.txtBuildUid.Size = New System.Drawing.Size(267, 23)
-        Me.txtBuildUid.TabIndex = 67
-        Me.txtBuildUid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'lbBuildUid
-        '
-        Me.lbBuildUid.Location = New System.Drawing.Point(93, 39)
-        Me.lbBuildUid.Name = "lbBuildUid"
-        Me.lbBuildUid.Size = New System.Drawing.Size(68, 16)
-        Me.lbBuildUid.TabIndex = 66
-        Me.lbBuildUid.Text = "Build Uid"
-        Me.lbBuildUid.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'gbOtherDetails
-        '
-        Me.gbOtherDetails.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.gbOtherDetails.Controls.Add(Me.dgOtherDetails)
-        Me.gbOtherDetails.Location = New System.Drawing.Point(3, 324)
-        Me.gbOtherDetails.Name = "gbOtherDetails"
-        Me.gbOtherDetails.Size = New System.Drawing.Size(459, 279)
-        Me.gbOtherDetails.TabIndex = 43
-        Me.gbOtherDetails.TabStop = False
-        Me.gbOtherDetails.Text = "Other details (Read-only)"
-        '
-        'dgOtherDetails
-        '
-        Me.dgOtherDetails.AllowUserToAddRows = False
-        Me.dgOtherDetails.AllowUserToDeleteRows = False
-        Me.dgOtherDetails.AllowUserToResizeColumns = False
-        Me.dgOtherDetails.AllowUserToResizeRows = False
-        Me.dgOtherDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgOtherDetails.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.OtherDetailsKeyColumn, Me.OtherDetailsValueColumn})
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.InactiveBorder
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgOtherDetails.DefaultCellStyle = DataGridViewCellStyle3
-        Me.dgOtherDetails.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.dgOtherDetails.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2
-        Me.dgOtherDetails.Location = New System.Drawing.Point(3, 19)
-        Me.dgOtherDetails.Name = "dgOtherDetails"
-        Me.dgOtherDetails.ReadOnly = True
-        Me.dgOtherDetails.Size = New System.Drawing.Size(453, 257)
-        Me.dgOtherDetails.TabIndex = 0
-        '
-        'OtherDetailsKeyColumn
-        '
-        Me.OtherDetailsKeyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.OtherDetailsKeyColumn.DataPropertyName = "Key"
-        Me.OtherDetailsKeyColumn.FillWeight = 25.0!
-        Me.OtherDetailsKeyColumn.HeaderText = "Key"
-        Me.OtherDetailsKeyColumn.Name = "OtherDetailsKeyColumn"
-        Me.OtherDetailsKeyColumn.ReadOnly = True
-        '
-        'OtherDetailsValueColumn
-        '
-        Me.OtherDetailsValueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.OtherDetailsValueColumn.DataPropertyName = "Value"
-        Me.OtherDetailsValueColumn.FillWeight = 75.0!
-        Me.OtherDetailsValueColumn.HeaderText = "Value"
-        Me.OtherDetailsValueColumn.Name = "OtherDetailsValueColumn"
-        Me.OtherDetailsValueColumn.ReadOnly = True
-        '
-        'groupBox2
-        '
-        Me.groupBox2.Controls.Add(Me.txtReferences)
-        Me.groupBox2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.groupBox2.Location = New System.Drawing.Point(0, 0)
-        Me.groupBox2.Name = "groupBox2"
-        Me.groupBox2.Size = New System.Drawing.Size(950, 321)
-        Me.groupBox2.TabIndex = 42
-        Me.groupBox2.TabStop = False
-        Me.groupBox2.Text = "References"
-        '
-        'txtReferences
-        '
-        Me.txtReferences.AcceptsReturn = True
-        Me.txtReferences.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtReferences.Location = New System.Drawing.Point(3, 19)
-        Me.txtReferences.Multiline = True
-        Me.txtReferences.Name = "txtReferences"
-        Me.txtReferences.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtReferences.Size = New System.Drawing.Size(944, 299)
-        Me.txtReferences.TabIndex = 1
-        '
-        'tpDescDetails
-        '
-        Me.tpDescDetails.Controls.Add(Me.gbPurpose)
-        Me.tpDescDetails.Controls.Add(Me.Splitter3)
-        Me.tpDescDetails.Controls.Add(Me.panelDescription)
-        Me.tpDescDetails.Controls.Add(Me.Splitter2)
-        Me.tpDescDetails.Controls.Add(Me.Splitter1)
-        Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
-        Me.tpDescDetails.Name = "tpDescDetails"
-        Me.tpDescDetails.Size = New System.Drawing.Size(950, 606)
-        Me.tpDescDetails.TabIndex = 0
-        Me.tpDescDetails.Title = "Details"
-        '
-        'Splitter3
-        '
-        Me.Splitter3.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Splitter3.Location = New System.Drawing.Point(620, 0)
-        Me.Splitter3.Name = "Splitter3"
-        Me.Splitter3.Size = New System.Drawing.Size(3, 600)
-        Me.Splitter3.TabIndex = 17
-        Me.Splitter3.TabStop = False
-        '
-        'Splitter2
-        '
-        Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Splitter2.Location = New System.Drawing.Point(0, 600)
-        Me.Splitter2.Name = "Splitter2"
-        Me.Splitter2.Size = New System.Drawing.Size(950, 3)
-        Me.Splitter2.TabIndex = 16
-        Me.Splitter2.TabStop = False
-        '
-        'Splitter1
-        '
-        Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Splitter1.Location = New System.Drawing.Point(0, 603)
-        Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(950, 3)
-        Me.Splitter1.TabIndex = 15
-        Me.Splitter1.TabStop = False
         '
         'tpAuthor
         '
@@ -603,7 +424,6 @@ Public Class TabPageDescription
         Me.tpAuthor.Controls.Add(Me.gbAuthor)
         Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
         Me.tpAuthor.Name = "tpAuthor"
-        Me.tpAuthor.Selected = False
         Me.tpAuthor.Size = New System.Drawing.Size(950, 606)
         Me.tpAuthor.TabIndex = 1
         Me.tpAuthor.Title = "Authorship"
@@ -630,10 +450,15 @@ Public Class TabPageDescription
         '
         'txtReviewDate
         '
-        Me.txtReviewDate.Location = New System.Drawing.Point(591, 76)
+        Me.txtReviewDate.Checked = False
+        Me.txtReviewDate.CustomFormat = "yyyy-MM-dd"
+        Me.txtReviewDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.txtReviewDate.Location = New System.Drawing.Point(593, 76)
         Me.txtReviewDate.Name = "txtReviewDate"
-        Me.txtReviewDate.Size = New System.Drawing.Size(188, 23)
-        Me.txtReviewDate.TabIndex = 52
+        Me.txtReviewDate.ShowCheckBox = True
+        Me.txtReviewDate.Size = New System.Drawing.Size(186, 23)
+        Me.txtReviewDate.TabIndex = 53
+        Me.txtReviewDate.Visible = False
         '
         'lblReviewDate
         '
@@ -643,6 +468,7 @@ Public Class TabPageDescription
         Me.lblReviewDate.TabIndex = 51
         Me.lblReviewDate.Text = "Review Date:"
         Me.lblReviewDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblReviewDate.Visible = False
         '
         'btnCustodianDefaults
         '
@@ -652,13 +478,17 @@ Public Class TabPageDescription
         Me.btnCustodianDefaults.TabIndex = 50
         Me.btnCustodianDefaults.Text = "Use your Publisher defaults"
         Me.btnCustodianDefaults.UseVisualStyleBackColor = True
+        Me.btnCustodianDefaults.Visible = False
         '
         'txtCustodianNamespace
         '
+        Me.txtCustodianNamespace.BackColor = System.Drawing.SystemColors.InactiveBorder
         Me.txtCustodianNamespace.Location = New System.Drawing.Point(112, 75)
         Me.txtCustodianNamespace.Name = "txtCustodianNamespace"
+        Me.txtCustodianNamespace.ReadOnly = True
         Me.txtCustodianNamespace.Size = New System.Drawing.Size(410, 23)
         Me.txtCustodianNamespace.TabIndex = 49
+        Me.txtCustodianNamespace.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lblCustodianNamespace
         '
@@ -671,10 +501,13 @@ Public Class TabPageDescription
         '
         'txtCustodianOrganisation
         '
+        Me.txtCustodianOrganisation.BackColor = System.Drawing.SystemColors.InactiveBorder
         Me.txtCustodianOrganisation.Location = New System.Drawing.Point(112, 31)
         Me.txtCustodianOrganisation.Name = "txtCustodianOrganisation"
+        Me.txtCustodianOrganisation.ReadOnly = True
         Me.txtCustodianOrganisation.Size = New System.Drawing.Size(410, 23)
         Me.txtCustodianOrganisation.TabIndex = 47
+        Me.txtCustodianOrganisation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lblCustodianOrganisation
         '
@@ -806,13 +639,17 @@ Public Class TabPageDescription
         Me.btnPublisherDefaults.TabIndex = 45
         Me.btnPublisherDefaults.Text = "Use your Publisher defaults"
         Me.btnPublisherDefaults.UseVisualStyleBackColor = True
+        Me.btnPublisherDefaults.Visible = False
         '
         'txtOriginalNamespace
         '
+        Me.txtOriginalNamespace.BackColor = System.Drawing.SystemColors.InactiveBorder
         Me.txtOriginalNamespace.Location = New System.Drawing.Point(111, 213)
         Me.txtOriginalNamespace.Name = "txtOriginalNamespace"
+        Me.txtOriginalNamespace.ReadOnly = True
         Me.txtOriginalNamespace.Size = New System.Drawing.Size(424, 23)
         Me.txtOriginalNamespace.TabIndex = 44
+        Me.txtOriginalNamespace.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lblOriginalNamespace
         '
@@ -825,10 +662,13 @@ Public Class TabPageDescription
         '
         'txtOriginalPublisher
         '
+        Me.txtOriginalPublisher.BackColor = System.Drawing.SystemColors.InactiveBorder
         Me.txtOriginalPublisher.Location = New System.Drawing.Point(111, 173)
         Me.txtOriginalPublisher.Name = "txtOriginalPublisher"
+        Me.txtOriginalPublisher.ReadOnly = True
         Me.txtOriginalPublisher.Size = New System.Drawing.Size(424, 23)
         Me.txtOriginalPublisher.TabIndex = 40
+        Me.txtOriginalPublisher.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lblOriginalPublisher
         '
@@ -948,6 +788,47 @@ Public Class TabPageDescription
         Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 23)
         Me.txtOriginalEmail.TabIndex = 4
         '
+        'tpDescDetails
+        '
+        Me.tpDescDetails.Controls.Add(Me.gbPurpose)
+        Me.tpDescDetails.Controls.Add(Me.Splitter3)
+        Me.tpDescDetails.Controls.Add(Me.panelDescription)
+        Me.tpDescDetails.Controls.Add(Me.Splitter2)
+        Me.tpDescDetails.Controls.Add(Me.Splitter1)
+        Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
+        Me.tpDescDetails.Name = "tpDescDetails"
+        Me.tpDescDetails.Selected = False
+        Me.tpDescDetails.Size = New System.Drawing.Size(950, 606)
+        Me.tpDescDetails.TabIndex = 0
+        Me.tpDescDetails.Title = "Details"
+        '
+        'Splitter3
+        '
+        Me.Splitter3.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Splitter3.Location = New System.Drawing.Point(620, 0)
+        Me.Splitter3.Name = "Splitter3"
+        Me.Splitter3.Size = New System.Drawing.Size(3, 600)
+        Me.Splitter3.TabIndex = 17
+        Me.Splitter3.TabStop = False
+        '
+        'Splitter2
+        '
+        Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Splitter2.Location = New System.Drawing.Point(0, 600)
+        Me.Splitter2.Name = "Splitter2"
+        Me.Splitter2.Size = New System.Drawing.Size(950, 3)
+        Me.Splitter2.TabIndex = 16
+        Me.Splitter2.TabStop = False
+        '
+        'Splitter1
+        '
+        Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Splitter1.Location = New System.Drawing.Point(0, 603)
+        Me.Splitter1.Name = "Splitter1"
+        Me.Splitter1.Size = New System.Drawing.Size(950, 3)
+        Me.Splitter1.TabIndex = 15
+        Me.Splitter1.TabStop = False
+        '
         'tpTranslation
         '
         Me.tpTranslation.BackColor = System.Drawing.Color.LightSteelBlue
@@ -1041,6 +922,148 @@ Public Class TabPageDescription
         Me.txtTranslatorEmail.Size = New System.Drawing.Size(424, 23)
         Me.txtTranslatorEmail.TabIndex = 1
         '
+        'tpReferences
+        '
+        Me.tpReferences.Controls.Add(Me.gbTechnicalIdentifiers)
+        Me.tpReferences.Controls.Add(Me.gbOtherDetails)
+        Me.tpReferences.Controls.Add(Me.groupBox2)
+        Me.tpReferences.Location = New System.Drawing.Point(0, 0)
+        Me.tpReferences.Name = "tpReferences"
+        Me.tpReferences.Selected = False
+        Me.tpReferences.Size = New System.Drawing.Size(950, 606)
+        Me.tpReferences.TabIndex = 3
+        Me.tpReferences.Title = "References / Other Details"
+        '
+        'gbTechnicalIdentifiers
+        '
+        Me.gbTechnicalIdentifiers.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.gbTechnicalIdentifiers.AutoSize = True
+        Me.gbTechnicalIdentifiers.Controls.Add(Me.lblCanonicalHash)
+        Me.gbTechnicalIdentifiers.Controls.Add(Me.txtCanonicalHash)
+        Me.gbTechnicalIdentifiers.Controls.Add(Me.txtBuildUid)
+        Me.gbTechnicalIdentifiers.Controls.Add(Me.lbBuildUid)
+        Me.gbTechnicalIdentifiers.Location = New System.Drawing.Point(465, 324)
+        Me.gbTechnicalIdentifiers.Name = "gbTechnicalIdentifiers"
+        Me.gbTechnicalIdentifiers.Size = New System.Drawing.Size(482, 279)
+        Me.gbTechnicalIdentifiers.TabIndex = 58
+        Me.gbTechnicalIdentifiers.TabStop = False
+        Me.gbTechnicalIdentifiers.Text = "Technical identifiers (read-only)"
+        '
+        'lblCanonicalHash
+        '
+        Me.lblCanonicalHash.Location = New System.Drawing.Point(40, 82)
+        Me.lblCanonicalHash.Name = "lblCanonicalHash"
+        Me.lblCanonicalHash.Size = New System.Drawing.Size(121, 23)
+        Me.lblCanonicalHash.TabIndex = 69
+        Me.lblCanonicalHash.Text = "Canonical MD5 hash"
+        Me.lblCanonicalHash.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtCanonicalHash
+        '
+        Me.txtCanonicalHash.BackColor = System.Drawing.SystemColors.InactiveBorder
+        Me.txtCanonicalHash.Location = New System.Drawing.Point(177, 83)
+        Me.txtCanonicalHash.Name = "txtCanonicalHash"
+        Me.txtCanonicalHash.ReadOnly = True
+        Me.txtCanonicalHash.Size = New System.Drawing.Size(267, 23)
+        Me.txtCanonicalHash.TabIndex = 68
+        Me.txtCanonicalHash.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txtBuildUid
+        '
+        Me.txtBuildUid.BackColor = System.Drawing.SystemColors.InactiveBorder
+        Me.txtBuildUid.Location = New System.Drawing.Point(177, 37)
+        Me.txtBuildUid.Name = "txtBuildUid"
+        Me.txtBuildUid.ReadOnly = True
+        Me.txtBuildUid.Size = New System.Drawing.Size(267, 23)
+        Me.txtBuildUid.TabIndex = 67
+        Me.txtBuildUid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbBuildUid
+        '
+        Me.lbBuildUid.Location = New System.Drawing.Point(93, 39)
+        Me.lbBuildUid.Name = "lbBuildUid"
+        Me.lbBuildUid.Size = New System.Drawing.Size(68, 16)
+        Me.lbBuildUid.TabIndex = 66
+        Me.lbBuildUid.Text = "Build Uid"
+        Me.lbBuildUid.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'gbOtherDetails
+        '
+        Me.gbOtherDetails.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.gbOtherDetails.Controls.Add(Me.dgOtherDetails)
+        Me.gbOtherDetails.Location = New System.Drawing.Point(3, 324)
+        Me.gbOtherDetails.Name = "gbOtherDetails"
+        Me.gbOtherDetails.Size = New System.Drawing.Size(459, 279)
+        Me.gbOtherDetails.TabIndex = 43
+        Me.gbOtherDetails.TabStop = False
+        Me.gbOtherDetails.Text = "Other details (Read-only)"
+        '
+        'dgOtherDetails
+        '
+        Me.dgOtherDetails.AllowUserToAddRows = False
+        Me.dgOtherDetails.AllowUserToDeleteRows = False
+        Me.dgOtherDetails.AllowUserToResizeColumns = False
+        Me.dgOtherDetails.AllowUserToResizeRows = False
+        Me.dgOtherDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgOtherDetails.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.OtherDetailsKeyColumn, Me.OtherDetailsValueColumn})
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.InactiveBorder
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgOtherDetails.DefaultCellStyle = DataGridViewCellStyle1
+        Me.dgOtherDetails.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dgOtherDetails.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2
+        Me.dgOtherDetails.Location = New System.Drawing.Point(3, 19)
+        Me.dgOtherDetails.Name = "dgOtherDetails"
+        Me.dgOtherDetails.ReadOnly = True
+        Me.dgOtherDetails.Size = New System.Drawing.Size(453, 257)
+        Me.dgOtherDetails.TabIndex = 0
+        '
+        'OtherDetailsKeyColumn
+        '
+        Me.OtherDetailsKeyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.OtherDetailsKeyColumn.DataPropertyName = "Key"
+        Me.OtherDetailsKeyColumn.FillWeight = 25.0!
+        Me.OtherDetailsKeyColumn.HeaderText = "Key"
+        Me.OtherDetailsKeyColumn.Name = "OtherDetailsKeyColumn"
+        Me.OtherDetailsKeyColumn.ReadOnly = True
+        '
+        'OtherDetailsValueColumn
+        '
+        Me.OtherDetailsValueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.OtherDetailsValueColumn.DataPropertyName = "Value"
+        Me.OtherDetailsValueColumn.FillWeight = 75.0!
+        Me.OtherDetailsValueColumn.HeaderText = "Value"
+        Me.OtherDetailsValueColumn.Name = "OtherDetailsValueColumn"
+        Me.OtherDetailsValueColumn.ReadOnly = True
+        '
+        'groupBox2
+        '
+        Me.groupBox2.Controls.Add(Me.txtReferences)
+        Me.groupBox2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.groupBox2.Location = New System.Drawing.Point(0, 0)
+        Me.groupBox2.Name = "groupBox2"
+        Me.groupBox2.Size = New System.Drawing.Size(950, 321)
+        Me.groupBox2.TabIndex = 42
+        Me.groupBox2.TabStop = False
+        Me.groupBox2.Text = "References"
+        '
+        'txtReferences
+        '
+        Me.txtReferences.AcceptsReturn = True
+        Me.txtReferences.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtReferences.Location = New System.Drawing.Point(3, 19)
+        Me.txtReferences.Multiline = True
+        Me.txtReferences.Name = "txtReferences"
+        Me.txtReferences.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtReferences.Size = New System.Drawing.Size(944, 299)
+        Me.txtReferences.TabIndex = 1
+        '
         'TabPageDescription
         '
         Me.BackColor = System.Drawing.SystemColors.Control
@@ -1056,6 +1079,16 @@ Public Class TabPageDescription
         Me.gbUse.PerformLayout()
         Me.panelDescription.ResumeLayout(False)
         Me.panelDescription.PerformLayout()
+        Me.tpAuthor.ResumeLayout(False)
+        Me.gbCurrentResponsibility.ResumeLayout(False)
+        Me.gbCurrentResponsibility.PerformLayout()
+        Me.gbContributors.ResumeLayout(False)
+        Me.gbAuthor.ResumeLayout(False)
+        Me.gbAuthor.PerformLayout()
+        Me.tpDescDetails.ResumeLayout(False)
+        Me.tpTranslation.ResumeLayout(False)
+        Me.gbTranslator.ResumeLayout(False)
+        Me.gbTranslator.PerformLayout()
         Me.tpReferences.ResumeLayout(False)
         Me.tpReferences.PerformLayout()
         Me.gbTechnicalIdentifiers.ResumeLayout(False)
@@ -1064,16 +1097,6 @@ Public Class TabPageDescription
         CType(Me.dgOtherDetails, System.ComponentModel.ISupportInitialize).EndInit()
         Me.groupBox2.ResumeLayout(False)
         Me.groupBox2.PerformLayout()
-        Me.tpDescDetails.ResumeLayout(False)
-        Me.tpAuthor.ResumeLayout(False)
-        Me.gbCurrentResponsibility.ResumeLayout(False)
-        Me.gbCurrentResponsibility.PerformLayout()
-        Me.gbContributors.ResumeLayout(False)
-        Me.gbAuthor.ResumeLayout(False)
-        Me.gbAuthor.PerformLayout()
-        Me.tpTranslation.ResumeLayout(False)
-        Me.gbTranslator.ResumeLayout(False)
-        Me.gbTranslator.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1089,7 +1112,6 @@ Public Class TabPageDescription
     Friend dgOtherDetails As System.Windows.Forms.DataGridView
     Friend gbOtherDetails As System.Windows.Forms.GroupBox
     Friend lblReviewDate As System.Windows.Forms.Label
-    Friend txtReviewDate As System.Windows.Forms.TextBox
     Friend lblCustodianOrganisation As System.Windows.Forms.Label
     Friend txtCustodianOrganisation As System.Windows.Forms.TextBox
     Friend btnCustodianDefaults As System.Windows.Forms.Button
@@ -1133,7 +1155,7 @@ Public Class TabPageDescription
             txtOriginalPublisher.Text = value.OriginalPublisher
             txtOriginalNamespace.Text = value.OriginalNamespace
             txtLicense.Text = value.Licence
-            txtReviewDate.Text = value.ReviewDate
+            ''    txtReviewDate.Text = value.ReviewDate
             txtRevision.Text = value.Revision
 
             txtBuildUid.Text = value.BuildUid
@@ -1220,7 +1242,7 @@ Public Class TabPageDescription
         mArchetypeDescription.CustodianNamespace = txtCustodianNamespace.Text
         mArchetypeDescription.Licence = txtLicense.Text
         mArchetypeDescription.Revision = txtRevision.Text
-        mArchetypeDescription.ReviewDate = txtReviewDate.Text
+        '' mArchetypeDescription.ReviewDate = txtReviewDate.Text
 
 
 

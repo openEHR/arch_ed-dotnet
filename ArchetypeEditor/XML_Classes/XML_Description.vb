@@ -196,7 +196,10 @@ Namespace ArchetypeEditor.XML_Classes
                         Case RevisionKey
                         	mRevision = di.Value
                         Case BuildUidKey
-                        	mBuildUid = di.Value
+                            mBuildUid = di.Value
+                        Case AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                            ArchetypeDigest = di.Value
+
                     End Select
                 Next
             End If
