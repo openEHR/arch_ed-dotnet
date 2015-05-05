@@ -3,13 +3,14 @@ Imports XMLParser
 
 Public Enum LifeCycleStates
     NotSet = 118
-    Initial = 524
-    AuthorDraft = 569
-    OrganisationDraft = 571
-    CommitteeDraft = 570
-    Submitted = 572
-    Candidate = 573
-    ApprovedCandidate = 574
+    '' AEPR-32 IMCN 5 May 2015 removed old author lifecycle states
+    ''  Initial = 524
+    ''AuthorDraft = 569
+    ''OrganisationDraft = 571
+    ''CommitteeDraft = 570
+    ''Submitted = 572
+    ''Candidate = 573
+    ''ApprovedCandidate = 574
     published = 575
     rejected = 576
     '   obsolete = 577

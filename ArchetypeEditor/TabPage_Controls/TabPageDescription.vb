@@ -1545,7 +1545,8 @@ Public Class TabPageDescription
 
         'Debug.Assert(mLifeCycleStatesTable.Rows.Count = 0, "Did not clear lifecycletable")
 
-        For Each r As DataRow In Filemanager.Master.OntologyManager.CodeForGroupID(23) ' LifeCycle states
+        ' AEPR-32 IMCN 05 May 2015 - changed from Group 23 to 26 to use ADL1.5 author lifecycle states
+        For Each r As DataRow In Filemanager.Master.OntologyManager.CodeForGroupID(26) ' LifeCycle states
             Dim row As DataRow = mLifeCycleStatesTable.NewRow
             row(0) = r(1)
             row(1) = r(2)

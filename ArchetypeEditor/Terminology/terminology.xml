@@ -847,6 +847,7 @@
   <PrimaryRubric Id="773" Language="en" />
   <PrimaryRubric Id="774" Language="en" />
   <PrimaryRubric Id="775" Language="en" />
+  <PrimaryRubric Id="776" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1552,6 +1553,8 @@
   <Concept Language="en" ConceptID="773" Rubric="Provenance Id" />
   <Concept Language="en" ConceptID="774" Rubric="Canonical MD5 Hash" />
   <Concept Language="en" ConceptID="775" Rubric="Technical Identifiers (read-only)" />
+  <Concept Language="en" ConceptID="776" Rubric="Authoring Lifecyle" />
+
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />
@@ -7283,6 +7286,7 @@
   <Grouper id="23" ConceptID="568" />
   <Grouper id="24" ConceptID="610" />
   <Grouper id="25" ConceptID="684" />
+  <Grouper id="26" ConceptID="776" />
   <GroupedConcept GrouperID="1" ChildID="0" />
   <GroupedConcept GrouperID="1" ChildID="3" />
   <GroupedConcept GrouperID="1" ChildID="6" />
@@ -7757,6 +7761,12 @@
   <GroupedConcept GrouperID="8" ChildID="685" />
   <GroupedConcept GrouperID="1" ChildID="688" />
   <GroupedConcept GrouperID="1" ChildID="689" />
+  <GroupedConcept GrouperID="26" ChildID="118" />
+  <GroupedConcept GrouperID="26" ChildID="575" />
+  <GroupedConcept GrouperID="26" ChildID="576" />
+  <GroupedConcept GrouperID="26" ChildID="770" />
+  <GroupedConcept GrouperID="26" ChildID="771" />
+
   <TerminologyIdentifiers VSAB="AIR93" SourceName="AI/RHEUM,1993" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ALT2000" SourceName="Alternative Billing Concepts, 2000" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="AOD2000" SourceName="Alcohol and Other Drug Thesaurus, 2000" Authority="UMLS2003AA" />

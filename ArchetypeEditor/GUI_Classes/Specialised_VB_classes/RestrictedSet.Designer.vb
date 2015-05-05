@@ -20,12 +20,12 @@ Partial Class RestrictedSet
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(RestrictedSet))
-        Me.gbRestrictedData = New System.Windows.Forms.GroupBox
-        Me.listRestrictionSet = New System.Windows.Forms.ListBox
-        Me.butRemoveFromRestrictedSet = New System.Windows.Forms.Button
-        Me.radioRestrictedSet = New System.Windows.Forms.RadioButton
-        Me.radioUnrestrictedSubject = New System.Windows.Forms.RadioButton
-        Me.butAddToRestrictedSet = New System.Windows.Forms.Button
+        Me.gbRestrictedData = New System.Windows.Forms.GroupBox()
+        Me.listRestrictionSet = New System.Windows.Forms.ListBox()
+        Me.butRemoveFromRestrictedSet = New System.Windows.Forms.Button()
+        Me.radioRestrictedSet = New System.Windows.Forms.RadioButton()
+        Me.radioUnrestrictedSubject = New System.Windows.Forms.RadioButton()
+        Me.butAddToRestrictedSet = New System.Windows.Forms.Button()
         Me.gbRestrictedData.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -49,8 +49,8 @@ Partial Class RestrictedSet
         'listRestrictionSet
         '
         Me.listRestrictionSet.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.listRestrictionSet.HorizontalScrollbar = True
         Me.listRestrictionSet.Location = New System.Drawing.Point(34, 37)
         Me.listRestrictionSet.Margin = New System.Windows.Forms.Padding(2)
@@ -71,10 +71,10 @@ Partial Class RestrictedSet
         '
         'radioRestrictedSet
         '
-        Me.radioRestrictedSet.Location = New System.Drawing.Point(120, 15)
+        Me.radioRestrictedSet.Location = New System.Drawing.Point(101, 15)
         Me.radioRestrictedSet.Margin = New System.Windows.Forms.Padding(2)
         Me.radioRestrictedSet.Name = "radioRestrictedSet"
-        Me.radioRestrictedSet.Size = New System.Drawing.Size(102, 23)
+        Me.radioRestrictedSet.Size = New System.Drawing.Size(74, 23)
         Me.radioRestrictedSet.TabIndex = 1
         Me.radioRestrictedSet.Text = "Restricted"
         '
@@ -84,7 +84,7 @@ Partial Class RestrictedSet
         Me.radioUnrestrictedSubject.Location = New System.Drawing.Point(10, 15)
         Me.radioUnrestrictedSubject.Margin = New System.Windows.Forms.Padding(2)
         Me.radioUnrestrictedSubject.Name = "radioUnrestrictedSubject"
-        Me.radioUnrestrictedSubject.Size = New System.Drawing.Size(104, 23)
+        Me.radioUnrestrictedSubject.Size = New System.Drawing.Size(87, 23)
         Me.radioUnrestrictedSubject.TabIndex = 0
         Me.radioUnrestrictedSubject.TabStop = True
         Me.radioUnrestrictedSubject.Text = "Unrestricted"
