@@ -362,6 +362,8 @@ Public Class CountConstraintControl : Inherits ConstraintControl
                 numMinValue.DecimalPlaces = 0
                 NumericAssumed.DecimalPlaces = 0
                 numMinValue.Increment = 1D
+                numMaxValue.Increment = 1D
+                NumericAssumed.Increment = 1D
             Else
                 chkDecimalPlaces.Show()
 
