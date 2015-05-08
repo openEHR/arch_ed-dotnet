@@ -111,7 +111,7 @@ Public Class ArchetypeID
 
             result = result.ToLowerInvariant
 
-            If Not IsValidId("xx-xx-xx." & result & ".v1") Then
+            If Not IsValidId("xx-xx-xx." & result & ".v0") Then
                 result = ""
             End If
         End If
