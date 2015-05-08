@@ -237,7 +237,7 @@ Public Class frmStartUp
     Public Property Archetype_ID() As ArchetypeID
         Get
             Try
-                Return New ArchetypeID(Me.comboModel.Text & "-" & ReferenceModel.RM_StructureName(ReferenceModel.ArchetypedClass) & "." & txtConcept.Text & ".v1")
+                Return New ArchetypeID(Me.comboModel.Text & "-" & ReferenceModel.RM_StructureName(ReferenceModel.ArchetypedClass) & "." & txtConcept.Text & ".v0")
             Catch
                 Return Nothing
                 Debug.Assert(False)
