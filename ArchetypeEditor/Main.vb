@@ -265,67 +265,6 @@ Public Class Main
         End Get
     End Property
 
-    Private Function MakeUnitsTable() As DataTable
-        Dim tTable As DataTable
-
-        ' Now only used as a backup if there are no PropertyUnits XML files
-
-        ' Create a new DataTable titled 'TermDefinitions' or 'ConstraintDefinitions'
-        tTable = New DataTable("Unit")
-        ' Add three column objects to the table.
-        Dim idColumn As DataColumn = New DataColumn
-        idColumn.DataType = Type.GetType("System.Int32")
-        idColumn.ColumnName = "property_id"
-        idColumn.AutoIncrement = False
-        tTable.Columns.Add(idColumn)
-        Dim TextColumn As DataColumn = New DataColumn
-        TextColumn.DataType = Type.GetType("System.String")
-        TextColumn.ColumnName = "Text"
-        tTable.Columns.Add(TextColumn)
-        Dim DescriptionColumn As DataColumn = New DataColumn
-        DescriptionColumn.DataType = Type.GetType("System.String")
-        DescriptionColumn.ColumnName = "Description"
-        tTable.Columns.Add(DescriptionColumn)
-        ' Return the new DataTable.
-        Dim keys(1) As DataColumn
-        keys(0) = idColumn
-        keys(1) = TextColumn
-        tTable.PrimaryKey = keys
-
-        MakeUnitsTable = tTable
-    End Function
-
-    Private Function MakePhysicalPropertiesTable() As DataTable
-        Dim result As DataTable
-
-        ' Now only used as a backup if there are no PropertyUnits XML files
-
-        ' Create a new DataTable titled 'TermDefinitions' or 'ConstraintDefinitions'
-        result = New DataTable("Property")
-        ' Add three column objects to the table.
-        Dim idColumn As DataColumn = New DataColumn
-        idColumn.DataType = Type.GetType("System.Int32")
-        idColumn.ColumnName = "id"
-        idColumn.AutoIncrement = True
-        result.Columns.Add(idColumn)
-        Dim TextColumn As DataColumn = New DataColumn
-        TextColumn.DataType = Type.GetType("System.String")
-        TextColumn.ColumnName = "Text"
-        result.Columns.Add(TextColumn)
-        Dim DescriptionColumn As DataColumn = New DataColumn
-        DescriptionColumn.DataType = Type.GetType("System.String")
-        DescriptionColumn.ColumnName = "Description"
-        result.Columns.Add(DescriptionColumn)
-        ' Return the new DataTable.
-        'Dim keys(1) As DataColumn
-        Dim keys(0) As DataColumn
-        keys(0) = idColumn
-        'keys(1) = TextColumn
-        result.PrimaryKey = keys
-
-        Return result
-    End Function
-
     Public Function AddTerminology() As Boolean
         ' add the language codes 
         Dim result As Boolean = False
@@ -563,50 +502,57 @@ Public Class Main
     End Property
 
     Private Sub MakeQuantityTables()
+        Dim propertiesTable As DataTable = Nothing
+        Dim unitsTable As DataTable = Nothing
+
         Try
-            mDataSet.ReadXmlSchema(Application.StartupPath & "\PropertyUnits\PropertyUnits.xsd")
-            mDataSet.ReadXml(Application.StartupPath & "\PropertyUnits\PropertyUnitData.xml")
+            mDataSet.ReadXmlSchema(Application.StartupPath + "\PropertyUnits\PropertyUnits.xsd")
+            mDataSet.ReadXml(Application.StartupPath + "\PropertyUnits\PropertyUnitData.xml")
+            propertiesTable = mDataSet.Tables("Property")
+            unitsTable = mDataSet.Tables("Unit")
 
             ' Set up the primary key
             Dim keys(0) As DataColumn
-            keys(0) = mDataSet.Tables("Property").Columns(0) ' property id
-            mDataSet.Tables("Property").PrimaryKey = keys
-            mDataSet.Tables("Property").DefaultView.Sort = "Text"
+            keys(0) = propertiesTable.Columns(0) ' property id
+            propertiesTable.PrimaryKey = keys
+            propertiesTable.DefaultView.Sort = "Text"
 
             If mDefaultLanguageCode <> "en" Then
-                'translate the properties
+                ' Translate the properties:
                 ' 0 = Id
                 ' 1 = text
                 ' 2 = openEHR code
                 ' 3 = translation
                 ' 4 = language code
-                For Each dr As DataRow In mDataSet.Tables("Property").Rows
+                For Each dr As DataRow In propertiesTable.Rows
                     dr.BeginEdit()
-                    'dr(3) = dr(1)
                     dr(1) = Filemanager.GetOpenEhrTerm(CInt(dr(2)), CStr(dr(1)), mDefaultLanguageCode)
-                    'dr(4) = mDefaultLanguageCode
                     dr.EndEdit()
                 Next
             End If
 
             ' Set up the primary key
             ReDim keys(1)
-            keys(0) = mDataSet.Tables("Unit").Columns(0) ' property id
-            keys(1) = mDataSet.Tables("Unit").Columns(1)
-            mDataSet.Tables("Unit").PrimaryKey = keys
-            mDataSet.Tables("Unit").DefaultView.Sort = "Text"
+            keys(0) = unitsTable.Columns(0) ' property id
+            keys(1) = unitsTable.Columns(1)
+            unitsTable.PrimaryKey = keys
+            unitsTable.DefaultView.Sort = "Text"
 
-            Dim new_relation As New DataRelation("PhysPropUnits", mDataSet.Tables("Property").Columns(0), mDataSet.Tables("Unit").Columns(0))
-            mDataSet.Relations.Add(new_relation)
-        Catch e As Exception
-            ' emergency if data is not available as file
-            Dim physicalProperties As DataTable = MakePhysicalPropertiesTable()
-            Dim units As DataTable = MakeUnitsTable()
-            mDataSet.Tables.Add(physicalProperties)
-            mDataSet.Tables.Add(units)
-            Dim new_relation As New DataRelation("PhysPropUnits", physicalProperties.Columns(0), units.Columns(0))
-            mDataSet.Relations.Add(new_relation)
-            PopulatePhysPropUnitTables(units, physicalProperties)
+            Dim relation As New DataRelation("PhysPropUnits", propertiesTable.Columns(0), unitsTable.Columns(0))
+            mDataSet.Relations.Add(relation)
+        Catch ex As Exception
+            Dim message As String = "There is an error in the list of Property Units:" + Environment.NewLine + _
+                ex.Message + Environment.NewLine + _
+                Environment.NewLine + _
+                "Check inside your '" + Application.StartupPath & "\PropertyUnits' folder. You should see two files there:" + Environment.NewLine + _
+                " * PropertyUnits.xsd" + Environment.NewLine + _
+                " * PropertyUnitData.xml" + Environment.NewLine + _
+                Environment.NewLine + _
+                "If both files are there, then you may have installed an invalid 'PropertyUnitData.xml' file." + Environment.NewLine + _
+                Environment.NewLine + _
+                "Recommended fix: reinstall Archetype Editor."
+
+            MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
