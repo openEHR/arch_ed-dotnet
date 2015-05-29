@@ -100,9 +100,9 @@
   <Unit property_id="2" Text="d" name="day" conversion="86400" primary="false" UCUM="D" />
   <Unit property_id="2" Text="yr" name="year" conversion="3.156" coefficient="7" primary="false" UCUM="YR" />
   <Unit property_id="3" Text="K" conversion="1" primary="true" UCUM="K" />
-  <Unit property_id="3" Text="°R" conversion="0.5555" primary="false" />
-  <Unit property_id="3" Text="°F" conversion="0.5555" primary="false" />
-  <Unit property_id="3" Text="°C" conversion="1" primary="false" />
+  <Unit property_id="3" Text="°R" conversion="0.5555" primary="false" UCUM="[degR]" />
+  <Unit property_id="3" Text="°F" conversion="0.5555" primary="false" UCUM="[DEGF]" />
+  <Unit property_id="3" Text="°C" conversion="1" primary="false" UCUM="CEL" />
   <Unit property_id="4" Text="A" conversion="1" primary="true" />
   <Unit property_id="4" Text="abampere" conversion="10" primary="false" />
   <Unit property_id="4" Text="statampere" conversion="3.3356" coefficient="-10" primary="false" />
