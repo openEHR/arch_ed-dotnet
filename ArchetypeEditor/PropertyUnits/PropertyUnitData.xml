@@ -98,7 +98,7 @@
   <Unit property_id="2" Text="min" name="minute" conversion="60" primary="false" UCUM="MIN" />
   <Unit property_id="2" Text="h" name="hour" conversion="3600" primary="false" UCUM="HR" />
   <Unit property_id="2" Text="d" name="day" conversion="86400" primary="false" UCUM="D" />
-  <Unit property_id="2" Text="yr" name="year" conversion="3.156" coefficient="7" primary="false" UCUM="YR" />
+  <Unit property_id="2" Text="yr" name="year" conversion="3.156" coefficient="7" primary="false" UCUM="ANN" />
   <Unit property_id="3" Text="K" conversion="1" primary="true" UCUM="K" />
   <Unit property_id="3" Text="°R" conversion="0.5555" primary="false" UCUM="[degR]" />
   <Unit property_id="3" Text="°F" conversion="0.5555" primary="false" UCUM="[DEGF]" />
