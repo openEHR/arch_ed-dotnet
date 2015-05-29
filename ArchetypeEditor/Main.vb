@@ -66,6 +66,11 @@ Public Class Main
             End If
         Next
 
+        If Not Environment.GetEnvironmentVariable("ARCHETYPE_EDITOR_LANGUAGE") Is Nothing Then
+            mSpecificLanguageCode = Environment.GetEnvironmentVariable("ARCHETYPE_EDITOR_LANGUAGE")
+            mDefaultLanguageCode = Environment.GetEnvironmentVariable("ARCHETYPE_EDITOR_LANGUAGE").Substring(0, 2)
+        End If
+
         AE_Constants.Create(DefaultLanguageCode)
 
         If invalidArgs <> "" Then
