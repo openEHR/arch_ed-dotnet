@@ -32,6 +32,23 @@ Public Class Main
         Instance.Run(args)
     End Sub
 
+    Public Sub New()
+        mDataSet = New DataSet("DesignerDataSet")
+
+        ' Get the default and specific languages via an environment variable.
+        ' If the environment variable is not set, then get them from the operating system.
+        ' The default language is two letter code, e.g. "en".
+        ' The specific language also specifies a country or region, e.g. "en-au".
+        mSpecificLanguageCode = Environment.GetEnvironmentVariable("ARCHETYPE_EDITOR_LANGUAGE")
+
+        If Not mSpecificLanguageCode Is Nothing AndAlso mSpecificLanguageCode.Length >= 2 Then
+            mDefaultLanguageCode = mSpecificLanguageCode.Substring(0, 2)
+        Else
+            mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag.ToLowerInvariant()
+            mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+        End If
+    End Sub
+
     Public Sub Run(ByVal args() As String)
         ' Enable XP visual style in order to show groups in the web lookup form.
         ' IMPORTANT! This must be the first call in the application; otherwise the icons do not display on the main toolbar!
@@ -59,17 +76,12 @@ Public Class Main
                     arg = arg.Substring(3)
                 End If
 
-                mDefaultLanguageCode = arg.Substring(0, 2)
                 mSpecificLanguageCode = arg
+                mDefaultLanguageCode = arg.Substring(0, 2)
             Else
                 invalidArgs = invalidArgs + " " + arg
             End If
         Next
-
-        If Not Environment.GetEnvironmentVariable("ARCHETYPE_EDITOR_LANGUAGE") Is Nothing Then
-            mSpecificLanguageCode = Environment.GetEnvironmentVariable("ARCHETYPE_EDITOR_LANGUAGE")
-            mDefaultLanguageCode = Environment.GetEnvironmentVariable("ARCHETYPE_EDITOR_LANGUAGE").Substring(0, 2)
-        End If
 
         AE_Constants.Create(DefaultLanguageCode)
 
@@ -251,16 +263,6 @@ Public Class Main
             mConstraint = Value
         End Set
     End Property
-
-    Public Sub New()
-        mDataSet = New DataSet("DesignerDataSet")
-
-        'default language as two letter code e.g. "en"
-        mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-
-        ' specific as four letter e.g. "en-au"
-        mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag.ToLowerInvariant()
-    End Sub
 
     Private mDataSet As DataSet
 

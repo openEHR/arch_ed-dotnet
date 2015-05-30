@@ -46,6 +46,7 @@
             <li>The option to report an issue goes to the problem tracker on <i>open</i>EHR rather than Ocean Informatics.</li>
             <li>The <b>Help</b> is now online as well as being installed.</li>
             <li>Archetypes can be copied to and from ADL and XML, in batch mode from the command line.</li>
+            <li>On creating a new archetype, the version defaults to 'v0' instead of 'v1'.</li>
             <li>On creating a new archetype, the 'short concept label' is inserted as the default 'Concept' label.</li>
             <li>On creating a new archetype, an appropriate structure is preselected (usually 'Tree').</li>
             <li><b>&lt;Ctrl+F6&gt;</b> and <b>&lt;Ctrl+Shift+F6&gt;</b> keyboard shortcuts move between the main tabs.</li>
@@ -76,7 +77,8 @@
             <li>Allow <b>DV_PARSABLE</b> to be viewed on the Interface tab.</li>
             <li>Allow <b>v0</b> archetype ids.</li>
             <li>Named <b>slots</b> now show the Details tab, allowing comments, annotations and bindings to be added.</li>
-            <li>The active <b>language</b> is now displayed in the title bar.</li>
+            <li>The <b>default language</b> can be set via the <b>ARCHETYPE_EDITOR_LANGUAGE</b> environment variable.</li>
+            <li>The <b>active language</b> is now displayed in the title bar.</li>
             <li>The at-code and description of <b>internal codes</b> are now shown.</li>
             <li>HTML displays the <b>copyright</b> from the archetype.</li>
             <li>The <b>Authorship</b> date defaults to YYYY-MM-DD format.</li>
@@ -86,6 +88,7 @@
             <li>When specialising a cluster by cloning, all of the cluster's children are copied too.</li>
             <li>Changing the data type of elements at the same specialisation level as the archetype is always allowed.</li>
             <li>Specialised <b>XML</b> archetypes preserve all term codes inherited from the parent archetype.</li>
+            <li>Replaced old <b>lifecycle states</b> with new ones that are aligned with CKM.</li>
             <li>Added <b>namespacing and revision</b> to the other_details archetype attribute.</li>
             <li>Added g/m2.7 and 10^x property units.</li>
             <li>Added <b>Rate of Change - Pressure</b> property units (daPa/s).</li>
