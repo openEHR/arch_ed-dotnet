@@ -35,6 +35,8 @@ Public Class TabPageDescription
 
     Private mIsLoading As Boolean = False
     Friend WithEvents txtReviewDate As System.Windows.Forms.DateTimePicker
+    Friend WithEvents btnCCBYSA4 As System.Windows.Forms.Button
+    Friend WithEvents btnCCBySA3 As System.Windows.Forms.Button
     Private WithEvents mOtherDetailsTable As DataTable
 
 #Region " Windows Form Designer generated code "
@@ -100,7 +102,7 @@ Public Class TabPageDescription
     Friend WithEvents gbContributors As System.Windows.Forms.GroupBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageDescription))
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.gbPurpose = New System.Windows.Forms.GroupBox()
         Me.gbMisuse = New System.Windows.Forms.GroupBox()
@@ -183,6 +185,8 @@ Public Class TabPageDescription
         Me.OtherDetailsValueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.groupBox2 = New System.Windows.Forms.GroupBox()
         Me.txtReferences = New System.Windows.Forms.TextBox()
+        Me.btnCCBySA3 = New System.Windows.Forms.Button()
+        Me.btnCCBYSA4 = New System.Windows.Forms.Button()
         Me.gbPurpose.SuspendLayout()
         Me.gbMisuse.SuspendLayout()
         Me.gbUse.SuspendLayout()
@@ -280,6 +284,8 @@ Public Class TabPageDescription
         '
         'panelDescription
         '
+        Me.panelDescription.Controls.Add(Me.btnCCBYSA4)
+        Me.panelDescription.Controls.Add(Me.btnCCBySA3)
         Me.panelDescription.Controls.Add(Me.CopyrightTextBox)
         Me.panelDescription.Controls.Add(Me.CopyrightLabel)
         Me.panelDescription.Controls.Add(Me.txtRevision)
@@ -411,8 +417,8 @@ Public Class TabPageDescription
         Me.TabDescription.Location = New System.Drawing.Point(2, 2)
         Me.TabDescription.Name = "TabDescription"
         Me.TabDescription.PositionTop = True
-        Me.TabDescription.SelectedIndex = 1
-        Me.TabDescription.SelectedTab = Me.tpAuthor
+        Me.TabDescription.SelectedIndex = 0
+        Me.TabDescription.SelectedTab = Me.tpDescDetails
         Me.TabDescription.Size = New System.Drawing.Size(950, 631)
         Me.TabDescription.TabIndex = 15
         Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation, Me.tpReferences})
@@ -424,6 +430,7 @@ Public Class TabPageDescription
         Me.tpAuthor.Controls.Add(Me.gbAuthor)
         Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
         Me.tpAuthor.Name = "tpAuthor"
+        Me.tpAuthor.Selected = False
         Me.tpAuthor.Size = New System.Drawing.Size(950, 606)
         Me.tpAuthor.TabIndex = 1
         Me.tpAuthor.Title = "Authorship"
@@ -797,7 +804,6 @@ Public Class TabPageDescription
         Me.tpDescDetails.Controls.Add(Me.Splitter1)
         Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
         Me.tpDescDetails.Name = "tpDescDetails"
-        Me.tpDescDetails.Selected = False
         Me.tpDescDetails.Size = New System.Drawing.Size(950, 606)
         Me.tpDescDetails.TabIndex = 0
         Me.tpDescDetails.Title = "Details"
@@ -1008,14 +1014,14 @@ Public Class TabPageDescription
         Me.dgOtherDetails.AllowUserToResizeRows = False
         Me.dgOtherDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgOtherDetails.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.OtherDetailsKeyColumn, Me.OtherDetailsValueColumn})
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.InactiveBorder
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgOtherDetails.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.InactiveBorder
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgOtherDetails.DefaultCellStyle = DataGridViewCellStyle2
         Me.dgOtherDetails.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgOtherDetails.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2
         Me.dgOtherDetails.Location = New System.Drawing.Point(3, 19)
@@ -1063,6 +1069,24 @@ Public Class TabPageDescription
         Me.txtReferences.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtReferences.Size = New System.Drawing.Size(944, 299)
         Me.txtReferences.TabIndex = 1
+        '
+        'btnCCBySA3
+        '
+        Me.btnCCBySA3.Location = New System.Drawing.Point(68, 151)
+        Me.btnCCBySA3.Name = "btnCCBySA3"
+        Me.btnCCBySA3.Size = New System.Drawing.Size(97, 23)
+        Me.btnCCBySA3.TabIndex = 50
+        Me.btnCCBySA3.Text = "CC-BY-SA 3.0"
+        Me.btnCCBySA3.UseVisualStyleBackColor = True
+        '
+        'btnCCBYSA4
+        '
+        Me.btnCCBYSA4.Location = New System.Drawing.Point(171, 151)
+        Me.btnCCBYSA4.Name = "btnCCBYSA4"
+        Me.btnCCBYSA4.Size = New System.Drawing.Size(97, 23)
+        Me.btnCCBYSA4.TabIndex = 51
+        Me.btnCCBYSA4.Text = "CC-BY-SA 4.0"
+        Me.btnCCBYSA4.UseVisualStyleBackColor = True
         '
         'TabPageDescription
         '
@@ -1122,11 +1146,11 @@ Public Class TabPageDescription
     Friend txtOriginalNamespace As System.Windows.Forms.TextBox
     Friend btnPublisherDefaults As System.Windows.Forms.Button
     Public lblRevision As System.Windows.Forms.Label
-    Friend txtRevision As System.Windows.Forms.TextBox
+    Friend WithEvents txtRevision As System.Windows.Forms.TextBox
     Friend lblCustodianNamespace As System.Windows.Forms.Label
     Friend txtCustodianNamespace As System.Windows.Forms.TextBox
     Friend lblLicence As System.Windows.Forms.Label
-    Friend txtLicense As System.Windows.Forms.TextBox
+    Friend WithEvents txtLicense As System.Windows.Forms.TextBox
 
 #End Region
 
@@ -1150,16 +1174,16 @@ Public Class TabPageDescription
             Next
 
             txtCurrentContact.Text = Value.CurrentContact
-            txtCustodianNamespace.Text = value.CustodianNamespace
-            txtCustodianOrganisation.Text = value.CustodianOrganisation
-            txtOriginalPublisher.Text = value.OriginalPublisher
-            txtOriginalNamespace.Text = value.OriginalNamespace
-            txtLicense.Text = value.Licence
+            txtCustodianNamespace.Text = Value.CustodianNamespace
+            txtCustodianOrganisation.Text = Value.CustodianOrganisation
+            txtOriginalPublisher.Text = Value.OriginalPublisher
+            txtOriginalNamespace.Text = Value.OriginalNamespace
+            txtLicense.Text = Value.Licence
             ''    txtReviewDate.Text = value.ReviewDate
-            txtRevision.Text = value.Revision
+            txtRevision.Text = Value.Revision
 
-            txtBuildUid.Text = value.BuildUid
-            txtCanonicalHash.Text = value.ArchetypeDigest
+            txtBuildUid.Text = Value.BuildUid
+            txtCanonicalHash.Text = Value.ArchetypeDigest
 
             txtReferences.Text = NewlinesNormalised(Value.References)
             mArchetypeDescription = Value
@@ -1591,7 +1615,7 @@ Public Class TabPageDescription
             txtTranslatorEmail.TextChanged, txtTranslatorOrganisation.TextChanged, _
             txtDate.TextChanged, txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, _
             comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged, txtMisuse.TextChanged, CopyrightTextBox.TextChanged, _
-            txtReferences.TextChanged, txtCurrentContact.TextChanged
+            txtReferences.TextChanged, txtCurrentContact.TextChanged, txtLicense.TextChanged, txtRevision.TextChanged
         If Not Filemanager.Master.FileLoading Then
             Filemanager.Master.FileEdited = True
         End If
@@ -1686,6 +1710,19 @@ Public Class TabPageDescription
     End Sub
 
 
+
+    Private Sub btnCCBySA3_Click(sender As Object, e As EventArgs) Handles btnCCBySA3.Click
+        Const CC_BY_SA_3 As String = "This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/."
+        txtLicense.Clear()
+        txtLicense.Text() = CC_BY_SA_3
+
+    End Sub
+
+    Private Sub btnCCBYSA4_Click(sender As Object, e As EventArgs) Handles btnCCBYSA4.Click
+        Const CC_BY_SA_4 As String = "This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/."
+        txtLicense.Clear()
+        txtLicense.Text() = CC_BY_SA_4
+    End Sub
 End Class
 
 
