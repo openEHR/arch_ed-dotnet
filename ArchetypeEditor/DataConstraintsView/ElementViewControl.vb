@@ -10,7 +10,7 @@
 '
 '
 
-Public MustInherit Class ElementViewControl : Inherits Control
+Public Class ElementViewControl : Inherits Control
 
     Public Event ValueChanged As EventHandler
 
@@ -73,7 +73,9 @@ Public MustInherit Class ElementViewControl : Inherits Control
         SetSize()
     End Sub
 
-    Protected MustOverride Sub InitialiseComponent(ByVal aConstraint As Constraint, ByVal aLocation As Point)
+    Protected Overridable Sub InitialiseComponent(ByVal aConstraint As Constraint, ByVal aLocation As Point)
+        Throw New System.NotImplementedException("Abstract form Initialisation must be overridden")
+    End Sub
 
     Protected Sub SetSize()
         Dim s As New Size
