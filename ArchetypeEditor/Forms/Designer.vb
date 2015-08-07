@@ -1792,7 +1792,7 @@ Public Class Designer
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(953, 692)
+        Me.ClientSize = New System.Drawing.Size(969, 952)
         Me.Controls.Add(Me.PanelMain)
         Me.Controls.Add(Me.PanelHeader)
         Me.HelpProviderDesigner.SetHelpKeyword(Me, "HowTo/archetype_editor.htm")
@@ -4810,9 +4810,6 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub RichTextBoxDescription_TextChanged(sender As Object, e As EventArgs) Handles RichTextBoxDescription.TextChanged
-
-    End Sub
 End Class
 
 
