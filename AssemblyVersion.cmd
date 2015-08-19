@@ -12,7 +12,7 @@
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 setlocal EnableDelayedExpansion
-set Version=2.2
+set Version=2.8
 set Suffix= Beta
 set Revision=0
 

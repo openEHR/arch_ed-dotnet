@@ -2,7 +2,7 @@
 !define PRODUCT_LONG_NAME "openEHR Archetype Editor"
 !define PRODUCT_SHORT_NAME "ArchetypeEditor"
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 2.2
+!define VERSION 2.8
 !define BUILD 0.0
 !define COMPANY "openEHR Foundation"
 !define URL www.openehr.org

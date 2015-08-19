@@ -31,7 +31,7 @@
 
           <h1><a name="ArchetypeEditorReleases-CurrentBetaRelease"></a>Current Beta Release</h1>
 
-          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor2.2"></a><span><a href="https://github.com/openEHR/arch_ed-dotnet" rel="nofollow">Archetype Editor 2.2.905</a></span> 27 February 2013</h2>
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor2.8"></a><span><a href="https://github.com/openEHR/arch_ed-dotnet" rel="nofollow">Archetype Editor 2.8.996</a></span> 19 August 2015</h2>
 
           <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
           <ul>
@@ -39,6 +39,40 @@
             <li>When saving to XML, if the option to save ADL automatically is on, then the ADL definition section is deleted.</li>
             <li>The Help documentation is out of date.</li>
           </ul>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Allow <b>v0</b> archetype ids.</li>
+            <li>On creating a new archetype, the version defaults to <b>v0</b> instead of <b>v1</b>.</li>
+            <li>Added <b>namespacing and revision</b> to the other_details archetype attribute.</li>
+            <li><b>Cluster specialisation</b> now clones by copy rather than by reference.</li>
+            <li>Allow editing of the child element of a <b>cloned cluster</b> if the original child has already been specialised.</li>
+            <li>Make sure that unused term and constraint codes are removed from the ontology in ADL archetypes.</li>
+            <li>When viewing XML on the Display tab, make sure that unused term and constraint codes are removed from the ontology.</li>
+            <li>Delete the <b>recovery file</b> immediately after the user opens it.</li>
+            <li>Removed the Transitions option from the Pathway Specification in <b>ACTION</b> archetypes.</li>
+            <li>Fixed garbled text on the Header and Display tabs in some languages.</li>
+            <li>Fixed the replacement of translations of a term definitions in XML archetypes.</li>
+            <li>Fixed <b>annotations</b>, which did not work except in the primary language.</li>
+            <li>Fixed serialisation of persistent compositions to prevent <b>participations</b> from being serialised to the ADL or XML.</li>
+            <li>Fixed various other bugs introduced in the beta releases since version 2.1.</li>
+          </ul>
+
+
+          <p><br/></p>
+          <hr />
+
+          <h1><a name="ArchetypeEditorReleases-PreviousBetaRelease"></a>Previous Beta Release</h1>
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor2.2"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/TRUNK/ArchetypeEditor" rel="nofollow">Archetype Editor 2.2.904</a></span> 27 February 2013</h2>
+
+          <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
+          <ul>
+            <li>ADL Parser is slow loading first Archetype file.</li>
+            <li>When saving to XML, if the option to save ADL automatically is on, then the ADL definition section is deleted.</li>
+            <li>The Help documentation is out of date.</li>
+          </ul>
+
 
           <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
           <ul>
@@ -74,7 +108,6 @@
             <li>Allow the <b>copyright</b> to be edited.</li>
             <li>Allow the <b>current contact</b> to be recorded.</li>
             <li>Allow <b>DV_PARSABLE</b> to be viewed on the Interface tab.</li>
-            <li>Allow <b>v0</b> archetype ids.</li>
             <li>Named <b>slots</b> now show the Details tab, allowing comments, annotations and bindings to be added.</li>
             <li>The active <b>language</b> is now displayed in the title bar.</li>
             <li>The at-code and description of <b>internal codes</b> are now shown.</li>
@@ -86,7 +119,7 @@
             <li>When specialising a cluster by cloning, all of the cluster's children are copied too.</li>
             <li>Changing the data type of elements at the same specialisation level as the archetype is always allowed.</li>
             <li>Specialised <b>XML</b> archetypes preserve all term codes inherited from the parent archetype.</li>
-            <li>Added <b>namespacing and revision</b> to the other_details archetype attribute.</li>
+
             <li>Added g/m2.7 and 10^x property units.</li>
             <li>Added <b>Rate of Change - Pressure</b> property units (daPa/s).</li>
             <li>Added <b>Rate of Change - Frequency</b> property units (Hz/s).</li>
