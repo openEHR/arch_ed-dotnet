@@ -18,27 +18,28 @@ Public Class ConstraintContextMenu
     Private mFileManager As FileManagerLocal
 
     Private _
-        HeaderMenuItem, _
-        SpacerMenuItem, _
-        TextMenuItem, _
-        QuantityMenuItem, _
-        CountMenuItem, _
-        DateTimeMenuItem, _
-        OrdinalMenuItem, _
-        BooleanMenuItem, _
-        AnyMenuItem, _
-        MultipleMenuItem, _
-        SlotMenuItem, _
-        ProportionMenuItem, _
-        IntervalMenuItem, _
-        IntervalOfQuantityMenuItem, _
-        IntervalOfCountMenuItem, _
-        IntervalOfDateTimeMenuItem, _
-        DurationMenuItem, _
-        MultiMediaMenuItem, _
-        UriMenuItem, _
-        IdentifierMenuItem, _
-        ParsableMenuItem, _
+        HeaderMenuItem,
+        SpacerMenuItem,
+        TextMenuItem,
+        QuantityMenuItem,
+        CountMenuItem,
+        DateTimeMenuItem,
+        OrdinalMenuItem,
+        BooleanMenuItem,
+        AnyMenuItem,
+        MultipleMenuItem,
+        SlotMenuItem,
+        ProportionMenuItem,
+        IntervalMenuItem,
+        IntervalOfQuantityMenuItem,
+        IntervalOfCountMenuItem,
+        IntervalOfDateTimeMenuItem,
+        IntervalOfDurationMenuItem,
+        DurationMenuItem,
+        MultiMediaMenuItem,
+        UriMenuItem,
+        IdentifierMenuItem,
+        ParsableMenuItem,
         CurrencyMenuItem As MenuItem
 
     Public Sub ShowHeader(ByVal headerText As String)
@@ -77,6 +78,8 @@ Public Class ConstraintContextMenu
                 IntervalOfQuantityMenuItem.Visible = isVisible
             Case ConstraintKind.Interval_DateTime
                 IntervalOfDateTimeMenuItem.Visible = isVisible
+            Case ConstraintKind.Interval_Duration
+                IntervalOfDurationMenuItem.Visible = isVisible
             Case ConstraintKind.MultiMedia
                 MultiMediaMenuItem.Visible = isVisible
             Case ConstraintKind.URI
@@ -89,7 +92,7 @@ Public Class ConstraintContextMenu
                 ParsableMenuItem.Visible = isVisible
         End Select
 
-        IntervalMenuItem.Visible = IntervalOfCountMenuItem.Visible Or IntervalOfQuantityMenuItem.Visible Or IntervalOfDateTimeMenuItem.Visible
+        IntervalMenuItem.Visible = IntervalOfCountMenuItem.Visible Or IntervalOfQuantityMenuItem.Visible Or IntervalOfDateTimeMenuItem.Visible Or IntervalOfDurationMenuItem.Visible
     End Sub
 
     Protected Sub DoClick(ByVal sender As Object, ByVal e As EventArgs)
@@ -124,6 +127,8 @@ Public Class ConstraintContextMenu
             onClick(New Constraint_Interval_Quantity)
         ElseIf sender Is IntervalOfDateTimeMenuItem Then
             onClick(New Constraint_Interval_DateTime)
+        ElseIf sender Is IntervalOfDurationMenuItem Then
+            onClick(New Constraint_Interval_Duration)
         ElseIf sender Is MultiMediaMenuItem Then
             onClick(New Constraint_MultiMedia)
         ElseIf sender Is UriMenuItem Then
@@ -173,6 +178,7 @@ Public Class ConstraintContextMenu
         IntervalOfCountMenuItem = NewMenuItem(IntervalMenuItem, AE_Constants.Instance.IntervalCount)
         IntervalOfQuantityMenuItem = NewMenuItem(IntervalMenuItem, AE_Constants.Instance.IntervalQuantity)
         IntervalOfDateTimeMenuItem = NewMenuItem(IntervalMenuItem, AE_Constants.Instance.IntervalDateTime)
+        IntervalOfDurationMenuItem = NewMenuItem(IntervalMenuItem, AE_Constants.Instance.IntervalDuration)
         AnyMenuItem = NewMenuItem(Me, AE_Constants.Instance.Any)
         MultipleMenuItem = NewMenuItem(Me, AE_Constants.Instance.Multiple)
         MultiMediaMenuItem = NewMenuItem(Me, AE_Constants.Instance.MultiMedia)

@@ -81,6 +81,7 @@ Public Class AE_Constants
     Private mIntervalCount As String = "Interval of Count"
     Private mIntervalQuantity As String = "Interval of Quantity"
     Private mIntervalDateTime As String = "Interval of DateTime"
+    Private mIntervalDuration As String = "Interval of Duration"
     Private mSetAbsoluteMax As String = "Set absolute maximum"
     Private mSetAbsoluteMin As String = "Set absolute minimum"
     Private mOK As String = "OK"
@@ -335,6 +336,12 @@ Public Class AE_Constants
     Friend ReadOnly Property IntervalDateTime() As String
         Get
             Return mIntervalDateTime
+        End Get
+    End Property
+
+    Friend ReadOnly Property IntervalDuration() As String
+        Get
+            Return mIntervalDuration
         End Get
     End Property
 

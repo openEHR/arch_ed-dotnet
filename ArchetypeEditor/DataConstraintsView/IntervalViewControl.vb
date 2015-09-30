@@ -47,6 +47,12 @@ Public Class IntervalViewControl : Inherits ElementViewControl
             mLower = New DateTimeViewControl(c.LowerLimit, mFileManager)
             mUpper = New DateTimeViewControl(c.UpperLimit, mFileManager)
 
+        ElseIf aConstraint.Kind = ConstraintKind.Interval_Duration Then
+            Dim c As Constraint_Interval_Duration = CType(aConstraint, Constraint_Interval_Duration)
+
+            mLower = New DurationViewControl(c.LowerLimit, mFileManager)
+            mUpper = New DurationViewControl(c.UpperLimit, mFileManager)
+
         End If
 
         Dim width As Integer
