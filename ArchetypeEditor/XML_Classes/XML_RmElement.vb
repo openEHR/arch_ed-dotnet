@@ -109,6 +109,24 @@ Namespace ArchetypeEditor.XML_Classes
                     End Try
 
                     Return cic
+                Case "dv_interval<dv_duration>", "dv_interval<duration>", "interval<duration>"
+                    Dim cic As New Constraint_Interval_Duration
+
+                    Try
+                        For Each attrib As XMLParser.C_ATTRIBUTE In ObjNode.attributes
+                            Select Case attrib.rm_attribute_name
+                                Case "upper"
+                                    cic.UpperLimit = CType(ProcessValue(CType(attrib.children(0), XMLParser.C_OBJECT), fileManager), Constraint_Duration)
+                                Case "lower"
+                                    cic.LowerLimit = CType(ProcessValue(CType(attrib.children(0), XMLParser.C_OBJECT), fileManager), Constraint_Duration)
+                            End Select
+                        Next
+                    Catch ex As Exception
+                        MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ObjNode.node_id & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
+
+                    Return cic
+
                 Case "interval_quantity"
                     Dim ciq As New Constraint_Interval_Quantity
                     Dim quantLimits As New Constraint_Quantity
@@ -222,10 +240,10 @@ Namespace ArchetypeEditor.XML_Classes
                         result = ProcessCount(CType(node, XMLParser.C_COMPLEX_OBJECT))
                     Case "interval_count", "interval_quantity" 'OBSOLETE
                         result = ProcessInterval(CType(node, XMLParser.C_COMPLEX_OBJECT), fileManager)
-                    Case "dv_interval<dv_count>", "dv_interval<count>", "interval<count>", _
-                         "dv_interval<dv_quantity>", "dv_interval<quantity>", "interval<quantity>", _
-                         "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", _
-                         "dv_interval<dv_date>", "dv_interval<dv_time>"
+                    Case "dv_interval<dv_count>", "dv_interval<count>", "interval<count>",
+                         "dv_interval<dv_quantity>", "dv_interval<quantity>", "interval<quantity>",
+                         "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>",
+                         "dv_interval<dv_date>", "dv_interval<dv_time>,""dv_interval<dv_duration>"
                         result = ProcessInterval(CType(node, XMLParser.C_COMPLEX_OBJECT), fileManager)
                     Case "dv_multimedia", "multimedia", "multi_media"
                         result = ProcessMultiMedia(CType(node, XMLParser.C_COMPLEX_OBJECT))
