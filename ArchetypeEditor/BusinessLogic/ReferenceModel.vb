@@ -185,6 +185,8 @@ Public Class ReferenceModel
                 kindOfInterval = ConstraintKind.Quantity
             Case ConstraintKind.Interval_DateTime
                 kindOfInterval = ConstraintKind.DateTime
+            Case ConstraintKind.Interval_Duration
+                kindOfInterval = ConstraintKind.Duration
         End Select
 
         If kindOfInterval <> ConstraintKind.Any Then

@@ -92,6 +92,8 @@ Public Class ConstraintControl
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_interval.html")
             Case ConstraintKind.Interval_Quantity
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_interval.html")
+            Case ConstraintKind.Interval_Duration
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_interval.html")
             Case ConstraintKind.Multiple
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_interval.html")
             Case ConstraintKind.Ordinal
@@ -153,7 +155,7 @@ Public Class ConstraintControl
             Case ConstraintKind.Slot
                 Return New SlotConstraintControl(a_file_manager)
 
-            Case ConstraintKind.Interval_Count, ConstraintKind.Interval_Quantity, ConstraintKind.Interval_DateTime
+            Case ConstraintKind.Interval_Count, ConstraintKind.Interval_Quantity, ConstraintKind.Interval_DateTime, ConstraintKind.Interval_Duration
                 Return New IntervalConstraintControl(a_file_manager)
 
             Case ConstraintKind.MultiMedia

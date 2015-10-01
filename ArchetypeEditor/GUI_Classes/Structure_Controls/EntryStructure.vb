@@ -135,30 +135,30 @@ Public Class EntryStructure
     Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
     Friend WithEvents lblAtcode As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(EntryStructure))
-        Me.PanelIcons = New System.Windows.Forms.Panel
-        Me.ButAddElement = New System.Windows.Forms.Button
-        Me.butRemoveElement = New System.Windows.Forms.Button
-        Me.butListUp = New System.Windows.Forms.Button
-        Me.butListDown = New System.Windows.Forms.Button
-        Me.pbText = New System.Windows.Forms.PictureBox
-        Me.pbQuantity = New System.Windows.Forms.PictureBox
-        Me.pbCount = New System.Windows.Forms.PictureBox
-        Me.pbDateTime = New System.Windows.Forms.PictureBox
-        Me.pbOrdinal = New System.Windows.Forms.PictureBox
-        Me.pbBoolean = New System.Windows.Forms.PictureBox
-        Me.pbAny = New System.Windows.Forms.PictureBox
-        Me.pbCluster = New System.Windows.Forms.PictureBox
-        Me.butChangeDataType = New System.Windows.Forms.Button
-        Me.pbSlot = New System.Windows.Forms.PictureBox
-        Me.PanelStructureHeader = New System.Windows.Forms.Panel
-        Me.lblAtcode = New System.Windows.Forms.Label
+        Me.PanelIcons = New System.Windows.Forms.Panel()
+        Me.ButAddElement = New System.Windows.Forms.Button()
+        Me.butRemoveElement = New System.Windows.Forms.Button()
+        Me.butListUp = New System.Windows.Forms.Button()
+        Me.butListDown = New System.Windows.Forms.Button()
+        Me.pbText = New System.Windows.Forms.PictureBox()
+        Me.pbQuantity = New System.Windows.Forms.PictureBox()
+        Me.pbCount = New System.Windows.Forms.PictureBox()
+        Me.pbDateTime = New System.Windows.Forms.PictureBox()
+        Me.pbOrdinal = New System.Windows.Forms.PictureBox()
+        Me.pbBoolean = New System.Windows.Forms.PictureBox()
+        Me.pbAny = New System.Windows.Forms.PictureBox()
+        Me.pbCluster = New System.Windows.Forms.PictureBox()
+        Me.butChangeDataType = New System.Windows.Forms.Button()
+        Me.pbSlot = New System.Windows.Forms.PictureBox()
+        Me.PanelStructureHeader = New System.Windows.Forms.Panel()
+        Me.lblAtcode = New System.Windows.Forms.Label()
         Me.ilSmall = New System.Windows.Forms.ImageList(Me.components)
         Me.ttElement = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolTipSpecialisation = New System.Windows.Forms.ToolTip(Me.components)
-        Me.helpEntryStructure = New System.Windows.Forms.HelpProvider
-        Me.Splitter1 = New System.Windows.Forms.Splitter
+        Me.helpEntryStructure = New System.Windows.Forms.HelpProvider()
+        Me.Splitter1 = New System.Windows.Forms.Splitter()
         Me.PanelIcons.SuspendLayout()
         CType(Me.pbText, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbQuantity, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -396,9 +396,9 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(17, "")
         Me.ilSmall.Images.SetKeyName(18, "")
         Me.ilSmall.Images.SetKeyName(19, "")
-        Me.ilSmall.Images.SetKeyName(20, "")
-        Me.ilSmall.Images.SetKeyName(21, "")
-        Me.ilSmall.Images.SetKeyName(22, "")
+        Me.ilSmall.Images.SetKeyName(20, "Dummy filler")
+        Me.ilSmall.Images.SetKeyName(21, "dummy_filler_2")
+        Me.ilSmall.Images.SetKeyName(22, "interval_duration.png")
         Me.ilSmall.Images.SetKeyName(23, "")
         Me.ilSmall.Images.SetKeyName(24, "")
         Me.ilSmall.Images.SetKeyName(25, "")
@@ -419,9 +419,9 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(40, "")
         Me.ilSmall.Images.SetKeyName(41, "")
         Me.ilSmall.Images.SetKeyName(42, "")
-        Me.ilSmall.Images.SetKeyName(43, "")
-        Me.ilSmall.Images.SetKeyName(44, "")
-        Me.ilSmall.Images.SetKeyName(45, "")
+        Me.ilSmall.Images.SetKeyName(43, "filler_ref")
+        Me.ilSmall.Images.SetKeyName(44, "filler_ref2")
+        Me.ilSmall.Images.SetKeyName(45, "interval_duration_ref.png")
         Me.ilSmall.Images.SetKeyName(46, "")
         Me.ilSmall.Images.SetKeyName(47, "")
         Me.ilSmall.Images.SetKeyName(48, "")
@@ -442,9 +442,9 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(63, "")
         Me.ilSmall.Images.SetKeyName(64, "")
         Me.ilSmall.Images.SetKeyName(65, "")
-        Me.ilSmall.Images.SetKeyName(66, "")
-        Me.ilSmall.Images.SetKeyName(67, "")
-        Me.ilSmall.Images.SetKeyName(68, "")
+        Me.ilSmall.Images.SetKeyName(66, "filler_selected")
+        Me.ilSmall.Images.SetKeyName(67, "filler_selected_2")
+        Me.ilSmall.Images.SetKeyName(68, "interval_duration_selected.png")
         Me.ilSmall.Images.SetKeyName(69, "")
         Me.ilSmall.Images.SetKeyName(70, "")
         Me.ilSmall.Images.SetKeyName(71, "")
@@ -456,6 +456,18 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(77, "")
         Me.ilSmall.Images.SetKeyName(78, "")
         Me.ilSmall.Images.SetKeyName(79, "")
+        Me.ilSmall.Images.SetKeyName(80, "")
+        Me.ilSmall.Images.SetKeyName(81, "")
+        Me.ilSmall.Images.SetKeyName(82, "")
+        Me.ilSmall.Images.SetKeyName(83, "")
+        Me.ilSmall.Images.SetKeyName(84, "")
+        Me.ilSmall.Images.SetKeyName(85, "")
+        Me.ilSmall.Images.SetKeyName(86, "")
+        Me.ilSmall.Images.SetKeyName(87, "")
+        Me.ilSmall.Images.SetKeyName(88, "")
+        Me.ilSmall.Images.SetKeyName(89, "filler_ref_selected")
+        Me.ilSmall.Images.SetKeyName(90, "filler_ref_selected_2")
+        Me.ilSmall.Images.SetKeyName(91, "interval_duration_ref_selected.png")
         '
         'ToolTipSpecialisation
         '

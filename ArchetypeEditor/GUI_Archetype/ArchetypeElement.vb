@@ -326,6 +326,14 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                 result &= DateTimeConstraintToRichText(CType(cidt.LowerLimit, Constraint_DateTime))
                 result &= "\par"
 
+            Case ConstraintKind.Interval_Duration
+                Dim cidt As Constraint_Interval_Duration = CType(constraint, Constraint_Interval_Duration)
+                result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Upper & ": "
+                result &= DurationConstraintToRichText(CType(cidt.UpperLimit, Constraint_Duration))
+                result &= ", " & AE_Constants.Instance.Lower & ": "
+                result &= DurationConstraintToRichText(CType(cidt.LowerLimit, Constraint_Duration))
+                result &= "\par"
+
             Case ConstraintKind.Interval_Quantity
                 Dim ciq As Constraint_Interval_Count = CType(constraint, Constraint_Interval_Quantity)
                 result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Upper & ": \par"
@@ -471,6 +479,14 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Return result
     End Function
 
+    Private Function IntervalDurationToHTML(ByVal constraint As Constraint_Interval_Duration) As String
+        Dim result As String = AE_Constants.Instance.Upper & ": "
+        result += DurationConstraintToRichText(CType(constraint.UpperLimit, Constraint_Duration))
+        result += ", " & AE_Constants.Instance.Lower & ": "
+        result += DurationConstraintToRichText(CType(constraint.LowerLimit, Constraint_Duration))
+        Return result
+    End Function
+
     Private Function SlotToHTML(ByVal constraint As Constraint_Slot) As String
         Dim result As String = ""
 
@@ -598,6 +614,10 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
                 Case ConstraintKind.Interval_DateTime
                     result.HTML = Environment.NewLine & IntervalDateTimeToHTML(CType(constraint, Constraint_Interval_DateTime))
+                    result.ImageSource = "Images/interval.gif"
+
+                Case ConstraintKind.Interval_Duration
+                    result.HTML = Environment.NewLine & IntervalDurationToHTML(CType(constraint, Constraint_Interval_Duration))
                     result.ImageSource = "Images/interval.gif"
 
                 Case ConstraintKind.MultiMedia

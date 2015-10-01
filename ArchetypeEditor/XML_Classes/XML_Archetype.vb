@@ -1370,7 +1370,7 @@ Namespace ArchetypeEditor.XML_Classes
                 Case ConstraintKind.Multiple
                     BuildChoice(attribute, CType(c, Constraint_Choice))
 
-                Case ConstraintKind.Interval_Count, ConstraintKind.Interval_Quantity, ConstraintKind.Interval_DateTime
+                Case ConstraintKind.Interval_Count, ConstraintKind.Interval_Quantity, ConstraintKind.Interval_DateTime, ConstraintKind.Interval_Duration
                     BuildInterval(attribute, c)
 
                 Case ConstraintKind.MultiMedia

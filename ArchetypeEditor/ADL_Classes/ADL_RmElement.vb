@@ -129,6 +129,33 @@ Namespace ArchetypeEditor.ADL_Classes
                     End Try
 
                     Return cic
+                Case "dv_interval<dv_duration>", "dv_interval<duration>", "interval<duration>"
+                    Dim cic As New Constraint_Interval_Duration
+
+                    Try
+                        ' Get the upper value
+                        If ObjNode.has_attribute(Eiffel.String("upper")) Then
+                            a = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
+
+                            If a.has_children Then
+                                cic.UpperLimit = CType(ProcessValue(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager), Constraint_Duration)
+                            End If
+                        End If
+
+                        ' Get the lower value
+                        If ObjNode.has_attribute(Eiffel.String("lower")) Then
+                            a = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
+
+                            If a.has_children Then
+                                cic.LowerLimit = CType(ProcessValue(CType(a.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), fileManager), Constraint_Duration)
+                            End If
+                        End If
+                    Catch ex As Exception
+                        MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ObjNode.node_id.to_cil & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
+
+                    Return cic
+
                 Case "interval_quantity"
                     Dim ciq As New Constraint_Interval_Quantity
                     Dim quantLimits As New Constraint_Quantity
@@ -356,10 +383,11 @@ Namespace ArchetypeEditor.ADL_Classes
                         result = ProcessCount(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     Case "interval_count", "interval_quantity" 'OBSOLETE
                         result = ProcessInterval(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), fileManager)
-                    Case "dv_interval<dv_count>", "dv_interval<count>", "interval<count>", _
-                         "dv_interval<dv_quantity>", "dv_interval<quantity>", "interval<quantity>", _
-                         "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", _
-                         "dv_interval<dv_date>", "dv_interval<dv_time>"
+                    Case "dv_interval<dv_count>", "dv_interval<count>", "interval<count>",
+                         "dv_interval<dv_quantity>", "dv_interval<quantity>", "interval<quantity>",
+                         "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>",
+                         "dv_interval<dv_date>", "dv_interval<dv_time>",
+                         "dv_interval<dv_duration>", "dv_interval<duration>", "interval<duration>"
                         result = ProcessInterval(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), fileManager)
                     Case "dv_multimedia", "multimedia", "multi_media"
                         result = ProcessMultiMedia(CType(node, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
